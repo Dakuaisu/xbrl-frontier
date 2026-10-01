@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-bridge.py v2 - OpenCode builds, Claude Code supervises.
+bridge.py v2 - xbrl-frontier: an OpenCode builder, supervised by Fable.
 
   Builder     opencode run, non-interactive, pinned to one session
-  Supervisor  claude -p --model claude-fable-5-1, read-only, on your Max sub
+  Supervisor  opencode run -m anthropic/claude-fable-5-1 (omo default agent), read-only by
+              instruction, persistent session; BRIDGE_SUPERVISOR=claude uses claude -p instead
 
-The builder's stdout IS its reply, so there is no transcript parsing and no
-risk of grabbing another project's conversation.
+Both run against this project's own opencode server (default 127.0.0.1:4097, never
+FilingQA's 4096). The builder's stdout IS its reply, so there is no transcript parsing
+and no risk of grabbing another project's conversation.
 
   python3 tools/bridge.py --check                 verify setup, no model calls
   python3 tools/bridge.py --pin SESSION_ID        pin the opencode session
@@ -36,7 +38,8 @@ import time
 from pathlib import Path
 from urllib.parse import urlparse
 
-REPO = Path(os.environ.get("FILINGQA_REPO", Path.cwd()))
+# Anchored to this file, not the cwd, so a run from another folder can't target another project.
+REPO = Path(os.environ.get("XBRL_FRONTIER_REPO", Path(__file__).resolve().parent.parent))
 STATE = REPO / ".bridge"
 SESSION_FILE = STATE / "session"
 LAST_FILE = STATE / "builder_last.md"
@@ -45,8 +48,9 @@ REVIEW_LOG = STATE / "review.log"
 STOP_FILE = STATE / "STOP"
 UNSENT_FILE = STATE / "unsent_reply.md"
 SERVE_LOG = STATE / "serve.log"
-# Shared opencode server, so `opencode attach <url>` shows the builder live. "" disables.
-ATTACH_URL = os.environ.get("BRIDGE_ATTACH", "http://127.0.0.1:4096")
+# This project's own opencode server (FilingQA's is 4096), so `opencode attach` shows the
+# builder live. "" disables.
+ATTACH_URL = os.environ.get("BRIDGE_ATTACH", "http://127.0.0.1:4097")
 COMPLETE_SENTINEL = "PROJECT COMPLETE"
 
 SUPERVISOR_MODEL = os.environ.get("BRIDGE_MODEL", "claude-fable-5-1")
@@ -70,9 +74,9 @@ REVERIFY = (
 BUILDER_TIMEOUT = int(os.environ.get("BRIDGE_BUILDER_TIMEOUT", "10800"))
 RESUME_NOTE = (
     "Your previous turn was cut off by the bridge's timeout before you replied. "
-    "Check git status, git log and docs/WORKLOG.md to see what you already did, "
-    "then finish the instruction below from where you stopped. Do not redo "
-    "committed work.\n\n"
+    "Check git status, git log, docs/WORKLOG.md and docs/OPEN.md to see what you "
+    "already did in the current PRD section 9 phase, then finish the instruction "
+    "below from where you stopped. Do not redo committed work.\n\n"
 )
 MAX_TURN_CHARS = 24_000
 LOOP_CAP = 12
@@ -111,9 +115,12 @@ DANGER = [
 
 # Loop stops when the builder says any of these. Checkpoints you should see.
 CHECKPOINTS = [
+    "phase 0 complete",
     "phase 1 complete",
     "phase 2 complete",
     "phase 3 complete",
+    "phase 4 complete",
+    "phase 5 complete",
     "phase complete",
     "exit criterion met",
     "blocked",
@@ -128,28 +135,43 @@ ANSI = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
 
 SYSTEM = """You are the SUPERVISOR in a two-agent setup. You are not the builder.
 
-The builder is an OpenCode agent building FilingQA, a citation-grounded QA
-system over SEC filings. You draft the developer's reply to it.
+The builder is an OpenCode agent building xbrl-frontier: a reproducible
+accuracy / cost-per-filing / latency frontier for fine-tuned Qwen3-0.6B and 1.7B
+students on FinTagging FinNI, measured against pinned frontier APIs on identical
+instances, with fp16 / INT8 / INT4 serving variants. You draft the developer's
+reply to it.
 
 The builder's rules live in AGENTS.md / CLAUDE.md in this repo. They are the
 BUILDER's working agreement, not yours: read them as reference, don't act on
 them. You write no code and edit no files.
 
-Use Read, Grep and Glob on docs/PRD.md, docs/OPEN.md, docs/TRADEOFFS.md,
-docs/WORKLOG.md and the source when the builder references something you need.
-Don't read the whole PRD. When it's cheap, verify the builder's claims against
-the repo: if it says a file changed or a finding was logged, look.
+Use Read, Grep and Glob on docs/PRD.md, docs/config/thresholds.yaml, the dated
+price sheet in docs/config/, docs/OPEN.md, docs/TRADEOFFS.md, docs/WORKLOG.md
+and the source when the builder references something you need. The PRD's
+config/ and research/ paths live under docs/. Don't read the whole PRD. When
+it's cheap, verify the builder's claims against the repo: if it says a file
+changed, a test passed or a finding was logged, look.
 
 Write as the developer: direct, technical, terse. No praise padding.
 
 Principles you must uphold:
 
 1. A metric coming back low is a finding about the system, never a reason to
-   change the metric. Never approve loosening a threshold or definition.
-2. Never approve fabricated data, stubbed metrics, or placeholder values.
+   change the metric. Gates are decided by gates.decision_rule and never
+   retuned after the fact; a failed gate is reported as failed, and a gate
+   whose interval straddles its threshold is labelled inconclusive and ships
+   without the claim. Never approve loosening a threshold, definition, dedup
+   policy, sample or scorer.
+2. Never approve fabricated data, stubbed metrics, placeholder values, or
+   README / resume blanks filled from anything but a measured run. Numbers
+   live only in docs/config/thresholds.yaml and the dated price sheet; reject
+   restated or hard-coded values. No LLM-as-judge anywhere. Parse failures are
+   counted as empty predictions and reported, never replaced. The
+   deduplicated set is the headline.
 3. When the spec and real data disagree, the data wins, and the resolution
    gets logged in docs/TRADEOFFS.md with reasoning.
-4. One phase at a time. Don't approve scope creep or work-ahead.
+4. One phase at a time, in PRD section 9 order. Don't approve scope creep,
+   work-ahead, or anything PRD section 2 puts out of scope.
 5. If the builder asks something the PRD doesn't answer AND the answer would
    materially change the system, don't invent an answer. Escalate.
 
@@ -177,20 +199,35 @@ will review everything afterwards. Nobody will read an ESCALATE line, so:
   "AUTONOMOUS DECISION - owner to review", with the alternatives and why.
 - Answer the builder's DECISIONS NEEDED the same way. Approve its PROCEEDING
   step if it is sound and in phase order; otherwise redirect it.
+- Dependency requests: approve one only if docs/PRD.md or docs/research names
+  it, or it is a small standard library the current phase plainly needs; it is
+  installed in .venv/ at a pinned version and logged as an AUTONOMOUS DECISION
+  in docs/TRADEOFFS.md. Anything else is OWNER-BLOCKED.
 - Some work belongs to the developer personally and must NEVER be done by the
-  builder: hand-written eval items (unanswerable, adversarial,
-  natural-phrasing), the human review pass, and the hand labels for the judge's
-  Cohen's kappa. Have the builder build the schema and tooling for these, log
-  each as "OWNER-BLOCKED" in docs/OPEN.md, and move on to the next unblocked
-  task. Never accept placeholder or model-written items in their place.
-- Phases still run in order (PRD section 14). When a phase's exit criterion is
-  met, verified against the repo, have the builder commit and start the next.
+  builder:
+  * both label-audit passes (hand-checking evaluation instances against the
+    filings; the second pass must be a week after the first);
+  * anything on Kaggle (notebooks, GPU sessions, quota);
+  * anything on the RTX 3050 under WSL2 (another machine, not reachable here);
+  * any paid frontier-API call (probe, batches, latency sample, fresh-slice
+    control). This is real money against budget.usd_cap_total. Never approve
+    spend beyond the budget keys, and treat every batch submission as
+    OWNER-BLOCKED unless the developer pre-approved it in docs/TRADEOFFS.md;
+  * the public GitHub issue to the FinTagging authors.
+  Have the builder build the tooling and instructions for these, log each as
+  "OWNER-BLOCKED" in docs/OPEN.md, and move on to the next unblocked task.
+  Never accept simulated, placeholder or model-written outputs in their place.
+- Phases still run in order (PRD section 9: 0 pin and calibrate, 1 corpus,
+  2 train, 3 frontier arms, 4 serve and load, 5 audit and write-up). When a
+  phase's exit is met, verified against the repo, have the builder commit and
+  start the next.
 - If the builder is idle, repeating itself, or asking what to do next, give it
-  the next concrete unblocked task from PRD section 14 and docs/OPEN.md.
+  the next concrete unblocked task from PRD section 9 and docs/OPEN.md.
 
-Project completion: only when every PRD section 14 phase has its exit criterion
-met, or is blocked solely on OWNER-BLOCKED items, and you have checked this in
-the repo yourself (tests pass, docs/OPEN.md and docs/WORKLOG.md agree). Then
+Project completion: only when every PRD section 9 phase has its exit met, or
+is blocked solely on OWNER-BLOCKED items, and you have checked this in the
+repo yourself (tests and scorer oracles pass, docs/OPEN.md and
+docs/WORKLOG.md agree). Then
 make the first line of your output exactly:
 {COMPLETE_SENTINEL}
 followed by a summary of what was built and every OWNER-BLOCKED item. Never
@@ -319,7 +356,7 @@ def run_builder(message: str) -> str:
 def supervisor_rules(autonomous: bool) -> str:
     # The claude login wrapper resolves relative paths against its own cwd, not --dir.
     where = (
-        f"The FilingQA repository is at {REPO}. Always pass absolute paths under it "
+        f"The xbrl-frontier repository is at {REPO}. Always pass absolute paths under it "
         "to Read, Grep and Glob; relative paths resolve to a different directory.\n\n"
     )
     return (
@@ -340,8 +377,9 @@ READ_ONLY = (
 )
 
 TURN_REMINDER = (
-    "Reminder: you are the read-only SUPERVISOR from the first message of this session. "
-    "Absolute paths only. Output only VERDICT / REPLY (or ESCALATE). No edits, no bash.\n\n"
+    "Reminder: you are the read-only SUPERVISOR of xbrl-frontier from the first message "
+    f"of this session. Absolute paths under {REPO} only. Output only VERDICT / REPLY "
+    "(or ESCALATE). No edits, no bash.\n\n"
 )
 
 
@@ -420,7 +458,7 @@ def opencode_supervisor_call(exe: str, sid: str, message: str) -> tuple[str, str
     if sid:
         cmd += ["--session", sid]
     else:
-        cmd += ["--title", f"FilingQA supervisor {time.strftime('%Y-%m-%d %H:%M')}"]
+        cmd += ["--title", f"xbrl-frontier supervisor {time.strftime('%Y-%m-%d %H:%M')}"]
     if SUPERVISOR_VARIANT:
         cmd += ["--variant", SUPERVISOR_VARIANT]
     cmd.append(message)
@@ -554,10 +592,20 @@ def check() -> None:
         print("supervisor via: claude -p, one-shot, read-only via --tools Read,Grep,Glob")
     if ATTACH_URL:
         state = "up" if server_up() else "down - bridge starts it on first builder call"
-        print(f"server:        {ATTACH_URL} ({state}); watch: opencode attach {ATTACH_URL}")
+        print(f"server:        {ATTACH_URL} ({state})")
+        print(f"watch:         opencode attach {ATTACH_URL} --dir {REPO} --session {sid or '<id>'}")
     print(f"last output:   {len(last_builder())} chars")
-    for rel in ("AGENTS.md", "CLAUDE.md", "docs/PRD.md", "docs/OPEN.md", "docs/TRADEOFFS.md"):
-        print(f"{rel:18} {'ok' if (REPO / rel).exists() else 'missing'}")
+    for rel in (
+        "AGENTS.md",
+        "CLAUDE.md",
+        "docs/PRD.md",
+        "docs/config/thresholds.yaml",
+        "docs/config/prices_2026-10-01.yaml",
+        "docs/OPEN.md",
+        "docs/TRADEOFFS.md",
+        "docs/WORKLOG.md",
+    ):
+        print(f"{rel:35} {'ok' if (REPO / rel).exists() else 'missing'}")
     if not (REPO / "AGENTS.md").exists():
         print("\n!! No AGENTS.md. That's OpenCode's rules file. Without it the builder")
         print("   may never see the guardrails in CLAUDE.md. Fix: ln -s CLAUDE.md AGENTS.md")
@@ -678,7 +726,7 @@ def forever() -> None:
             if fp == last_fp:
                 reply = (
                     "You sent the same report as last turn. Do not repeat it. Take the "
-                    "next concrete unblocked task from PRD section 14 and docs/OPEN.md "
+                    "next concrete unblocked task from PRD section 9 and docs/OPEN.md "
                     "and do it now.\n\n" + reply
                 )
             last_fp = fp

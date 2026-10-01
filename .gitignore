@@ -2,6 +2,12 @@
 __pycache__/
 .venv/
 .env
-data/
 .DS_Store
 .codegraph
+
+data/*
+!data/eval_manifest.csv
+!data/eval_instance_to_filing.csv
+!data/train_accessions.txt
+!data/fresh_accessions.txt
+!data/contamination_audit/
