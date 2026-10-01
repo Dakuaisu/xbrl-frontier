@@ -1,0 +1,156 @@
+### key
+gap_10
+
+### question
+What are the units of FHS Table 19 wall-clock (5.31 +/- 1.71 for FHS full on CodiEsp) and did the authors run or report any timing on the 2,509-fact financial split? One sweep reports 'hours (1.18 h)', another says units are not recoverable; my local PDF extraction confirms the caption prints no unit and the text says 'per full test-set run on a single NVIDIA B200'.
+
+### topic
+gap_10: Units of FHS (arXiv:2608.06614) Table 19 wall-clock, and whether any timing exists for the 2,509-fact financial split. RESOLVED: units are HOURS ('Wall time (h)' header in TeX source and arXiv HTML; the PDF text extraction dropped it). Timing is reported ONLY for the CodiEsp split (3,144 facts). No wall-clock, latency, runtime or cost exists for the financial split in the paper, TeX, GitHub release, or HF cards.
+
+### facts
+[
+ {
+  "claim": "Table 19's wall-clock column header is 'Wall time (h)', i.e., hours (TeX source).",
+  "evidence_url": "https://arxiv.org/e-print/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "\\textbf{Method} & \\textbf{$J{/}B$} & \\textbf{LLM} & \\textbf{Ret.} & \\textbf{Wall time (h)} \\\\"
+ },
+ {
+  "claim": "The arXiv HTML rendering also shows 'Wall time (h)' with all rows: Direct retr. 1.18 ± 0.01; One-pass free-text 1.20 ± 0.02; One-pass structured 2.42 ± 0.04; Parallel stochastic 2.03 ± 0.05; Decomposed 2.74 ± 0.06; FHS (full) 5.31 ± 1.71; Intrinsic refine. 4.86 ± 0.01; Feedback refine. 5.56 ± 0.17.",
+  "evidence_url": "https://arxiv.org/html/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "Method J / B LLM Ret. Wall time (h) Direct retr. — 0.0 1.0 1.18 ± 0.01 ... FHS (full) 2 4.0 4.0 5.31 ± 1.71"
+ },
+ {
+  "claim": "Table 19 caption: timing is on the CodiEsp test split, mean ± std over Slurm runs.",
+  "evidence_url": "https://arxiv.org/html/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "Table 19: Average inference cost per fact and wall-clock time on the CodiEsp test split. Wall time is reported as mean ± standard deviation over completed Slurm runs."
+ },
+ {
+  "claim": "Appendix E.6: wall-clock is per full test-set run on a single NVIDIA B200; LLM/retrieval counts are per fact.",
+  "evidence_url": "https://arxiv.org/html/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "The LLM and retrieval counts measure computational work per fact, whereas wall-clock time is measured per full test-set run on a single NVIDIA B200 GPU."
+ },
+ {
+  "claim": "Authors caveat that FHS wall time is from a serial implementation, not optimal latency.",
+  "evidence_url": "https://arxiv.org/html/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "Our current FHS implementation executes hypothesis generation and verification serially, so the reported FHS wall time is not the optimal latency that would be obtained from a fully parallel implementation."
+ },
+ {
+  "claim": "No timing of any kind is reported for the financial split: in the TeX source every non-comment occurrence of 'wall'/'wall-clock' is in Appendix E.6 (lines 2427-2459) and refers to CodiEsp; 'latency', 'runtime', 'seconds', 'minutes', 'throughput', 'GPU-hour' appear in no non-comment line outside E.6.",
+  "evidence_url": "https://arxiv.org/e-print/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "grep -n -i 'wall' acl_preprint.tex (non-comment lines) -> 2427, 2429, 2431, 2444, 2459 only"
+ },
+ {
+  "claim": "A commented-out draft paragraph in the TeX shows the authors originally reported call counts only, citing shared-cluster noise as the reason for omitting wall-clock.",
+  "evidence_url": "https://arxiv.org/e-print/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "% ... We report call counts instead of wall-clock time because runtime on a shared cluster is strongly affected by scheduling and system load."
+ },
+ {
+  "claim": "CodiEsp evaluation split = 3,144 target facts from 250 documents (958 unique gold codes); this is the denominator for Table 19's wall-clock.",
+  "evidence_url": "https://arxiv.org/e-print/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "the split contains \\num{3144} target facts over \\num{958} distinct gold codes"
+ },
+ {
+  "claim": "DERIVED by me, not reported by authors: FHS (full) 5.31 h / 3,144 facts = 6.08 s/fact serial end-to-end on one B200 (~592 facts/h); direct-retrieval floor 1.18 h / 3,144 = 1.35 s/fact (includes the shared Qwen3-32B listwise selector and model load, since direct retrieval has 0 grounding LLM calls). Naive transfer of 6.08 s/fact to 2,509 financial facts = ~4.2 h, but this is NOT measured and financial prompts (HTML tables up to 16k tokens) differ from CodiEsp.",
+  "evidence_url": "https://arxiv.org/html/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "computed from Table 19 values and the 3,144-fact CodiEsp split size"
+ },
+ {
+  "claim": "Financial split: 2,509 target facts from 191 source contexts (110 tables, 81 narrative; 2,341 table facts + 168 text facts), 388 distinct gold concepts, 17,388-concept 2024 US-GAAP taxonomy; sourced from the FinTagging benchmark (wang-etal-2025-fintagging).",
+  "evidence_url": "https://huggingface.co/datasets/lm2445/Financial_Tagging_FHS",
+  "confidence": "VERIFIED",
+  "quote": "data/test.jsonl: 2,509 facts from 191 source contexts ... taxonomy/us_gaap_2024_enriched_retrieval.jsonl: 17,388 US-GAAP concepts"
+ },
+ {
+  "claim": "FHS (full) on the financial split: R@1 0.185, R@10 0.397, R@50 0.543, MRR 0.257, Acc 0.255 (std 1.5e-3); on CodiEsp: R@1 0.264, MRR 0.352, Acc 0.330. Each value is the mean of three runs.",
+  "evidence_url": "https://arxiv.org/e-print/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "\\textbf{FHS (full)} & \\textbf{0.185} & 0.397 & 0.543 & \\textbf{0.257} & \\textbf{0.255} & 1.5e-3"
+ },
+ {
+  "claim": "All LLM operations in all methods, including the shared final listwise selector, use Qwen3-32B.",
+  "evidence_url": "https://arxiv.org/e-print/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "To control for model capacity, all LLM-based operations across all methods use Qwen3-32B, including grounding, hypothesis generation, refinement, candidate-level verification, and other baseline-specific operations. After retrieval, every method additionally passes its candidates to the same Qwen3-32B listwise selector."
+ },
+ {
+  "claim": "Hardware/software: PyTorch 2.7.1+cu126, single NVIDIA B200, RHEL 9.6.",
+  "evidence_url": "https://arxiv.org/e-print/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "The experiments were run with PyTorch 2.7.1+cu126 on a single NVIDIA B200 GPU under Red Hat Enterprise Linux 9.6 (Plow)."
+ },
+ {
+  "claim": "arXiv record: only v1 exists (6 Aug 2026), 28 pages, 1 figure, 28 tables; authors Linhai Ma, Ethan F. Wei, Xueqing Peng, Yan Wang, Lingfei Qian, Víctor Gutiérrez-Basulto.",
+  "evidence_url": "https://arxiv.org/abs/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "[v1] Thu, 6 Aug 2026 21:56:56 UTC (128 KB) ... Comments: 28 pages, 1 figure, 28 tables"
+ },
+ {
+  "claim": "GitHub SarielMa/FHS: top-level README is literally '# FHS' (6 bytes); 3 commits, all on 2026-08-02; two folders CodeEps/ and Financial_Tagging/; no logs anywhere in the tree (84 paths).",
+  "evidence_url": "https://github.com/SarielMa/FHS",
+  "confidence": "VERIFIED",
+  "quote": "18b8659b 2026-08-02T04:17:34Z data hf added | 45da3ceb 2026-08-02T04:14:56Z all the code, except two iter in codeeps | 5c8b4307 2026-08-02T04:13:59Z first commit"
+ },
+ {
+  "claim": "Financial_Tagging/README explicitly states logs and the efficiency-study code are NOT included in the release.",
+  "evidence_url": "https://raw.githubusercontent.com/SarielMa/FHS/main/Financial_Tagging/README.md",
+  "confidence": "VERIFIED",
+  "quote": "Run outputs, traces, verdict files and logs (gigabytes, and not needed to re-run); the dataset splits and the taxonomy index, which are released separately; and the code for the appendix studies — retriever robustness, efficiency, the verifier-quality and bridge analyses, the beta sweep, and the query-form probe — none of which Table 1 or Table 2 depends on."
+ },
+ {
+  "claim": "Financial_Tagging/README: Qwen3-32B via vLLM on one 80GB-class GPU; FHS (full) on the financial split is THREE separate Slurm jobs (generation+fusion; verifier over fused top-10; rerank + listwise selector), so any financial wall-clock would be a sum of three jobs.",
+  "evidence_url": "https://raw.githubusercontent.com/SarielMa/FHS/main/Financial_Tagging/README.md",
+  "confidence": "VERIFIED",
+  "quote": "Generation and reranking use Qwen3-32B through vLLM on one 80GB-class GPU ... **FHS (full)** is three stages, because its ranking is produced by an LLM and not by retrieval alone"
+ },
+ {
+  "claim": "Released Slurm wrappers carry only #SBATCH --time LIMITS, not measurements: financial frozen_ags 6:00:00, verifier 12:00:00, verifier-ablation rerank 8:00:00, direct retrieval 8:00:00, ags_seq 24:00:00; CodiEsp frozen_ags 5:00:00, direct 3:00:00; all --gpus=b200:1, --mem=256G, partition gpu_b200. The CodiEsp FHS limit (5:00:00) is below the reported mean 5.31 h, so the released limits cannot be used as bounds on the reported runs.",
+  "evidence_url": "https://github.com/SarielMa/FHS/tree/main/Financial_Tagging/scripts/slurm",
+  "confidence": "VERIFIED",
+  "quote": "#SBATCH --time=6:00:00 / #SBATCH --gpus=b200:1 (apply_server_fintagging_frozen_ags.sh); #SBATCH --time=12:00:00 (apply_server_ags_table5_llm_verifier.sh); #SBATCH --time=5:00:00 (apply_server_codiesp_frozen_ags.sh)"
+ },
+ {
+  "claim": "The released runner records per-fact 'wall_time' (time.monotonic delta), total_llm_calls, total_retrieval_calls, total_prompt_tokens and total_completion_tokens in every candidate record, so re-running the released financial pipeline would yield per-fact timing and token counts; those outputs are not released.",
+  "evidence_url": "https://raw.githubusercontent.com/SarielMa/FHS/main/Financial_Tagging/src/run_fintagging_grounding_baseline.py",
+  "confidence": "VERIFIED",
+  "quote": "if wall_time is not None:\n        record[\"wall_time\"] = round(wall_time, 6)  ... wall_time=time.monotonic() - start_time"
+ },
+ {
+  "claim": "The CodiEsp FHS runner includes the six-dimension verifier in-job (build_fhs_verifier_messages in CodeEps/codiesp_pipeline/ags_frozen_grounding.py) and the shared Slurm script sets RUN_RERANK=1 for MODE=full, so the 5.31 h figure plausibly covers generation + retrieval + verifier + listwise selector in one job; the financial release's ags_frozen_grounding.py contains no verifier code (verifier is a separate stage).",
+  "evidence_url": "https://raw.githubusercontent.com/SarielMa/FHS/main/CodeEps/codiesp_pipeline/ags_frozen_grounding.py",
+  "confidence": "VERIFIED",
+  "quote": "the full frozen_ags arm, the internal six-dimensional FHS verifier is the final LLM ... def build_fhs_verifier_messages("
+ },
+ {
+  "claim": "Run-script vLLM defaults relevant to reading any latency: TENSOR_PARALLEL_SIZE=1, GPU_MEMORY_UTILIZATION=0.9, MAX_NUM_SEQS=8, VLLM_BATCH_SIZE=32, RERANK_LIST_SIZE=20, MAX_INPUT_TOKENS=30000; financial QUERY_MAX_NEW_TOKENS default 2048 (2816 for some FHS modes), rerank MAX_NEW_TOKENS=512; CodiEsp FHS_VERIFIER_MAX_NEW_TOKENS=3072, rerank MAX_NEW_TOKENS=1024.",
+  "evidence_url": "https://raw.githubusercontent.com/SarielMa/FHS/main/Financial_Tagging/scripts/run_fintagging_grounding_baseline.sh",
+  "confidence": "VERIFIED",
+  "quote": "MAX_NUM_SEQS=\"${MAX_NUM_SEQS:-8}\" VLLM_BATCH_SIZE=\"${VLLM_BATCH_SIZE:-32}\" TENSOR_PARALLEL_SIZE=\"${TENSOR_PARALLEL_SIZE:-1}\""
+ },
+ {
+  "claim": "Both Hugging Face dataset cards (Financial_Tagging_FHS, CodeEps_FHS) contain no timing, latency, or logs.",
+  "evidence_url": "https://huggingface.co/datasets/lm2445/CodeEps_FHS",
+  "confidence": "VERIFIED",
+  "quote": "It is a data artifact only: it does not include experiment code, Slurm scripts, model outputs, logs, or raw source archives."
+ },
+ {
+  "claim": "Semantic Scholar record / citation count could not be retrieved (HTTP 429 on three attempts); the session's WebSearch budget was already exhausted (200/200) before this task, so no third-party citing papers with FHS timing were searched.",
+  "evidence_url": "https://api.semanticscholar.org/graph/v1/paper/arXiv:2608.06614",
+  "confidence": "UNVERIFIED",
+  "quote": "{\"message\": \"Too Many Requests...\", \"code\": \"429\"}"
+ }
+]
+
+### unknowns
+Not resolvable from public sources: (1) any measured wall-clock / per-fact latency / token counts for FHS or baselines on the 2,509-fact financial split — the paper, TeX source, GitHub release, and HF cards contain none; (2) exactly which stages the 5.31 h CodiEsp figure covers (code suggests one job incl. verifier + selector, but the paper does not itemize) and why its std (±1.71 h) is 10-100x larger than other rows; (3) how many Slurm runs Table 19's mean ± std is over (likely 3, matching 'mean of three runs' for accuracy, but not stated); (4) whether the authors hold unpublished financial-split timing — only route is contacting the corresponding author (Linhai Ma; GitHub SarielMa, HF lm2445), which this agent did not do (sending email is outside its remit); (5) citation count / downstream papers reporting FHS latency (Semantic Scholar rate-limited, web search budget exhausted).
+
+### notes
+Bottom line: FHS provides a hard CodiEsp-only anchor (Qwen3-32B, one B200, serial: 5.31 h per 3,144 facts = ~6.1 s/fact end-to-end; direct-retrieval floor ~1.35 s/fact) but NO financial-split latency and no cost ($) anywhere. The novelty claim 'nobody has benchmarked FinTagging-style linking with cost or latency' survives for the financial split specifically, but must be narrowed to acknowledge FHS Table 19's CodiEsp wall-clock. A 32B latency anchor on the financial split cannot be cited; it would have to be reproduced by re-running the released Financial_Tagging pipeline, which logs per-fact wall_time and token counts (three Slurm stages). Reconciling the two prior sweeps: '1.18 h' was correct (direct-retrieval row, hours); 'units not recoverable' reflected PDF text-extraction loss of the '(h)' header, which both the arXiv HTML and TeX preserve. Method notes: WebSearch was unavailable (budget exhausted), so discovery relied on direct fetches: arXiv abs/HTML/e-print TeX, GitHub (via gh api tree + raw files), HF dataset cards, arXiv export API; Semantic Scholar was rate-limited. JSON saved to /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/gap_10.json; downloaded sources under .../scratchpad/research/fhs/ (paper.html, paper.txt, src/acl_preprint.tex, repo/).

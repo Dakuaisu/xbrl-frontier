@@ -1,0 +1,176 @@
+# Single source of truth for every numeric gate, pin, seed and budget in PRD.md.
+# The PRD names these keys and never restates their values. Change values here, not in prose.
+# Empty revision/sha fields are filled at pin time (Phase 0) and never edited afterwards.
+schema_version: "2026-10-01.v2.2-frozen"   # v2: $10 cap, no rented GPUs, FinNI only, 0.6B/1.7B students, T4 + RTX 3050 serving; v2.1: cost gate, sampling, decision rule, fresh control, smoke test
+
+pins:
+  eval_finni:        { repo: "TheFinAI/FinNI-eval-v2", split: "test", rows_expected: 28787, hf_revision: "" }
+  eval_manifest:     "data/eval_manifest.csv"          # CIK, accession, filing date for all 142 FinTagging eval filings
+  eval_instance_map: "data/eval_instance_to_filing.csv" # every eval instance id -> accession (needed for bootstrap over filings)
+  train_accessions:  "data/train_accessions.txt"       # pinned accession list; never a date window relative to today
+  fresh_accessions:  "data/fresh_accessions.txt"       # post-cutoff slice, pinned the same way
+  students:
+    - { id: "Qwen/Qwen3-0.6B", hf_revision: "" }
+    - { id: "Qwen/Qwen3-1.7B", hf_revision: "" }       # primary
+  encoder_baseline:  { id: "nlpaueb/sec-bert-base", hf_revision: "" }
+  frontier_arms:     # zero-shot only; dateless Anthropic/Google ids are pinned snapshots per vendor docs; OpenAI dated snapshot used
+    - "gpt-6-luna"                   # cheapest arm
+    - "gemini-3.5-flash-lite"        # second vendor, cheap
+    - "gpt-5.4-mini-2026-03-17"      # mid-tier accuracy anchor
+  arm_swap_if_over_budget: { replace: "gpt-5.4-mini-2026-03-17", with: "gpt-5.4-nano-2026-03-17" }
+  seeds:             [ 1, 2 ]                          # primary student only; the 0.6B student runs seed 1
+  software:          { vllm: "", mlx_lm: "", transformers: "", peft: "", trl: "", unsloth: "", autoawq: "", llmcompressor: "", guidellm: "" }
+  price_sheet:       "config/prices_2026-10-01.yaml"
+
+eval:
+  dedup_policy:                 "exact_context_and_answer"   # report raw and deduplicated; headline uses deduplicated
+  aggregation:                  "global_pairs"               # pooled TP/FP/FN over all instances; per-instance mean also reported
+  value_normalization:          "fintagging_prompt_rules"    # strip $ % , ; no magnitude expansion; lowercase word numbers
+  bootstrap_resamples:          1000
+  ci_level:                     0.95
+  paired_bootstrap:             true                         # student-minus-frontier difference resampled per filing on the shared sample
+  slices:                       [ "context_type", "entity_type", "company", "fiscal_year", "context_token_bucket", "train_size_point" ]
+  oracles:
+    gold_copy_f1:               1.0
+    empty_prediction_f1:        0.0
+    gold_with_types_swapped_f1: 0.0
+    gold_half_dropped_recall:   0.5
+    tolerance:                  0.0005
+  label_audit:
+    sample_size:                300
+    second_pass_size:           100                          # re-checked a week later by the same person for self-agreement
+    stratify_by:                [ "context_type", "entity_type" ]
+    min_self_agreement:         0.90
+
+frontier:                    # all $ figures priced from pins.price_sheet, batch endpoints for accuracy, sync for latency
+  sample_filings:            23                               # default; recomputed from the probe, see PRD section 7
+  stratify_by:               [ "table_share_tercile", "instances_per_filing_tercile" ]   # 3 x 3 cells, 2-3 filings each
+  balance_check:             [ "sector" ]                      # reported against the manifest; redraw if a sector with > proportional share is empty
+  fresh_slice_control_arm:   "gpt-6-luna"                     # zero-shot on the full fresh slice, batch price, same reasoning margin
+  probe_filings:             1                                # per arm, synchronous, to measure real tokens before committing
+  reasoning_token_margin:    0.15                             # multiplier on the batch estimate for thinking/retry overhead
+  sync_latency_instances:    100                              # fixed ids, same for every arm and student
+  sync_runs:                 3
+  thinking:                  "minimum_the_api_allows"         # set per vendor; recorded in the run log
+  usd_reserve_min:           1.00                             # must remain unspent after the plan is priced
+  power_check:                                                # run after the primary student's full-set run, before the probe
+    sd_source:               "primary student between-filing F1 SD on the deduplicated full set (proxy for the paired SD)"
+    expected_half_width:     "1.96 * sd / sqrt(sample_filings)"
+    must_not_exceed_key:     "gates.headline_margin_f1"
+    if_exceeded:             "drop pins.frontier_arms[2]; sample_filings = largest N whose priced plan (remaining arms, their probe and sync costs, fresh control, reasoning margin) leaves usd_reserve_min; headline becomes 'fraction of the best remaining arm'"
+
+contamination:
+  eval_manifest_required_recovered: 142
+  instance_assignment_min_fraction: 0.95                      # share of eval instances mapped to a filing; the rest form an "unassigned" stratum
+  train_filing_date_max:            "2023-02-12"             # strictly before the FinTagging eval window
+  exclude_ciks_from:                [ "data/eval_manifest.csv", "research/edgar_submissions_train10.json" ]
+  ngram_n:                          13
+  max_flagged_train_docs_after_removal: 0
+  minhash_num_perm:                 128
+  minhash_jaccard_threshold:        0.8
+  fresh_slice_min_filings:          30
+  fresh_slice_filing_date_min:      ""                       # = max knowledge cutoff among pinned frontier arms + 1 day; filled at pin time
+
+training:
+  target_train_instances:    40000                            # sized to the Kaggle quota, see PRD section 9
+  negatives_fraction:        0.40                             # FinTagging v5 ratio is ~0.43 (12,310 / 28,787)
+  curve_points:              [ 2500, 5000, 10000, 20000, 40000 ]   # nested prefixes of one shuffled order; checkpoints at these example counts
+  curve_lr_schedule:         "constant"                       # so checkpoints are comparable; the final run may decay
+  curve_validation_run:      10000                            # one independent run at this size to check the nested-checkpoint curve
+  dev_slice_instances:       2000                             # held-out training-corpus slice used to score curve checkpoints cheaply
+  epochs:                    2
+  lora_rank:                 16
+  lora_alpha:                32
+  learning_rate:             1.0e-4
+  kaggle:
+    max_seq_len_tokens:      4096
+    dtype:                   "fp16"                           # T4 has no bf16
+    quant_base:              "nf4"                            # QLoRA via bitsandbytes
+    session_hours_max:       12
+    weekly_gpu_hours_quota:  30
+    gpu_hours_cap_total:     70
+    checkpoint_every_minutes: 30                              # resume across sessions
+  mac:
+    pilot_instances:         3000
+    max_seq_len_tokens:      2048
+    quant_base:              "4bit"                           # mlx-lm QLoRA
+    min_tokens_per_sec_to_train_0p6b_locally: 1500            # measured in the pilot; below this the 0.6B also trains on Kaggle
+  planning_tokens_per_sec:   { t4_qlora_1p7b: 1500, t4_qlora_0p6b: 3000 }   # planning assumptions only; replaced by pilot measurements
+
+serving:
+  hardware:
+    kaggle_t4:
+      gpu: "NVIDIA T4 16GB"
+      sm: 7.5
+      dtype: "fp16"
+      variants: [ "fp16", "int8-w8a8", "awq-int4" ]           # natively supported on Turing; FP8 is not
+      market_rate_keys:                                        # dated sources in config/prices_2026-10-01.yaml; first is the headline, all shown as sensitivity
+        - "gpu_per_hour.modal.T4"
+        - "gpu_per_hour.huggingface_endpoints.T4"
+        - "gpu_per_hour.aws.g4dn_xlarge_T4"                   # blank in the sheet until observed at pin time; dropped if still blank
+      load_generator_colocated: true                          # GuideLLM in the same notebook; network excluded and stated
+    rtx3050_wsl2:
+      gpu: "NVIDIA RTX 3050 Laptop 4GB"
+      sm: 8.6
+      dtype: "bf16"
+      variants: [ "0.6B-bf16", "0.6B-awq-int4", "1.7B-awq-int4" ]   # 1.7B bf16 weights alone are 3.4 GB and do not fit
+      vllm_flags: { enforce_eager: true, max_model_len: 4096, gpu_memory_utilization: 0.95, max_num_seqs: 8 }
+      cost_label: "owned hardware; latency and throughput only; no $ per filing is reported"
+  concurrency_levels:        { kaggle_t4: [ 1, 4, 16 ], rtx3050_wsl2: [ 1, 4 ] }
+  request_rate_sweep_rps:    [ 0.25, 0.5, 1, 2, 4 ]
+  warmup_requests:           20
+  requests_per_point:        200
+  slo:
+    ttft_p95_ms:             500
+    e2e_p95_ms:              2000
+  utilization_scenarios:     [ 0.10, 0.50, 0.90 ]
+  frontier_latency_vantage:  "mac_home_network"               # network included and stated
+  phase0_throughput_benchmark:                               # before any training; base models, vLLM fp16, FinNI token shape
+    models:                  [ "Qwen/Qwen3-0.6B", "Qwen/Qwen3-1.7B" ]
+    input_tokens:            1100
+    output_tokens:           175
+    concurrency_levels:      [ 1, 4, 16 ]
+    requests_per_point:      200
+    report:                  [ "max_throughput_filings_per_hour", "goodput_filings_per_hour_at_slo", "break_even_goodput_per_arm_per_regime", "gate_pass_goodput_per_arm_per_regime" ]
+    break_even:              "t4_rate / (arm $/filing at the regime price * regime utilization)"
+    gate_pass_goodput:       "gates.cost_ratio_vs_comparator_min * break_even"
+  smoke_test:                                                # Phase 0; one generation plus a short throughput check per variant per card
+    required:                true
+    cards:                   [ "kaggle_t4", "rtx3050_wsl2" ]
+    variants:                "all planned variants of serving.hardware.<card>.variants, using base-model checkpoints quantized the same way"
+    requests_per_variant:    20
+    failure_action:          "remove the variant from the serving table before training hours are spent; record the error"
+
+
+gates:                       # the minimum defensible version ships only if every gate passes
+  finni_f1_fraction_of_best_frontier_min:  0.90               # on the shared frontier sample, paired bootstrap
+  finni_f1_gain_over_zero_shot_min:        0.30               # absolute, same base model
+  quantized_f1_drop_max:                   0.02
+  quantized_flip_rate_max:                 0.05
+  headline_margin_f1:                      0.03               # the smallest distance from the headline threshold the design must resolve; drives frontier.power_check
+  cost_ratio_vs_comparator_min:            3.0                # T4 headline rate, gated regime below
+  cost_comparator_rule:                                       # which frontier arm the cost ratio is taken against
+    primary:   "cheapest arm whose F1 point estimate lies within the student's bootstrap CI on the shared sample"
+    fallback_1: "if no arm lies within the CI, the cheapest arm whose F1 is above the CI"
+    fallback_2: "if no arm is within or above the CI, the cheapest arm overall, and the result is labelled 'student dominates on quality'"
+  cost_gate_regime:                        "offline"          # the other regime is reported with the same rule, not gated
+  cost_regimes:
+    offline: { frontier_price: "batch", self_host_denominator: "max_throughput_filings_per_hour", utilization: 0.90 }
+    online:  { frontier_price: "sync",  self_host_denominator: "goodput_filings_per_hour_at_slo", utilization: 0.50 }
+  pareto_chart_required:                   true               # F1 vs $/filing, every arm and serving variant, both regimes
+  fresh_slice_f1_gap_max:                  0.05
+  fresh_slice_control_gap_reported:        true               # student gap next to the control arm's gap and their difference
+  decision_rule:                                              # applies to every gate that rests on a bootstrap statistic
+    statistic:    "paired_bootstrap_point_estimate"
+    pass:         "point_estimate meets threshold AND the whole CI meets it"
+    fail:         "point_estimate misses threshold AND the whole CI misses it"
+    inconclusive: "CI straddles the threshold, whichever side the point estimate is on; ships labelled, without the claim"
+    ci_level_key: "eval.ci_level"
+  encoder_baseline_reported:               true
+  learning_curve_reported:                 true
+
+budget:
+  usd_cap_total:         10
+  usd_cap_frontier_api:  10
+  usd_cap_gpu:           0                                    # no rented GPUs
+  hours_cap_total:       90

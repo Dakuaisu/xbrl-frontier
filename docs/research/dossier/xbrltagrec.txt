@@ -1,0 +1,72 @@
+### key
+xbrltagrec
+
+### query_name
+xbrltagrec
+
+### found
+True
+
+### title
+XBRLTagRec: Domain-Specific Fine-Tuning and Zero-Shot Re-Ranking with LLMs for Extreme Financial Numeral Labeling
+
+### authors
+Gang Hu, Qun Zhang, Jingyao Luo, Yile Jiang, Jing Chai, Haiyan Ding (School of Information Science & Engineering, Yunnan University, Kunming, China; corresponding author Haiyan Ding) [VERIFIED: arXiv API + PDF header]
+
+### venue_year
+arXiv 2603.25263, submitted 2026-03-26 (updated 2026-10-01), primary category cs.CE; arXiv journal_ref field = 'IJCNN 2026' [VERIFIED via export.arxiv.org API]. The string 'IJCNN' does not appear in the HTML/PDF body itself.
+
+### identifiers
+arXiv:2603.25263 (v1); https://arxiv.org/abs/2603.25263 ; https://arxiv.org/html/2603.25263v1 ; https://arxiv.org/pdf/2603.25263v1 (8 pages); code https://github.com/ckw29/XBRLTagRec ; no DOI, no ACL id; Semantic Scholar returned HTTP 429 on 5 attempts so citation count is unavailable; no citing works found by web search.
+
+### task_summary
+Text-only XBRL tag assignment for a given numeral in a 10-K sentence (financial numeral labeling / extreme classification over 2,794 US-GAAP tags), NOT full fact extraction (no value/period/unit extraction; the numeral and sentence are given). Pipeline: (A) FLAN-T5-Large fine-tuned with LoRA generates a semantic 'tag document' from instruction prompt + sentence + question about the target numeral; (B) Sentence-T5-XXL embeds the generated doc and all ground-truth tag docs, retrieves Top-10 by cosine similarity; (C) ChatGPT-3.5-Turbo-1106 zero-shot re-ranks: Top-10 split into 2 groups of 5 (order-preserving), each group's top pick is voted, repeated for up to 13 rounds, argmax of votes is the prediction. Tables are not handled. [VERIFIED from HTML body]
+
+### data
+Only FNXL (Sharma et al., ACL Findings 2023, arXiv 2306.03723). Full FNXL: 2,339 companies, 79,088 sentences, 142,922 annotated numerals, 2,794 tags (from SEC 10-K filings). Paper states: 'Since the full FNXL dataset [5] is not publicly available, we conduct experiments on the partial FNXL dataset released by Khatuya et al. [8]' (the FLAN-FinXC authors; Google Drive link https://drive.google.com/drive/folders/1a022npRv7zVOtGxUxAbgocYrarA4PzuW in the repo README). The paper does NOT state the subset's train/test sizes. No FinTagging evaluation (FinTagging is cited only in the Introduction, ref [10]); FiNER appears only as a baseline METHOD, not as an evaluated dataset. Code repo (ckw29/XBRLTagRec): created 2025-07-13, last push 2025-07-15, 0 stars, 0 forks, NO license, 7 files (README, lora_xbrl_tuning.py, Similarity_Retrieval.py, groupwise_shuffling_top10.py, groupdoc_rerank_gpt35.py, iterative_frequency_selection.ipynb, requirements.txt); no weights, no data; expects ./data/consolidated_xbrl_train.csv and consolidated_xbrl_test.csv. arXiv HTML carries CC BY 4.0 [SNIPPET-ONLY]. No XBRLTagRec model/dataset exists on Hugging Face (HF API search empty). Related HF FNXL cards: soummyaah-space/FNXL (train 1.34M / val 158k / test 219k rows, 1.15 GB, no card/license), TheFinAI/flare-fnxl (318 test rows), ChanceFocus/flare-fnxl, Dezh1/FNXL [VERIFIED via HF API + card fetch].
+
+### models_and_results
+Generator: google/flan-t5-large (780M per FLAN-FinXC paper), LoRA r=2, alpha=32, dropout 0.05, target modules q,v; 5 epochs, batch 8, lr 5e-4, max input 128 / target 30 tokens (from paper + repo script). Encoder: Sentence-T5-XXL. Re-ranker: ChatGPT-3.5-Turbo-1106 (openai==1.66.3 in requirements). Metrics: Hits@1, Macro-P, Macro-R, Macro-F1 on the partial FNXL. TABLE I (Hits@1 / M-P / M-R / M-F1): GalaXC 0.3596/0.2088/0.2193/0.1870; AttentionXML 0.7676/0.5069/0.4851/0.4754; Label Semantics 0.5815/0.3360/0.3135/0.3058; FiNER 0.6736/0.4104/0.4140/0.3896; FLAN-FinXC 0.8354/0.4724/0.4881/0.4616; XBRLTagRec (1-2 iters) 0.8526/0.4936/0.5018/0.4777; XBRLTagRec (1-8 iters) 0.8618/0.5171/0.5323/0.5050 -> +2.64 / +4.47 / +4.42 / +4.34 points over FLAN-FinXC. TABLE V (re-ranker swap, 1-2 iters; Hits@1/M-P/M-R/M-F1/avg): +ChatGPT-3.5 0.8526/0.4936/0.5018/0.4777/0.5814; +DeepSeek-V3 0.8672/0.4856/0.4935/0.4706/0.5792; +ERNIE-3.5-8K 0.8594/0.4992/0.5028/0.4827/0.5860; +GPT-4 0.8730/0.5160/0.5227/0.4998/0.6029 (text says GPT-4o, table says GPT-4). Caveats: AttentionXML's M-F1 (0.4754) exceeds FLAN-FinXC's (0.4616) in Table I though FLAN-FinXC is called the strongest baseline; FLAN-FinXC self-reports Hits@1 89.98 / Macro-F1 66.23 on full FNXL, far above the 0.8354/0.4616 reproduced here on the public subset. [all VERIFIED from HTML body]
+
+### small_models_evaluated
+FLAN-T5-Large (780M) is the only trainable component; it is a seq2seq generator, not a 1-3B decoder LLM. No quantized variants, no vLLM, no 1-3B decoder models. The LLM re-rankers (GPT-3.5, GPT-4(o), DeepSeek-V3, ERNIE-3.5-8K) are all API frontier models.
+
+### reports_training_cost
+partial: hardware only. 'We implement our framework on a 32GB Tesla V100 GPU and use the pretrained checkpoints of FLAN-T5-Large and Sentence-T5-XXL from Hugging Face.' No training hours, GPU-hours, or dollars. [VERIFIED]
+
+### reports_serving_cost
+no. Grep of HTML body text: 'price' 0, 'dollar' 0, '$' 0, 'API' 3 (qualitative). The word 'cost' appears 7 times, always qualitatively: 'significantly reducing training costs'; 'iterations 1-8 provide the optimal overall performance, balancing performance improvement with computational cost'; '1-8 iterations to balance performance and cost'; 'Considering both overall performance and computational cost, this study ultimately selects ChatGPT-3.5 as the primary experimental model'; 'Answer for RQ3: Considering computational cost, XBRLTagRec outperforms baselines with only two iterations across LLMs'; Limitations: '(1) iterative re-ranking with ChatGPT-3.5 increases computational and API costs'. No number is attached to any of these. Derived from the Implementation section (2 groups x up to 13 rounds): up to 26 GPT-3.5 calls per numeral at the full setting, 16 at '1-8 iters', 4 at '1-2 iters' -- the paper never prices this. [VERIFIED]
+
+### reports_latency_or_throughput
+no. Grep of HTML body text and pypdf-extracted PDF text: 'latency' 0, 'throughput' 0, 'inference time' 0, 'seconds' 0, 'hours' 0, 'runtime' 0, 'speed' 0. No per-sample or per-document timing anywhere; the repo training script has no timing/logging of elapsed time either. [VERIFIED]
+
+### relevance_to_idea
+SUPPORTS the narrow novelty claim for this paper: XBRLTagRec reports accuracy only (Hits@1/Macro-F1 on a text-only FNXL subset), names a V100 but gives zero latency/throughput/cost numbers, and its production path depends on 4-26 GPT-3.5 API calls per numeral, which it never prices. It does not touch FinTagging, tables, or 1-3B decoder models, so it is not a direct competitor to a 1-3B extraction model served with vLLM. CITE it as the current FNXL text-tagging SOTA (Hits@1 0.8618 / M-F1 0.5050 on the public subset) and as an example of accuracy-only reporting with an unpriced API-reranker dependency. CAUTIONS for the broader claim 'nobody reports cost/latency': (a) its predecessor FLAN-FinXC (NAACL 2024, arXiv 2405.06671) DOES print a coarse figure -- 'with an lr of 5e-4 with LoRA (training time: 56 minutes/epoch, inference time: 2 minutes/sample)' on Tesla V100 32GB, plus a Table 8 of training time per epoch for baselines (FiNER 12h, Label Semantics 9h, GalaXC 1.2h, AttentionXML 4h, FLAN-T5-Large w/ LoRA 56 min) [VERIFIED]; (b) FinTagging itself (arXiv 2505.20650) already benchmarks sub-8B models -- Qwen3-0.6B, Qwen3-1.7B, Llama-3.2-3B-Instruct, Llama-3.1-8B-Instruct, Fino1-8B -- for accuracy (e.g. Llama-3.2-3B-Instruct FinCL accuracy 0.0415; Qwen3-1.7B 0.0735; Qwen3-0.6B 0.0414; DeepSeek-V3 best at 0.1889) and gives only an aggregate budget: 'Models are evaluated with the LM Evaluation Harness on a 4 x H100 cluster and via APIs ... Total cost is approximately 500 GPU-hours and $1,500 in API usage.' [VERIFIED]. So the defensible framing is: no XBRL-tagging paper reports per-query serving cost, latency, or throughput, nor fine-tuned/quantized small-model variants on FinTagging; FinTagging's zero-shot small-model numbers are the baseline the project must beat, and FLAN-FinXC's '2 minutes/sample' is the only prior timing figure to acknowledge. REUSE: public FNXL subset (Google Drive via FLAN-FinXC repo; HF mirrors TheFinAI/flare-fnxl, soummyaah-space/FNXL) and XBRLTagRec's LoRA recipe/metrics for an FNXL side-experiment. AVOID: claiming the full FNXL is available (it is not), or comparing against FLAN-FinXC's self-reported 66.23 Macro-F1 without noting the subset discrepancy.
+
+### confidence
+high. VERIFIED (page fetched and raw text grepped locally): arXiv abstract page, arXiv API metadata (dates, journal_ref IJCNN 2026, cs.CE), full HTML body (all tables, implementation, limitations, grep counts for latency/throughput/cost/GPU/hours/seconds/price/dollar/$), pypdf-extracted PDF text (consistent counts), GitHub repo via API (dates, 0 stars, no license, file list) and raw README/requirements.txt/lora_xbrl_tuning.py, HF API model/dataset searches, HF cards for TheFinAI/flare-fnxl and soummyaah-space/FNXL, FLAN-FinXC HTML body (inference-time sentence, Table 8), FinTagging HTML body (cost sentence, small-model rows). SNIPPET-ONLY: CC BY 4.0 license on the arXiv HTML; corresponding-author email. UNAVAILABLE: Semantic Scholar citation count (HTTP 429 x5); exact size of the partial FNXL subset (not stated in paper); Google Drive folder contents not opened. JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/xbrltagrec.json
+
+### sources
+[
+ "https://arxiv.org/abs/2603.25263",
+ "https://arxiv.org/html/2603.25263v1",
+ "https://arxiv.org/pdf/2603.25263v1",
+ "https://export.arxiv.org/api/query?id_list=2603.25263",
+ "https://export.arxiv.org/api/query?search_query=all:%22XBRLTagRec%22&max_results=20",
+ "https://github.com/ckw29/XBRLTagRec",
+ "https://api.github.com/repos/ckw29/XBRLTagRec",
+ "https://raw.githubusercontent.com/ckw29/XBRLTagRec/main/README.md",
+ "https://raw.githubusercontent.com/ckw29/XBRLTagRec/main/requirements.txt",
+ "https://raw.githubusercontent.com/ckw29/XBRLTagRec/main/lora_xbrl_tuning.py",
+ "https://paperswithcode.co/paper/2603.25263",
+ "https://arxiv.org/abs/2405.06671",
+ "https://arxiv.org/html/2405.06671v1",
+ "https://github.com/subhendukhatuya/FLAN-FinXC",
+ "https://arxiv.org/abs/2306.03723",
+ "https://arxiv.org/html/2505.20650",
+ "https://huggingface.co/api/models?search=XBRLTagRec&limit=10",
+ "https://huggingface.co/api/datasets?search=FNXL&limit=10",
+ "https://huggingface.co/datasets/TheFinAI/flare-fnxl",
+ "https://huggingface.co/datasets/soummyaah-space/FNXL",
+ "https://api.semanticscholar.org/graph/v1/paper/arXiv:2603.25263 (HTTP 429, not retrieved)"
+]

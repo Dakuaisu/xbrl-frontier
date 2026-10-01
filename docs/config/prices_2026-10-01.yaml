@@ -1,0 +1,45 @@
+# Dated price sheet. Every $ figure in results must cite this file and its observed date.
+# All prices observed 2026-10-01 from vendor pages (see research/dossier/feas_api_pricing.txt and
+# research/dossier/feas_gpu_rental_serving.txt for the exact URLs and quotes). Re-observe before any new run.
+observed: "2026-10-01"
+
+api_per_million_tokens:      # input / output, synchronous list price; batch = 50% at all three vendors; cache reads ~90% off
+  claude-fable-5-1:            { input: 10.00, output: 50.00, batch_input: 5.00,  batch_output: 25.00, notes: "cache read 0.025x" }
+  claude-opus-5-5:             { input: 4.00,  output: 20.00, batch_input: 2.00,  batch_output: 10.00, notes: "thinking cannot be disabled; thinking tokens billed as output" }
+  claude-sonnet-5-5:           { input: 2.00,  output: 10.00, batch_input: 1.00,  batch_output: 5.00 }
+  claude-haiku-4-5-20251001:   { input: 1.00,  output: 5.00,  batch_input: 0.50,  batch_output: 2.50,  notes: "retirement not sooner than 2026-10-15; no newer Haiku" }
+  gpt-6-astra:                 { input: 10.00, output: 50.00, batch_input: 5.00,  batch_output: 25.00, notes: "no dated snapshot" }
+  gpt-6.1-sol:                 { input: 2.00,  output: 10.00, batch_input: 1.00,  batch_output: 5.00,  notes: "no dated snapshot" }
+  gpt-6-luna:                  { input: 0.10,  output: 0.50,  batch_input: 0.05,  batch_output: 0.25,  notes: "no dated snapshot" }
+  gpt-5.5-2026-04-23:          { input: 5.00,  output: 30.00, batch_input: 2.50,  batch_output: 15.00 }
+  gpt-5.4-mini-2026-03-17:     { input: 0.75,  output: 4.50,  batch_input: 0.375, batch_output: 2.25 }
+  gpt-5.4-nano-2026-03-17:     { input: 0.20,  output: 1.25,  batch_input: 0.10,  batch_output: 0.625 }
+  gemini-3.8-flash:            { input: 0.75,  output: 3.75,  batch_input: 0.375, batch_output: 1.875, notes: "promo through 2026-12-31; then 1.50 / 7.50" }
+  gemini-3.5-flash-lite:       { input: 0.30,  output: 2.50,  batch_input: 0.15,  batch_output: 1.25 }
+  gemini-3.1-pro-preview:      { input: 2.00,  output: 12.00, batch_input: 1.00,  batch_output: 6.00,  notes: "preview; 2-week retirement notice" }
+  tokenizer_notes: "Anthropic 4.7+ tokenizer yields ~30% more tokens than Sonnet 4.6/Haiku 4.5 for the same text. Report $/filing, never $/token."
+
+hosted_fine_tuning:
+  openai:   { available_to_new_users: false, notes: "platform closed to new users since 2026-05-07" }
+  anthropic:{ available: false }
+  vertex_gemini_2_5_flash_lite: { train_per_million_tokens: 1.50, tuned_inference: "same as base", base_input: 0.10, base_output: 0.40, notes: "2.5 models access-restricted for new users since 2026-09-18" }
+  vertex_gemini_3_1_flash_lite: { train_per_million_tokens: 3.00, tuned_inference: "1.5x base", base_input: 0.25, base_output: 1.50 }
+
+t4_sources_note: "T4 sources observed 2026-10-01: modal.T4 = 0.59 (per-second billing), huggingface_endpoints.T4 = 0.50; they differ by about 15%. A third source (aws.g4dn_xlarge_T4) is a blank to observe at pin time; never fill it from memory."
+
+gpu_per_hour:                # on-demand unless noted; single GPU
+  runpod:   { L4: 0.44, L4_secure: 0.49, A5000: 0.16, A100_80GB_PCIe: 1.19, A100_80GB_secure: 1.59, H100_PCIe: 1.99, H100_SXM: 2.69, RTX4090: 0.34 }
+  lambda:   { A10: 1.29, A100_40GB: 1.99, A6000: 1.09, H100_PCIe: 3.29, H100_SXM: 4.29 }
+  modal:    { L4: 0.80, A10: 1.10, A100_40GB: 2.10, A100_80GB: 2.50, H100: 3.95, T4: 0.59, notes: "per-second billing; $30/month free credits" }
+  aws:      { g5_xlarge_A10G: 1.006, g6_xlarge_L4: 0.805, g4dn_xlarge_T4: null, notes: "us-east-1 Linux on-demand; g4dn_xlarge_T4 NOT observed on 2026-10-01, fill at pin time with its own observed date or drop" }
+  vast_ai:  { L4: 0.32, RTX4090: 0.32, A100: 0.40, notes: "aggregator figure (getdeploying.com); marketplace, variable" }
+  huggingface_endpoints: { T4: 0.50, L4: 0.80, A10G: 1.00, A100: 2.50 }   # T4 observed 2026-10-01 (research/dossier/feas_gpu_rental_serving.txt)
+
+serverless_small_model_floors_per_million_tokens:
+  fireworks_under_4B_tier: { input: 0.10, output: 0.10 }
+  deepinfra_gemma_3_4b:    { input: 0.05, output: 0.10 }
+  together_llama_3_1_8b_lite: { input: 0.14, output: 0.14 }
+
+training_token_prices_per_million:
+  together_lora_sft_0_8B_to_9B: 0.34   # to 0.38; per-job minimum $4-60
+  fireworks_lora_sft_up_to_16B: 0.50

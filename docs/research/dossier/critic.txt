@@ -1,0 +1,108 @@
+### overall_assessment
+The dossier is thorough on the five anchor papers (FiNER-139, FNXL, FLAN-FinXC, FinTagging, XBRLTagRec) and converges on the same verdict from seven independent angles: the literal claim is false, the narrowed claim is open. My own checks (FLaME PDF grep, FinTagging v5 HTML, FHS PDF grep, FinLoRA v1 HTML, FinLoRA v2 PDF page 8 rendered and read, FinLoRA repo inference.py, HF model searches, arXiv newest-40 XBRL listing) confirmed the convergent verdict and resolved three dossier contradictions (FLaME FNXL scores, FLaME cost granularity, FinLoRA v1 FiNER coverage), but also exposed that the strongest 'prior latency' precedent, FinLoRA Figure 3, is an unbatched HF-transformers bitsandbytes-8bit per-example timing (approx. Llama-LoRA FiNER ~1.6 s, FNXL ~2.3 s vs Gemini ~0.3 s; the public test/inference.py contains no timing code, no batching, no vLLM), which strengthens the project's 'serving frontier' framing. Residual weaknesses a reviewer will probe: (1) nobody read the IEEE CSCloud 2025 FinAI-Contest papers that fine-tuned <=8B models on FinNI/FinCL; (2) the official FinCL evaluation depends on private rerank-candidate datasets and no public pair-level FinNI scorer exists, so a head-to-head against paper numbers is not yet reproducible; (3) the FinTagging taxonomy size and the canonical v2 test-set size are inconsistent across sources; (4) FinTagging labels are 99% unaudited iXBRL auto-labels (NORA shows iXBRL is noisy) so the accuracy ceiling is unknown. WebSearch budget was exhausted (200/200) before this critique; Semantic Scholar was rate-limited throughout the session, so the 2026 citation graph of FinTagging/FinLoRA is incompletely checked. Result JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/gap_critic.json; supporting extracts in .../scratchpad/gapcrit/ (flame.pdf.txt, fhs.pdf.txt, finlora.txt, finlora_p8.png).
+
+### novelty_claim_status
+DENTED, not dead. Items that kill the literal wording: (a) FinLoRA arXiv 2505.19819 [VERIFIED, PDF p.8 read]: LoRA/QLoRA Llama-3.1-8B on FiNER-139 (10k/7.4k) and FNXL (247 test), fine-tuning cost '$14.66 to $16.54', and Figure 3 per-task inference seconds incl. FiNER and FNXL bars (local Llama ~1.6/2.3 s vs Gemini FL ~0.3/0.3 s, visual estimate) — so 'XBRL tagging work reports accuracy but NOT latency' is false at 8B; (b) FinTagging v5 [VERIFIED]: Qwen3-0.6B, Qwen3-1.7B, Llama-3.2-3B AND DeepSeek-R1-Distill-Qwen-32B are already on the leaderboard zero-shot, so 'nobody has benchmarked small or distilled models on FinTagging' is false as written (only fine-tuned/distilled-into-small is open); (c) FLaME 2506.15846 Appendix F.4 Table 13 [VERIFIED by local PDF grep] tabulates per-dataset USD including FNXL for Llama 3 8B / Mistral 7B / Gemma 2 9B (zero-shot, FNXL F1 <= 0.057) — so 'no cost reported for small models on FNXL' is false; (d) FinAI Contest 2025 Task 2 [VERIFIED] fine-tuned <=8B models on FinNI/FinCL subsets and public 8-bit/4-bit Llama-3.1-8B adapters exist (LbbbbbY/FinAI_Contest_FinGPT) with no numbers; (e) arXiv 2603.22651 [VERIFIED] gives $/doc ($0.148-0.430) and p50 latency on 10k SEC filings with XBRL-derived labels (frontier/70B only, private). Items that keep the narrowed claim intact: no paper, HF model (search 'fintagging' = empty; lm2445 has no FinTagging models), contest result, or leaderboard reports a fine-tuned 1-3B (or quantized, vLLM-served) model on FinTagging FinNI+FinCL over the full taxonomy with per-fact/per-filing $ and p50/p95 latency vs frontier APIs; no FinTagging result anywhere carries serving cost or throughput (paper: aggregate '500 GPU-hours and $1,500'); FHS Table 19 wall-clock is CodiEsp-only [VERIFIED]; FinLoRA's latency is unbatched HF-transformers bnb-8bit per-example timing with no public timing code [VERIFIED]; arXiv newest-40 XBRL listing (to 2026-09-30) contains no FinTagging fine-tuning paper. Defensible wording: 'first public accuracy/cost/latency frontier for fine-tuned 1-3B models with quantized vLLM serving on FinTagging (and FNXL/FiNER-139 as secondary), measured against frontier APIs on the same split; FinLoRA (8B, training $, unbatched per-example seconds), FLaME (zero-shot API $ per dataset), FinTagging (zero-shot 0.6B-32B, aggregate budget) and 2603.22651 (frontier/70B $/doc on private SEC data) are the closest precedents.'
+
+### gaps
+[
+ {
+  "question": "Did any FinAI Contest 2025 Task 2 entrant (IEEE CSCloud 2025: FinVerse Agent DOI 10.1109/CSCloud66326.2025.00061 — '4-bit quantized LLaMA-3.1-8B with 15 LoRA adapters' incl. XBRL; FinGPT Agent .00062; FinGPT Agents .00066) publish FinNI/FinCL accuracy, model size, GPU memory, inference time or cost? Three agents saw only abstracts; full texts unread. If one reports FinNI/FinCL numbers plus efficiency for a quantized 8B, the 'first cost/latency on FinTagging' framing needs another qualifier (sub-8B).",
+  "why_it_matters": "These are the only known works that FINE-TUNED models for FinNI/FinCL before this project; an unseen results table with GPU memory or latency would be the closest competitor and must be cited either way.",
+  "suggested_queries": [
+   "https://ieeexplore.ieee.org/document/11261525 (and 11261461) via browser or institutional access; search 'FinVerse Agent' 'FinNI' OR 'FinCL' OR 'XBRL' results table",
+   "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1109/CSCloud66326.2025.00061?fields=title,abstract,openAccessPdf,citationCount (with x-api-key to avoid 429)",
+   "GitHub code search: \"FinNI\" \"FinCL\" lora llama fintagging (contest repos); https://github.com/Open-Finance-Lab/FinAI_Contest_2025 issues/leaderboard; https://huggingface.co/LbbbbbY/FinAI_Contest_FinGPT/tree/main (README of each adapter for eval numbers)",
+   "Google Scholar: \"FinAI Contest 2025\" \"XBRL\" Llama LoRA"
+  ]
+ },
+ {
+  "question": "Which FinTagging test set is canonical for v5 numbers, and can an outsider reproduce the official FinNI/FinCL scoring? HF FinNI-eval-v2 = 28,787 rows, FinTagging_Original_v2 = 46,496 rows, a v2 HTML snippet said 6,151/62,668; the FinBen fork's FinCL YAMLs point at PRIVATE datasets (TheFinAI/XBRL_Tagging_Pipeline_GPT4o_Rerank_1 / DeepSeek_v3_Rerank_1, test_split 'train'); no FinNI pair-level P/R/F1 scorer for LLM outputs was found; the FinCL embedding index is on Google Drive (text-embedding-3-small, an OpenAI dependency).",
+  "why_it_matters": "A head-to-head 'vs DeepSeek-V3 0.6932 / GPT-4o 0.5397' is only valid if the project scores on the same instances with the same candidate lists and scorer; otherwise reviewers will reject the comparison. It also decides whether the project must re-run the frontier APIs itself (cost!).",
+  "suggested_queries": [
+   "https://github.com/The-FinAI/FinTagging/issues (open an issue asking for the FinNI scorer, the rerank candidate lists, and the 28,787-vs-46,496 discrepancy)",
+   "https://datasets-server.huggingface.co/info?dataset=TheFinAI/FinTagging_Original_v2 vs .../FinNI-eval-v2 — diff context_id sets to see if 46,496 is a superset incl. negatives/duplicates",
+   "https://github.com/Yan2266336/FinBen/tree/master/tasks/FinTagging (list all YAMLs; check for a FinNI task and utils.py metric functions)",
+   "https://arxiv.org/html/2505.20650v2 and v3 — grep 'FinNI-eval' sizes to locate the 6,151/62,668 figure",
+   "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/retrieval/retrieval.py (does it rebuild the top-200 candidates from the shipped BM25 jsonl without OpenAI embeddings?)"
+  ]
+ },
+ {
+  "question": "How many concepts are in the FinCL taxonomy — 17,388 (FHS 2608.06614 '2024 US-GAAP inventory'; FinTagging v1 taxonomy DB; finer139 agent's narrowed claim) or 17,688 (FinTagging v5 text; my fetch) — and which taxonomy year/file (repo ships taxonomy/us-gaap-2024.xsd and us_gaap_2024_BM25.jsonl)?",
+  "why_it_matters": "The project's headline sentence quotes the label-space size; citing a number the benchmark authors themselves print inconsistently invites an easy reviewer nit, and the count determines the retrieval/constrained-decoding design (trie over N concept names).",
+  "suggested_queries": [
+   "Download https://raw.githubusercontent.com/The-FinAI/FinTagging/main/taxonomy/us_gaap_2024_BM25.jsonl and count lines; parse us-gaap-2024.xsd for xs:element count (abstract vs non-abstract)",
+   "grep '17,388' and '17,688' in https://arxiv.org/pdf/2505.20650v1 and v5 (local pdftotext)",
+   "https://arxiv.org/html/2608.06614 — quote the sentence defining the 17,388 inventory and whether abstract/deprecated concepts were excluded"
+  ]
+ },
+ {
+  "question": "What exactly did FinLoRA measure in Figure 3 (hardware, batch size, 8-bit vs 16-bit, transformers vs vLLM, prompt lengths), and are the per-task values available as numbers? I read approximate values from the chart (Llama LoRA: FiNER ~1.6 s, FNXL ~2.3 s, XBRL Analysis ~4.6 s; Gemini: ~0.3/0.3/1.4 s) and found that the public test/inference.py uses transformers + bitsandbytes with no batching and no timing calls (max_new_tokens=60), so the figure's provenance is unclear.",
+  "why_it_matters": "FinLoRA is the single prior work that reports latency on FiNER/FNXL; the project should contrast its vLLM/quantized serving numbers against FinLoRA's unbatched HF-transformers figure explicitly, and needs the methodology to do so honestly.",
+  "suggested_queries": [
+   "https://github.com/Open-Finance-Lab/FinLoRA/issues?q=inference+time OR latency OR 'Figure 3'",
+   "https://finlora-docs.readthedocs.io/en/latest/benchmark_results/resources.rst (and the .rst sources under docs/source/benchmark_results/) — grep 'inference'",
+   "Open a GitHub issue on Open-Finance-Lab/FinLoRA asking for Figure 3 raw numbers, GPU, batch size, and whether vLLM was used",
+   "https://arxiv.org/pdf/2505.19819 Appendix — grep 'batch' near 'inference' (my local finlora.txt extract can be grepped)"
+  ]
+ },
+ {
+  "question": "What is the label-noise ceiling of FinTagging, and are the 10 training filings disjoint from the 142 evaluation companies? Only 1,949 of 261,457 entities were human-audited (96% agreement, kappa 0.81); NORA (2605.24910) argues iXBRL labels are 'inherently noisy'; the training window (2024-02-13..2025-02-13) overlaps the eval window and disjointness is unstated; the 142 CIKs are unpublished but recoverable via EDGAR full-text search (verified on 2 samples).",
+  "why_it_matters": "A fine-tuned model's achievable FinNI/FinCL ceiling and the leakage story both hinge on this; reviewers will ask 'how much of the 0.19 FinCL ceiling is label noise?' and 'did you train on eval companies?'. Recovering the manifest is also needed for the contamination protocol already recommended.",
+  "suggested_queries": [
+   "EDGAR FTS exact-phrase queries (https://efts.sec.gov/LATEST/search-index?q=\"<first sentence of each context>\"&forms=10-K&dateRange=custom&startdt=2023-02-13&enddt=2025-02-13) over all 10 TrainingSet_Annotation.json filings and a stratified sample of FinNI-eval-v2 contexts; intersect CIKs",
+   "https://arxiv.org/html/2605.24910 — quote NORA's measured noise/disagreement rates on iXBRL concept labels and whether its 6.6M-sentence benchmark was released (GitHub/HF)",
+   "Re-score FinTagging's 1,949-instance audit subset vs the auto-labels: is the audit subset identifiable in benchmark_ground_truth_pipeline.json or FinNI-eval-v2 (ask authors)"
+  ]
+ },
+ {
+  "question": "Is the public FNXL release (HF soummyaah-space/FNXL: train.csv 121 MB, dev 13 MB, test 18.5 MB) the FULL dataset matching Table 1 (62,782/6,823/9,483 sentences), or the 'partial' subset that XBRLTagRec says is the only public version? The fnxl agent treats HF as full; XBRLTagRec and FLAN-FinXC say only a partial subset (Google Drive) is public; the HF viewer shows line-based row counts.",
+  "why_it_matters": "Determines whether FNXL can serve as a secondary benchmark with numbers comparable to FLAN-FinXC's 66.23 Macro-F1 (full set) or only to XBRLTagRec's 0.5050 (subset); also the license (README says research-only) affects redistribution of derived training data.",
+  "suggested_queries": [
+   "Download https://huggingface.co/datasets/soummyaah-space/FNXL/resolve/main/data/fnxl/finer/test.csv and count unique sentences / companies / labels vs Table 1 (9,483 / 794 / 1,374)",
+   "Compare against the FLAN-FinXC Google Drive folder https://drive.google.com/drive/folders/1a022npRv7zVOtGxUxAbgocYrarA4PzuW (consolidated_xbrl_train.csv / test.csv row counts) used by XBRLTagRec",
+   "Email/issue to soummyaah/FNXL ('Rest of the Data' issue #1) asking whether HF upload is complete and under what license"
+  ]
+ },
+ {
+  "question": "Do three unread titles contain small-model or efficiency results on XBRL tagging: 'Detecting Semantic Mismatches in XBRL Tag Mapping for SEC 10-K Filings: A Text Comparison and Historical Consistency Analysis' (2026, cites FiNER-139), 'Exploring LLMs for Financial Numeric Labelling and Summarization' (cites FLAN-FinXC; possibly Khatuya's KDD-24 PhD consortium paper), and 'Knowledge distillation for financial LLMs: a systematic review' (FITEE 2025, DOI 10.1631/fitee.2500282, cites FNXL)?",
+  "why_it_matters": "Each is a 2025-2026 FiNER/FNXL citer that the sweeps could not open (S2 429 / paywall); a distillation review or a tag-mapping paper could contain exactly the small-model XBRL efficiency table the claim says does not exist.",
+  "suggested_queries": [
+   "https://api.semanticscholar.org/graph/v1/paper/search?query=Detecting+Semantic+Mismatches+in+XBRL+Tag+Mapping+for+SEC+10-K+Filings&fields=title,year,venue,externalIds,abstract,openAccessPdf",
+   "https://kdd2024.kdd.org/wp-content/uploads/2024/07/paper_24.pdf (confirm it is the 'Exploring LLMs for Financial Numeric Labelling and Summarization' citer) ",
+   "https://link.springer.com/article/10.1631/fitee.2500282 (full text; grep 'latency', 'FNXL', 'FiNER', 'distill')",
+   "https://api.openalex.org/works?filter=title.search:Detecting%20Semantic%20Mismatches%20XBRL&select=id,title,publication_year,primary_location,open_access"
+  ]
+ },
+ {
+  "question": "Has anything appeared since June 2026 that fine-tunes or distills a small model on FinTagging, beyond what the sweeps saw? Semantic Scholar was rate-limited all session (citation lists partially stale: 4 vs 15 citers), Google Scholar was never queried, and HF datasets lm2445/FinTagging_1000* (Jul 2026, SFT-formatted, 800/200 split) signal that someone is preparing exactly this experiment (I verified lm2445 has published no FinTagging models yet).",
+  "why_it_matters": "A scooped result in Aug-Sep 2026 would not surface in the arXiv 'all:XBRL' listing if it uses different vocabulary ('US-GAAP concept linking', 'financial numeric entity', 'iXBRL'); the window between the HF SFT data (Jul 2026) and today is the risk.",
+  "suggested_queries": [
+   "Google Scholar: \"FinTagging\" 2026 (sort by date); \"FinNI\" \"FinCL\" fine-tuning; \"FinTagging_1000\"",
+   "https://api.semanticscholar.org/graph/v1/paper/5d05ef163ef270b9eabe80e9633e281f05097080/citations?fields=title,year,externalIds,abstract&limit=100 (with API key; compare to the 15 known citers)",
+   "https://api.openalex.org/works?filter=cites:<OpenAlex id of FinTagging SSRN record>&select=title,publication_year,primary_location (the SSRN record showed 3 citers nobody listed)",
+   "https://huggingface.co/api/datasets?search=FinTagging and ?search=FinCL re-run monthly; https://huggingface.co/api/models?search=xbrl&sort=lastModified",
+   "arXiv API: all:\"US-GAAP\" AND (all:\"fine-tun\" OR all:LoRA) sorted by date; all:\"concept linking\" AND all:financial"
+  ]
+ },
+ {
+  "question": "Is FLaME's FNXL evaluation comparable at all? Its FNXL F1 is <= 0.057 for every model (my PDF check), it reports 'new evaluation metrics for FNXL' based on numeric overlap rather than exact match, and its per-dataset Table 13 costs are provider API prices for zero-shot runs. Two dossier agents quoted FLaME FNXL scores of 0.52-0.66, which are wrong.",
+  "why_it_matters": "FLaME is the only paper with per-dataset dollar cost on FNXL for 7-9B models; the project will cite it as a cost precedent, so its metric definition and zero-shot setting must be stated precisely to avoid a reviewer catching a misquote.",
+  "suggested_queries": [
+   "https://arxiv.org/pdf/2506.15846 Appendix C/F: quote the FNXL metric definition ('numerical overlaps instead of enforcing exact matches') and Table 13 FNXL column for all models",
+   "https://github.com/gtfintechlab/FLaME — locate the FNXL scorer (flame/metrics or task config) and whether candidate tags are provided in the prompt"
+  ]
+ },
+ {
+  "question": "What are the units of FHS Table 19 wall-clock (5.31 +/- 1.71 for FHS full on CodiEsp) and did the authors run or report any timing on the 2,509-fact financial split? One sweep reports 'hours (1.18 h)', another says units are not recoverable; my local PDF extraction confirms the caption prints no unit and the text says 'per full test-set run on a single NVIDIA B200'.",
+  "why_it_matters": "FHS is the best published FinCL linker (Acc 0.255 on the 2,509-fact split with Qwen3-32B); if its per-fact latency on the financial split can be derived (e.g., hours per 2,509 facts), it becomes the natural 32B latency anchor against which a 1-3B linker is compared.",
+  "suggested_queries": [
+   "https://arxiv.org/html/2608.06614 (HTML may render the Table 19 header unit that the PDF extraction lost)",
+   "https://github.com/SarielMa/FHS (README empty; check commits/scripts for Slurm logs or timing config)",
+   "Email corresponding author for financial-split wall-clock and per-fact LLM call counts"
+  ]
+ }
+]
+
+### contradictions
+(1) FLaME FNXL scores — RESOLVED: sweep_concept_linking_methods ('Claude 3.5 Sonnet 0.655, DeepSeek R1 0.587, GPT-4o 0.523') and sweep_small_models ('best DeepSeek-V3 0.549') are wrong; sweep_related_benchmarks is right: Table 2 FNXL F1 column tops out at 0.057 (DeepSeek R1), Llama 3 8B 0.003 [VERIFIED, HTML + PDF]. (2) FLaME cost granularity — RESOLVED: sweep_small_models says 'suite-level only'; sweep_concept_linking says per-dataset Table 13 — the PDF Appendix F.4 'Cost Analysis Table' is per-dataset (e.g. Llama 3 70B FNXL $0.25), the HTML omits it [VERIFIED]. (3) FinLoRA v1 (2412.11378) scope — RESOLVED: sweep_finlora_openfinllm says its datasets are FinLoRA's own XBRL tag/value QA, 'not FiNER-139/FNXL'; sweep_small_models says it includes FiNER-139 — the paper does include 'FiNER dataset ... 139 types of XBRL Tags'; the 1.9 s 'time per example' is for XBRL extraction and 0.1 s for NER, no FiNER timing quoted [VERIFIED]. (4) FinTagging taxonomy size — UNRESOLVED: 17,688 (fintagging agent v5; my v5 fetch) vs 17,388 (FHS 'US-GAAP 2024 inventory', v1 taxonomy DB, finer139 agent's narrowed claim); v5 also says 'over 10k' and '17k+'. (5) FinTagging v2 test size — UNRESOLVED: 28,787 (FinNI-eval-v2, BIO_v2, v5 Table 4) vs 46,496 (FinTagging_Original_v2) vs 6,151/62,668 (v2 HTML snippet). (6) FinTagging licensing — sweep_industry_cost_benchmarks: 'data on HF, CC BY 4.0'; data_fintagging_release/data_finer_fnxl_alternatives: paper CC BY 4.0, FinTagging_Original MIT, seven other HF repos and GitHub have NO license — the latter is correct. (7) FinTagging version conflation — sweep_industry and sweep_small_models cite Qwen2.5-0.5B/1.5B/14B and 'best macro F1 0.0582' and '30 filings' (v1) where other agents cite v5 (Qwen3-0.6B/1.7B, 0.0659, 142 filings); both true for different versions, but the project must state the version. (8) FinLoRA fine-tuned on FNXL? — feas_training_data_scale: FNXL is test-only (247) and the FNXL score comes from the reporting-category adapter; several agents say 'fine-tunes on FiNER-139 and FNXL'; the former is the precise reading. (9) FinLoRA inference reporting — feas_training_data_scale/sweep_concept_linking quote the readthedocs page 'no inference time, latency, or throughput measurements', while the paper's Figure 3 has per-task seconds; both true (docs omit Fig 3); repo inference.py has no timing code [VERIFIED]. (10) FNXL availability — XBRLTagRec: 'full FNXL dataset is not publicly available', FLAN-FinXC/XBRLTagRec use a Google Drive subset; fnxl agent treats HF soummyaah-space/FNXL (121 MB train.csv) as the release — unverified whether HF matches Table 1 (gap 6). (11) FHS wall-time units — sweep_fintagging_followups: 'hours (e.g. 1.18 h)'; sweep_concept_linking: 'units not recoverable'; PDF caption prints no unit [VERIFIED]. (12) FiNER-139 license — HF cc-by-sa-4.0 vs Zenodo CC-BY-4.0 (noted by finer139 agent, unresolved). (13) Minor count mismatches: FinTagging citations S2 4 vs 15 vs OpenAlex 1/3; FinAuditing S2 17 vs HF 20; mlx-lm GitHub release v0.31.3 vs PyPI 0.32.0 — immaterial.

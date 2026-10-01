@@ -1,0 +1,138 @@
+### key
+gap_1
+
+### question
+Did any FinAI Contest 2025 Task 2 entrant (IEEE CSCloud 2025: FinVerse Agent DOI 10.1109/CSCloud66326.2025.00061 — '4-bit quantized LLaMA-3.1-8B with 15 LoRA adapters' incl. XBRL; FinGPT Agent .00062; FinGPT Agents .00066) publish FinNI/FinCL accuracy, model size, GPU memory, inference time or cost? Three agents saw only abstracts; full texts unread. If one reports FinNI/FinCL numbers plus efficiency for a quantized 8B, the 'first cost/latency on FinTagging' framing needs another qualifier (sub-8B).
+
+### topic
+gap_1: Did any FinAI Contest 2025 Task 2 entrant (FinVerse Agent .00061, FinGPT Agent .00062, FinGPT Agents .00066) publish FinNI/FinCL accuracy plus model size / GPU memory / inference time / cost?
+
+### facts
+[
+ {
+  "claim": "FinVerse Agent (DOI 10.1109/CSCloud66326.2025.00061) resolves to IEEE Xplore document 11261453 (not 11261525), CSCloud 2025 pp. 338-340 (3 pages), published 2025-11-07; authors Rana, Amin, Ameer (NUST Islamabad) and Latif.",
+  "evidence_url": "https://doi.org/10.1109/CSCloud66326.2025.00061",
+  "confidence": "VERIFIED",
+  "quote": "\"page\": \"338-340\" ... \"published\": {\"date-parts\": [[2025, 11, 7]]} (Crossref CSL-JSON); DOI redirect -> https://ieeexplore.ieee.org/document/11261453/"
+ },
+ {
+  "claim": "FinVerse Agent is closed access: no open-access PDF in OpenAlex or Semantic Scholar, no arXiv preprint by any author, no GitHub/Hugging Face repo found; full text could not be read.",
+  "evidence_url": "https://api.openalex.org/works?filter=doi:10.1109/CSCloud66326.2025.00061",
+  "confidence": "VERIFIED",
+  "quote": "\"is_oa\": false, \"oa_status\": \"closed\", \"oa_url\": null, \"any_repository_has_fulltext\": false; Semantic Scholar openAccessPdf url \"\"; arXiv au:Rana_Laiba returns 0 entries; GitHub repo search 'FinVerse LoRA' total_count 0"
+ },
+ {
+  "claim": "FinVerse abstract lists only quality metrics (accuracy, F1, match accuracy, BERTScore) benchmarked against GPT-4 and BloombergGPT; it does not mention FinNI/FinCL scores, GPU memory, inference time or cost.",
+  "evidence_url": "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1109/CSCloud66326.2025.00061?fields=title,abstract",
+  "confidence": "VERIFIED",
+  "quote": "It is built on a 4-bit quantized LLaMA-3.1-8B base model with 15 LoRA adapters. ... Performance is measured via accuracy, F1, match accuracy and BERTScore, benchmarked against models like GPT-4 and BloombergGPT."
+ },
+ {
+  "claim": "FinVerse IEEE keywords (visible without login) cover XBRL, CFA, sentiment, headlines, entity recognition, 'Matching Accuracy', 'Quantized' - none refer to latency, memory, throughput or cost; the Figures tab requires sign-in.",
+  "evidence_url": "https://ieeexplore.ieee.org/document/11261453/keywords#keywords",
+  "confidence": "VERIFIED",
+  "quote": "Author Keywords: Financial LLMs, LoRA, PEFT, Task Routing, XBRL, CFA Exams, Quantized, Agent; Index Terms: ... Sentiment Analysis, Matching Accuracy, Dynamic Selection, Financial Domain, Headlines, Agentic, Calculation Formula, ... Entity Recognition; Figures: 'Sign in to view'"
+ },
+ {
+  "claim": "FinGPT Agent paper (DOI .00062; Dong, Liu, Yang, Su, Northwestern) is a 3-page closed-access CSCloud paper (pp. 341-343); its abstract reports no numbers and no efficiency metrics.",
+  "evidence_url": "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1109/CSCloud66326.2025.00062?fields=title,abstract",
+  "confidence": "VERIFIED",
+  "quote": "Built on the FinLoRA backbone, FinGPT integrates structured prompting, semantic contrastive pretraining and angle-optimized embeddings. ... In simulated evaluations, FinGPT shows consistent gains in interpretability, robustness, and performance"
+ },
+ {
+  "claim": "The Northwestern team's public contest artifact is Hugging Face repo LbbbbbY/FinAI_Contest_FinGPT (owner Bingye Liu, a co-author of .00062); it contains LoRA adapters fintagging_finni_rag_llama_3_1_8b_8bits_r8, fintagging_fincl_rag_llama_3_1_8b_8bits_r8, fintagging_combined_rag_... and apollo_fintagging_combined_... on 8-bit Llama-3.1-8B-Instruct (r=8, q/k/v), plus 4-bit adapters only for non-FinTagging tasks.",
+  "evidence_url": "https://huggingface.co/api/models/LbbbbbY/FinAI_Contest_FinGPT",
+  "confidence": "VERIFIED",
+  "quote": "finlora_hf_submission/models/fintagging_finni_rag_llama_3_1_8b_8bits_r8/adapter_model.safetensors ... models_4bit/{sentiment,ner,headline,xbrl_extract,xbrl_term,financebench,finer,formula}_llama_3_1_8b_4bits_r4; adapter_config: base_model_name_or_path meta-llama/Llama-3.1-8B-Instruct, r 8, target_modules k_proj,q_proj,v_proj"
+ },
+ {
+  "claim": "The Northwestern HF submission publishes NO FinNI or FinCL accuracy/F1 and NO inference latency or cost; its results table covers only FPB, NER, Headline, FiQA-SA and 'XBRL Tag Extraction' accuracy 0.200.",
+  "evidence_url": "https://huggingface.co/LbbbbbY/FinAI_Contest_FinGPT/raw/main/finlora_hf_submission/SUBMISSION_SUMMARY.md",
+  "confidence": "VERIFIED",
+  "quote": "| XBRL Processing | XBRL Tag Extraction | - | 0.200 | ... testdata/ ├── FinCL-eval-subset.csv └── FinNI-eval-subset.csv (no FinNI/FinCL scores anywhere in SUBMISSION_SUMMARY.md, README-finlora.md or README.md)"
+ },
+ {
+  "claim": "The only efficiency numbers in the Northwestern artifact are training-time peak GPU memory auto-logged by Axolotl on the adapter cards (FinNI adapter ~11.83 GiB allocated / 12.78 GiB reserved; FinCL adapter 11.51 GiB) and a '16GB+ GPU memory' recommendation; inference.py uses HF transformers + bitsandbytes (no vLLM) and logs no timing.",
+  "evidence_url": "https://huggingface.co/LbbbbbY/FinAI_Contest_FinGPT/raw/main/finlora_hf_submission/models/fintagging_finni_rag_llama_3_1_8b_8bits_r8/README.md",
+  "confidence": "VERIFIED",
+  "quote": "Memory/max Mem Allocated(gib): 11.83 ... Memory/device Mem Reserved(gib): 12.78; load_in_8bit: true; num_epochs: 3; sequence_len 4096 (inference.py: load_in_8bit=True, llm_int8_threshold=6.0; no inference time, latency, or GPU memory logging)"
+ },
+ {
+  "claim": "FinGPT Agents (DOI .00066; Chandra & Balakrishna, Anurag University) full text IS openly available as a PDF in the team's GitHub repo; the paper never mentions XBRL, FinNI, FinCL, FinTagging, FiNER or FNXL (0 hits) - it evaluates only CFA-style QA.",
+  "evidence_url": "https://raw.githubusercontent.com/SatishChandraPhD/FinAI2025/main/Paper/Paper_8171_FinGPT_Agents_RFT_%20LLMs4FinAnalytics_Ver_2.0.docx.pdf",
+  "confidence": "VERIFIED",
+  "quote": "Keywords—FinGPT, CFA question answering, financial agents, LoRA, explainability, financial reasoning models, financial LLMs, supervised fine-tuning, reinforcement fine-tuning, LLaMA-2, finance QA"
+ },
+ {
+  "claim": "FinGPT Agents (.00066) does report model size, quantization, hardware and an end-to-end processing time - but for a 4-bit Llama-2-7B agent on 30 CFA-style questions, not for FinNI/FinCL: 47.9 s average (24.9 s conceptual, 56.4 s bond math, 62.5 s portfolio); SFT took 54.52 min on a Colab A100 40GB.",
+  "evidence_url": "https://raw.githubusercontent.com/SatishChandraPhD/FinAI2025/main/Paper/Paper_8171_FinGPT_Agents_RFT_%20LLMs4FinAnalytics_Ver_2.0.docx.pdf",
+  "confidence": "VERIFIED",
+  "quote": "Base Model was loaded with 4-bit quantization + LoRA on device: cuda:0. Out of the total 6,778,392,576 parameters the trainable parameters were 39,976,960 ... The programs were executed using A100 GPU with 40GB on Google Colab. ... Processing Time: 47.9 seconds average"
+ },
+ {
+  "claim": "Only three FinAI Contest 2025 Task 2 papers exist in the CSCloud 2025 proceedings (.00061 FinVerse, .00062 FinGPT Agent, .00066 FinGPT Agents); neighbouring DOIs .00058/.00060/.00063/.00067 are Task 1/Task 3 papers and .00059/.00064/.00065 are unrelated.",
+  "evidence_url": "https://api.openalex.org/works?search=%22FinAI%20Contest%202025%22&per-page=50",
+  "confidence": "VERIFIED",
+  "quote": "OpenAlex count 11: ...00061 FinVerse Agent | ...00067 FinAI-Trader ... Task 1 | ...00063 DeFi Liquidity Provisioning | ...00058 Hybrid DRL ... Uniswap V3 | ...00062 FinGPT: Agent ... | ...00060 Multi-Agent Deep RL for Crypto Trading | ...00066 FinGPT Agents"
+ },
+ {
+  "claim": "The contest's official Task 2 evaluation used FinNI (sample 200, F1) and FinCL (sample 500, Accuracy) plus XBRL analysis tasks and FiNER-139/FNXL subsets, recommended <=8B models, and specified no latency, GPU-memory or cost criterion.",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/FinAI_Contest_2025/main/Task_2_FinGPT_Agents_Real_Life/README.md",
+  "confidence": "VERIFIED",
+  "quote": "| Financial Numeric Identification (FinNI)[7] | 6.6k (sample 200) | F1 | ... | Financial Concept Linking (FinCL) [7] | 52.6k (sample 500) | Accuracy |; 'It is recommended that the model size should not exceed 8B parameters'; 'The model evaluation in each domain is the average score of all tasks.'"
+ },
+ {
+  "claim": "Contest organisers' Task 2 baseline page gives XBRL-analysis and CFA baselines for GPT-4o, DeepSeek V3, Llama 3 70B and Gemini 2.0 FL but no FinNI/FinCL baselines and no latency/cost figures.",
+  "evidence_url": "https://finrl-contest.readthedocs.io/en/latest/finai2025/task2.html",
+  "confidence": "VERIFIED",
+  "quote": "GPT-4o: 81.60% tag extraction, 97.01% value extraction, 79.76% formula construction, 83.59% calculation ... No specifications mentioned regarding model size limits, GPU memory, inference time, latency, or cost."
+ },
+ {
+  "claim": "FinLoRA (arXiv 2505.19819, the backbone of the .00062 entry and the contest's reference implementation) DOES report inference-stage time for a LoRA-fine-tuned Llama-3.1-8B on its 19 tasks including FiNER-139, FNXL and XBRL Term (Figure 3, graphical), plus fine-tuning cost ($14.66-$16.54 on 4xA5000) - but no per-fact serving cost, no sub-8B model, and FinTagging is not among its datasets.",
+  "evidence_url": "https://arxiv.org/html/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "Figure 3: 'Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks'; 'Gemini API generally exhibits lower inference latency and is less sensitive to increasing prompt lengths than local Llama 3.1 8B Instruct inference'; 'At an estimated rate of $0.26 per GPU hour, this translates to a cost of roughly $14.66 to $16.54.'; no models smaller than 8B are evaluated"
+ },
+ {
+  "claim": "FinLoRA docs publish a GPU-memory table for Llama-3.1-8B LoRA (fine-tuning, batch 4/8): r8-8bit 11.41/11.81 GB, r8-4bit 8.26/8.65 GB, 16-bit 30.91 GB; the resources page explicitly contains no inference-time or inference-memory table.",
+  "evidence_url": "https://finlora-docs.readthedocs.io/en/latest/benchmark_results/resources.html",
+  "confidence": "VERIFIED",
+  "quote": "Llama-3.1-8B-r8-8bit | 4.72M | 11.41 GB | 11.81 GB | 8.04 GB | 50.1%; Llama-3.1-8B-r8-4bit | 4.72M | 8.26 GB | 8.65 GB | 4.02 GB | 25.0%"
+ },
+ {
+  "claim": "The FinTagging benchmark paper (arXiv 2505.20650, v5 revised 2026-05-17) already evaluated 0.6B-3B open models zero-shot on FinNI/FinCL (Llama-3.2-3B FinNI F1 0.1460 / FinCL acc 0.0415; Qwen3-1.7B 0.0541 / 0.0735; Qwen3-0.6B 0.0038 / 0.0414; Llama-3.1-8B 0.2421 / 0.0913; best DeepSeek-V3 0.6932 / 0.1889) but reports no per-model latency or cost and fine-tuned no LLM (only BERT-large/FinBERT/SECBERT).",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "Models are evaluated with the LM Evaluation Harness on a 4×H100 cluster and via APIs, using input limits of 24,576 (FinNI) and 8,192 (FinCL) tokens. Total cost is approximately 500 GPU-hours and $1,500 in API usage. ... No LLMs were fine-tuned on FinTagging data; all LLMs were evaluated in zero-shot settings."
+ },
+ {
+  "claim": "The-FinAI/FinTagging GitHub README (updated 2026-09-17) lists 13 evaluated models and best scores (SECBERT macro-F1 0.2145 overall; DeepSeek-V3 FinNI F1 0.7238, FinCL acc 0.1715) with no latency, inference-time, GPU-memory or cost information.",
+  "evidence_url": "https://github.com/The-FinAI/FinTagging",
+  "confidence": "VERIFIED",
+  "quote": "No mentions of latency, inference time, GPU memory requirements, or computational costs appear in this README."
+ },
+ {
+  "claim": "SecureFinAI Contest 2025 Task 2 (ICAIF 2025) also evaluates FinNI/FinCL with a <=8B cap; no entrant papers from it are indexed in OpenAlex, and no arXiv paper other than FinTagging itself mentions FinNI or FinCL in its abstract.",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/SecureFinAI_Contest_2025/main/Task_2_FinGPT_Powered_Compliance_Agents/README.md",
+  "confidence": "VERIFIED",
+  "quote": "The model size should not exceed 8B parameters. (OpenAlex search \"SecureFinAI Contest\" count 0; arXiv abs:\"FinCL\" OR abs:\"FinNI\" returns only 2505.20650)"
+ },
+ {
+  "claim": "Works citing FinVerse (2 in OpenAlex) are unrelated sentiment/edge-NLP papers, and works citing FinTagging in OpenAlex (FAITH, Conv-FinRe) are not small-model latency/cost benchmarks; Semantic Scholar citation endpoints returned HTTP 429 so its citation graph could not be checked.",
+  "evidence_url": "https://api.openalex.org/works?filter=cites:W4416923051",
+  "confidence": "VERIFIED",
+  "quote": "10.1145/3832928.3833015 | Application of Large Language Model Fine-Tuning in Financial News Sentiment Recognition | 2026; 10.1109/icisc69558.2026.11681338 | A Resource-Adaptive and Semantically Compressed Transformer Framework for Multilingual Sentiment Analysis on Edge Devices | 2026"
+ },
+ {
+  "claim": "Public HF XBRL LoRA checkpoints from other apparent contest participants (e.g., Ben16001/XBRL-LoRA5050V2 on Qwen3-4B-Instruct-2507; binhminh1/GPT-OSS-20B-XBRL-finetuned) carry only training loss, no FinNI/FinCL scores and no latency/cost.",
+  "evidence_url": "https://huggingface.co/Ben16001/XBRL-LoRA5050V2",
+  "confidence": "VERIFIED",
+  "quote": "a fine-tuned version of Qwen/Qwen3-4B-Instruct-2507 ... validation loss of 0.0429 ... no evaluation metrics beyond loss are provided"
+ }
+]
+
+### unknowns
+(1) FinVerse Agent (.00061) full text remains unread: paywalled on IEEE Xplore (doc 11261453), no OA copy, no preprint, no code; so whether its 3 pages contain a FinNI/FinCL results table or any GPU-memory/latency figure is UNVERIFIED. Its abstract and IEEE keywords list only quality metrics (accuracy, F1, match accuracy, BERTScore; 'Matching Accuracy', 'Quantized'), which makes an efficiency table unlikely but not excluded. (2) FinGPT Agent (.00062) full text also unread (paywalled, 3 pages); only the team's HF artifact was inspected. (3) Semantic Scholar search/citation endpoints were rate-limited (429), and Google Scholar/DuckDuckGo returned CAPTCHAs, so the citation-graph sweep for later FinTagging latency/cost work relied on OpenAlex and arXiv only. (4) The session's WebSearch budget was already exhausted when this task started; discovery used OpenAlex, Crossref, the arXiv API, GitHub API/gh, the HF API, Brave/Bing fetches and the browser pane instead.
+
+### notes
+RESOLUTION: No public evidence that any FinAI Contest 2025 Task 2 entrant published FinNI/FinCL accuracy together with GPU memory, inference time or cost. (.00066) is fully read (open PDF in the team's GitHub repo): it never touches XBRL/FinNI/FinCL; it does report 4-bit Llama-2-7B, Colab A100-40GB, and 47.9 s average processing time, but only for 30 CFA-style questions. (.00062) team's HF repo proves they LoRA-fine-tuned 8-bit Llama-3.1-8B adapters for FinNI and FinCL, yet publishes no FinNI/FinCL scores and no inference latency/cost (only Axolotl training peak memory ~11.5-11.8 GiB and a '16GB+ GPU' recommendation; inference via HF transformers, not vLLM). (.00061 FinVerse) is unverifiable without IEEE access; its abstract/keywords name no efficiency metric. FRAMING ADVICE: the 'first cost/latency on FinTagging' claim survives for FinTagging/FinNI/FinCL, but should be worded 'to our knowledge', citing FinVerse as a 4-bit 8B LoRA contest system whose abstract reports accuracy-type metrics only, and citing the Northwestern HF adapters as prior (unreported) FinNI/FinCL fine-tunes. The broader clause 'nobody benchmarked ... FNXL/FiNER with cost or latency' must be narrowed: FinLoRA (arXiv 2505.19819) reports average inference time (Figure 3) and fine-tuning cost for LoRA-tuned Llama-3.1-8B on FiNER-139/FNXL/XBRL Term, albeit no sub-8B model, no vLLM/quantized serving comparison, and no $-per-fact frontier; so qualify as 'no sub-8B / no serving-cost-vs-API-frontier'. Also note FinTagging itself already reports zero-shot accuracy for Llama-3.2-3B, Qwen3-1.7B and Qwen3-0.6B (very low), which strengthens the fine-tuning motivation but means 'small models on FinTagging' is not itself new - only 'fine-tuned small models with cost/latency' is. Suggested next step: obtain the 3-page FinVerse PDF through institutional IEEE access (or email the NUST authors) to close the remaining gap. JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/gap_1.json; supporting downloads (FinGPT Agents PDF + extracted text, HF submission docs, FinLoRA docs HTML) are in the same folder.

@@ -1,0 +1,285 @@
+### key
+sweep_academic_cost_quality_frontier
+
+### angle
+sweep_academic_cost_quality_frontier: academic papers (2023-2026) that report an accuracy-vs-cost or accuracy-vs-latency frontier for small fine-tuned/distilled models vs frontier LLMs on IE/NER, any domain and finance specifically; plus whether FinBen/FinEval/PIXIU/BizFinBench/FinMTEB/FinTagging report cost or latency. JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/sweep_academic_cost_quality_frontier.json
+
+### queries_run
+[
+ "WebSearch: FinTagging benchmark XBRL LLM financial information extraction arXiv",
+ "WebSearch: small language model fine-tuned vs GPT-4 information extraction cost latency Pareto frontier paper",
+ "WebSearch: \"cost-effective\" named entity recognition small model distillation vs GPT-4 accuracy cost tradeoff arXiv 2024",
+ "WebSearch: FinBen benchmark financial LLM inference cost latency reported",
+ "WebSearch: financial NER FiNER-139 FNXL small model fine-tuned cost latency benchmark",
+ "WebSearch: \"accuracy\" \"cost\" \"latency\" frontier small fine-tuned model vs frontier LLM extraction FinNLP ICAIF 2025",
+ "WebSearch: BizFinBench financial benchmark LLM cost latency evaluation",
+ "WebSearch: distilled small LLM structured extraction \"per 1000 documents\" cost comparison GPT-4 fine-tuned Llama 2024 arXiv",
+ "WebSearch: PIXIU FinMA financial LLM benchmark inference latency cost reported arXiv 2306.05443",
+ "WebSearch: FinMTEB finance embedding benchmark latency cost reported",
+ "WebSearch: FinNLP 2025 shared task FinTagging XBRL system paper small model fine-tuned Qwen Llama",
+ "WebSearch: \"Pareto\" accuracy cost LLM financial document extraction small model fine-tuned vs GPT-4o arXiv",
+ "WebSearch: LLM XBRL tagging 10-K cost per filing latency GPT-4 fine-tuned small model 2025",
+ "WebSearch: FinEval financial benchmark Chinese LLM latency cost evaluation dimensions",
+ "(6 further WebSearch queries blocked by the session search budget — Phi-3-mini finance study; Cost-of-Pass; GLiNER/NuExtract; quantized finance NER; FinNLP NER inference-time; AI Agents That Matter — resolved via direct WebFetch instead)",
+ "arXiv API: all:\"FiNER-139\" OR all:\"FNXL\" OR all:\"FinTagging\" (6 hits)",
+ "arXiv API: all:\"XBRL\" AND (latency OR \"inference cost\" OR throughput OR quantized) (0 hits)",
+ "arXiv API: financial+extraction+\"small language model\" OR financial+\"named entity\"+latency (4 hits)",
+ "arXiv API: (\"small language model\" OR \"compact model\" OR distilled) AND (\"information extraction\" OR NER) AND (latency OR \"inference cost\" OR Pareto) (4 hits)",
+ "arXiv API: \"Phi-3\" AND financial AND fine-tun (0 hits)",
+ "Semantic Scholar citations of FinTagging arXiv:2505.20650 (4 citing papers)",
+ "Semantic Scholar citations of FNXL arXiv:2306.03723 (18 citing papers)",
+ "Semantic Scholar citations of FiNER-139 arXiv:2203.06482 (100 citing papers)",
+ "Semantic Scholar keyword search (XBRL tagging / financial NER cost latency / SLM cost latency) — HTTP 429 on all 4 attempts",
+ "ACL Anthology event listings: finnlp-2025 (76 papers), finnlp-2024; finnlp-2026 and ICAIF-25 accepted-papers pages 404",
+ "Direct fetches: ~45 arXiv abs/html/pdf pages, FinLoRA GitHub README, vals.ai finance leaderboard, premai blog; local PyMuPDF text extraction of 7 PDFs (FinLoRA, Sub-Billion, pathology, biomedical, Efficient FinBERT, L3iTC, DistFin)"
+]
+
+### findings
+[
+ {
+  "title": "FinLoRA: Benchmarking LoRA Methods for Fine-Tuning LLMs on Financial Datasets",
+  "url": "https://arxiv.org/abs/2505.19819",
+  "year": "2025",
+  "what": "LoRA/QLoRA/DoRA/rsLoRA fine-tuning of Llama 3.1 8B Instruct (smallest model) on 19 financial datasets incl. FiNER-139 and FNXL XBRL tagging and four new XBRL analysis sets; compared to base Llama 8B/70B, DeepSeek-V3, GPT-4o, fine-tuned Gemini 2.0 Flash-Lite. Table 4: FiNER-139 F1 LoRA-8B 0.759 vs GPT-4o 0.725 vs Gemini-FT 0.802; FNXL rsLoRA 0.348 vs GPT-4o 0.398.",
+  "reports_cost": "partial — fine-tuning cost only: 'At an estimated rate of $0.26 per GPU hour, this translates to a cost of roughly $14.66 to $16.54' vs Gemini $162.02 / GPT-4o-mini $312; no per-query inference dollar cost.",
+  "reports_latency": "yes — Figure 3 'Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks FiNER FNXL ...'; text: 'Gemini API generally exhibits lower inference latency and is less sensitive to increasing prompt lengths than local Llama 3.1 8B Instruct inference, even when accounting for network overhead for the API.' Paper states it will 'report computational cost in terms of time and GPU memory during fine-tuning and inference stages.'",
+  "threat_to_novelty": "high — directly contradicts 'nobody reports latency for fine-tuned models on FiNER/FNXL'; it does, for an 8B LoRA model vs an API model, though with no dollar inference cost, no sub-3B models, no quantized serving variants, no vLLM, and no FinTagging.",
+  "verification": "VERIFIED (arXiv HTML + local PDF text extraction + GitHub README)"
+ },
+ {
+  "title": "Benchmarking Multi-Agent LLM Architectures for Financial Document Processing: A Comparative Study of Orchestration Patterns, Cost-Accuracy Tradeoffs and Production Scaling Strategies",
+  "url": "https://arxiv.org/abs/2603.22651",
+  "year": "2026",
+  "what": "Four multi-agent orchestration patterns x five LLMs (GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Pro, Llama 3 70B, Mixtral 8x22B) on 10,000 SEC filings (4k 10-K, 4k 10-Q, 2k 8-K) extracting 25 fields (financial metrics, governance, compensation); ground truth partly XBRL-derived plus CFA/CPA annotators. No model under 8B, none fine-tuned; not FinTagging/FNXL/FiNER; private corpus.",
+  "reports_cost": "yes — 'five axes: field-level F1, document-level accuracy, end-to-end latency, cost per document and token efficiency'; 'The Hierarchical-Optimized point (green star) offers the best cost-efficiency knee, achieving F1 = 0.924 at only $0.148/doc.'; 'Hierarchical architectures occupy the most favorable position on the cost-accuracy Pareto frontier (F1 0.921 at 1.4x cost)'",
+  "reports_latency": "yes — end-to-end p50 latency per document reported per architecture/model (e.g. 46.2 s hierarchical Claude 3.5 Sonnet).",
+  "threat_to_novelty": "high — an explicit cost-per-document / latency / accuracy Pareto frontier for numeric fact extraction from SEC 10-K/10-Q already exists (Mar 2026); it does not cover small/fine-tuned/quantized models or a public benchmark, which is where the project must position itself.",
+  "verification": "VERIFIED (arXiv abs + HTML)"
+ },
+ {
+  "title": "How Small Can You Go? LoRA Fine-Tuning 270M-8B Models for Merchant Information Extraction in Financial Transactions",
+  "url": "https://arxiv.org/abs/2606.08051",
+  "year": "2026",
+  "what": "LoRA fine-tuning of Gemma 3 (270M/1B/4B), Qwen 3.5 (0.8B/2B/4B), Aya 3.35B, Llama 3.1 8B to extract 10 JSON fields from 8,015 bank transaction strings; reports F1 and median samples/s; Figure 5 plots F1 vs inference time (Pareto); no frontier API baseline; no dollar cost; private data.",
+  "reports_cost": "no — only '657 GPU-hours of retained compute' for training; no per-query cost.",
+  "reports_latency": "yes — 'Inference throughput is reported as median samples per second'; Figure 5 F1 vs inference time; '3.8x reduction in per-sample inference time' from Llama 8B to Qwen 3.5 4B at -0.15 F1.",
+  "threat_to_novelty": "medium — closest methodological analog in finance (sub-1B to 8B size sweep with an accuracy-latency Pareto), but different task, private data, no API comparison and no cost.",
+  "verification": "VERIFIED (arXiv HTML)"
+ },
+ {
+  "title": "FinTagging: Benchmarking LLMs for Extracting and Structuring Financial Information",
+  "url": "https://arxiv.org/abs/2505.20650",
+  "year": "2025 (v5 May 2026)",
+  "what": "The target benchmark: FinNI (numeric fact extraction from text+tables) and FinCL (linking to 10k+ US-GAAP concepts). Zero-shot eval of GPT-4o, DeepSeek-V3, Qwen3 0.6B/1.7B/14B/32B, Llama-3.2-3B, Llama-3.1-8B, Gemma-2-27B, Fino1-8B plus fine-tuned BERT/FinBERT/SECBERT. Small models collapse: Qwen3-0.6B FinNI F1 0.0038, Llama-3.2-3B 0.146 vs DeepSeek-V3 0.693 / GPT-4o 0.540. Only 4 citing papers on Semantic Scholar, none fine-tuning small models.",
+  "reports_cost": "partial — only aggregate evaluation spend: 'Total cost is approximately 500 GPU-hours and $1,500 in API usage.' No per-model cost.",
+  "reports_latency": "no",
+  "threat_to_novelty": "none — confirms the gap: no fine-tuned small LLMs, no per-model cost or latency on FinTagging, and no follow-on work found that does so.",
+  "verification": "VERIFIED (arXiv abs + HTML v1 and v5; S2 citations)"
+ },
+ {
+  "title": "Sub-Billion, Super-Frontier: Small Language Models Rival Zero-Shot Frontier LLMs on General and Literary Relation Extraction",
+  "url": "https://arxiv.org/abs/2606.22606",
+  "year": "2026",
+  "what": "QLoRA-tuned 360M-3B models (SmolLM2-360M, Qwen2.5-0.5B, SmolLM3-3B, Llama-3.2-3B) vs zero-shot GPT-5.4 and RoBERTa on nine RE benchmarks; Table 14 gives 4-bit footprint, GPU/CPU latency, F1 per billion params.",
+  "reports_cost": "no — 'frontier systems depend on remote APIs, per-token cost' but no dollar figures.",
+  "reports_latency": "yes (estimated) — 'completing a single extraction in roughly 18 ms on an RTX 4090 or 120 ms on a consumer CPU' (SmolLM2-360M); 'The latencies in Table 14 are estimated single-example figures ... order-of-magnitude guides rather than benchmarked means'.",
+  "threat_to_novelty": "medium — the exact sub-3B-tuned-vs-frontier accuracy/footprint/latency format already published (general RE, not finance; no cost, no serving-stack measurement).",
+  "verification": "VERIFIED (arXiv abs + HTML + local PDF)"
+ },
+ {
+  "title": "A Few Good Clauses: Comparing LLMs vs Domain-Trained Small Language Models on Structured Contract Extraction",
+  "url": "https://arxiv.org/abs/2605.05532",
+  "year": "2026",
+  "what": "Vendor (Olava) self-hosted legal MoE extractor vs Gemini 2.5 Pro, Gemini 3.1 Pro, Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6 on contract clause extraction; model size undisclosed.",
+  "reports_cost": "yes — per-document table: 'Olava Extract (batched) $0.018', 'Gemini 2.5 Pro $0.149', 'GPT-5.4 (medium reasoning) $0.262', 'Claude Sonnet 4.6 (medium effort) $0.456'; 'extraction cost fell by 78% to 97%'.",
+  "reports_latency": "yes — Olava batched 313.69 s / unbatched 131.55 s avg vs frontier 93.2-350.8 s.",
+  "threat_to_novelty": "medium — same accuracy+cost+latency-vs-frontier framing for structured extraction, legal domain, 2026; no accuracy-vs-cost plot, no size sweep.",
+  "verification": "VERIFIED (arXiv abs + HTML)"
+ },
+ {
+  "title": "Distilling Large Language Models for Efficient Clinical Information Extraction",
+  "url": "https://arxiv.org/abs/2501.00031",
+  "year": "2024",
+  "what": "BERT-sized students distilled from GPT-4o/o1-mini/Gemini Flash + ontologies for clinical NER on 3,300+ notes, five datasets.",
+  "reports_cost": "yes — 'lower costs (85x, 101x, 2x cheaper than GPT-4o, o1-mini, and Gemini Flash respectively)'",
+  "reports_latency": "yes — 'faster inference (12x, 4x, 8x faster than GPT-4o, o1-mini, and Gemini Flash respectively)'",
+  "threat_to_novelty": "medium — shows distilled-small-vs-frontier with cost and latency is an established format in clinical NER.",
+  "verification": "VERIFIED (arXiv abs)"
+ },
+ {
+  "title": "Domain-Adapted Small Language Models with Hybrid Post-Processing: Achieving Cost-Efficient, Low-Latency Multi-Label Structured Prediction via LoRA Fine-Tuning on Scarce Data",
+  "url": "https://arxiv.org/abs/2606.05781",
+  "year": "2026",
+  "what": "LoRA Llama 3.1 8B on 219 examples for 18-field structured compliance labelling of transcripts; vs proprietary APIs.",
+  "reports_cost": "yes — 'USD 0.013 per evaluation versus USD 0.025--0.055 for proprietary alternatives, yielding 46--76% cost savings.'",
+  "reports_latency": "yes — 'Inference completes in ~2 seconds -- 2--5x faster than frontier APIs'",
+  "threat_to_novelty": "low — format analog only; 8B, non-finance, classification-style output.",
+  "verification": "VERIFIED (arXiv abs)"
+ },
+ {
+  "title": "Leveraging large language models for structured information extraction from pathology reports",
+  "url": "https://arxiv.org/abs/2502.12183",
+  "year": "2025",
+  "what": "Zero-shot GPT-4o, GPT-4o mini, Llama 3.1 8B/70B/405B extracting structured fields from breast pathology reports; Figure 6 'Performance and cost comparison of evaluated LLMs'.",
+  "reports_cost": "yes — 'GPT-4o significantly outperformed GPT-4o mini (96.1% vs 87.9%), though this came with a significantly higher cost per report ($0.44 vs $0.01)'; 'Llama 3.1 ... (8B: 75%, 70B: 91.6%, 405B: 94.7% agreement), as does cost per report ($0.02, $0.15, and $0.35 respectively)'.",
+  "reports_latency": "no (only qualitative: reasoning models 'come with significantly higher latency and costs').",
+  "threat_to_novelty": "low — accuracy-vs-cost-per-document plot for IE exists (clinical, no fine-tuning, no latency).",
+  "verification": "VERIFIED (local PDF text)"
+ },
+ {
+  "title": "Benchmarking large language models for biomedical natural language processing applications and recommendations",
+  "url": "https://arxiv.org/abs/2305.16326",
+  "year": "2023 (Nat. Commun. 2025)",
+  "what": "GPT-3.5/GPT-4/LLaMA-2 zero/few-shot vs fine-tuned BERT SOTA on 12 BioNLP benchmarks incl. NER/RE, with cost analysis.",
+  "reports_cost": "yes — 'GPT-4 being 60 to 100 times more expensive'; 'cost per 100 instances of GPT-4 for five-shots ranges from approximately $2 for sentence-level inputs to around $10'. Cost only for GPT models, not for the fine-tuned BERT baselines.",
+  "reports_latency": "no",
+  "threat_to_novelty": "low — cost-accuracy trade-off reporting on IE is well established, but no small-model serving cost.",
+  "verification": "VERIFIED (local PDF text)"
+ },
+ {
+  "title": "Towards Efficient FinBERT via Quantization and Coreset for Financial Sentiment Analysis (FinNLP 2025)",
+  "url": "https://aclanthology.org/2025.finnlp-2.6/",
+  "year": "2025",
+  "what": "Post-training quantization 8-bit to 1-bit of FinBERT plus coreset training for tweet sentiment; compression ratio and accuracy per bit-width; no LLM/API comparison.",
+  "reports_cost": "no",
+  "reports_latency": "partial — 'We also report inference time per batch to assess real-time deployment feasibility'; 'The results suggest a Pareto frontier: configurations offering strong accuracy-efficiency trade-offs'.",
+  "threat_to_novelty": "low — shows accuracy-efficiency Pareto framing already appears at FinNLP, but for BERT sentiment, not extraction and not vs frontier.",
+  "verification": "VERIFIED (local PDF text)"
+ },
+ {
+  "title": "Mixing It Up: The Cocktail Effect of Multi-Task Fine-Tuning on LLM Performance -- A Case Study in Finance",
+  "url": "https://arxiv.org/abs/2410.01109",
+  "year": "2024",
+  "what": "200+ fine-tuning runs; Phi-3-Mini (3.8B), Phi-3-Small, Mistral-7B, Llama-3.1-8B on Headline, FPB, FinNerCLS, FinQA, ConvFinQA, Twitter tasks; Phi-3-Mini surpasses GPT-4o on several.",
+  "reports_cost": "no (the '$0.13 vs $3.75 per million tokens' figure circulating in blogs is the blog's own addition, not in the paper).",
+  "reports_latency": "no",
+  "threat_to_novelty": "low — small-vs-GPT-4o in finance exists on accuracy only; supports the cost/latency gap.",
+  "verification": "VERIFIED (arXiv abs + HTML)"
+ },
+ {
+  "title": "FinStat2SQL: A Text2SQL Pipeline for Financial Statement Analysis",
+  "url": "https://arxiv.org/abs/2506.23273",
+  "year": "2025",
+  "what": "Multi-agent text2SQL over financial statements; fine-tuned 7B on consumer hardware.",
+  "reports_cost": "no",
+  "reports_latency": "yes — 'A fine-tuned 7B model achieves 61.33% accuracy with sub-4-second response times' outperforming GPT-4o-mini.",
+  "threat_to_novelty": "low — finance, fine-tuned small model, latency reported, but text2SQL not extraction.",
+  "verification": "VERIFIED (arXiv abs)"
+ },
+ {
+  "title": "PRISM: Prompt-Refined In-Context System Modelling for Financial Retrieval (ICAIF 2025 Agentic Retrieval Grand Challenge)",
+  "url": "https://arxiv.org/abs/2511.14130",
+  "year": "2025",
+  "what": "Training-free prompting/multi-agent ranking on FinAgentBench, FiQA-2018, FinanceBench.",
+  "reports_cost": "yes — 'We provide comprehensive feasibility analyses covering latency, token usage, and cost trade-offs to support deployment decisions.'",
+  "reports_latency": "yes — same sentence; a search snippet cites avg latencies 10.43 s doc ranking / 131.13 s chunk ranking and $0.0155 / $0.2768 per query (SNIPPET-ONLY for the numbers).",
+  "threat_to_novelty": "low — finance venue (ICAIF) already hosting cost/latency reporting, but retrieval not extraction, no small fine-tuned models.",
+  "verification": "VERIFIED (abstract); numbers SNIPPET-ONLY"
+ },
+ {
+  "title": "Cost-of-Pass: An Economic Framework for Evaluating Language Models",
+  "url": "https://arxiv.org/abs/2504.13359",
+  "year": "2025",
+  "what": "Defines cost-of-pass = expected dollar cost of a correct answer and a 'frontier cost-of-pass' across lightweight/large/reasoning models; general benchmarks.",
+  "reports_cost": "yes (framework)",
+  "reports_latency": "no",
+  "threat_to_novelty": "low — establishes that cost-accuracy frontier reporting is a recognized, named evaluation format in general LLM eval (not finance IE).",
+  "verification": "VERIFIED (arXiv abs)"
+ },
+ {
+  "title": "AI Agents That Matter",
+  "url": "https://arxiv.org/abs/2407.01502",
+  "year": "2024",
+  "what": "Argues agent benchmarks over-focus on accuracy and ignore cost; 'Our focus on cost in addition to accuracy motivates the new goal of jointly optimizing the two metrics.'",
+  "reports_cost": "yes (methodological)",
+  "reports_latency": "no",
+  "threat_to_novelty": "low — makes 'report the cost frontier' a recognized demand, so the project's framing is not new in itself.",
+  "verification": "VERIFIED (arXiv abs)"
+ },
+ {
+  "title": "FinBen: A Holistic Financial Benchmark for Large Language Models (NeurIPS 2024 D&B)",
+  "url": "https://arxiv.org/abs/2402.12659",
+  "year": "2024",
+  "what": "36 datasets / 24 tasks incl. FNXL numeric labelling; 21 LLMs, smallest 6-7B; no FiNER-139.",
+  "reports_cost": "partial — only aggregate 'Including the GPT-4 API costs, the total expenditure amounts to approximately $51,000'.",
+  "reports_latency": "no",
+  "threat_to_novelty": "none — confirms benchmark suites do not report per-model cost/latency.",
+  "verification": "VERIFIED (arXiv HTML)"
+ },
+ {
+  "title": "BizFinBench: A Business-Driven Real-World Financial Benchmark for Evaluating LLMs",
+  "url": "https://arxiv.org/abs/2505.19457",
+  "year": "2025",
+  "what": "6,781 Chinese queries, 25 models, IteraJudge.",
+  "reports_cost": "partial — abstract silent; a search snippet reports aggregate eval cost '$21,000' on 8xH100 (SNIPPET-ONLY).",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED (abstract); eval-cost figure SNIPPET-ONLY"
+ },
+ {
+  "title": "FinMTEB: Finance Massive Text Embedding Benchmark (EMNLP 2025)",
+  "url": "https://arxiv.org/abs/2502.10990",
+  "year": "2025",
+  "what": "64 embedding datasets, 7 task types.",
+  "reports_cost": "no",
+  "reports_latency": "partial — Appendix D total benchmark wall-time per model: 'NV-Embed v2 ... completing all tasks in just 5.6 hours' vs 12 h for Echo; no per-query latency.",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED (arXiv HTML)"
+ },
+ {
+  "title": "PIXIU / FinMA; FinEval; FinAuditing; FLaME; HiFi-KPI (grouped: finance benchmarks that report accuracy only)",
+  "url": "https://arxiv.org/abs/2306.05443 ; https://arxiv.org/abs/2308.09975 ; https://arxiv.org/abs/2510.08886 ; https://arxiv.org/abs/2506.15846 ; https://arxiv.org/abs/2502.15411",
+  "year": "2023-2026",
+  "what": "PIXIU (5 FinNLP tasks, FinMA 7B/13B); FinEval (Chinese MCQ); FinAuditing (XBRL multi-doc, 13 LLMs); FLaME (23 LMs, 20 FinNLP tasks); HiFi-KPI (iXBRL KPI extraction, LREC 2026: encoders 0.906 macro-F1 vs LLMs 0.440 F1 on structured extraction).",
+  "reports_cost": "no (none of them)",
+  "reports_latency": "no (none of them)",
+  "threat_to_novelty": "none — all confirm the accuracy-only convention in finance benchmarks.",
+  "verification": "VERIFIED (arXiv abs pages) except FinEval SNIPPET-ONLY"
+ },
+ {
+  "title": "XBRL-tagging method papers: FLAN-FinXC (NAACL 2024), XBRLTagRec (2026), Noise-Robust Financial Numerical Entity Attribute Tagging (2026), FNXL (ACL 2023), FiNER-139 (2022)",
+  "url": "https://arxiv.org/abs/2405.06671 ; https://arxiv.org/abs/2603.25263 ; https://arxiv.org/abs/2605.24910 ; https://arxiv.org/abs/2306.03723 ; https://arxiv.org/abs/2203.06482",
+  "year": "2022-2026",
+  "what": "LoRA instruction-tuned FLAN-T5 (FLAN-FinXC) and FLAN-T5-Large + ChatGPT-3.5 re-ranking (XBRLTagRec) on FNXL/FiNER; noise-robust FNE tagging on a 6.6M-instance corpus.",
+  "reports_cost": "no (none)",
+  "reports_latency": "no (none)",
+  "threat_to_novelty": "none — this is exactly the 'accuracy but not cost/latency' literature the claim describes; arXiv full-text query XBRL AND (latency OR inference cost OR throughput OR quantized) returns 0 papers.",
+  "verification": "VERIFIED (arXiv abs pages + arXiv API)"
+ },
+ {
+  "title": "FinNLP 2024 / 2025 efficiency papers: L3iTC quantization (Mistral-7B/Llama-3-8B 4-bit+LoRA), Upaya DistFin (Llama-3 70B->8B distillation), Efficient Cross-Lingual Financial NER, LayoutLM insurance NER",
+  "url": "https://aclanthology.org/2024.finnlp-2.14/ ; https://aclanthology.org/2024.finnlp-2.17/ ; https://aclanthology.org/2025.finnlp-1.5/ ; https://aclanthology.org/2025.finnlp-1.9/",
+  "year": "2024-2025",
+  "what": "Workshop papers using quantization/distillation/small encoders for financial classification, summarization and NER.",
+  "reports_cost": "no",
+  "reports_latency": "no — L3iTC and DistFin texts contain no latency/throughput numbers; cross-lingual NER and LayoutLM papers only say 'smaller and faster' / 'single T4 GPU' qualitatively.",
+  "threat_to_novelty": "none-to-low — efficiency motivation is common at FinNLP but no measured cost/latency frontier.",
+  "verification": "VERIFIED (ACL Anthology pages + local PDF text for L3iTC/DistFin)"
+ },
+ {
+  "title": "CEBench: A Benchmarking Toolkit for the Cost-Effectiveness of LLM Pipelines",
+  "url": "https://arxiv.org/abs/2407.12797",
+  "year": "2024",
+  "what": "Toolkit for multi-objective cost vs effectiveness benchmarking of LLM pipelines (local vs API) for regulated sectors; no IE/NER or finance task specified.",
+  "reports_cost": "yes (framework)",
+  "reports_latency": "unclear from abstract",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED (arXiv abs)"
+ },
+ {
+  "title": "Vals.ai Finance Agent leaderboard (industry, non-academic)",
+  "url": "https://www.vals.ai/benchmarks/finance_agent",
+  "year": "2025-2026",
+  "what": "Agentic finance QA leaderboard with a 'Cost / Test' column and accuracy-vs-cost-per-session discussion ('some challenging queries cost more than $5 for o3 or Claude Opus 4.1').",
+  "reports_cost": "yes",
+  "reports_latency": "no (not shown)",
+  "threat_to_novelty": "low — shows cost-vs-accuracy is already standard on finance leaderboards, but frontier models only, no extraction benchmark.",
+  "verification": "VERIFIED (page)"
+ }
+]
+
+### gaps
+Semantic Scholar keyword search returned HTTP 429 on every attempt, so keyword discovery there was replaced by citation-graph pulls (FinTagging, FNXL, FiNER-139) and arXiv API full-text queries. The session's WebSearch budget ran out after 14 queries; six planned queries were substituted with direct fetches. Could not read paywalled/captcha'd published versions (ScienceDirect pathology, PMC thrombectomy, Nature Comms) — arXiv PDFs were used instead. FinLoRA's Figure 3 is a bar chart; exact per-task second values were not extracted. ICAIF 2025 and FinNLP 2026 proceedings pages 404'd, so those venues were covered only via arXiv/S2. 'Knowledge distillation for financial LLMs: a systematic review' (FITEE 2025, no arXiv) and 'Detecting Semantic Mismatches in XBRL Tag Mapping for SEC 10-K Filings' (2026, no arXiv) were not read. No shared task built on FinTagging was found (arXiv full-text search for 'FinTagging' returns only the paper itself plus two prompt-optimization papers).
+
+### verdict_on_novelty
+DENTED, not dead — and it must be reworded. (1) The strong form 'prior XBRL/financial-numeric-extraction work reports accuracy but NOT cost or latency' is intact for the XBRL-tagging line (FiNER-139, FNXL, FinTagging, FLAN-FinXC, XBRLTagRec, HiFi-KPI, FinAuditing, FinBen, PIXIU, FLaME, BizFinBench: none report per-model cost or latency; arXiv XBRL AND latency/cost query = 0 hits), but it is contradicted by FinLoRA (arXiv 2505.19819), which fine-tunes Llama 3.1 8B on FiNER-139 and FNXL and plots inference time vs a Gemini API model (no dollar inference cost), and by arXiv 2603.22651, which reports cost per document, p50 latency and an explicit cost-accuracy Pareto frontier for 25-field extraction from 10,000 SEC 10-K/10-Q/8-K filings using GPT-4o/Claude/Gemini/Llama-70B/Mixtral. (2) The narrower form 'nobody has benchmarked small (1-3B) or distilled models on FinTagging with cost or latency' is intact: FinTagging has only 4 citing papers, none fine-tune small models, and small models are only evaluated zero-shot (Qwen3-0.6B FinNI F1 0.0038, Llama-3.2-3B 0.146). For FiNER/FNXL it holds only below 8B and only for dollar cost / quantized serving, since FinLoRA already covers 8B latency. (3) The format itself — small tuned model vs frontier API on accuracy, cost and latency — is well-trodden by 2025-2026: clinical NER (2501.00031: '101x cheaper and 12x faster'), legal contract extraction (2605.05532: $0.018 vs $0.149-$0.456/doc), general RE with 360M-3B models and ms-level latency (2606.22606), finance merchant extraction with a 270M-8B F1-vs-latency Pareto (2606.08051), and general cost-aware evaluation frameworks (Cost-of-Pass 2504.13359; AI Agents That Matter 2407.01502). Defensible claim: 'first accuracy/cost/latency frontier for sub-3B fine-tuned and quantized models, served with vLLM, on a public XBRL benchmark (FinTagging), against frontier APIs' — and it should cite FinLoRA, 2603.22651 and 2606.08051 as the closest analogs rather than claiming the gap is unaddressed.

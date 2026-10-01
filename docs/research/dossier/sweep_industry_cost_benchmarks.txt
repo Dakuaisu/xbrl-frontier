@@ -1,0 +1,383 @@
+### key
+sweep_industry_cost_benchmarks
+
+### angle
+sweep_industry_cost_benchmarks: industry / engineering-blog and industry-authored benchmarks of fine-tuned small open models vs frontier APIs on COST and LATENCY for structured extraction, especially financial documents (SEC filings, 10-K/10-Q, invoices, checks, statements). Also checked whether any such work touches FinTagging/FNXL/FiNER. JSON saved to /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/sweep_industry_cost_benchmarks.json
+
+### queries_run
+[
+ "WebSearch: Predibase LoRA Land fine-tuned Llama 2 7B outperform GPT-4 cost benchmark",
+ "WebSearch: OpenPipe fine-tuned model vs GPT-4 cost latency structured data extraction benchmark",
+ "WebSearch: fine-tuned Llama 3 8B vs GPT-4 cost 10-K SEC filing extraction",
+ "WebSearch: SEC filings financial data extraction small language model cost latency benchmark vs GPT-4 blog",
+ "WebSearch: document extraction benchmark cost per page Reducto LlamaParse Unstructured financial statements accuracy latency",
+ "WebSearch: \"small language model\" vs LLM financial document extraction cost latency fine-tuned",
+ "WebSearch: Fireworks AI fine-tuning case study structured extraction financial documents cost GPT-4",
+ "WebSearch: Databricks fine-tuned small open model vs GPT-4 structured extraction cost latency benchmark",
+ "WebSearch: FinTagging benchmark XBRL LLM small model fine-tuned cost latency inference",
+ "WebSearch: XBRL tagging LLM inference cost latency FiNER-139 FNXL distilled small model",
+ "WebSearch: invoice extraction fine-tuned small model vs GPT-4 cost per document latency benchmark blog Qwen Llama",
+ "WebSearch: Hebbia OR Rogo OR Kensho OR Bloomberg small model fine-tuned financial extraction cost latency benchmark GPT-4",
+ "WebSearch: Together AI fine-tuning case study small model replaces GPT-4 structured extraction cost reduction latency",
+ "WebSearch: \"cost per document\" OR \"cost per page\" financial statement extraction LLM fine-tuned open model vLLM quantized benchmark",
+ "WebSearch (BLOCKED - session budget 200/200 exhausted): Predibase/OpenPipe 10-K case study; vals.ai finance cost latency; vLLM quantized Qwen/Llama 3B financial extraction; Unstructured/Tensorlake/Extend/Snorkel 10-K; EDGAR cost per filing 1B/3B/8B; Snowflake/Gemma financial statement extraction",
+ "arXiv API: all:\"XBRL\" AND (latency OR \"inference cost\" OR throughput) -> 0 results",
+ "arXiv API: all:\"FinTagging\" OR all:\"FNXL\" OR all:\"FiNER-139\" -> 6 results, none with cost/latency",
+ "arXiv API: abs:\"SEC filings\" AND abs:\"fine-tuned\" AND (cost OR latency) -> 4 results (FinLoRA, FinBloom, RAG exam gen, TAT-LLM)",
+ "arXiv API: abs:\"10-K\" AND (latency OR \"cost per\") -> 2 results",
+ "arXiv API: abs:\"small language model\" AND abs:\"financial\" AND abs:\"extraction\" -> 3 results (ASTIF, FinStat2SQL, MoA)",
+ "arXiv API: abs:\"financial\" AND abs:\"structured extraction\" AND (cost OR latency) AND (fine-tun OR distill) -> 0 results",
+ "arXiv API (FAILED 429/503/timeout): financial+vLLM/quantized+extraction; XBRL+small/distill/quantiz/efficien; invoice+fine-tun+GPT-4+cost/latency; earnings/financial statements+extraction+latency/cost; financial+extraction+frontier+fine-tuned+cost/latency",
+ "Semantic Scholar API (FAILED HTTP 429 on 7 attempts incl. 20-25s backoff): XBRL tagging inference cost latency; financial numeric extraction small model cost latency SEC filings; FinTagging benchmark",
+ "WebFetch of ~45 pages: arXiv abs/HTML for 2505.19819, 2603.22651, 2605.05532, 2606.08051, 2609.15706, 2512.14717, 2405.00732, 2405.06671, 2505.20650, 2603.25263, 2606.05781, 2506.23273, 2607.29677, 2606.03829, 2602.14743, 2602.19073, 2401.13223, 2510.16066, 2505.19197, 2506.05182; FinLoRA GitHub + docs; distil labs blog + GitHub; financialdatasets.ai EarningsBench; LlamaIndex ExtractBench blog; Nanonets; Ertas; Fireworks; TensorZero; Together; LangChain; HN OpenPipe post; dev.to; Hebbia; Rogo; Ramp; Vals.ai; Reducto; A-Kuo GitHub; Predibase leaderboard/index (now redirect to Rubrik); OpenPipe blog (empty); Kensho blog (404)"
+]
+
+### findings
+[
+ {
+  "title": "FinLoRA: Benchmarking LoRA Methods for Fine-Tuning LLMs on Financial Datasets (Wang, Patel, Zha, Yang, Liu - Open-Finance-Lab)",
+  "url": "https://arxiv.org/abs/2505.19819",
+  "year": "2025 (v1 26 May 2025)",
+  "what": "Academic. LoRA/QLoRA/DoRA/rsLoRA fine-tunes of Llama 3.1 8B Instruct (plus fine-tuned Gemini 2.0 Flash Lite; base-only Llama 70B, DeepSeek V3, GPT-4o) on 19 financial datasets INCLUDING FiNER-139 (10.0k train / 7.4k test), FNXL (247 test) and four new XBRL extraction/formula datasets from 150 SEC filings. Code public: https://github.com/Open-Finance-Lab/FinLoRA (OpenMDW-1.0). Abstract: 'report computational cost in terms of time and GPU memory during fine-tuning and inference stages.'",
+  "reports_cost": "partial - fine-tuning dollars only: 'LoRA: 14.9 hours on 4 A5000 GPUs = ~$15.50 ... QLoRA ... ~$14.66'; 'this translates to a cost of roughly $14.66 to $16.54. This is substantially more cost-effective than fine-tuning services from providers like Google or OpenAI' (GPT-4o fine-tune est. $312). No inference $ cost, no per-token serving cost.",
+  "reports_latency": "partial - Figure 3 caption: 'Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks'; text: 'Gemini API generally exhibits lower inference latency and is less sensitive to increasing prompt lengths than local Llama 3.1 8B Instruct inference, even when accounting for network overhead.' No per-task latency numbers in text for FiNER/FNXL, no throughput, no quantized/vLLM serving, nothing below 8B.",
+  "threat_to_novelty": "high - closest prior work: it fine-tunes an 8B open model on FiNER-139/FNXL/XBRL tasks AND reports fine-tuning dollar cost plus average inference time, so the literal sentence 'nobody reports cost or latency for small models on FiNER/FNXL' is false; but it builds no accuracy/cost/latency frontier vs frontier APIs, has no 1-3B models, no quantized serving, no inference $ cost, and does not touch FinTagging.",
+  "verification": "VERIFIED (abs, HTML body, readthedocs task page, GitHub README fetched)"
+ },
+ {
+  "title": "Benchmarking Multi-Agent LLM Architectures for Financial Document Processing: Orchestration Patterns, Cost-Accuracy Tradeoffs and Production Scaling (Kulkarni & Kulkarni)",
+  "url": "https://arxiv.org/abs/2603.22651",
+  "year": "2026 (24 Mar 2026)",
+  "what": "Four multi-agent orchestration patterns x five LLMs (GPT-4o 2024-11-20, Claude 3.5 Sonnet, Gemini 1.5 Pro, Llama 3 70B, Mixtral 8x22B; 'Open-weight models were served on 4xA100 80GB nodes using vLLM with tensor parallelism') on 10,000 SEC filings (10-K, 10-Q, 8-K), 25 field types, ground truth 'automatically pre-annotated using XBRL tags where available'. Metrics: 'field-level F1, document-level accuracy, end-to-end latency, cost per document and token efficiency.' No model under 10B, no fine-tuning, no public code/data URL found; cites FiNER, not FinTagging/FNXL.",
+  "reports_cost": "yes - Claude 3.5 Sonnet: Sequential $0.187/doc, Parallel $0.221, Hierarchical $0.261, Reflexive $0.430; 'Hierarchical-Optimized' '$0.148/doc'; 'reflexive architectures achieved highest accuracy (F1 0.943) but cost 2.3x more'",
+  "reports_latency": "yes - p50 per doc: Sequential 38.7s, Parallel 21.3s, Hierarchical 46.2s, Reflexive 74.1s; Hierarchical-Optimized 30.2s",
+  "threat_to_novelty": "medium - a cost-per-document + latency + accuracy study on SEC 10-K/10-Q extraction with XBRL-derived labels already exists, denting 'prior work on financial numeric extraction reports accuracy but not cost/latency'; but only >=70B/frontier models in multi-agent configs, no fine-tuning, no small models, not public.",
+  "verification": "VERIFIED (abs + HTML body)"
+ },
+ {
+  "title": "A Few Good Clauses: Comparing LLMs vs Domain-Trained Small Language Models on Structured Contract Extraction (Olava)",
+  "url": "https://arxiv.org/abs/2605.05532",
+  "year": "2026 (7 May 2026)",
+  "what": "Industry-authored (Olava). Self-hosted 'legal-domain Mixture-of-Experts model' with LoRA fine-tuning (parameter count undisclosed) vs Claude Opus 4.6, Claude Sonnet 4.6, Gemini 2.5 Pro, Gemini 3.1 Pro Preview, GPT-5.4 on clause extraction from 24 held-out public SEC EDGAR contracts (508 labeled field instances). Macro F1 0.812 / micro F1 0.842, best in study. Code/data not stated public.",
+  "reports_cost": "yes - 'reducing inference cost by 78% to 97% compared with the frontier models tested'; '$0.018 per document' (batched) vs 'frontier API baselines...ranged from $0.149 to $0.456 per document'",
+  "reports_latency": "yes - 'Olava Extract averaged 131 seconds per document' vs GPT-5.4 194 s and Claude Sonnet 4.6 'approximately 93-100 seconds'; batched 'processed all 24 contracts in 6 minutes and 27 seconds'",
+  "threat_to_novelty": "medium - the exact template (self-hosted fine-tuned small domain model vs five frontier APIs with accuracy + $/doc + s/doc on SEC EDGAR documents) is already published in 2026, but for legal clause extraction, not numeric XBRL facts; model size undisclosed; not reproducible.",
+  "verification": "VERIFIED (abs + HTML body)"
+ },
+ {
+  "title": "Beyond Accuracy: Robustness, Cost, and Governance Trade-offs for Vision-Language Models in Templated Document Extraction (Patel et al., Manulife AI)",
+  "url": "https://arxiv.org/abs/2609.15706",
+  "year": "2026 (v1 14 Sep 2026, v2 19 Sep 2026)",
+  "what": "Industry-authored (Manulife). Eleven systems - 3 commercial (incl. GPT-5, Claude Sonnet 4.5), 2 reasoning, 5 open-source VLMs pretrained and fine-tuned (SmolVLM-500M, SmolVLM2-2.2B, Qwen2.5-VL-3B, Qwen2.5-VL-7B...), OCR->regex floor - on 750 synthetic bank checks (Payee, Amount, Date, Bank). 'fine-tuning on 3K samples lifts the best open-source VLMs above F1 0.98-above every zero-shot commercial system'. Open-source release: https://github.com/manulife-ai/beyond-accuracy-vlm-emnlp2026/ . Includes a selection framework mapping '(quality, latency, governance, volume)' to an approach.",
+  "reports_cost": "yes - fine-tuned open VLMs '≈0' per doc; GPT-5 '$0.025/doc'; Claude Sonnet 4.5 '$0.006/doc'",
+  "reports_latency": "yes - p95: SmolVLM2-2.2B FT 3.4s, SmolVLM-500M FT 4.1s, Qwen2.5-VL-3B FT 9.9s, Qwen2.5-VL-7B FT 8.2s ('measured on an NVIDIA A100 80 GB PCIe', projected to g5.xlarge at '1.7x'); GPT-5 40s, Claude Sonnet 4.5 12s",
+  "threat_to_novelty": "medium-high (generic) - a public, reproducible, industry study of fine-tuned 0.5B-7B open models vs frontier APIs with accuracy + cost + latency on a financial document type exists; the project's defensible gap narrows to XBRL-style fact extraction from real SEC filing text/tables (FinTagging) and quantized vLLM serving curves, vs synthetic templated checks.",
+  "verification": "VERIFIED (abs + HTML body)"
+ },
+ {
+  "title": "How Small Can You Go? LoRA Fine-Tuning 270M-8B Models for Merchant Information Extraction in Financial Transactions (Mastercard R&D / SMU)",
+  "url": "https://arxiv.org/abs/2606.08051",
+  "year": "2026 (v1 6 Jun 2026, v4 8 Sep 2026)",
+  "what": "Industry-authored (Mastercard). 23 LoRA runs over Gemma 3 (270M-4B), Qwen 3.5 (0.8B-4B), Aya 3.35B, LLaMA 3.1-8B for structured merchant-field extraction from transaction descriptors; 14 Databricks Model Serving endpoints. 'A rank-8 LLaMA fine-tune reaches 96.75% F1 ... Qwen 3.5 4B with JSON-Only prompting reaches 96.60% F1 ... with a 3.8x lower inverse-throughput time estimate than the rank-8 8B model.' No frontier API comparison; bf16, no quantization/vLLM; dataset proprietary (public snapshot pending approval).",
+  "reports_cost": "no - 'No dollar costs reported'; hardware only (DGX Spark GB10, RTX 4090, Databricks endpoints)",
+  "reports_latency": "partial - throughput samples/s at batch 4: Gemma 3 270M FT 4.09, Qwen 3.5 0.8B 1.86-2.01, Qwen 3.5 4B 0.61, LLaMA 3.1-8B 0.50; seconds-per-sample 1.63 (Qwen 4B) vs 2.00 (LLaMA 8B) - 'inverse throughput, not request latency'",
+  "threat_to_novelty": "medium - an accuracy-vs-throughput frontier for sub-4B fine-tuned models on a financial extraction task with 'accuracy-latency-cost trade-offs across hardware tiers', but no frontier-API comparison, no $, not document-level, not SEC/XBRL.",
+  "verification": "VERIFIED (abs + HTML body)"
+ },
+ {
+  "title": "The 10x Inference Tax You Don't Have to Pay (distil labs) + inference-efficiency-benchmarks repo",
+  "url": "https://www.distillabs.ai/blog/the-10x-inference-tax-you-dont-have-to-pay/",
+  "year": "2026 (6 Mar 2026)",
+  "what": "Vendor blog with public repo (https://github.com/distil-labs/inference-efficiency-benchmarks/). Distilled Qwen3 0.6B-8B served via vLLM vs 10 frontier LLMs on 9 datasets (Banking77, E-commerce, TREC, Smart Home, Git Assistant, PII Redaction Healthcare, Text2SQL, Docstring, HotpotQA). 'small, task-specific distilled models match or beat mid-tier frontier LLMs on quality across 9 datasets - at 10x lower cost and significantly lower latency.' No financial document extraction.",
+  "reports_cost": "yes - '$3 for fine-tuned SLMs per million requests vs. $6,241 for Opus'",
+  "reports_latency": "yes - Text2SQL 4B: 'p50 latency 390ms, p95 latency 640ms, p99 latency 870ms'; 'max sustained throughput 222 RPS'",
+  "threat_to_novelty": "medium (generic) - a public, reproducible vLLM-served 0.6B-8B vs frontier cost/latency/quality benchmark already exists, so 'fine-tuned small models are cheaper and faster' is a known, reproduced result; not finance extraction, not FinTagging.",
+  "verification": "VERIFIED (blog + GitHub README)"
+ },
+ {
+  "title": "LoRA Land: 310 Fine-tuned LLMs that Rival GPT-4 (Predibase)",
+  "url": "https://arxiv.org/abs/2405.00732",
+  "year": "2024 (29 Apr 2024)",
+  "what": "Industry (Predibase). 310 QLoRA fine-tunes across 10 base models and 31 tasks (bc5cdr, conllpp, e2e_nlg, viggo, webnlg, magicoder, wikisql, boolq, dbpedia, customer_support, glue_*, legal, reuters, mmlu, winogrande, arc, hellaswag, jigsaw, drop, gsm8k, covid). No finance extraction task. Evaluates LoRAX multi-adapter serving. Note: predibase.com/fine-tuning-leaderboard and /fine-tuning-index now 301-redirect to rubrik.com, so the public leaderboard is gone.",
+  "reports_cost": "partial - 'using GPT-4 to assess the complete WikiSQL test set of 15,878 examples would cost approximately $400'; blog (snippet) claims <$8 per fine-tune; no serving $ in paper",
+  "reports_latency": "yes - LoRAX TTFT 'average 153.89 p90 200.2' ms at 50 concurrent users / 25 adapters; 'aggregate throughput ... between 74 tokens/s and 83 tokens/s'; '+21.84ms or 17.9% increase' TTFT from 1 to 50 users",
+  "threat_to_novelty": "low-medium (generic) - canonical 'fine-tuned 7B beats GPT-4 cheaply' evidence with serving latency, but no finance, no numeric extraction, no $ frontier vs API.",
+  "verification": "VERIFIED (abs + HTML body)"
+ },
+ {
+  "title": "We tested 6 LLMs on SEC filing extraction (EarningsBench, financialdatasets.ai)",
+  "url": "https://www.financialdatasets.ai/blogs/earningsbench",
+  "year": "2026 (29 Jun 2026)",
+  "what": "Vendor blog. KPI extraction from 60 SEC earnings releases across 12 sectors; Claude Opus 4.6 (+Extended Thinking), Sonnet 4.6 (+ET), GPT-5.4 high/medium; Opus 4.6 ET wins at 99.3%. No open-weight or fine-tuned models; data private ('Want access to the KPI data we're extracting? Contact us.').",
+  "reports_cost": "yes - 'Opus 4.6 with Extended Thinking costs $0.249 per earnings release'",
+  "reports_latency": "yes - '49 seconds per earnings release'; range '13s' to '148s'; GPT-5.4 high '3-10x slower than the Anthropic models (148s vs 13-49s per earnings release)'",
+  "threat_to_novelty": "low-medium - industry already frames SEC numeric extraction as accuracy + $/doc + s/doc, but frontier-only and private; small-model axis untouched.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "ExtractBench: A Benchmark for Schema-Guided Enterprise Document Extraction (LlamaIndex)",
+  "url": "https://arxiv.org/abs/2607.29677",
+  "year": "2026 (arXiv v1 31 Jul 2026; blog 11 Aug 2026)",
+  "what": "Vendor benchmark, public dataset (https://huggingface.co/datasets/llamaindex/ExtractBench) and harness (https://github.com/run-llama/ExtractBench). 370 docs / 4,869 pages / 8 domains incl. 'SEC filings and fund-holdings schedules' (Finance D1 'Overall value F1 ranges from 48.4% to 96.3%'). 14 systems: LlamaExtract tiers, frontier VLM APIs, coding agents, Reducto/Extend/Datalab, and four self-hosted open-weight models (Qwen 3.6 35B 87.3% F1, Lift 9B 77.3%, Gemma 26B 66.2%, NuExtract 3 47.9%). None fine-tuned.",
+  "reports_cost": "partial - measured ¢/page for API systems ('Agentic Plus: 8.1¢, Agentic: 3.1¢, Cost-Effective: 1.0¢'; competitors '0.05¢ to 50.6¢'); BUT 'Because the four self-hosted VLMs have no directly comparable API price, we omit them from cost comparisons.'",
+  "reports_latency": "no - 'The paper does not report latency or throughput metrics anywhere.'",
+  "threat_to_novelty": "low-medium - public cost-aware extraction benchmark including SEC filings, but explicitly punts on self-hosted/open-model cost, no latency, no fine-tuned small models.",
+  "verification": "VERIFIED (blog, abs, HTML body)"
+ },
+ {
+  "title": "Is GPT-OSS All You Need? Benchmarking LLMs for Financial Intelligence and the Surprising Efficiency Paradox",
+  "url": "https://arxiv.org/abs/2512.14717",
+  "year": "2025 (9 Dec 2025)",
+  "what": "Zero-shot benchmark of GPT-OSS-120B/20B, Qwen3-235B, Qwen3-30B, Llama4-Scout on ten financial NLP tasks (Financial PhraseBank, FiQA-SA, FLARE FINER-ORD financial NER...) on 8xH100. 'GPT-OSS-20B model achieves comparable accuracy (65.1% vs 66.5%) while demonstrating superior computational efficiency with 198.4 Token Efficiency Score and 159.80 tokens per second'. No fine-tuning, no <10B model, no XBRL/FinTagging/FNXL, no code URL.",
+  "reports_cost": "partial - relative only: 'cost/token relative to GPT-OSS-20B baseline' (Qwen3-235B 8.2x); no dollars",
+  "reports_latency": "partial - aggregate tokens/s (20B 159.80, 120B 98.72); not per task/document",
+  "threat_to_novelty": "low-medium - efficiency metrics on financial NLP incl. financial NER exist, but nothing on XBRL tagging, fine-tuned/small models, or $.",
+  "verification": "VERIFIED (abs + HTML body)"
+ },
+ {
+  "title": "Parameter-Efficient Instruction Tuning of LLMs for Extreme Financial Numeral Labelling (FLAN-FinXC)",
+  "url": "https://arxiv.org/abs/2405.06671",
+  "year": "2024",
+  "what": "Academic. T5-Base (220M), T5-Large/FLAN-T5-Large (780M) with LoRA / prefix tuning on FNXL (79,088 sentences, 2,794 XBRL tags) and FiNER-139; vs ChatGPT GPT-3.5 (Macro-F1 9.08 vs 66.23). Code: https://github.com/subhendukhatuya/FLAN-FinXC . V100 32GB.",
+  "reports_cost": "no - no dollars; training time only ('56 minutes/epoch' vs AttentionXML '4 hours')",
+  "reports_latency": "partial - 'inference time: 2 minutes/sample' for FLAN-T5-Large variants (an efficiency footnote, not a serving benchmark)",
+  "threat_to_novelty": "low-medium - a sub-1B fine-tuned model on FNXL/FiNER with a reported inference time already exists, so 'nobody reports latency on FNXL' is literally false; but a single unoptimized figure, no cost, no API frontier.",
+  "verification": "VERIFIED (HTML body)"
+ },
+ {
+  "title": "FinTagging: Benchmarking LLMs for Extracting and Structuring Financial Information (The-FinAI)",
+  "url": "https://arxiv.org/abs/2505.20650",
+  "year": "2025 (27 May 2025; v5)",
+  "what": "Target benchmark. Zero-shot GPT-4o, DeepSeek-V3 (685B), DeepSeek-R1-Distill-Qwen-32B, Qwen2.5-Instruct 0.5B/1.5B/14B, Llama-3.2-3B, Llama-3.1-8B, Gemma-2-27B, Fino1-8B; fine-tuned BERT-large/FinBERT/SECBERT baselines; best macro F1 0.0582. Code https://github.com/The-FinAI/FinTagging, data on HF, CC BY 4.0.",
+  "reports_cost": "no - 'Zero mentions of inference cost, latency, throughput, or runtime.'",
+  "reports_latency": "no",
+  "threat_to_novelty": "none - confirms the gap: 0.5B-8B models evaluated zero-shot only, no fine-tuned generative model, no cost/latency.",
+  "verification": "VERIFIED (HTML body)"
+ },
+ {
+  "title": "XBRLTagRec: Domain-Specific Fine-Tuning and Zero-Shot Re-Ranking with LLMs for Extreme Financial Numeral Labeling",
+  "url": "https://arxiv.org/abs/2603.25263",
+  "year": "2026 (26 Mar 2026)",
+  "what": "Fine-tuned FLAN-T5-Large + retrieval + ChatGPT-3.5 re-ranking on FNXL; '2.64%-4.47% improvements in Hits@1 and Macro metrics' over FLAN-FinXC.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none - accuracy-only; consistent with the project's claim about XBRL tagging literature.",
+  "verification": "VERIFIED (abs)"
+ },
+ {
+  "title": "Domain-Adapted Small Language Models with Hybrid Post-Processing: Cost-Efficient, Low-Latency Multi-Label Structured Prediction via LoRA",
+  "url": "https://arxiv.org/abs/2606.05781",
+  "year": "2026 (4 Jun 2026)",
+  "what": "LLaMA 3.1 8B LoRA (219 examples) + rules for 18-field compliance evaluation of conversational transcripts (not financial documents); 83.0% accuracy on 53 transcripts.",
+  "reports_cost": "yes - 'USD 0.013 per evaluation versus USD 0.025--0.055 for proprietary alternatives, yielding 46--76% cost savings'",
+  "reports_latency": "yes - 'On a single NVIDIA A100 GPU, inference completes in ~2 seconds -- 2--5x faster than frontier APIs'",
+  "threat_to_novelty": "low (generic) - another 8B-vs-frontier $/latency datapoint; wrong domain.",
+  "verification": "VERIFIED (abs)"
+ },
+ {
+  "title": "FinStat2SQL: A Text2SQL Pipeline for Financial Statement Analysis",
+  "url": "https://arxiv.org/abs/2506.23273",
+  "year": "2025 (29 Jun 2025; v2 7 Sep 2025)",
+  "what": "Fine-tuned 7B in a multi-agent text2SQL pipeline over Vietnamese (VAS) financial statements. 'A fine-tuned 7B model achieves 61.33% accuracy with sub-4-second response times on consumer hardware, outperforming GPT-4o-mini.'",
+  "reports_cost": "partial - 'cost-efficient' qualitative only",
+  "reports_latency": "yes - 'sub-4-second response times on consumer hardware'",
+  "threat_to_novelty": "low - financial-statement task, small fine-tuned model with latency, but text2SQL not fact extraction; no $ frontier.",
+  "verification": "VERIFIED (abs)"
+ },
+ {
+  "title": "Fine-Tuned Models vs GPT-4: Cut Document AI Costs 90% (Nanonets)",
+  "url": "https://nanonets.com/blog/fine-tuned-models-vs-frontier-cost/",
+  "year": "2026 (2 Mar 2026)",
+  "what": "Vendor marketing. Invoices/AP, medical claims, contracts, tax forms; 'lightweight 27B parameter model'. No reproducible benchmark, dataset, or frontier model names.",
+  "reports_cost": "yes (unsupported) - 'Processing 10,000 documents daily through GPT or Claude costs $50K annually. Fine-tuned models: $5K'; 'Fine-tuning a lightweight 27B parameter model costs under $10 today'",
+  "reports_latency": "yes (unsupported) - 'API latency means 66 minutes of pure network overhead' vs 'On-premises deployment cuts latency to 50-80ms per document'",
+  "threat_to_novelty": "low - marketing-grade; makes the generic claim feel 'known' but nothing citable.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Fine-Tuned SLM vs GPT-4 API: Enterprise Cost and Accuracy Comparison (Ertas AI)",
+  "url": "https://www.ertas.ai/blog/fine-tuned-slm-vs-gpt4-enterprise",
+  "year": "2026 (6 Mar 2026, updated 13 Aug 2026)",
+  "what": "Vendor blog; 'aggregated results from enterprise fine-tuning projects'; fine-tuned 7B on L40S vs GPT-4 API across classification, NER, structured extraction, contract clauses. Illustrative, not reproducible.",
+  "reports_cost": "yes (illustrative) - GPT-4 '$21,000-$54,000/month' at 1M queries vs fine-tuned 7B '~$413/month'",
+  "reports_latency": "yes (illustrative) - '5-15ms time-to-first-token versus 100-300ms for GPT-4; P99 latency of 80ms versus 2-5s'",
+  "threat_to_novelty": "low - generic marketing.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Introducing Vision-Language Model Fine-tuning (Fireworks AI)",
+  "url": "https://fireworks.ai/blog/vlm-tuning",
+  "year": "2025 (29 Jul 2025)",
+  "what": "Product launch; Qwen 2.5 VL 3B/7B/32B/72B fine-tuning for 'document extraction' etc.; single anonymous client claim.",
+  "reports_cost": "partial - 'match accuracy on their task compared to closed source providers allowing them 1.5x lower latency and 100x lower cost' (relative only)",
+  "reports_latency": "partial - same sentence",
+  "threat_to_novelty": "low - unverifiable vendor anecdote; no finance benchmark.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Distillation with Programmatic Data Curation: Smarter LLMs, 5-30x Cheaper Inference (TensorZero)",
+  "url": "https://www.tensorzero.com/blog/distillation-programmatic-data-curation-smarter-llms-5-30x-cheaper-inference/",
+  "year": "2025 (29 Jul 2025)",
+  "what": "Vendor blog; teachers GPT-4.1/GPT-4o -> students Gemini 2.0 Flash/Flash Lite, GPT-4.1 mini/nano, GPT-4o mini, Qwen3-8B on CoNLL++ NER, BabyAI, multi-hop RAG, tau-bench. Not finance. Partially reproducible.",
+  "reports_cost": "yes - 'up to 30x cost reduction'; NER: Gemini 2.0 Flash Lite '31.0x' vs GPT-4.1; fine-tuning '$2.30 (BabyAI) to $32 (tau-bench)'",
+  "reports_latency": "yes - 'up to 4x faster response times'",
+  "threat_to_novelty": "low (generic) - distillation-for-extraction cost/latency is established; wrong domain.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Fine-tuning Llama-3 to get 90% of GPT-4's performance at a fraction of the cost (Together AI)",
+  "url": "https://www.together.ai/blog/finetuning",
+  "year": "2024 (12 Jul 2024)",
+  "what": "MathInstruct fine-tune of Llama-3-8B: 47.2% -> 65.2% vs Llama-3-70B 64.2% and GPT-4o 71.4%. Not finance, not extraction.",
+  "reports_cost": "partial - 'less than $100 total to fine-tune on Together AI'; no serving $",
+  "reports_latency": "no - only output length ('only 100 tokens' vs '311 tokens')",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "My finetuned models beat OpenAI's GPT-4 (OpenPipe-affiliated, Hacker News)",
+  "url": "https://news.ycombinator.com/item?id=40843848",
+  "year": "2024 (1 Jul 2024)",
+  "what": "Structured extraction (dates, events, casualty flag) from ISAF press releases; fine-tuned Llama 3 8B / Mistral 7B via OpenPipe beat GPT-4 at temperature=1 (criticized). Not finance.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low - anecdotal; OpenPipe marketing elsewhere claims '~14x reduction in cost and ~5x reduction in average latency' (SNIPPET-ONLY, cerebralvalley.beehiiv.com).",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Fine Tuning LLMs to Process Massive Amounts of Data 50x Cheaper than GPT-4 (dev.to / Open Recommender)",
+  "url": "https://dev.to/experilearning/fine-tuning-llms-to-process-massive-amounts-of-data-50x-cheaper-than-gpt-4-4a1d",
+  "year": "2024 (8 Jan 2024)",
+  "what": "Mistral 7B fine-tuned on GPT-4 outputs for video-clip recommendation; GPT-4 baseline '$10-15 per run'. Not finance.",
+  "reports_cost": "partial - '50x' relative only",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Fine-tuning ChatGPT: Surpassing GPT-4 Summarization - 63% Cost Reduction and 11x Speed (LangChain)",
+  "url": "https://www.langchain.com/blog/fine-tuning-chatgpt-surpassing-gpt-4-summarization",
+  "year": "2023 (10 Oct 2023)",
+  "what": "Fine-tuned gpt-3.5 vs GPT-4 on news summarization; not finance, not open model.",
+  "reports_cost": "yes - '63% cheaper than GPT-4 zero-shot and 84% cheaper than GPT-4 w/ CoD'",
+  "reports_latency": "yes - 'over 11x faster than GPT-4 zero-shot and 33x faster than GPT-4 w/ CoD'",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Introducing Hebbia's Financial AI Benchmark",
+  "url": "https://www.hebbia.com/blog/which-model-will-give-me-the-edge",
+  "year": "2025 (12 Sep 2025)",
+  "what": "600+ finance workflows (extraction, summarization, reasoning); GPT-5, o3, GPT-4.1, Claude 4, Grok 4, Gemini; frontier only; methodology PDF public, results proprietary.",
+  "reports_cost": "partial - qualitative only: 'GPT-4.1 matched the performance of top-tier models at a fraction of the price'",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "BigFinanceBench: A Workflow-Grounded Benchmark for Financial-Research Agents (Rogo)",
+  "url": "https://arxiv.org/abs/2606.03829",
+  "year": "2026 (blog 27 May 2026; arXiv 2 Jun 2026)",
+  "what": "928 expert-authored finance tasks with rubrics; ten frontier and open-weight agents; best 58.8%; 50-item subset on HF, harness on GitHub, bigfinancebench.com. Analyst workflows, not fact extraction; no small/fine-tuned models.",
+  "reports_cost": "partial - 'the same task costs roughly $1.26 with Claude Opus 4.7 and closer to $0.02 through a cheaper model'",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED (rogo.com post + arXiv abs)"
+ },
+ {
+  "title": "Financial Benchmarks (Ramp Builders Blog)",
+  "url": "https://builders.ramp.com/post/financial-benchmarks",
+  "year": "2026 (undated; 2026-era models)",
+  "what": "Internal Ramp evals incl. 'Financial Statement OCR (P&L documents with 500+ real examples)' and invoice OCR; GPT-5.1/5.4, Claude Sonnet 4.6/Opus 4.5/4.6, Gemini 2.5/3 Flash, open-weight Minimax 2.5 and GLM 5 (large). Not public.",
+  "reports_cost": "partial - relative only ('less than 1/3rd the cost', 'roughly a quarter of the cost')",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Vals AI Finance Agent benchmark",
+  "url": "https://www.vals.ai/benchmarks/finance_agent",
+  "year": "2025-2026 (live leaderboard)",
+  "what": "537 entry-level-analyst questions; 21 frontier models (Claude Opus 4.7 64.37%); cost per test shown ('some challenging queries cost more than $5'); no small/fine-tuned models.",
+  "reports_cost": "yes - cost per test on leaderboard",
+  "reports_latency": "partial - not visible in fetched excerpt",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Best Document Extraction for Financial Documents (2026) (Reducto) / LongExtractBench / RD-TableBench",
+  "url": "https://llms.reducto.ai/best-document-extraction-financial-documents",
+  "year": "2026 (9 Sep 2026)",
+  "what": "Vendor comparison of parsing APIs (Reducto, Textract, Azure DI, Google DocAI, Unstructured, LlamaParse, Mistral, Ocrolus, V7) on bank statements, 10-K/10-Q, K-1s; cites micro1 LongExtractBench (225 docs). No open-weight/fine-tuned small LLMs.",
+  "reports_cost": "yes - per-page list prices: Textract Analyze Lending '$0.07/page', Reducto '$10 per 1,000 pages', Unstructured '$0.03/page', Google DocAI '$1.50/1K pages'",
+  "reports_latency": "partial - batch SLA only ('12-hour completion guarantee')",
+  "threat_to_novelty": "low - parsing-API price sheets, not a model-level cost/latency frontier.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Fine-Tuned-SEC-Filing-Extraction-Pipeline (A-Kuo, GitHub)",
+  "url": "https://github.com/A-Kuo/Fine-Tuned-SEC-Filing-Extraction-Pipeline",
+  "year": "2026",
+  "what": "Solo project: QLoRA Llama 3.1 8B (NF4) for structured facts from untagged narrative in EDGAR 10-Ks alongside iXBRL facts; MIT. README: real model results 'None yet (all measured runs use base weights only, no trained adapter)'; '~320 ms / document' and '~60 docs / min' are 'unverified placeholder' targets; heuristic revenue extraction 0/5. No API comparison, no FinTagging/FNXL/FiNER.",
+  "reports_cost": "no",
+  "reports_latency": "partial - placeholder targets only, explicitly unverified",
+  "threat_to_novelty": "low - shows the idea is 'in the air' for solo engineers but delivers no benchmark.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "TAT-LLM: A Specialized Language Model for Discrete Reasoning over Tabular and Textual Data",
+  "url": "https://arxiv.org/abs/2401.13223",
+  "year": "2024 (24 Jan 2024)",
+  "what": "Fine-tuned LLaMA 2 for FinQA/TAT-QA/TAT-DQA; motivation: 'utilizing an online LLM like GPT-4 holds various challenges in terms of cost, latency, and data security risk, which motivates us to specialize smaller LLMs'. No numbers.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none - motivates with cost/latency but does not measure it (supports the project's framing).",
+  "verification": "VERIFIED (abs)"
+ },
+ {
+  "title": "The Power of Fine-Tuning on Your Data: Quick Fixing Bugs with LLMs via NEL (Databricks)",
+  "url": "https://www.databricks.com/blog/power-fine-tuning-your-data-quick-fixing-bugs-llms-never-ending-learning-nel",
+  "year": "2024-2025",
+  "what": "Snippet: fine-tuned Llama 'achieving 1.4x improvement in acceptance rate over GPT-4o while achieving a 2x reduction in inference latency' on code bug-fix suggestions. Not finance.",
+  "reports_cost": "partial (snippet)",
+  "reports_latency": "yes (snippet) - '2x reduction in inference latency'",
+  "threat_to_novelty": "low (generic)",
+  "verification": "SNIPPET-ONLY"
+ },
+ {
+  "title": "Fine Tuning Llama 3.5 vs GPT-4 (sivaro.in) and LLMs for Financial Document Analysis (intuitionlabs.ai)",
+  "url": "https://sivaro.in/articles/fine-tuning-llama-35-vs-gpt-4-which-model-wins-in/",
+  "year": "2026 (snippet)",
+  "what": "Snippets claim 'Llama 3.5 70B with QLoRA fine-tuning achieved 94.2% exact field match while GPT-4 fine-tuned hit 96.8%' on 'SEC filing extraction', '$8,000/year ... compared to GPT-4 fine-tuned at $64,000/year'; intuitionlabs: 'fine-tuned Llama 3.1 8B can match GPT-4o quality at $0.06/1M tokens versus $6.25/1M'. Not fetched; content-farm style, no methodology, 'Llama 3.5' unverifiable - non-citable.",
+  "reports_cost": "yes (snippet, unsupported)",
+  "reports_latency": "no",
+  "threat_to_novelty": "low - no reproducible benchmark; only shows the marketing narrative is common.",
+  "verification": "SNIPPET-ONLY"
+ },
+ {
+  "title": "LLMStructBench: Benchmarking LLM Structured Data Extraction",
+  "url": "https://arxiv.org/abs/2602.14743",
+  "year": "2026 (16 Feb 2026)",
+  "what": "Open dataset for JSON extraction from text across 22 models and 5 prompting strategies; prompting matters more than size. No finance, no cost/latency.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED (abs)"
+ },
+ {
+  "title": "Evaluation and Benchmarking Suite for Financial LLMs and Agents (SecureFinAI Lab / Open-Finance-Lab)",
+  "url": "https://arxiv.org/abs/2602.19073",
+  "year": "2026 (22 Feb 2026)",
+  "what": "FinLLM leaderboard/evaluation pipeline (HuggingFace, Linux Foundation); abstract mentions 'analyzing SEC filings' but no XBRL/FinTagging cost or latency content.",
+  "reports_cost": "no (abstract)",
+  "reports_latency": "no (abstract)",
+  "threat_to_novelty": "low - same lab as FinLoRA; watch for a leaderboard adding efficiency columns.",
+  "verification": "VERIFIED (abs)"
+ }
+]
+
+### gaps
+1) WebSearch budget was exhausted mid-sweep (200/200 session calls), so six planned queries (Predibase/OpenPipe 10-K case studies, vals.ai cost/latency, vLLM-quantized 3B financial extraction blogs, Unstructured/Tensorlake/Extend/Snorkel 10-K benchmarks, EDGAR cost-per-filing small-model posts, Snowflake/Gemma financial statement extraction) were not run; I substituted arXiv-API phrase queries where possible. 2) Semantic Scholar API returned HTTP 429 on all seven attempts (including 20-25s backoff), so no Semantic Scholar coverage. 3) arXiv export API began returning 429/503/timeouts for the last five phrase queries (financial+vLLM/quantized; XBRL+small/distill/efficien; invoice+fine-tuned+cost; earnings/financial-statements+extraction+latency; financial+extraction+frontier+fine-tuned+cost), so 2026 arXiv papers on quantized/vLLM-served small models for financial extraction may have been missed. 4) kensho.com/blog returned 404 and OpenPipe's blog index rendered empty, so I could not confirm or rule out finance-specific case studies from those vendors; Predibase's public fine-tuning leaderboard/index now redirects to Rubrik and is unavailable. 5) Bloomberg: only BloombergGPT (50B, 2023) surfaced; no Bloomberg small-model cost/latency benchmark found. 6) FinLoRA's Figure 3 inference-time values are only in a figure; I could not read the numeric seconds-per-task for FiNER/FNXL. 7) The sivaro.in / intuitionlabs snippets were not fetched and look like low-credibility content; treated as non-citable.
+
+### verdict_on_novelty
+From this angle the claim is DENTED, not dead, and must be reworded. (a) 'Nobody reports cost or latency for small models on FiNER/FNXL' is literally false: FinLoRA (arXiv 2505.19819, VERIFIED) fine-tunes Llama 3.1 8B with LoRA/QLoRA on FiNER-139 and FNXL and reports fine-tuning dollar cost ('$14.66 to $16.54' on 4xA5000) plus 'Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks' (Figure 3) and a qualitative API-vs-local latency comparison; FLAN-FinXC (arXiv 2405.06671, VERIFIED) reports 'inference time: 2 minutes/sample' for a 780M FLAN-T5 on FNXL. Neither gives inference $ cost, sub-8B generative models, quantized/vLLM serving, or an accuracy-cost-latency frontier against frontier APIs. (b) On FinTagging specifically the claim is INTACT: the FinTagging paper (VERIFIED) has 'Zero mentions of inference cost, latency, throughput, or runtime', evaluates 0.5B-8B models zero-shot only, and no fetched source benchmarks any fine-tuned or distilled model on FinTagging with cost or latency. (c) The broader 'prior work on SEC-filing numeric extraction reports accuracy but not cost/latency' is DENTED by Kulkarni & Kulkarni 2026 (arXiv 2603.22651, VERIFIED: $0.148-$0.430/doc and 21-74s p50 on 10,000 10-K/10-Q/8-K with XBRL-derived labels, but only >=70B/frontier models, no fine-tuning, no public release) and by EarningsBench (VERIFIED: $0.249 and 13-148s per earnings release, frontier only, private). (d) The generic thesis 'fine-tuned small open models match frontier APIs at 10-100x lower cost and lower latency' is already well established and reproducible: distil labs (0.6B-8B Qwen3 on vLLM, $3 vs $6,241 per 1M requests, p50/p95/p99 latency, public repo), Manulife 'Beyond Accuracy' (fine-tuned SmolVLM-500M/2.2B and Qwen2.5-VL-3B/7B vs GPT-5/Claude on bank checks with $/doc and p95 latency, public code), Olava (self-hosted fine-tuned SLM vs five frontier APIs on SEC EDGAR contracts, $0.018 vs $0.149-$0.456/doc, 131s vs 93-194s), Mastercard (270M-8B LoRA throughput frontier on financial transaction extraction), TensorZero, LoRA Land, plus Nanonets/Ertas/Fireworks/OpenPipe marketing. So a headline of 'small fine-tuned models are cheaper than GPT-class APIs for financial extraction' will read as generic. The defensible, still-open contribution is narrower and should be stated as: the first public, reproducible accuracy/cost/latency frontier for 1-3B fine-tuned models (with quantized vLLM serving curves) on XBRL-style fact extraction from real SEC 10-K/10-Q tables and text, evaluated on FinTagging (optionally FNXL/FiNER) against frontier APIs - positioned explicitly relative to FinLoRA (8B, fine-tuning cost only, no serving frontier), Kulkarni 2026 (frontier/70B, no fine-tuning, private), and Manulife/Olava (different document types).

@@ -1,0 +1,132 @@
+### key
+gap_3
+
+### question
+How many concepts are in the FinCL taxonomy — 17,388 (FHS 2608.06614 '2024 US-GAAP inventory'; FinTagging v1 taxonomy DB; finer139 agent's narrowed claim) or 17,688 (FinTagging v5 text; my fetch) — and which taxonomy year/file (repo ships taxonomy/us-gaap-2024.xsd and us_gaap_2024_BM25.jsonl)?
+
+### topic
+gap_3: FinCL taxonomy size — 17,388 vs 17,688 — and which taxonomy year/file. RESOLVED: 17,388 = element count of the FASB 2024 US-GAAP schema (us-gaap-2024.xsd), which is exactly what the FinTagging repo ships (us_gaap_2024_BM25.jsonl, 17,388 lines), what its BERT label space uses (34,777 = 2x17,388+1), and what FHS indexes. 17,688 = exact size of the union of the FASB 2023 (17,220) and 2024 (17,388) element-name sets; FinTagging paper v3–v5 call this "the US-GAAP 2023 and 2024 taxonomy" but no 17,688-entry file is published anywhere.
+
+### facts
+[
+ {
+  "claim": "FinTagging repo taxonomy/us_gaap_2024_BM25.jsonl has exactly 17,388 lines and 17,388 distinct us_gaap_tag values; fields {us_gaap_tag, entity_type, text}; abstract concepts (…Abstract, stringItemType) are included, not filtered.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/taxonomy/us_gaap_2024_BM25.jsonl",
+  "confidence": "VERIFIED",
+  "quote": "wc -l => 17388; first line: {\"us_gaap_tag\": \"AccidentAndHealthInsuranceSegmentMember\", \"entity_type\": \"domainItemType\", \"text\": \"Accident And Health Insurance Segment Member\"}"
+ },
+ {
+  "claim": "taxonomy/us-gaap-2024.xsd in the repo is byte-identical (md5 d55682588d8f41983ba0c2680a562c21) to FASB's official 2024 schema; targetNamespace http://fasb.org/us-gaap/2024.",
+  "evidence_url": "https://xbrl.fasb.org/us-gaap/2024/elts/us-gaap-2024.xsd",
+  "confidence": "VERIFIED",
+  "quote": "(c) 2010-2024 Financial Accounting Foundation ... targetNamespace='http://fasb.org/us-gaap/2024'"
+ },
+ {
+  "claim": "us-gaap-2024.xsd declares exactly 17,388 xs:element entries (all named, all distinct), and that name set equals the BM25 jsonl tag set exactly (0 differences either way).",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/taxonomy/us-gaap-2024.xsd",
+  "confidence": "VERIFIED",
+  "quote": "total xs:element tags: 17388 ... xsd names == jsonl tags? True | in xsd not jsonl: 0 | in jsonl not xsd: 0"
+ },
+ {
+  "claim": "Composition of the 17,388 (2024): abstract='true' 5,397; substitutionGroup xbrli:item 16,796 / xbrldt:hypercubeItem 333 / xbrldt:dimensionItem 251 / none 8; periodType duration 12,574, instant 4,806; types monetaryItemType 7,650, stringItemType 4,628, domainItemType 1,915, textBlockItemType 982, enumerationSetItemType 569, percentItemType 463, sharesItemType 224, booleanItemType 184, perShareItemType 161, durationItemType 158, dateItemType 126, integerItemType 98; name suffixes *Abstract 2,452, *Member 1,669, *TextBlock 763, *Table 333, *LineItems 329, *Axis 251, *Domain 245, *Policy 165. The xsd carries no deprecation attribute.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/taxonomy/us-gaap-2024.xsd",
+  "confidence": "VERIFIED",
+  "quote": "abstract attr: Counter({None: 11991, 'true': 5397}); substitutionGroup: Counter({'xbrli:item': 16796, 'xbrldt:hypercubeItem': 333, 'xbrldt:dimensionItem': 251, None: 8})"
+ },
+ {
+  "claim": "The five FinNI/FinCL numeric datatypes cover 8,596 of the 17,388 concepts (monetary 7,650 + percent 463 + shares 224 + perShare 161 + integer 98); the gold entity_type column of FinCL-eval and FinCL-eval-v2 contains exactly those five types.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinCL-eval-v2",
+  "confidence": "VERIFIED",
+  "quote": "FinCL-eval-v2 entity_type distribution: monetaryItemType 233749, percentItemType 11848, sharesItemType 9119, perShareItemType 5702, integerItemType 1039"
+ },
+ {
+  "claim": "parse_taxonomy.ipynb builds the concept dictionary by iterating every xsd:element with a name and type in taxonomy/us-gaap-2024.xsd — no abstract/dimensional/deprecated filtering.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/parse_taxonomy.ipynb",
+  "confidence": "VERIFIED",
+  "quote": "file_path = \"taxonomy/us-gaap-2024.xsd\" ... for element in root.findall(\".//xsd:element\", ns): name = element.get(\"name\"); type_attr = element.get(\"type\"); if name and type_attr: ... concepts[name] = type_attr"
+ },
+ {
+  "claim": "BERT/data/id2label.json in the repo has 34,777 entries (= 2 x 17,388 + 1): the BIO label space is built from the 2024 taxonomy only.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/BERT/data/id2label.json",
+  "confidence": "VERIFIED",
+  "quote": "entries 34777; ('0','O'), ('1','B-us-gaap:AccidentAndHealthInsuranceSegmentMember'), ..."
+ },
+ {
+  "claim": "FinTagging arXiv v1 (2025-05-27) reports 17,388 everywhere and never 17,688 (taxonomy-DB sentence, BIO sentence, Table 1); FinCL-eval = 52,572 pairs. pypdf on the v1 PDF: 4x '17,388', 0x '17,688'.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v1",
+  "confidence": "VERIFIED",
+  "quote": "In addition, we build a US-GAAP taxonomy database containing 17,388 unique financial concepts. ... we combine the entire set of 17,388 tags from the US-GAAP 2024 taxonomy with the BIO labeling scheme to construct an extreme classification label space, resulting in 34,777 unique entity labels (2x17388+1)"
+ },
+ {
+  "claim": "FinTagging arXiv v2 (2025-10-10) is transitional and self-inconsistent: the taxonomy-DB sentence says 17,688 while the BIO sentence and Table 1 still say 17,388 / '139 / 17,388'; FinCL-eval = 62,668 pairs. PDF counts: 6x 17,388, 2x 17,688.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v2",
+  "confidence": "VERIFIED",
+  "quote": "we built a US-GAAP taxonomy database containing 17,688 unique financial concepts ... we combine the entire set of 17,388 tags from the US-GAAP 2024 taxonomy ... FiNER (Loukas et al., 2022) XBRL tagging SEC 10-K Extreme classification text 0 139 / 17,388"
+ },
+ {
+  "claim": "FinTagging arXiv v3 (2026-01-06), v4 (2026-02-19), v5 (2026-05-17) say 17,688 'from the US-GAAP 2023 and 2024 taxonomy' and Table 1 '17,688 / 17,688' (#Entity Label / #Taxonomy Label), yet keep the v1 arithmetic '34,777 (2x17388+1)' (2x17,688+1 would be 35,377); body also says '17k+' and 'over 17,000'; FinCL-eval = 261,457 pairs. PDF counts v3/v4/v5: 1x 17,388, 6x 17,688 each.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "we combine the entire set of 17,688 tags from the US-GAAP 2023 and 2024 taxonomy with the BIO labeling scheme to construct an extreme classification label space, resulting in 34,777 unique entity labels (2x17388+1) ... along with a US-GAAP taxonomy containing 17,688 concepts"
+ },
+ {
+  "claim": "Arithmetic resolution of 17,688: FASB's official 2023 schema declares 17,220 elements; the union of the 2023 and 2024 element-name sets is exactly 17,688 (intersection 16,920; 300 only in 2023; 468 only in 2024). Hence 17,688 = |2023 U 2024| and 17,388 = 2024 alone.",
+  "evidence_url": "https://xbrl.fasb.org/us-gaap/2023/elts/us-gaap-2023.xsd",
+  "confidence": "VERIFIED",
+  "quote": "FASB 2023 elements: 17220; FASB 2024 elements: 17388; union 2023U2024: 17688 | intersection: 16920 | 2023-only: 300 | 2024-only: 468"
+ },
+ {
+  "claim": "The GitHub repo ships only the 2024 taxonomy (taxonomy/us-gaap-2024.xsd 4,999,840 B; taxonomy/us_gaap_2024_BM25.jsonl 3,129,259 B; last taxonomy/ commit 2025-06-13). No 2023 file and no 17,688-entry index exist in the repo. retrieval.py's default --index_document './index_document/us_gaap_2024_final_embedder.jsonl' is not in the repo; retrieval needs Elasticsearch; repo has no license field.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/README.md",
+  "confidence": "VERIFIED",
+  "quote": "Taxonomy: We provided the original US-GAAP taxonomy file (\"us-gaap-2024.xsd\") as well as the processed taxonomy BM25 index document (\"us_gaap_2024_BM25.jsonl\") under the taxonomy folder. However, you can construct your own index document instead of using ours with the original US-GAAP taxonomy file."
+ },
+ {
+  "claim": "Gold-label coverage from the HF parquet files: FinCL-eval (v1) 52,572 rows / 2,288 distinct gold concepts, all in the 2024 xsd. FinCL-eval-v2 261,457 rows / 3,953 distinct gold concepts; 2 concepts (33 rows) are absent from 2024 but present in 2023 — StockRepurchaseProgramAuthorizedAmount1 (monetaryItemType) and StockRepurchaseProgramNumberOfSharesAuthorizedToBeRepurchased (sharesItemType); 0 outside 2023U2024. FinTagging_Original_v2: 46,496 contexts, 522,914 facts, same 3,953 concepts (66 facts on those two).",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinCL-eval-v2/resolve/main/data/test-00000-of-00004.parquet",
+  "confidence": "VERIFIED",
+  "quote": "FinCL-eval-v2: rows=261457 distinct gold=3953 | not in 2024=2 (rows 33) | not in 2023U2024=0 (rows 0) | 2023-only used=2"
+ },
+ {
+  "claim": "None of the HF dataset cards (FinCL-eval, FinCL-eval-v2, FinNI-eval, FinTagging_Original, FinTagging_Original_v2, FinTagging_BIO) states a taxonomy size; the HF collection lists those plus *_v2 variants; huggingface.co/datasets/TheFinAI/FinTagging itself returns 401 / 'Invalid username or password' (no such public dataset).",
+  "evidence_url": "https://huggingface.co/api/collections/TheFinAI/fintagging-68270132372c6608ac069bef",
+  "confidence": "VERIFIED",
+  "quote": "dataset TheFinAI/FinNI-eval; dataset TheFinAI/FinCL-eval; dataset TheFinAI/FinTagging_BIO; dataset TheFinAI/FinTagging_Original; paper 2505.20650; dataset TheFinAI/FinTagging_Original_v2; dataset TheFinAI/FinNI-eval-v2; dataset TheFinAI/FinTagging_BIO_v2; dataset TheFinAI/FinCL-eval-v2"
+ },
+ {
+  "claim": "FHS (arXiv 2608.06614 v1, 2026-08-06) evaluates FinTagging on the 2024 inventory of 17,388 concepts, explicitly without removing abstract or deprecated concepts; 2,470 have no documentation string; only the us-gaap namespace is indexed. Test split: 191 contexts (110 table, 81 text), 2,509 facts, 388 distinct gold concepts. It cites FinTagging as arXiv:2505.20650 under the v1 title.",
+  "evidence_url": "https://arxiv.org/html/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "We index all 17,388 concepts of the 2024 US-GAAP taxonomy without filtering: no concept is removed for being abstract, deprecated, or lacking a documentation string, and 2470 of the 17,388 carry no documentation text. We index the us-gaap namespace only; every gold tag in the test split is a us-gaap concept, so no company-specific extension element appears as a target."
+ },
+ {
+  "claim": "FHS section 5.1 sentence defining the inventory.",
+  "evidence_url": "https://arxiv.org/html/2608.06614",
+  "confidence": "VERIFIED",
+  "quote": "We evaluate on the financial tagging benchmark of Wang et al. (2025b) using the 2024 US-GAAP inventory of 17,388 concepts."
+ },
+ {
+  "claim": "FHS code/data independently confirm 17,388: Financial_Tagging/README.md calls HF lm2445/Financial_Tagging_FHS 'the 17,388-concept US-GAAP 2024 retrieval index'; its taxonomy/build_summary.json reports records 17388, tags_with_standard_label 17388, tags_with_documentation 14918 (=> 2,470 undocumented, matching the paper), tags_with_references 11888, built from us-gaap-2024.xsd + lab/doc/ref-2024.xml, listing FinTagging's us_gaap_2024_BM25.jsonl as 'old_bm25_labels'.",
+  "evidence_url": "https://huggingface.co/datasets/lm2445/Financial_Tagging_FHS/resolve/main/taxonomy/build_summary.json",
+  "confidence": "VERIFIED",
+  "quote": "\"records\": 17388, \"tags_with_standard_label\": 17388, \"tags_with_documentation\": 14918, \"tags_with_references\": 11888, ... \"old_bm25_labels\": \"retrieval_data/us_gaap_2024_BM25.jsonl\""
+ },
+ {
+  "claim": "FinTagging's retrieval.py full_text_search uses entity_type only as a boosted 'should' match clause alongside tag_text (plus a fuzzy clause) — not a hard datatype filter; default size=100 candidates.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/retrieval/retrieval.py",
+  "confidence": "VERIFIED",
+  "quote": "\"should\":[{\"match\":{\"entity_type\":{\"query\": query, \"boost\": 1.0}}}, {\"match\":{\"tag_text\":{\"query\": query, \"boost\": 1.0}}}] ... {\"fuzzy\":{\"tag_text\":{\"value\":query, \"fuzziness\": \"AUTO\""
+ },
+ {
+  "claim": "The arXiv abstract page for 2505.20650 lists five versions (v1 2025-05-27, v2 2025-10-10, v3 2026-01-06, v4 2026-02-19, v5 2026-05-17), and the abstract itself uses the looser 'over 10k' US-GAAP concepts rather than either exact figure (wording per WebFetch summary of the page).",
+  "evidence_url": "https://arxiv.org/abs/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "v1: May 27, 2025; v2: October 10, 2025; v3: January 6, 2026; v4: February 19, 2026; v5: May 17, 2026 ... 'to over 10k US GAAP concepts'"
+ }
+]
+
+### unknowns
+(1) No author statement spells out that 17,688 is the 2023-plus-2024 union; the identification rests on the exact arithmetic match (17,220 U 17,388 = 17,688) plus the v3–v5 wording "US-GAAP 2023 and 2024 taxonomy". (2) No 17,688-entry taxonomy file is published in the GitHub repo or the HF collection; the only released index is the 17,388-line 2024 BM25 jsonl. (3) How many of the 17,388 are flagged deprecated in FASB's 2024 deprecated-label linkbase was not checked (the xsd carries no deprecation attribute; FHS states it removed none). (4) The FinTagging v2 text (62,668 FinCL pairs) matches no HF dataset I found; the HF *_v2 datasets (Sep 2025) match the v3–v5 numbers (261,457). (5) The session's WebSearch budget was already exhausted and Semantic Scholar returned HTTP 429, so discovery was limited to direct fetches of arXiv, GitHub, FASB and Hugging Face; a broader sweep for other papers quoting either number was not possible.
+
+### notes
+Recommended citation wording: "the 17,388 concepts of the 2024 US-GAAP taxonomy (us-gaap-2024.xsd), the index released with FinTagging and used by FHS". If the paper-level figure must be quoted, add: "FinTagging v3–v5 report 17,688, which equals the union of the FASB 2023 and 2024 element sets." Design implications: a trie/constrained decoder over the 17,388 2024 names covers 100% of FinCL-eval (v1) gold and 99.99% of FinCL-eval-v2 rows (2 concepts / 33 of 261,457 rows are 2023-only); adding the 300 2023-only names (17,688 total) gives 100% on both. A datatype pre-filter cuts the effective numeric label space to 8,596 (monetary/percent/shares/perShare/integer); the 5,397 abstract, 333 Table, 251 Axis and ~1,915 Member/Domain items can never be the concept of a numeric fact. JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/gap_3.json; supporting downloads (taxonomy files, FASB 2023/2024 xsd, arXiv HTML/PDF text v1–v5, FHS HTML text, HF parquet files, FHS build_summary.json) are in /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/gap3/.

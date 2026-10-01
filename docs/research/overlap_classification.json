@@ -1,0 +1,1324 @@
+[
+ {
+  "kind": "text",
+  "text": "pursuant to the requirements of section 13 or 15(d) of the securities exchange act of 1934, the registrant has duly caus",
+  "phrase": "d of the Securities Exchange Act of 1934 the Registrant has duly",
+  "total": 10000,
+  "ciks": [
+   "0000004904",
+   "0000006769",
+   "0000006879",
+   "0000007431",
+   "0000016614"
+  ],
+  "dates": [
+   "2001-04-02",
+   "2001-04-25",
+   "2001-04-27",
+   "2001-05-29",
+   "2001-06-14",
+   "2001-08-17"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "pursuant to the requirements of section 13 or 15(d) of the securities exchange act of 1934, the registrant has duly caus",
+  "phrase": "d of the Securities Exchange Act of 1934 the registrant has duly",
+  "total": 10000,
+  "ciks": [
+   "0000004904",
+   "0000006769",
+   "0000006879",
+   "0000007431",
+   "0000016614"
+  ],
+  "dates": [
+   "2001-04-02",
+   "2001-04-25",
+   "2001-04-27",
+   "2001-05-29",
+   "2001-06-14",
+   "2001-08-17"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "item 5. market for registrant\u2019s common equity, related stockholder matters and issuer purchases of equity securities",
+  "phrase": "Item 5 Market for registrant s common equity related stockholder matters and",
+  "total": 10000,
+  "ciks": [
+   "0000030554",
+   "0000035527",
+   "0000216543",
+   "0001021949",
+   "0001141438"
+  ],
+  "dates": [
+   "2005-03-29",
+   "2006-03-24",
+   "2007-04-02",
+   "2008-04-23",
+   "2011-04-01",
+   "2012-06-08"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "the maximum commitment for the wells fargo facility (as defined below) may be increased to up to $ 500.0 million at the ",
+  "phrase": "The maximum commitment for the Wells Fargo Facility as defined below may",
+  "total": 4,
+  "ciks": [
+   "0001529377"
+  ],
+  "dates": [
+   "2022-02-15",
+   "2023-02-15",
+   "2024-02-22",
+   "2025-02-12"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "certain of the company\u2019s subsidiaries were party to two separate non-recourse note agreements with the lenders referred ",
+  "phrase": "Certain of the Company s subsidiaries were party to two separate non",
+  "total": 3,
+  "ciks": [
+   "0001529377"
+  ],
+  "dates": [
+   "2023-02-15",
+   "2024-02-22",
+   "2025-02-12"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "the $ 28.3 million note was repaid in full in conjunction with the sale of the hotel property that was recognized as rea",
+  "phrase": "million note was repaid in full in conjunction with the sale of",
+  "total": 3,
+  "ciks": [
+   "0001529377"
+  ],
+  "dates": [
+   "2023-02-15",
+   "2024-02-22",
+   "2025-02-12"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "in june 2022, the company repaid the $ 23.5 million note in full. advances under the $ 23.5 million note accrued interes",
+  "phrase": "million note accrued interest at a per annum rate equal to the",
+  "total": 4,
+  "ciks": [
+   "0001529377"
+  ],
+  "dates": [
+   "2023-02-15",
+   "2024-02-22",
+   "2025-02-12",
+   "2026-02-10"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "a subsidiary of the company was party to a secured borrowing arrangement related to a transferred loan that was closed i",
+  "phrase": "A subsidiary of the Company was party to a secured borrowing arrangement",
+  "total": 3,
+  "ciks": [
+   "0001529377"
+  ],
+  "dates": [
+   "2023-02-15",
+   "2024-02-22",
+   "2025-02-12"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": ", for treatment as a sale \u2013 legal isolation, ability of transferee to pledge or exchange the transferred assets without ",
+  "phrase": "for treatment as a sale legal isolation ability of transferee to pledge",
+  "total": 53,
+  "ciks": [
+   "0001465128",
+   "0001467027",
+   "0001467760",
+   "0001514281",
+   "0001529377"
+  ],
+  "dates": [
+   "2011-02-25",
+   "2012-02-29",
+   "2012-03-19",
+   "2013-02-27",
+   "2014-02-26",
+   "2014-02-28"
+  ],
+  "class": "boilerplate",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "on may 20, 2022, the company closed the public offering of an aggregate of 7,000,000 shares of the company\u2019s common stoc",
+  "phrase": "of the Company s common stock generating net proceeds of approximately 103",
+  "total": 0,
+  "ciks": [],
+  "dates": [],
+  "class": "no-hit",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "on january 11, 2019, acre commercial mortgage 2017-fl3 ltd. (the \u201cfl3 issuer\u201d) and acre commercial mortgage 2017-fl3 llc",
+  "phrase": "FL3 Co Issuer both wholly owned indirect subsidiaries of the Company entered",
+  "total": 5,
+  "ciks": [
+   "0001529377"
+  ],
+  "dates": [
+   "2022-02-15",
+   "2023-02-15",
+   "2024-02-22",
+   "2025-02-12",
+   "2026-02-10"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "our audit included obtaining an understanding of internal control over financial reporting, assessing the risk that a ma",
+  "phrase": "Our audit included obtaining an understanding of internal control over financial reporting",
+  "total": 10000,
+  "ciks": [
+   "0000030302",
+   "0000046129",
+   "0000050601",
+   "0000077106",
+   "0000091576"
+  ],
+  "dates": [
+   "2005-02-16",
+   "2005-03-01",
+   "2005-03-11",
+   "2005-03-14",
+   "2005-03-15",
+   "2005-03-16"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "the trss recognize interest and penalties related to unrecognized tax benefits within income tax expense in the company\u2019",
+  "phrase": "The TRSs recognize interest and penalties related to unrecognized tax benefits within",
+  "total": 9,
+  "ciks": [
+   "0001529377"
+  ],
+  "dates": [
+   "2018-03-01",
+   "2019-02-21",
+   "2020-02-20",
+   "2021-02-18",
+   "2022-02-15",
+   "2023-02-15"
+  ],
+  "class": "company-specific",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "pursuant to the requirements of section 13 or 15(d) of the securities exchange act of 1934, the registrant has duly caus",
+  "phrase": "d of the Securities Exchange Act of 1934 the registrant has duly",
+  "total": 10000,
+  "ciks": [
+   "0000004904",
+   "0000006769",
+   "0000006879",
+   "0000007431",
+   "0000016614"
+  ],
+  "dates": [
+   "2001-04-02",
+   "2001-04-25",
+   "2001-04-27",
+   "2001-05-29",
+   "2001-06-14",
+   "2001-08-17"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "because of its inherent limitations, internal control over financial reporting may not prevent or detect misstatements. ",
+  "phrase": "Because of its inherent limitations internal control over financial reporting may not",
+  "total": 10000,
+  "ciks": [
+   "0000013610",
+   "0000064463",
+   "0000100517",
+   "0000101001",
+   "0000313364"
+  ],
+  "dates": [
+   "2005-03-15",
+   "2005-03-22",
+   "2005-03-23",
+   "2005-03-24",
+   "2005-03-29",
+   "2005-03-30"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "after the expiration of the five-year period described above, any business combination between the maryland corporation ",
+  "phrase": "After the expiration of the five year period described above any business",
+  "total": 114,
+  "ciks": [
+   "0001176373",
+   "0001307748",
+   "0001387061",
+   "0001440292",
+   "0001446687"
+  ],
+  "dates": [
+   "2008-03-31",
+   "2009-03-31",
+   "2010-03-18",
+   "2010-03-30",
+   "2010-03-31",
+   "2011-03-08"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "our board of directors determines our major policies, including with regard to financing, growth, debt capitalization, r",
+  "phrase": "Our board of directors determines our major policies including with regard to",
+  "total": 72,
+  "ciks": [
+   "0001084475",
+   "0001442626",
+   "0001481832",
+   "0001529377",
+   "0001547546"
+  ],
+  "dates": [
+   "2012-03-15",
+   "2013-03-15",
+   "2013-04-01",
+   "2014-03-12",
+   "2014-03-17",
+   "2015-03-05"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "if securities are registered pursuant to section 12(b) of the act, indicate by check mark whether the financial statemen",
+  "phrase": "If securities are registered pursuant to Section 12 b of the Act",
+  "total": 10000,
+  "ciks": [
+   "0000006845",
+   "0000019584",
+   "0000031235",
+   "0000310354",
+   "0000709005"
+  ],
+  "dates": [
+   "2023-02-27",
+   "2023-03-17",
+   "2023-03-24",
+   "2023-03-27",
+   "2023-04-17",
+   "2023-04-28"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "pursuant to the requirements of the securities exchange act of 1934, this report has been signed below by the following ",
+  "phrase": "Pursuant to the requirements of the Securities Exchange Act of 1934 this",
+  "total": 10000,
+  "ciks": [
+   "0000004904",
+   "0000006879",
+   "0000015840",
+   "0000016918",
+   "0000018734"
+  ],
+  "dates": [
+   "2001-03-07",
+   "2001-03-13",
+   "2001-03-23",
+   "2001-03-26",
+   "2001-03-27",
+   "2001-04-04"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "item 12. security ownership of certain beneficial owners and management and related stockholder matters.",
+  "phrase": "Item 12 Security Ownership of Certain Beneficial Owners and Management and Related",
+  "total": 10000,
+  "ciks": [
+   "0000216543",
+   "0000354647",
+   "0000857073",
+   "0000869187",
+   "0000900075"
+  ],
+  "dates": [
+   "2004-03-30",
+   "2005-03-29",
+   "2006-03-24",
+   "2006-03-31",
+   "2007-04-02",
+   "2009-04-20"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "if an emerging growth company, indicate by check mark if the registrant has elected not to use the extended transition p",
+  "phrase": "If an emerging growth company indicate by check mark if the registrant",
+  "total": 10000,
+  "ciks": [
+   "0000013156",
+   "0000031235",
+   "0000066382",
+   "0000066600",
+   "0000311817"
+  ],
+  "dates": [
+   "2017-04-21",
+   "2017-05-19",
+   "2017-05-25",
+   "2017-06-23",
+   "2017-06-26",
+   "2017-07-26"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "our segments are comprised of strategic business units or other operations that offer products and services to different",
+  "phrase": "Our segments are comprised of strategic business units or other operations that",
+  "total": 6,
+  "ciks": [
+   "0000732717",
+   "0000845819"
+  ],
+  "dates": [
+   "2023-02-13",
+   "2024-02-23",
+   "2025-02-12",
+   "2025-04-15",
+   "2026-02-09",
+   "2026-04-16"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "on january 14, 2022, the federal communications commission (fcc) announced that we were the winning bidder for 1,624 3.4",
+  "phrase": "2022 the Federal Communications Commission FCC announced that we were the winning",
+  "total": 3,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2023-02-13",
+   "2024-02-23",
+   "2025-02-12"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "on april 8, 2022, we completed the separation and distribution of our warnermedia business, and merger of spinco, an at&",
+  "phrase": "2022 we completed the separation and distribution of our WarnerMedia business and",
+  "total": 3,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2023-02-13",
+   "2024-02-23",
+   "2025-02-12"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "in december 2022, we recorded a noncash pre-tax charge of $ 1,413 to abandon conduits that will not be utilized to suppo",
+  "phrase": "413 to abandon conduits that will not be utilized to support future",
+  "total": 0,
+  "ciks": [],
+  "dates": [],
+  "class": "no-hit",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "common units, with 70 % held by at&t and 30 % held by tpg.",
+  "class": "too-short"
+ },
+ {
+  "kind": "text",
+  "text": "the events of default are customary for agreements of this type and such events would result in the acceleration of, or ",
+  "phrase": "The events of default are customary for agreements of this type and",
+  "total": 9,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2017-02-17",
+   "2018-02-20",
+   "2019-02-20",
+   "2020-02-20",
+   "2021-02-25",
+   "2022-02-16"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "at a variable annual rate equal to: (1) the highest of (but not less than zero) (a) the rate of interest announced publi",
+  "phrase": "at a variable annual rate equal to 1 the highest of but",
+  "total": 8,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2019-02-20",
+   "2020-02-20",
+   "2021-02-25",
+   "2022-02-16",
+   "2023-02-13",
+   "2024-02-23"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "(term sofr) for a period of one month plus a credit spread adjustment of 0.10 % plus 1.00 %, plus (2) an applicable marg",
+  "phrase": "Term SOFR for a period of one month plus a credit spread",
+  "total": 3,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2023-02-13",
+   "2024-02-23",
+   "2025-02-12"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "we pay a facility fee of 0.060 %, 0.070 %, 0.080 % or 0.100 % per annum of the amount of the lender commitments, dependi",
+  "phrase": "per annum of the amount of the lender commitments depending on AT",
+  "total": 8,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2019-02-20",
+   "2020-02-20",
+   "2021-02-25",
+   "2022-02-16",
+   "2023-02-13",
+   "2024-02-23"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "periodically, we enter into and designate interest rate locks to partially hedge the risk of changes in interest payment",
+  "phrase": "Periodically we enter into and designate interest rate locks to partially hedge",
+  "total": 29,
+  "ciks": [
+   "0000732717",
+   "0000740260",
+   "0000766704"
+  ],
+  "dates": [
+   "2010-02-25",
+   "2011-03-01",
+   "2012-02-24",
+   "2013-02-22",
+   "2014-02-21",
+   "2015-02-20"
+  ],
+  "class": "boilerplate",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "on april 26, 2023, at&t and state street global advisors trust company, as independent fiduciary of the at&t pension ben",
+  "phrase": "2023 AT T and State Street Global Advisors Trust Company as independent",
+  "total": 3,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2024-02-23",
+   "2025-02-12",
+   "2026-02-09"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "the purchase of the group annuity contracts was funded directly by assets of the plan via the pension trust underlying t",
+  "phrase": "The purchase of the group annuity contracts was funded directly by assets",
+  "total": 6,
+  "ciks": [
+   "0000001750",
+   "0000732717",
+   "0001524741"
+  ],
+  "dates": [
+   "2024-02-23",
+   "2024-02-27",
+   "2024-07-19",
+   "2025-02-12",
+   "2025-07-22",
+   "2026-07-22"
+  ],
+  "class": "boilerplate",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "we have authorized 14 billion common shares of at&t stock and 10 million preferred shares of at&t stock, each with a par",
+  "phrase": "We have authorized 14 billion common shares of AT T stock and",
+  "total": 7,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2020-02-20",
+   "2021-02-25",
+   "2022-02-16",
+   "2023-02-13",
+   "2024-02-23",
+   "2025-02-12"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "in 2019, we issued $ 6,000 nonconvertible cumulative preferred interests in a wireless subsidiary (tower holdings) that ",
+  "phrase": "nonconvertible cumulative preferred interests in a wireless subsidiary Tower Holdings that holds",
+  "total": 7,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2020-02-20",
+   "2021-02-25",
+   "2022-02-16",
+   "2023-02-13",
+   "2024-02-23",
+   "2025-02-12"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "the mobility noncontrolling interests are required to be initially recorded at fair value less issuance costs and will a",
+  "phrase": "The Mobility noncontrolling interests are required to be initially recorded at fair",
+  "total": 3,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2024-02-23",
+   "2025-02-12",
+   "2026-02-09"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "in preparation for close of the separation and distribution, on april 7, 2022, spinco drew $ 10,000 on its $ 10,000 term",
+  "phrase": "In preparation for close of the separation and distribution on April 7",
+  "total": 3,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2023-02-13",
+   "2024-02-23",
+   "2025-02-12"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "revenues from our traditional voice services continue to decline as customers switch to wireless or voip services provid",
+  "phrase": "Revenues from our traditional voice services continue to decline as customers switch",
+  "total": 11,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2016-02-18",
+   "2017-02-17",
+   "2018-02-20",
+   "2019-02-20",
+   "2020-02-20",
+   "2021-02-25"
+  ],
+  "class": "company-specific",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "these financial statements are the responsibility of the company\u2019s management. our responsibility is to express an opini",
+  "phrase": "These financial statements are the responsibility of the Company s management Our",
+  "total": 10000,
+  "ciks": [
+   "0000005981",
+   "0000006494",
+   "0000036966",
+   "0000049196",
+   "0000058361"
+  ],
+  "dates": [
+   "2002-04-01",
+   "2002-04-02",
+   "2002-05-08",
+   "2002-07-29",
+   "2002-11-26",
+   "2003-03-05"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "our audit included obtaining an understanding of internal control over financial reporting, assessing the risk that a ma",
+  "phrase": "Our audit included obtaining an understanding of internal control over financial reporting",
+  "total": 10000,
+  "ciks": [
+   "0000030302",
+   "0000046129",
+   "0000050601",
+   "0000077106",
+   "0000091576"
+  ],
+  "dates": [
+   "2005-02-16",
+   "2005-03-01",
+   "2005-03-11",
+   "2005-03-14",
+   "2005-03-15",
+   "2005-03-16"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "junior preferred units with distribution rights of $ 4,250 held by at&t, which were fully distributed as of december 31,",
+  "phrase": "held by AT T which were fully distributed as of December 31",
+  "total": 2,
+  "ciks": [
+   "0000732717"
+  ],
+  "dates": [
+   "2024-02-23",
+   "2025-02-12"
+  ],
+  "class": "company-specific",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "indicate by check mark if the registrant is a well-known seasoned issuer, as defined in rule 405 of the securities act.",
+  "phrase": "Indicate by check mark if the registrant is a well known seasoned",
+  "total": 10000,
+  "ciks": [
+   "0000018914",
+   "0000019617",
+   "0000031277",
+   "0000036369",
+   "0000056978"
+  ],
+  "dates": [
+   "2005-12-16",
+   "2006-01-04",
+   "2006-01-06",
+   "2006-03-01",
+   "2006-03-27",
+   "2006-03-31"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "if securities are registered pursuant to section 12(b) of the act, indicate by check mark whether the financial statemen",
+  "phrase": "If securities are registered pursuant to Section 12 b of the Act",
+  "total": 10000,
+  "ciks": [
+   "0000006845",
+   "0000019584",
+   "0000031235",
+   "0000310354",
+   "0000709005"
+  ],
+  "dates": [
+   "2023-02-27",
+   "2023-03-17",
+   "2023-03-24",
+   "2023-03-27",
+   "2023-04-17",
+   "2023-04-28"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "large accelerated filer \u2612 accelerated filer \u2610 non-accelerated filer \u2610 smaller reporting company \u2610 emerging growth compan",
+  "phrase": "Large Accelerated Filer Accelerated Filer Non accelerated Filer Smaller Reporting Company Emerging",
+  "total": 10000,
+  "ciks": [
+   "0000013156",
+   "0000031235",
+   "0000709005",
+   "0000715579",
+   "0000717423"
+  ],
+  "dates": [
+   "2017-05-01",
+   "2017-05-10",
+   "2017-10-26",
+   "2018-02-16",
+   "2018-04-03",
+   "2018-04-18"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "indicate by check mark if the registrant is not required to file reports pursuant to section 13 or section 15(d) of the ",
+  "phrase": "Indicate by check mark if the registrant is not required to file",
+  "total": 10000,
+  "ciks": [
+   "0000018914",
+   "0000019617",
+   "0000031277",
+   "0000036369",
+   "0000056978"
+  ],
+  "dates": [
+   "2005-12-16",
+   "2006-01-04",
+   "2006-01-06",
+   "2006-03-07",
+   "2006-03-27",
+   "2006-03-31"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "our debt obligations, of which there is no current portion, consisted of the following (in thousands):",
+  "phrase": "Our debt obligations of which there is no current portion consisted of",
+  "total": 3,
+  "ciks": [
+   "0001522727"
+  ],
+  "dates": [
+   "2024-02-13",
+   "2025-02-11",
+   "2026-02-17"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "borrowings under the credit agreement bear interest at a per-annum interest rate equal to, at the partnership\u2019s option, ",
+  "phrase": "Borrowings under the Credit Agreement bear interest at a per annum interest",
+  "total": 5,
+  "ciks": [
+   "0001522727"
+  ],
+  "dates": [
+   "2022-02-15",
+   "2023-02-14",
+   "2024-02-13",
+   "2025-02-11",
+   "2026-02-17"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "on march 7, 2019, the partnership and finance corp co-issued the senior notes 2027. the senior notes 2027 mature on sept",
+  "phrase": "and Finance Corp co issued the Senior Notes 2027 The Senior Notes",
+  "total": 3,
+  "ciks": [
+   "0001522727"
+  ],
+  "dates": [
+   "2023-02-14",
+   "2024-02-13",
+   "2025-02-11"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "if we experience a change of control followed by a ratings decline, unless we have previously exercised, or concurrently",
+  "phrase": "If we experience a change of control followed by a ratings decline",
+  "total": 8,
+  "ciks": [
+   "0001522727"
+  ],
+  "dates": [
+   "2019-02-19",
+   "2020-02-18",
+   "2021-02-16",
+   "2022-02-15",
+   "2023-02-14",
+   "2024-02-13"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "on january 12, 2024, the holders of the preferred units elected to convert 40,000 preferred units into 1,998,850 common ",
+  "phrase": "common units These Preferred Units were converted into common units and for",
+  "total": 4,
+  "ciks": [
+   "0001276187",
+   "0001522727"
+  ],
+  "dates": [
+   "2024-02-13",
+   "2025-02-11",
+   "2025-02-14",
+   "2026-02-17"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "on april 27, 2022, the tranche of warrants with the right to purchase 5,000,000 common units with a strike price of $ 17",
+  "phrase": "03 per common unit was exercised in full by the holders The",
+  "total": 0,
+  "ciks": [],
+  "dates": [],
+  "class": "no-hit",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "on october 27, 2023, the tranche of warrants with the right to purchase 10,000,000 common units with a strike price of $",
+  "phrase": "59 per common unit was exercised in full by the holders The",
+  "total": 0,
+  "ciks": [],
+  "dates": [],
+  "class": "no-hit",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "in january 2013, the board adopted the usa compression partners, lp 2013 long-term incentive plan (as amended, the \u201cltip",
+  "phrase": "the Board adopted the USA Compression Partners LP 2013 Long Term Incentive",
+  "total": 9,
+  "ciks": [
+   "0001522727"
+  ],
+  "dates": [
+   "2014-02-20",
+   "2019-02-19",
+   "2020-02-18",
+   "2021-02-16",
+   "2022-02-15",
+   "2023-02-14"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "text",
+  "text": "our debt obligations, of which there is no current portion, consisted of the following (in thousands):",
+  "phrase": "Our debt obligations of which there is no current portion consisted of",
+  "total": 3,
+  "ciks": [
+   "0001522727"
+  ],
+  "dates": [
+   "2024-02-13",
+   "2025-02-11",
+   "2026-02-17"
+  ],
+  "class": "company-specific",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "any additional regulation of air emissions from the oil and gas sector could result in increased expenditures for pollut",
+  "phrase": "Any additional regulation of air emissions from the oil and gas sector",
+  "total": 10,
+  "ciks": [
+   "0001522727"
+  ],
+  "dates": [
+   "2017-02-13",
+   "2018-02-13",
+   "2019-02-19",
+   "2020-02-18",
+   "2021-02-16",
+   "2022-02-15"
+  ],
+  "class": "company-specific",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "we tested the effectiveness of controls related to the determination of ltc future policy benefit reserves, including th",
+  "phrase": "We tested the effectiveness of controls related to the determination of LTC",
+  "total": 14,
+  "ciks": [
+   "0000021175",
+   "0000060086"
+  ],
+  "dates": [
+   "2020-02-11",
+   "2020-02-12",
+   "2021-02-09",
+   "2022-02-08",
+   "2023-02-07",
+   "2024-02-06"
+  ],
+  "class": "company-specific",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "indicate by check mark whether the registrant (1) has filed all reports required to be filed by section 13 or 15(d) of t",
+  "phrase": "Indicate by check mark whether the registrant 1 has filed all reports",
+  "total": 10000,
+  "ciks": [
+   "0000016104",
+   "0000019002",
+   "0000026987",
+   "0000310354",
+   "0000704562"
+  ],
+  "dates": [
+   "2001-01-08",
+   "2001-02-27",
+   "2001-03-07",
+   "2001-03-19",
+   "2001-03-20",
+   "2001-05-29"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "text",
+  "text": "indicate by check mark whether the registrant has filed a report on and attestation to its management\u2019s assessment of th",
+  "phrase": "Indicate by check mark whether the registrant has filed a report on",
+  "total": 10000,
+  "ciks": [
+   "0000013156",
+   "0000031235",
+   "0000311817",
+   "0000709005",
+   "0000771266"
+  ],
+  "dates": [
+   "2020-05-18",
+   "2020-06-05",
+   "2020-07-14",
+   "2020-07-30",
+   "2020-08-06",
+   "2020-08-28"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "table",
+  "text": "* management contract or compensatory plan or arrangement.",
+  "class": "too-short"
+ },
+ {
+  "kind": "table",
+  "text": "",
+  "class": "too-short"
+ },
+ {
+  "kind": "table",
+  "text": "",
+  "class": "too-short"
+ },
+ {
+  "kind": "table",
+  "text": "as of december 31, 2023 face amount amortized cost unamortized discount unrealized gain (loss), net available-for-sale d",
+  "phrase": "Amount Amortized Cost Unamortized Discount Unrealized Gain Loss Net Available",
+  "total": 4,
+  "ciks": [
+   "0001529377"
+  ],
+  "dates": [
+   "2023-02-15",
+   "2024-02-22",
+   "2025-02-12",
+   "2026-02-10"
+  ],
+  "class": "company-specific",
+  "positive": true
+ },
+ {
+  "kind": "table",
+  "text": "",
+  "class": "too-short"
+ },
+ {
+  "kind": "table",
+  "text": "maryland 45-3148087 (state or other jurisdiction of incorporation or organization) (i.r.s. employer identification no.)",
+  "phrase": "State or other jurisdiction of incorporation or organization I R",
+  "total": 425,
+  "ciks": [
+   "0000007084",
+   "0000088948",
+   "0000089140",
+   "0000103595",
+   "0000276750"
+  ],
+  "dates": [
+   "2002-05-03",
+   "2003-09-03",
+   "2004-03-30",
+   "2005-03-11",
+   "2005-04-28",
+   "2005-10-26"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "table",
+  "text": "title of each class title of each class trading symbol(s) name of each exchange on which registered name of each exchang",
+  "phrase": "Title of each class Title of each class Trading Symbol",
+  "total": 0,
+  "ciks": [],
+  "dates": [],
+  "class": "no-hit",
+  "positive": false
+ },
+ {
+  "kind": "table",
+  "text": "large accelerated filer o accelerated filer \u00fd non-accelerated filer o smaller reporting company \u2610 emerging growth compan",
+  "phrase": "Large accelerated filer o Accelerated filer Non accelerated filer o",
+  "total": 1843,
+  "ciks": [
+   "0000006885",
+   "0000065172",
+   "0000080124",
+   "0000083402",
+   "0000084839"
+  ],
+  "dates": [
+   "2006-03-08",
+   "2006-03-17",
+   "2006-03-23",
+   "2006-03-30",
+   "2006-03-31",
+   "2006-04-13"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "table",
+  "text": "",
+  "class": "too-short"
+ },
+ {
+  "kind": "table",
+  "text": "ratings definition 1 very low risk 2 low risk 3 medium risk 4 high risk/potential for loss: asset performance is trailin",
+  "phrase": "4 High Risk Potential for Loss Asset performance is trailing",
+  "total": 6,
+  "ciks": [
+   "0001529377"
+  ],
+  "dates": [
+   "2021-02-18",
+   "2022-02-15",
+   "2023-02-15",
+   "2024-02-22",
+   "2025-02-12",
+   "2026-02-10"
+  ],
+  "class": "company-specific",
+  "positive": false
+ },
+ {
+  "kind": "table",
+  "text": "\u2612 annual report pursuant to section 13 or 15(d) of the securities exchange act of 1934",
+  "class": "no-phrase"
+ },
+ {
+  "kind": "table",
+  "text": "\u2610 transition report pursuant to section 13 or 15(d) of the securities exchange act of 1934",
+  "class": "no-phrase"
+ },
+ {
+  "kind": "table",
+  "text": "securities registered pursuant to section 12(b) of the act (continued): securities registered pursuant to section 12(b) ",
+  "phrase": "Securities registered pursuant to Section 12 b of the Act",
+  "total": 10000,
+  "ciks": [
+   "0000005272",
+   "0000005907",
+   "0000007431",
+   "0000018672",
+   "0000027093"
+  ],
+  "dates": [
+   "2001-01-26",
+   "2001-03-19",
+   "2001-03-20",
+   "2001-06-29",
+   "2002-07-31",
+   "2003-03-31"
+  ],
+  "class": "boilerplate",
+  "positive": false
+ },
+ {
+  "kind": "table",
+  "text": "adjusted ebitda and dcf factors % of budget target bonus pool payout factor greater than or equal to 110% 1.20x 109.9% \u2013",
+  "phrase": "Adjusted EBITDA and DCF Factors of Budget Target Bonus Pool",
+  "total": 8,
+  "ciks": [
+   "0001522727"
+  ],
+  "dates": [
+   "2019-02-19",
+   "2020-02-18",
+   "2021-02-16",
+   "2022-02-15",
+   "2023-02-14",
+   "2024-02-13"
+  ],
+  "class": "company-specific",
+  "positive": false
+ },
+ {
+  "kind": "table",
+  "text": "leverage ratio factor range within budget target bonus pool payout factor more than 0.250 below budget target 1.20x 0.25",
+  "phrase": "Leverage Ratio Factor Range within Budget Target Bonus Pool Payout",
+  "total": 7,
+  "ciks": [
+   "0001522727"
+  ],
+  "dates": [
+   "2019-02-19",
+   "2020-02-18",
+   "2021-02-16",
+   "2022-02-15",
+   "2023-02-14",
+   "2024-02-13"
+  ],
+  "class": "company-specific",
+  "positive": false
+ },
+ {
+  "kind": "table",
+  "text": "safety factor % of target bonus pool payout factor less than 100% 1.00x 100% \u2013 105% 0.90x 105.1% \u2013 110% 0.80x 110.1% \u2013 1",
+  "phrase": "Safety Factor of Target Bonus Pool Payout Factor Less than",
+  "total": 8,
+  "ciks": [
+   "0001522727"
+  ],
+  "dates": [
+   "2019-02-19",
+   "2020-02-18",
+   "2021-02-16",
+   "2022-02-15",
+   "2023-02-14",
+   "2024-02-13"
+  ],
+  "class": "company-specific",
+  "positive": false
+ },
+ {
+  "kind": "table",
+  "text": "",
+  "class": "too-short"
+ },
+ {
+  "kind": "table",
+  "text": "\u2612 annual report pursuant to section 13 or 15(d) of the securities exchange act of 1934",
+  "class": "no-phrase"
+ },
+ {
+  "kind": "table",
+  "text": "\u2610 transition report pursuant to section 13 or 15(d) of the securities exchange act of 1934",
+  "class": "no-phrase"
+ },
+ {
+  "kind": "table",
+  "text": "",
+  "class": "too-short"
+ }
+]

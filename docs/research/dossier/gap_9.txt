@@ -1,0 +1,120 @@
+### key
+gap_9
+
+### question
+Is FLaME's FNXL evaluation comparable at all? Its FNXL F1 is <= 0.057 for every model (my PDF check), it reports 'new evaluation metrics for FNXL' based on numeric overlap rather than exact match, and its per-dataset Table 13 costs are provider API prices for zero-shot runs. Two dossier agents quoted FLaME FNXL scores of 0.52-0.66, which are wrong.
+
+### topic
+gap_9: Is FLaME's FNXL evaluation comparable? Metric definition, zero-shot setting, Table 13 per-dataset USD cost, and the 0.52-0.66 misquote
+
+### facts
+[
+ {
+  "claim": "FLaME = 'Financial Language Model Evaluation (FLaME)', Matlin, Okamoto, Pardawala, Yang, Chava. arXiv 2506.15846 has a single version v1 (18 Jun 2025, 48-page PDF). Published in Findings of ACL 2025, pp. 22633-22679, DOI 10.18653/v1/2025.findings-acl.1164; Semantic Scholar citationCount 8 (as of 2026-10-01).",
+  "evidence_url": "https://arxiv.org/abs/2506.15846 ; https://aclanthology.org/2025.findings-acl.1164/ ; https://api.semanticscholar.org/graph/v1/paper/DOI:10.18653/v1/2025.findings-acl.1164",
+  "confidence": "VERIFIED",
+  "quote": "an empirical study of 23 foundation LMs over 20 core NLP tasks in finance"
+ },
+ {
+  "claim": "FLaME's FNXL F1 is <= 0.057 for every one of the 23 models (Table 2, FNXL column): Llama 3 70B .020; Llama 3 8B .003; DBRX .009; DeepSeek LLM 67B .007; Gemma 2 27B .006; Gemma 2 9B .005; Mistral 7B .004; Mixtral-8x22B .009; Mixtral-8x7B .009; Qwen 2 72B .012; WizardLM-2 .008; DeepSeek-V3 .045; DeepSeek R1 .057; QwQ-32B .001; Jamba 1.5 Mini .005; Jamba 1.5 Large .005; Claude 3.5 Sonnet .047; Claude 3 Haiku .015; Cohere Command R 7B .018; Cohere Command R+ .021; Gemini 1.5 Pro .019; GPT-4o .037; o1-mini .010. Identical in the arXiv v1 and ACL Findings PDFs.",
+  "evidence_url": "https://arxiv.org/pdf/2506.15846 (Table 2; Table 6 'Information Retrieval Table' in Appendix F) ; https://aclanthology.org/2025.findings-acl.1164.pdf",
+  "confidence": "VERIFIED",
+  "quote": "Numeric reasoning tasks (like FNXL for numeric labeling or CONVFINQA for multi-step financial statements) remain especially challenging, with F1 scores for FNXL often below 0.06"
+ },
+ {
+  "claim": "Table 6 (Appendix F) gives FNXL Precision / Recall / F1 / 'Accuracy' (Jaccard) separately; e.g. DeepSeek R1 0.044 / 0.082 / 0.057 / 0.029; Claude 3.5 Sonnet 0.034 / 0.080 / 0.047 / 0.024; GPT-4o 0.027 / 0.056 / 0.037 / 0.019; Llama 3 8B 0.003 / 0.004 / 0.003 / 0.002; Mistral 7B 0.004 / 0.006 / 0.004 / 0.002; Gemma 2 9B 0.004 / 0.008 / 0.005 / 0.003. The Table 2 FNXL column is the F1 value, not the Jaccard accuracy.",
+  "evidence_url": "https://arxiv.org/pdf/2506.15846 (Table 6)",
+  "confidence": "VERIFIED",
+  "quote": "FNXL remains very difficult: even the top model DeepSeek R1 only achieves 0.057 F1, illustrating that numeric labeling tasks in fi-"
+ },
+ {
+  "claim": "The '0.52-0.66' values quoted by other dossier agents are NOT FNXL scores. They match the FinEntity (FE) F1 column immediately to the right of FNXL in Table 2: GPT-4o .523, DeepSeek-V3 .549, DeepSeek R1 .587, Claude 3.5 Sonnet .655, o1-mini .662. (Attributing the misquote to a column shift is my inference; the numbers are verified.)",
+  "evidence_url": "https://arxiv.org/pdf/2506.15846 (Table 2 header: 'Model/Dataset FiNER FR RD FNXL FE FiQA ...')",
+  "confidence": "VERIFIED",
+  "quote": "DeepSeek R1 .807 .393 .952 .057 .587 .110 ..."
+ },
+ {
+  "claim": "Metric definition (Appendix C, FNXL entry): FLaME introduces its own set-overlap metric. Each tag t maps to a set of numerals; TP = sum_t |S_p ∩ S_t|, FP = sum_t |S_p − M_t|, FN = sum_t |S_t − M_t|; precision/recall/F1 'using standard formulae'; plus a 'Jaccard-inspired accuracy' = TP / (Total_actual + Total_predicted − TP). Micro-averaged over the whole test set.",
+  "evidence_url": "https://arxiv.org/pdf/2506.15846 (Appendix C, 'Set-Based Comparison and Partial Credit')",
+  "confidence": "VERIFIED",
+  "quote": "This evaluation metric allows for partial credit by considering numerical overlaps instead of enforcing exact matches, which is crucial given the nature of LLM predictions."
+ },
+ {
+  "claim": "FLaME explicitly says standard entity-F1 cannot be used for FNXL and lists the FNXL/FinEntity metrics as new contributions of the paper (author contribution list).",
+  "evidence_url": "https://arxiv.org/pdf/2506.15846 (Appendix C; 'Author Contributions' item (h))",
+  "confidence": "VERIFIED",
+  "quote": "this task requires set-based numerical comparison. Thus, we cannot use Entity F1 scores directly. ... (h) Ideation and implementation of new evaluation metrics for FinEntity and FNXL."
+ },
+ {
+  "claim": "What 'partial credit' actually means in code: the tag string must still match exactly after lowercasing/strip (normalized[tag.lower().strip()]); numerals are parsed to float after removing commas; credit is counted per (tag, numeral) pair rather than requiring the whole sentence mapping to match. It is NOT lenient on the XBRL tag itself, only on the aggregation unit.",
+  "evidence_url": "https://raw.githubusercontent.com/gtfintechlab/FLaME/main/src/flame/code/fnxl/fnxl_evaluate.py",
+  "confidence": "VERIFIED",
+  "quote": "Partial-credit set comparison for \"tag -> set_of_floats\". Returns (tp, fp, fn, total_actual, total_predicted)."
+ },
+ {
+  "claim": "FLaME's FNXL scoring involves a SECOND LLM pass: fnxl_evaluate() sends every raw response through an 'extraction prompt' (PromptFormat.EXTRACTION) asking an LLM to rewrite it as {\"xbrl_tag\": [values]} JSON before comparison; the paper states all evaluation passes were run with Llama 3.1 8B. FNXL scores therefore depend on a Llama-3.1-8B reformatting step.",
+  "evidence_url": "https://raw.githubusercontent.com/gtfintechlab/FLaME/main/src/flame/code/fnxl/fnxl_evaluate.py ; https://raw.githubusercontent.com/gtfintechlab/FLaME/main/src/flame/code/extraction_prompts.py ; https://arxiv.org/pdf/2506.15846 (Appendix F.4)",
+  "confidence": "VERIFIED",
+  "quote": "This does not include evaluation costs, but as those were all done with Llama 3.1 8b, they should be significantly less variable than the inference costs for different providers and models."
+ },
+ {
+  "claim": "Setting is strictly zero-shot and the prompt gives NO candidate tag list: the model must generate a US-GAAP tag name from memory (2,794-label space) or output 'other'. Figure 12 prompt: 'Behave like you are an SEC reporting expert. Given a sentence from a financial filing, do the following two things: 1) Identify every numeral in the sentence. 2) For each numeral, assign the most appropriate US-GAAP XBRL tag based on context. If no tag is appropriate, label it as \"other\". Return only valid JSON in this format: {\"12.0\": \"us-gaap:Revenue\", \"9.5\": \"us-gaap:SomeExpense\", \"100.0\": \"other\"}'. The repo's zeroshot.py matches (minor wording differences; company/doc_type args 'not used in current implementation'); the few-shot FNXL prompt in the repo is an unimplemented stub.",
+  "evidence_url": "https://arxiv.org/pdf/2506.15846 (Figure 12) ; https://raw.githubusercontent.com/gtfintechlab/FLaME/main/src/flame/code/prompts/zeroshot.py ; https://raw.githubusercontent.com/gtfintechlab/FLaME/main/src/flame/code/prompts/fewshot.py",
+  "confidence": "VERIFIED",
+  "quote": "In order to gather so many results from high-cost proprietary models, we conducted only zero-shot evaluations. We acknowledge the limitation of this research as techniques such as chain-of-thought and program-of-thought can significantly increase"
+ },
+ {
+  "claim": "Repo inference config for FNXL: max_tokens 128, temperature 0.0, top_p 0.9, batch_size 50, prompt_format zero_shot (configs/fnxl.yaml; the default model there is Llama-4-Scout, which is NOT in the paper). Inference uses litellm batch_completion.",
+  "evidence_url": "https://raw.githubusercontent.com/gtfintechlab/FLaME/main/configs/fnxl.yaml ; https://raw.githubusercontent.com/gtfintechlab/FLaME/main/src/flame/utils/batch_utils.py",
+  "confidence": "VERIFIED",
+  "quote": "max_tokens: 128\ntemperature: 0.0\ntop_p: 0.9 ... prompt_format: zero_shot"
+ },
+ {
+  "claim": "Table 13 ('Cost Analysis Table. All prices listed in USD.') FNXL column, per model, total USD to run the FNXL test set once zero-shot: Llama 3 70B 0.25; Llama 3 8B 0.06; DBRX 0.34; DeepSeek LLM 67B 0.24; Gemma 2 27B 0.21; Gemma 2 9B 0.08; Mistral 7B 0.06; Mixtral-8x22B 0.35; Mixtral-8x7B 0.20; Qwen 2 72B 0.24; WizardLM-2 8x22B 0.34; DeepSeek-V3 0.28; DeepSeek R1 11.21; QwQ-32B-Preview 0.54; Jamba 1.5 Mini 0.07; Jamba 1.5 Large 0.77; Claude 3.5 Sonnet 1.79; Claude 3 Haiku 0.14; Cohere Command R 7B 0.01; Cohere Command R+ 0.97; Gemini 1.5 Pro 0.58; GPT-4o 0.96; o1-mini 6.39. All-dataset totals: Llama 3 8B 3.79; DeepSeek R1 263.16; Claude 3.5 Sonnet 107.87; o1-mini 104.73. Identical in arXiv v1 and ACL version.",
+  "evidence_url": "https://arxiv.org/pdf/2506.15846 (Appendix F.4, Table 13) ; https://aclanthology.org/2025.findings-acl.1164.pdf",
+  "confidence": "VERIFIED",
+  "quote": "Table 13: Cost Analysis Table. All prices listed in USD. SQA costs are an estimate based off known inputs and outputs, as the exact costs were not saved."
+ },
+ {
+  "claim": "Table 13 costs are provider API list-price costs computed post hoc from saved inference outputs, not self-hosted serving costs: Table 4 lists per-model provider and $/1M tokens (Llama-3-8B via Together AI 0.20 in / 0.20 out; Gemma-2-9B Together 0.30/0.30; Mistral-7B Together 0.20/0.20; Cohere Command R7B 0.0375/0.15; DeepSeek R1 Together 7.00/7.00; GPT-4o 2.5/10; Claude 3.5 Sonnet 3/15). The script that computed Table 13 is not in the public repo (no file matching cost/usage/price among 377 tree paths).",
+  "evidence_url": "https://arxiv.org/pdf/2506.15846 (Appendix D Table 4; Appendix F.4) ; https://github.com/gtfintechlab/FLaME",
+  "confidence": "VERIFIED",
+  "quote": "We calculated the cost to run each dataset and model using the saved inference results. ... Table 4: Details on Language Models. Note that pricing differs based on provider."
+ },
+ {
+  "claim": "FLaME reports NO latency, throughput, or tokens/sec measurements anywhere: 'latency' occurs 0 times in the 48-page PDF; 'throughput' occurs once, in a qualitative sentence. The only efficiency numbers are the Table 13 dollar costs.",
+  "evidence_url": "https://arxiv.org/pdf/2506.15846 (Section 4 'Efficiency'; Appendix F.4)",
+  "confidence": "VERIFIED",
+  "quote": "Notably, smaller models sometimes outperform larger ones by offering a superior trade-off between throughput and accuracy, making them more viable for real-world applications. For all of our inference runs, DeepSeek R1 cost approximately $260 USD compared to Claude 3.5 Sonnet's and o1-mini's $105 USD and Meta Llama 3.1 8b's $4 USD."
+ },
+ {
+  "claim": "FLaME evaluates a ~10% subsample of the FNXL test split: repo file data/FNXL/test_sample.csv has 988 rows (all 10-K, filing years 2019-2021) containing 1,612 gold numerals; huggify_fnxl.py builds the HF 'test' split from exactly this file and pushes it private=True; the HF API for gtfintechlab/fnxl returns an auth error, so the evaluated split is only obtainable from GitHub. The paper does not state the subsample size (no such sentence found in the PDF text). Derived: Llama 3 8B's $0.06 FNXL cost = ~$0.00006 per sentence; DeepSeek R1's $11.21 = ~$0.011 per sentence.",
+  "evidence_url": "https://raw.githubusercontent.com/gtfintechlab/FLaME/main/data/FNXL/test_sample.csv ; https://raw.githubusercontent.com/gtfintechlab/FLaME/main/data/FNXL/huggify_fnxl.py ; https://huggingface.co/api/datasets/gtfintechlab/fnxl",
+  "confidence": "VERIFIED",
+  "quote": "splits.push_to_hub(f\"{HF_ORGANIZATION}/{DATASET}\", config_name=\"main\", private=True, ...)"
+ },
+ {
+  "claim": "Original FNXL paper (Sharma et al., Findings of ACL 2023, pp. 3550-3561; arXiv 2306.03723): test split 9,483 sentences / 18,238 numerals / 1,374 labels; full set 79,088 sentences, 142,922 numerals, 2,794 labels. Metrics are Macro/Micro P/R/F1 over per-numeral exact label match with a closed label set; best Macro-F1 47.54 (AttentionXML pipeline [SHAPE]) and best Micro-F1 75.84 (FiNER BERT-base, no masking). It reports no inference cost or latency, only training time on a P100 16GB GPU (AttentionXML ~8 h, FiNER ~10-12 h).",
+  "evidence_url": "https://arxiv.org/abs/2306.03723 ; https://arxiv.org/pdf/2306.03723 ; https://aclanthology.org/2023.findings-acl.219/",
+  "confidence": "VERIFIED",
+  "quote": "Although we have evaluated based on exact match, the system may in practical setting recommend the top k tags to subject matter experts (SME)"
+ },
+ {
+  "claim": "Bottom line on comparability: FLaME's FNXL numbers (micro F1 <= 0.057, open-vocabulary generative tagging, zero-shot, 988-sentence subsample, Llama-3.1-8B extraction pass, set-overlap metric) are NOT comparable to the FNXL paper's fine-tuned closed-set classifiers (Micro-F1 75.84) nor to FinTagging/FiNER-style token-level F1; they can only be cited as 'zero-shot LLM performance under FLaME's own metric'. Table 13 is a valid precedent for 'per-dataset API dollar cost reported for FNXL' but not for serving cost, quantized models, or latency.",
+  "evidence_url": "https://arxiv.org/pdf/2506.15846 ; https://arxiv.org/pdf/2306.03723",
+  "confidence": "VERIFIED",
+  "quote": "with F1 scores for FNXL often below 0.06, signaling that even large models struggle to precisely map an extremely large amount of categories to numeric content."
+ },
+ {
+  "claim": "Repo provenance: github.com/gtfintechlab/FLaME, README license CC BY-NC-SA 4.0 (GitHub API license field NOASSERTION), 9 stars, last push 2026-01-29; fnxl_evaluate.py last changed 2025-06-12 in a squash commit whose log includes 'task: patch fnxl eval due to misnaming issues, unsure if fixed entirely', and the file carries an in-code TODO about the index patch. The public FNXL scorer may not be byte-identical to the one used for the paper's numbers.",
+  "evidence_url": "https://github.com/gtfintechlab/FLaME ; https://raw.githubusercontent.com/gtfintechlab/FLaME/main/README.md ; https://raw.githubusercontent.com/gtfintechlab/FLaME/main/src/flame/code/fnxl/fnxl_evaluate.py",
+  "confidence": "VERIFIED",
+  "quote": "# TODO: check with @Huzaifa about this and ensure my patch is correct"
+ }
+]
+
+### unknowns
+(1) The exact script/pricing snapshot used to compute Table 13 is not public; "cost = tokens x Table 4 provider prices" is the paper's description, not independently reproducible. (2) The paper does not state that FNXL was subsampled to 988 sentences; this is inferred from the repo's test_sample.csv + huggify script, and the HF dataset is private. (3) Whether the public fnxl_evaluate.py is identical to the version that produced the paper's numbers (commit log says 'unsure if fixed entirely'). (4) Cohere Command R 7B is missing from the extracted Table 6 text (present in Table 2 at .018) - possibly a PDF text-extraction artifact. (5) The WebSearch budget was already exhausted (200/200) when this task started; all discovery was via direct fetches (arXiv API/abs/pdf, ACL Anthology, Crossref, Semantic Scholar, GitHub raw + gh api); DBLP returned Access Denied. No Google-Scholar-style discovery was possible, so I cannot rule out a later FLaME version or erratum outside arXiv v1 / ACL Findings 2025.
+
+### notes
+Recommended citation wording: "FLaME (Matlin et al., Findings of ACL 2025) reports per-dataset zero-shot API inference cost in USD (Table 13; e.g., $0.06 for Llama 3 8B via Together AI and $11.21 for DeepSeek R1 on FNXL) for 23 models, but no latency or throughput; its FNXL scores (F1 <= 0.057 for all models) use a set-overlap micro-F1 over (tag, numeral) pairs with a Llama-3.1-8B extraction pass and no candidate-tag list, and are not comparable to fine-tuned closed-set FNXL baselines (Micro-F1 75.84, Sharma et al. 2023)." JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/gap_9.json. Supporting files in the same directory: flame.pdf, flame.txt (arXiv v1 text), flame_acl.pdf, flame_acl.txt (ACL version text), fnxl.pdf, fnxl.txt (Sharma et al. 2023), fnxl_evaluate.py, fnxl_inference.py, zeroshot.py, extraction_prompts.py, fnxl.yaml, fnxl_test_sample.csv, README.md, tree.txt.

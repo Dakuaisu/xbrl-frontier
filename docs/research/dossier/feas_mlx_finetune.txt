@@ -1,0 +1,345 @@
+### key
+feas_mlx_finetune
+
+### topic
+Feasibility of fine-tuning 1-4B open models on Apple Silicon with MLX (mlx-lm lora/qlora) vs Unsloth/TRL on a rented GPU, as of 2026-10-01. Result file: /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/feas_mlx_finetune.json
+
+### facts
+[
+ {
+  "claim": "mlx-lm latest PyPI release is 0.32.0 (uploaded 2026-10-01); mlx core is 0.32.3 (uploaded 2026-09-29).",
+  "evidence_url": "https://pypi.org/pypi/mlx-lm/json",
+  "confidence": "VERIFIED",
+  "quote": "0.32.0 2026-10-01T04:44:40 / mlx 0.32.3 2026-09-29T00:14:41"
+ },
+ {
+  "claim": "mlx-lm ships 135 model-architecture files including qwen2.py, qwen3.py, qwen3_moe.py, qwen3_5.py, smollm3.py, phi3.py, phimoe.py, llama.py, gemma3.py, gemma3_text.py, gemma3n.py, gemma4.py, lfm2.py, olmo2.py, mistral3.py, ministral3.py — Qwen3 1.7B/4B, Qwen2.5 1.5B/3B, Llama 3.2 1B/3B, Gemma 3 1B/4B, SmolLM3 3B and Phi-4-mini (phi3 arch) are all loadable.",
+  "evidence_url": "https://api.github.com/repos/ml-explore/mlx-lm/contents/mlx_lm/models",
+  "confidence": "VERIFIED",
+  "quote": "qwen2.py qwen3.py qwen3_moe.py ... smollm3.py ... phi3.py ... gemma3_text.py ... llama.py (raw file HTTP 200 for each)"
+ },
+ {
+  "claim": "LORA.md's listed families are stale ('Mistral, Llama, Phi2, Mixtral, Qwen2, Gemma, OLMo, MiniCPM, InternLM2'); the code applies LoRA generically to any nn.Linear/QuantizedLinear/SwitchLinear/Embedding in model.layers, so newer architectures work.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/tuner/utils.py",
+  "confidence": "VERIFIED",
+  "quote": "types = (nn.Linear, nn.QuantizedLinear, SwitchLinear, QuantizedSwitchLinear, nn.Embedding, nn.QuantizedEmbedding) ... for l in model.layers: l.apply_to_modules(get_keys_for_lora)"
+ },
+ {
+  "claim": "mlx_lm.lora defaults: fine_tune_type choices lora/dora/full; optimizers adam/adamw/muon/sgd/adafactor; max_seq_length 2048; batch_size 4; num_layers 16; iters 1000; learning_rate 1e-5; lora rank 8, scale 20.0, dropout 0; grad_checkpoint False; grad_accumulation_steps 1; mask_prompt False.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/lora.py",
+  "confidence": "VERIFIED",
+  "quote": "\"max_seq_length\": 2048, ... \"lora_parameters\": {\"rank\": 8, \"dropout\": 0.0, \"scale\": 20.0}"
+ },
+ {
+  "claim": "By default LoRA is applied to ALL linear/embedding modules in only the LAST num_layers (=16) transformer blocks; lora_parameters.keys and --num-layers -1 control targets.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/tuner/utils.py",
+  "confidence": "VERIFIED",
+  "quote": "for l in model.layers[-max(num_layers, 0) :]: lora_layers = [(k, to_lora(m)) for k, m in l.named_modules() if k in keys]"
+ },
+ {
+  "claim": "DoRA is supported (--fine-tune-type dora) but not for MoE SwitchLinear layers.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/tuner/utils.py",
+  "confidence": "VERIFIED",
+  "quote": "If use_dora and isinstance layer is SwitchLinear, raise ValueError that the type doesn't support DoRA yet."
+ },
+ {
+  "claim": "Gradient checkpointing exists (--grad-checkpoint), implemented by wrapping each layer call in mx.checkpoint.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/LORA.md",
+  "confidence": "VERIFIED",
+  "quote": "Gradient checkpointing lets you trade-off memory use (less) for computation (more) by recomputing instead of storing intermediate values."
+ },
+ {
+  "claim": "Official memory-reduction advice: QLoRA (quantized base), smaller --batch-size, fewer --num-layers, shorter sequences, --grad-checkpoint.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/LORA.md",
+  "confidence": "VERIFIED",
+  "quote": "Longer examples require more memory ... Consider pre-splitting your data to save memory."
+ },
+ {
+  "claim": "The trainer reports iterations/sec, tokens/sec, trained_tokens and peak_memory every steps_per_report, and warns+truncates sequences longer than max_seq_length — the user can measure their own throughput in minutes.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/tuner/trainer.py",
+  "confidence": "VERIFIED",
+  "quote": "[WARNING] Some sequences are longer than {max_seq_length} tokens. The longest sentence {max(lengths)} will be truncated to {max_seq_length}."
+ },
+ {
+  "claim": "mlx-lm batching sorts examples by length, pads each batch to a multiple of 32 (capped at max_seq_length), and does NOT pack examples.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/tuner/trainer.py",
+  "confidence": "VERIFIED",
+  "quote": "max_length_in_batch = 1 + pad_to * ((max(lengths) + pad_to - 1) // pad_to)"
+ },
+ {
+  "claim": "Data formats: train/valid/test .jsonl in chat (messages), completions (prompt/completion) or text form; Hugging Face datasets load directly.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/tuner/datasets.py",
+  "confidence": "VERIFIED",
+  "quote": "names = (\"train\", \"valid\", \"test\") ... Loading Hugging Face dataset {args.data}"
+ },
+ {
+  "claim": "Published MLX LoRA throughput anchors are 7B-class Mistral only: ~250 tokens/sec on M1 Max 32GB and ~475 tokens/sec on M2 Ultra.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-examples/main/lora/README.md",
+  "confidence": "VERIFIED",
+  "quote": "The model trains at around 475 tokens per second (M2 Ultra) ... runs at about 250 tokens-per-second (M1 Max 32GB)"
+ },
+ {
+  "claim": "The current mlx-lm LORA.md still quotes the same M1 Max figure.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/LORA.md",
+  "confidence": "VERIFIED",
+  "quote": "The above command on an M1 Max with 32 GB runs at about 250 tokens-per-second."
+ },
+ {
+  "claim": "Independent blog (Peatling): Mistral-7B-Instruct-v0.2 LoRA on M1 Max 32GB — ~260 tok/s at batch 1 / 4 LoRA layers, ~120 tok/s at batch 2 / 8 layers.",
+  "evidence_url": "https://apeatling.com/articles/part-3-fine-tuning-your-llm-using-the-mlx-framework/",
+  "confidence": "VERIFIED",
+  "quote": "Iter 10: Train loss 0.793, It/sec 0.223, Tokens/sec 229.758"
+ },
+ {
+  "claim": "Independent blog (Heidloff): Mistral-7B-Instruct-v0.2 LoRA, batch 1, 4 LoRA layers, 1000 iters on 100 SQL samples took ~10 minutes on a MacBook Pro M3.",
+  "evidence_url": "https://heidloff.net/article/apple-mlx-fine-tuning/",
+  "confidence": "VERIFIED",
+  "quote": "For 1000 iterations and the 100 SQL samples this process took 10 minutes on my MacBook."
+ },
+ {
+  "claim": "Large-model anchor: Qwen1.5-32B-Chat FP16 LoRA on M2 Ultra 192GB ran at 175 tokens/sec, 0.109 it/sec, peak 127.7 GB.",
+  "evidence_url": "https://github.com/ml-explore/mlx-examples/issues/866",
+  "confidence": "VERIFIED",
+  "quote": "Iter 990: Train loss 1.390, Learning Rate 1.000e-05, It/sec 0.109, Tokens/sec 175.406, Peak mem 127.703 GB"
+ },
+ {
+  "claim": "Apple WWDC25 demo: QLoRA on mlx-community/Mistral-7B-Instruct-v0.3-4bit with batch 16, 300 iters finishes 'in just a few minutes'; 4-bit base cuts weight memory ~3.5x.",
+  "evidence_url": "https://developer.apple.com/videos/play/wwdc2025/298/",
+  "confidence": "VERIFIED",
+  "quote": "Because quantization is deeply integrated into MLX, the mlx_lm.lora command can even train adapters on top of quantized models."
+ },
+ {
+  "claim": "NOT FOUND: no public, citable tokens/sec figure for LoRA-training a 1-4B model (Qwen3-1.7B/4B, Llama-3.2-3B, Gemma-3-4B, SmolLM3) with mlx-lm on M3/M4 chips; GitHub issue searches for 'Tokens/sec' in mlx-lm and mlx-examples surfaced only 7B-32B logs.",
+  "evidence_url": "https://github.com/ml-explore/mlx-lm/issues?q=is%3Aissue+%22Tokens%2Fsec%22",
+  "confidence": "UNVERIFIED",
+  "quote": "(absence of evidence; 6 issues matched, none with 1-4B training logs)"
+ },
+ {
+  "claim": "Apple's M5 post reports MLX inference only: TTFT 3.33x-4.06x faster than M4 and 19-27% faster generation on a 24GB MacBook Pro — no training numbers.",
+  "evidence_url": "https://machinelearning.apple.com/research/exploring-llms-mlx-m5",
+  "confidence": "VERIFIED",
+  "quote": "the M5 provides 19-27% performance boost compared to the M4, thanks to its greater memory bandwidth."
+ },
+ {
+  "claim": "KEY LIMITATION: a fused backward pass (VJP) for scaled_dot_product_attention was only merged into MLX on 2026-09-29 (PR #4563); before it, training materialized a full [context x context] attention matrix.",
+  "evidence_url": "https://api.github.com/repos/ml-explore/mlx/pulls/4563",
+  "confidence": "VERIFIED",
+  "quote": "However, it uses a lot of memory since it allocates a full [context_size x context_size] attention matrix."
+ },
+ {
+  "claim": "PR #4563 reports up to 2.8x speedup (causal) and up to 24x attention-memory reduction at long context (24.63 GiB -> 1 GiB at batch 1; 97 GiB -> 4 GiB at batch 4) on M5 Ultra; it is NOT in the mlx v0.32.3 release notes (published 2026-09-29T00:37Z, before the 09:01Z merge), so pip users as of 2026-10-01 still get the old fallback.",
+  "evidence_url": "https://api.github.com/repos/ml-explore/mlx/releases?per_page=6",
+  "confidence": "VERIFIED",
+  "quote": "Memory improves in every configuration, up to 24x at the longest shape: 24.63 GiB to 1 GiB for batch size = 1, and from 97GiB to 4GiB for batch size = 4."
+ },
+ {
+  "claim": "An earlier community flash-attention-VJP PR (#2995) was closed unmerged in Mar 2026 after maintainer zcbenz measured the fused VJP slower on M4 Air and M3 Max; the author noted the primary benefit is O(N) memory rather than speed.",
+  "evidence_url": "https://api.github.com/repos/ml-explore/mlx/issues/2995/comments",
+  "confidence": "VERIFIED",
+  "quote": "I ran the benchmark script on a M4 air and it seems that fused VJP is slower for most cases"
+ },
+ {
+  "claim": "Long-sequence memory in practice: Llama-3.1-8B LoRA at max_seq_length 8192, batch 1, grad-checkpoint on M3 Max 128GB showed 121.55 GB peak at iter 10 growing to 236 GB before crashing (closed via mlx#1548).",
+  "evidence_url": "https://github.com/ml-explore/mlx-examples/issues/1076",
+  "confidence": "VERIFIED",
+  "quote": "Iter 10: Train loss 0.784... Peak mem 121.550 GB ... Iter 2370: ... Peak mem 236.340 GB"
+ },
+ {
+  "claim": "Full fine-tune in practice: Qwen3-8B --fine-tune-type full, batch 1, max_seq_length 5000, grad-checkpoint on a 128GB Mac Studio reported ~32-34 GB peak and then died with a Metal 'Insufficient Memory' error after 50 iters (no maintainer reply).",
+  "evidence_url": "https://github.com/ml-explore/mlx-lm/issues/236",
+  "confidence": "VERIFIED",
+  "quote": "[METAL] Command buffer execution failed: Insufficient Memory"
+ },
+ {
+  "claim": "Very long context LoRA (Qwen3-8B-4bit, rank 16, 7 target modules, max_seq_length 16384, batch 1) on M5 Max 128GB: validation of 25 batches took 200.8 s (8.03 s/it) and the process then hung (open).",
+  "evidence_url": "https://github.com/ml-explore/mlx-lm/issues/1348",
+  "confidence": "VERIFIED",
+  "quote": "Iter 1: Val loss 0.858, Val took 200.836s"
+ },
+ {
+  "claim": "Open 2026 stability issues: Metal 'Resource limit (499000) exceeded' during LoRA on M4 Max 128GB (Qwen3.5-27B-4bit, seq 1024, ~60 GB peak) and Metal OOM on first backward on M5 Max 36GB (Qwen3.5-9B-4bit, 4 layers, seq 2048, grad-ckpt).",
+  "evidence_url": "https://github.com/ml-explore/mlx-lm/issues/1185",
+  "confidence": "VERIFIED",
+  "quote": "[metal::malloc] Resource limit (499000) exceeded"
+ },
+ {
+  "claim": "Memory growth across validation/iterations on a 48GB Mac causing hard crashes; user workaround was tuning mx.metal wired/memory/cache limits; no maintainer response (open since Jan 2026).",
+  "evidence_url": "https://github.com/ml-explore/mlx-lm/issues/828",
+  "confidence": "VERIFIED",
+  "quote": "Setting wired_limit to 90% of recommended maximum ... cache_limit to 50% of wired_limit"
+ },
+ {
+  "claim": "mlx-lm adapter format: adapters.safetensors + adapter_config.json; weight keys end in lora_a / lora_b (and 'm' for DoRA); lora_a is (in_features, r), lora_b is (r, out_features); forward is y + scale * ((x @ lora_a) @ lora_b) with scale applied directly (default 20.0).",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/tuner/lora.py",
+  "confidence": "VERIFIED",
+  "quote": "z = (self.dropout(x) @ self.lora_a) @ self.lora_b; return y + (self.scale * z).astype(x.dtype)"
+ },
+ {
+  "claim": "PEFT format (what vLLM/transformers load): adapter_model.safetensors + adapter_config.json; keys like base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight; lora_A/lora_B are nn.Linear weights (lora_A is r x in); config needs peft_type 'LORA', r, lora_alpha, target_modules.",
+  "evidence_url": "https://huggingface.co/docs/peft/developer_guides/checkpoint",
+  "confidence": "VERIFIED",
+  "quote": "The keys of the state_dict always start with \"base_model.model.\" ... When converting to the PEFT format, it is required to add these prefixes."
+ },
+ {
+  "claim": "mlx-lm has NO built-in PEFT import or export: PR #1120 ('support loading PEFT/Unsloth LoRA adapters') was closed unmerged on 2026-08-21 for maintainer-capacity reasons; grep of tuner/utils.py on main finds no 'peft' handling. The PR body documents the exact mapping (r->rank, lora_alpha/r->scale, rename base_model.model.*.lora_A.weight -> *.lora_a, transpose A and B).",
+  "evidence_url": "https://api.github.com/repos/ml-explore/mlx-lm/pulls/1120",
+  "confidence": "VERIFIED",
+  "quote": "Thanks for the PR but at the moment the number of PRs is way beyond our capacity to review so I'm closing the non-essential ones so we can actually work on this repo."
+ },
+ {
+  "claim": "Reverse conversion (mlx -> PEFT) needs a short script: transpose lora_a -> lora_A (r x in) and lora_b -> lora_B (out x r), prefix keys with base_model.model., set lora_alpha = scale * r (mlx default scale 20, rank 8 -> lora_alpha 160), set target_modules to the adapted module suffixes, and restrict to the last num_layers blocks (PEFT layers_to_transform).",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/tuner/lora.py",
+  "confidence": "UNVERIFIED",
+  "quote": "(derived from verified code semantics on both sides; no published converter found)"
+ },
+ {
+  "claim": "mlx-lm explicitly requires 'scale' (not PEFT-style 'alpha') in its LoRA config; PR #1671 (merged 2026-08-27) added a clear error for this.",
+  "evidence_url": "https://api.github.com/repos/ml-explore/mlx-lm/pulls/1671",
+  "confidence": "VERIFIED",
+  "quote": "mlx-lm's LoRA config format requires scale, but many LoRA tutorials and other frameworks (e.g. PEFT) use alpha for a related concept."
+ },
+ {
+  "claim": "mlx_lm.fuse can merge adapters, --dequantize, upload to HF, or --export-gguf, but its own GGUF writer supports only llama/mistral/mixtral and refuses quantized models.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/gguf.py",
+  "confidence": "VERIFIED",
+  "quote": "if quantization: raise NotImplementedError('Conversion of quantized models is not yet supported.')"
+ },
+ {
+  "claim": "LORA.md: GGUF export is limited to Mistral/Mixtral/Llama in fp16 — Qwen3/Gemma3/SmolLM3 fused models must go through llama.cpp's convert_hf_to_gguf.py instead.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/LORA.md",
+  "confidence": "VERIFIED",
+  "quote": "GGUF support is limited to Mistral, Mixtral, and Llama style models in fp16 precision."
+ },
+ {
+  "claim": "mlx_lm.convert quantization modes are affine (default), mxfp4, nvfp4, mxfp8; --dequantize exists to go back to fp16/bf16 safetensors.",
+  "evidence_url": "https://raw.githubusercontent.com/ml-explore/mlx-lm/main/mlx_lm/convert.py",
+  "confidence": "VERIFIED",
+  "quote": "--q-mode choices: affine, mxfp4, nvfp4, mxfp8; --dequantize/-d: Dequantize a quantized model."
+ },
+ {
+  "claim": "vLLM's supported-quantization list (AutoAWQ, BitsAndBytes, GPTQModel, INC, LLM Compressor FP8/INT4/INT8, ModelOpt, Quark, TorchAO, GGUF, Marlin...) contains no MLX/affine format — MLX 4-bit checkpoints are not directly servable by vLLM.",
+  "evidence_url": "https://docs.vllm.ai/en/latest/features/quantization/",
+  "confidence": "VERIFIED",
+  "quote": "There is no mention of MLX or Apple-format quantized checkpoints anywhere in the provided documentation."
+ },
+ {
+  "claim": "llama.cpp's converter handles pre-quantized bitnet/fp8/gptq (PR #14810, merged 2025-10-23) but NOT MLX affine .scales/.biases; MLX was only mentioned as a possible future addition.",
+  "evidence_url": "https://github.com/ggml-org/llama.cpp/pull/14810",
+  "confidence": "VERIFIED",
+  "quote": "MLX support could be useful, they have .scales and .biases tensors"
+ },
+ {
+  "claim": "Two llama.cpp issues (#14467 closed 'not planned' 2025-07-02; #22431 closed stale 2026-06-29) show convert_hf_to_gguf.py failing on MLX-fused quantized models with 'Can not map tensor lm_head.biases' / 'Unrecognized tensor name: lm_head.scales' — fuse with --dequantize before GGUF conversion.",
+  "evidence_url": "https://github.com/ggml-org/llama.cpp/issues/14467",
+  "confidence": "VERIFIED",
+  "quote": "Can not map tensor 'lm_head.biases'"
+ },
+ {
+  "claim": "vLLM LoRA serving: --max-lora-rank choices 1,8,16,32,64,128,256,320,512 (default 16); adapters discovered by presence of adapter_config.json; served via --enable-lora --lora-modules name=path.",
+  "evidence_url": "https://docs.vllm.ai/en/latest/configuration/engine_args/",
+  "confidence": "VERIFIED",
+  "quote": "--max-lora-rank Possible choices: 1, 8, 16, 32, 64, 128, 256, 320, 512 Max LoRA rank. Default: 16"
+ },
+ {
+  "claim": "vLLM marks LoRA as supported for Qwen2ForCausalLM, Qwen3ForCausalLM, LlamaForCausalLM, Gemma3ForCausalLM (gemma-3-1b-it), Gemma3ForConditionalGeneration (gemma-3-4b-it), Phi3ForCausalLM (Phi-4-mini-instruct), SmolLM3ForCausalLM (SmolLM3-3B) and MistralForCausalLM (Ministral-3-3B).",
+  "evidence_url": "https://docs.vllm.ai/en/latest/models/supported_models/",
+  "confidence": "VERIFIED",
+  "quote": "SmolLM3ForCausalLM ... HuggingFaceTB/SmolLM3-3B (LoRA supported)"
+ },
+ {
+  "claim": "Unsloth Core (the pip library) runs on Linux and Windows with NVIDIA CUDA capability >= 7.0 (also AMD/Intel); native Apple Silicon support for Unsloth Core is 'in the works'.",
+  "evidence_url": "https://unsloth.ai/docs/llms-full.txt",
+  "confidence": "VERIFIED",
+  "quote": "Unsloth works on AMD and Intel GPUs (follow our specific guides). Apple/Silicon/MLX is in the works"
+ },
+ {
+  "claim": "Unsloth Studio/Desktop (the GUI) does offer training on macOS via an MLX backend.",
+  "evidence_url": "https://unsloth.ai/docs/llms-full.txt",
+  "confidence": "VERIFIED",
+  "quote": "Unsloth Studio works on MacOS device with full support for training, MLX and GGUF inference. ... Unsloth Studio Training currently works on NVIDIA, AMD, MLX, Intel devices."
+ },
+ {
+  "claim": "Unsloth VRAM guidance: 3B model needs ~3.5 GB for QLoRA (4-bit) and ~8 GB for LoRA (16-bit); 7B 5 GB / 19 GB — any 24 GB A10G/L4 is ample for 1-4B LoRA.",
+  "evidence_url": "https://unsloth.ai/docs/get-started/fine-tuning-for-beginners/unsloth-requirements",
+  "confidence": "VERIFIED",
+  "quote": "| 3B | 3.5 GB | 8 GB |"
+ },
+ {
+  "claim": "Unsloth README speed/memory claims: Qwen3.5 (4B) 1.5x faster / 60% less VRAM; Llama 3.1 (8B) 2x faster / 70% less; Gemma 4 1.5x / 50% less (vs HF+FA2).",
+  "evidence_url": "https://github.com/unslothai/unsloth",
+  "confidence": "VERIFIED",
+  "quote": "Qwen3.5 (4B) 1.5x faster 60% less"
+ },
+ {
+  "claim": "Concrete GPU timing anchor (LitGPT, plain PyTorch LoRA, bf16, Alpaca2k = 2,000 examples, seq 512): llama-3.2-3b LoRA 2 epochs, micro-batch 1, 1xA10G = 8.31 min, $0.8, 9.67 GB peak; QLoRA 14.89 min; full FT 1 epoch 4.71 min, 16.51 GB; llama-3.2-1b LoRA 2 epochs 4.17 min; Phi-3-mini LoRA 1 epoch 6.46 min, 19.75 GB.",
+  "evidence_url": "https://raw.githubusercontent.com/Lightning-AI/litgpt/main/config_hub/finetune/README.md",
+  "confidence": "VERIFIED",
+  "quote": "| llama-3.2-3b/lora.yaml | llama-3.2-3b | 2 | 512 | 1 | 1xA10G | 8.31 min | $0.8 | 9.67 GB | 0.973 | 2.647 | 54.77% |"
+ },
+ {
+  "claim": "HF TRL SFTConfig defaults relevant here: max_length 1024, gradient_checkpointing True, bf16 True, packing False (bfd packing available), completion-only loss by default for prompt/completion data, peft_config=LoraConfig() for LoRA.",
+  "evidence_url": "https://huggingface.co/docs/trl/sft_trainer",
+  "confidence": "VERIFIED",
+  "quote": "max_length (int or None, optional, defaults to 1024) ... gradient_checkpointing: Defaults to True instead of False."
+ },
+ {
+  "claim": "AWS g5.xlarge (1x A10G 24 GB) on-demand $1.006/h (Linux, us-east-1), spot ~$0.46/h. Observed 2026-10-01.",
+  "evidence_url": "https://instances.vantage.sh/aws/ec2/g5.xlarge",
+  "confidence": "VERIFIED",
+  "quote": "$1.006 per hour ... Spot $0.460"
+ },
+ {
+  "claim": "AWS g6.xlarge (1x L4 24 GB) on-demand $0.805/h (Linux, us-east-1), spot $0.601/h. Observed 2026-10-01.",
+  "evidence_url": "https://instances.vantage.sh/aws/ec2/g6.xlarge",
+  "confidence": "VERIFIED",
+  "quote": "$0.805 per hour ... Spot $0.601 per hour"
+ },
+ {
+  "claim": "GCP g2-standard-4 (1x L4) on-demand $0.7068/h, spot $0.4241/h in us-central1. Observed 2026-10-01 (vantage's GCP page showed $0.146/h, apparently excluding the GPU; use the gcloud-compute.com figure).",
+  "evidence_url": "https://gcloud-compute.com/g2-standard-4.html",
+  "confidence": "VERIFIED",
+  "quote": "$0.7068 per hour ... Spot VM price: $0.4241"
+ },
+ {
+  "claim": "Lambda on-demand (per GPU/h): 1x A10 24 GB $1.29; 1x A100 40 GB (PCIe or SXM) $1.99; 1x H100 PCIe $3.29; 1x H100 SXM $4.29; 1x A6000 48 GB $1.09. Observed 2026-10-01.",
+  "evidence_url": "https://lambda.ai/service/gpu-cloud",
+  "confidence": "VERIFIED",
+  "quote": "1x A10 (24 GB) ... $1.29 ; 1x A100 PCIe (40 GB) ... $1.99"
+ },
+ {
+  "claim": "RunPod: L4 24 GB $0.44/h community / $0.49/h secure; A100 80 GB $1.19-1.39 community / $1.59 secure; H100 $1.99-3.49; RTX 4090 $0.34/0.74. Observed 2026-10-01.",
+  "evidence_url": "https://www.runpod.io/pricing",
+  "confidence": "VERIFIED",
+  "quote": "L4 24GB Community Cloud: $0.44/hr Secure Cloud: $0.49/hr"
+ },
+ {
+  "claim": "Modal per-second GPU pricing (hourly equiv.): T4 $0.59, L4 $0.80, A10 $1.10, L40S $1.95, A100-40GB $2.10, A100-80GB $2.50, H100 $3.95. Observed 2026-10-01.",
+  "evidence_url": "https://modal.com/pricing",
+  "confidence": "VERIFIED",
+  "quote": "L4: $0.000222 per second ($0.7992/hour) ... A10 $0.000306/second ($1.1016/hour)"
+ },
+ {
+  "claim": "Managed alternative: Together.ai fine-tuning charges $0.34-$0.38 per 1M training tokens (SFT, 0.8B-9B models), per-job minimums $4-$60. Observed 2026-10-01.",
+  "evidence_url": "https://www.together.ai/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Price is based on the sum of tokens processed in the fine-tuning training dataset (training dataset size x number of epochs)."
+ },
+ {
+  "claim": "arXiv 2606.31048 (2026-06-30) fine-tunes Qwen2.5-7B with LoRA on Apple Silicon using MLX but reports no training throughput in the abstract; an arXiv API abstract search for 'Apple Silicon' AND 'fine-tun' returned 0 results — academic throughput benchmarks of MLX fine-tuning are essentially absent.",
+  "evidence_url": "https://arxiv.org/abs/2606.31048",
+  "confidence": "VERIFIED",
+  "quote": "fine-tune the student model with Low-Rank Adaptation (LoRA) on Apple Silicon hardware using the MLX framework."
+ },
+ {
+  "claim": "Related inference-only MLX papers exist (2511.05502 MLX vs llama.cpp/Ollama/MLC on M2 Ultra; 2601.19139 vllm-mlx; 2510.18921 MLX on-device benchmarking) — none benchmark LoRA training.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:%22MLX%22%20AND%20all:%22Apple%20Silicon%22&max_results=30",
+  "confidence": "VERIFIED",
+  "quote": "2511.05502 Production-Grade Local LLM Inference on Apple Silicon: A Comparative Study of MLX, MLC-LLM, Ollama, llama.cpp, and PyTorch MPS"
+ }
+]
+
+### unknowns
+1) No public, citable tokens/sec figure for LoRA/QLoRA-training a 1-4B model with mlx-lm on M3/M4/M5 was found (WebSearch budget was exhausted at session start; DuckDuckGo returned a CAPTCHA which was not bypassed; Reddit is blocked; Bing returned only generic results). The only hard MLX training numbers are 7B-class (M1 Max ~250 tok/s, M2 Ultra ~475 tok/s) and a 32B FP16 run (175 tok/s on M2 Ultra). 2) Whether pip mlx 0.32.3 users already benefit from the SDPA backward kernel: PR #4563 merged 2026-09-29 ~8.5 h after the v0.32.3 release was published and is absent from its notes, so it presumably lands in the next release. 3) The exact average token length of Alpaca2k behind the LitGPT A10G timings (needed to convert examples/sec to tokens/sec). 4) Whether a PEFT-converted adapter trained against an MLX 4-bit base serves faithfully on vLLM over the bf16 base (standard QLoRA caveat; not sourced). 5) Unsloth Studio's macOS/MLX training throughput (not published). 6) The GitHub 'latest release' API shows mlx-lm v0.31.3 (2026-04-22) while PyPI shows 0.32.0 (2026-10-01); PyPI is treated as authoritative for installed versions.
+
+### notes
+BOTTOM LINE FOR THE PROJECT: (a) MLX/mlx-lm can LoRA/QLoRA every target model (Qwen3, Qwen2.5, Llama 3.2, Gemma 3, SmolLM3, Phi-4-mini) and reports tokens/sec + peak memory out of the box, but there is NO published small-model throughput; the user must benchmark (a 10-minute run gives the number). (b) The load-bearing MLX limitation for ~1k-token (and especially table-heavy multi-k-token 10-K) examples is attention-backward memory: until PR #4563 ships in a release, training materializes an L x L attention matrix (PR cites 24.63 GiB -> 1 GiB savings at the longest shape), consistent with the 121 GB peak seen for an 8B LoRA at seq 8192 on an M3 Max. Keep max_seq_length <= 2048-4096 on 32-64 GB Macs, batch 1-2, --grad-checkpoint, QLoRA base. (c) Full fine-tuning is supported (--fine-tune-type full) but undocumented memory-wise; one 8B bf16 run at seq 5000 hit Metal OOM on a 128 GB Mac Studio. (d) Export: mlx-lm writes its own adapter format (lora_a (in,r) / lora_b (r,out), 'scale' not alpha, last-16-layers default, no 'base_model.model.' prefix). There is no PEFT import/export in mlx-lm (PR #1120 closed unmerged Aug 2026), so a ~50-line converter is needed: transpose, rename, prefix, lora_alpha = scale*r (default 160 for r=8, scale=20), target_modules, layers_to_transform. vLLM then serves it with --enable-lora (max-lora-rank default 16; Qwen3/Gemma3/Llama/Phi3/SmolLM3 all LoRA-capable). (e) MLX 4-bit (affine) checkpoints are NOT loadable by vLLM (no MLX in its quantization list) nor convertible by llama.cpp (converter lacks MLX .scales/.biases; two issues closed not-planned/stale; mlx-lm's own gguf.py raises NotImplementedError for quantized models and only handles llama/mistral/mixtral). The workable path is mlx_lm.fuse --dequantize -> fp16 HF safetensors -> convert_hf_to_gguf.py (GGUF) or AWQ/GPTQ/llm-compressor re-quantization for vLLM; note dequantized-4-bit base != original bf16 base. (f) GPU alternative: Unsloth Core is Linux/Windows-only (Apple 'in the works'), though Unsloth Studio GUI can train on macOS via MLX. Budget sketch (derived, UNVERIFIED arithmetic): 50k-200k examples x ~1k tokens = 50M-200M tokens/epoch. LitGPT measured llama-3.2-3b LoRA at ~8 examples/s on 1x A10G at seq 512 on short Alpaca examples; scaling to 1k-token examples (~1.6 ex/s assumed) gives roughly 9 h (~$9 at $1.006/h g5.xlarge) for 50k and ~35 h (~$35) for 200k per epoch, halved with Unsloth's 1.5-2x claim, and ~3-4x faster on an A100 ($1.99/h Lambda, $1.19-1.59/h RunPod 80GB). L4 is cheapest (~$0.44-0.81/h) but slower than A10G. Managed Together.ai LoRA at $0.34-0.38/M tokens is ~$17-19 (50M) to ~$68-76 (200M) per epoch with zero ops. On a Mac at an assumed 500-1,500 tok/s for a 3B QLoRA, the same epoch is ~9-110 h, i.e., Mac is fine for the 1-5k-example pilot and ablations, but a rented A10G/A100 (or Together) is the realistic path for 50k-200k examples. (g) Publication relevance: the arXiv API shows no paper benchmarking MLX fine-tuning throughput, and only one (2606.31048) that even uses MLX LoRA, so reporting measured Mac vs GPU training cost/latency is itself a minor novelty, though it is orthogonal to the FinTagging serving-cost claim.

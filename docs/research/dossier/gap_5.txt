@@ -1,0 +1,162 @@
+### key
+gap_5
+
+### question
+What is the label-noise ceiling of FinTagging, and are the 10 training filings disjoint from the 142 evaluation companies? Only 1,949 of 261,457 entities were human-audited (96% agreement, kappa 0.81); NORA (2605.24910) argues iXBRL labels are 'inherently noisy'; the training window (2024-02-13..2025-02-13) overlaps the eval window and disjointness is unstated; the 142 CIKs are unpublished but recoverable via EDGAR full-text search (verified on 2 samples).
+
+### topic
+gap_5: FinTagging label-noise ceiling, train/eval company disjointness, and recoverability of the 142-filing evaluation manifest
+
+### facts
+[
+ {
+  "claim": "FinTagging (arXiv 2505.20650, v5 dated 17 May 2026, CC BY 4.0) evaluation corpus = 142 annual 10-K filings from 142 companies, period 2023-02-13 to 2025-02-13; after filtering 15,986 sentences + 12,801 tables yielding 261,457 numerical entities linked to 3,953 US-GAAP concepts.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "We compiled 142 annual 10-K filings from publicly listed U.S. companies submitted to the U.S. Securities and Exchange Commission (SEC) in 2023–2024 ... Period 2023-02-13 to 2025-02-13 #Company 142 ... yielding 261,457 numerical entities linked to 3,953 unique US-GAAP concepts."
+ },
+ {
+  "claim": "The PLM training set is 10 additional 10-K filings (10 companies) filed 2024-02-13 to 2025-02-13, reduced to 1,116 sentences (558 pos/558 neg) + 953 tables (594 pos/359 neg), 25,199 entities, 1,435 unique concepts. The training window lies entirely inside the evaluation window.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "Similar to the collection process for the FinTagging benchmark data, we gathered an additional 10 annual 10-K financial reports filed with the SEC for the period from February 13, 2024, to February 13, 2025, as summarized in Table 11 ... Period 2024-02-13 to 2025-02-13 #Company 10"
+ },
+ {
+  "claim": "The paper never states that the 10 training companies/filings are disjoint from the 142 evaluation companies: the v5 HTML contains zero occurrences of 'disjoint', 'overlap', 'leakage', 'leak', 'contaminat', 'held-out', 'unseen', 'same compan', 'different compan', or 'CIK'. The only wording is 'an additional 10 annual 10-K financial reports'.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "we gathered an additional 10 annual 10-K financial reports filed with the SEC"
+ },
+ {
+  "claim": "Human audit: 1,949 instances (928 sentence + 1,021 table) selected by a greedy minimal-cover algorithm with per-company cap K=10 and full concept coverage, reviewed by two junior analysts and one senior adjudicator; reported agreement is 96% raw agreement and Cohen's kappa = 0.81. The paper reports inter-annotator agreement only; it does NOT report the fraction of auto-generated triplets judged incorrect (the auto-label error rate).",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "Validating all 261,457 entities is infeasible. We therefore adopt a strategic sampling scheme based on a greedy minimal-cover method ... This process yields a diversity-maximized subset consisting of 928 sentence instances and 1,021 table instances ... On the independent round, annotators achieved 96% raw agreement and Cohen's κ=0.81"
+ },
+ {
+  "claim": "Derived, not reported by the authors: with Po=0.96 and kappa=0.81, chance agreement Pe=(0.96-0.81)/(1-0.81)=0.789; for a binary correct/incorrect label with similar annotator marginals this implies the minority ('incorrect') marginal was roughly 12% (10-14% allowing for rounding). I.e., annotators flagged on the order of one in eight audited triplets as wrong. This is an inference about a deliberately diverse (harder-than-random) subset, not a measured random-sample noise rate.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "UNVERIFIED",
+  "quote": "κ = (Po − Pe)/(1 − Pe) ... our κ = 0.81 indicates substantial agreement"
+ },
+ {
+  "claim": "The corrected audit subset was merged back into the full corpus without any flag, so the released evaluation files contain ~1,949 expert-corrected instances mixed with ~259,500 unaudited iXBRL-derived entities (~99.25%), and the audit subset cannot be re-scored against the auto-labels from the public release. The paper explicitly says the benchmark includes 'naturally occurring noise' and that regulatory tags carry 'substantial structural noise'.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "Following validation, we integrated the corrected P* subset back into the full corpus to form a high-fidelity hybrid dataset. ... Including both valid facts and naturally occurring noise, it supports a realistic evaluation of LLMs under regulatory-style conditions. ... these regulatory tags are designed for compliance rather than model evaluation, providing limited negative coverage and substantial structural noise"
+ },
+ {
+  "claim": "Released files carry no audit flag and no company/CIK/filing identifier. HF TheFinAI/FinNI-eval-v2: 28,787 rows (context_index, context, query, answer); FinCL-eval-v2: 261,457 rows (context, category, entity, entity_type, query, answer); FinTagging_Original_v2: 46,496 rows (text, numeric_entities, context_id). GitHub annotation/benchmark_ground_truth_pipeline.json: 6,599 items with only text + numeric_entities; annotation/TrainingSet_Annotation.json: text_data 1,116 + table_data 953 with only text + numeric_entities. The HF eval cards have no license field.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinNI-eval-v2/raw/main/README.md",
+  "confidence": "VERIFIED",
+  "quote": "features: - name: context_index dtype: int64 - name: context dtype: string - name: query dtype: string - name: answer dtype: string ... num_examples: 28787"
+ },
+ {
+  "claim": "The GitHub 'subdata' CSVs are not the audit set: subdata/FinNI-eval-subset.csv has 200 rows and subdata/FinCL-eval-subset.csv has 500 rows (vs 1,949 audited instances). The repo tree contains no audit-set, CIK list, or ticker manifest file.",
+  "evidence_url": "https://api.github.com/repos/The-FinAI/FinTagging/git/trees/main?recursive=1",
+  "confidence": "VERIFIED",
+  "quote": "blob 2332403 subdata/FinCL-eval-subset.csv ; blob 1286960 subdata/FinNI-eval-subset.csv ; blob 9091474 annotation/TrainingSet_Annotation.json ; blob 19890807 annotation/benchmark_ground_truth_pipeline.json"
+ },
+ {
+  "claim": "The 142 tickers/CIKs are not published anywhere: Appendix C.1 only gives aggregate distributions (Figures 5-7 by sector, market cap, geography).",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "Figure 5, Figure 6, and Figure 7 illustrate the distribution of 142 tickers across industry sectors, market capitalization categories, and geographic regions"
+ },
+ {
+  "claim": "Training manifest fully recovered via EDGAR full-text search (131 exact-phrase queries on 11-word windows from TrainingSet_Annotation.json, forms=10-K, window 2024-02-13..2025-02-13): the 10 training companies are CVS Health (CIK 64803), Welltower (766704), AT&T (732717), Halliburton (45012), Ares Commercial Real Estate (1529377), Mastercard (1141391), Pegasystems (1013857), NVR (906163), CNA Financial (21175), USA Compression Partners (1522727). Every single-filing hit for all 10 is dated 2025-02-11 or 2025-02-12, i.e. the training filings are the FY2024 10-Ks (e.g. accession 0000732717-25-000013 for AT&T, 0000021175-25-000008 for CNA).",
+  "evidence_url": "https://efts.sec.gov/LATEST/search-index?q=%222024+we+had+combined+net+operating+and+capital+loss+carryforwards+tax%22&forms=10-K&dateRange=custom&startdt=2024-02-13&enddt=2025-02-13",
+  "confidence": "VERIFIED",
+  "quote": "CIK counts: 27 CVS HEALTH Corp; 15 WELLTOWER INC.; 14 AT&T INC.; 12 HALLIBURTON CO; 9 Ares Commercial Real Estate Corp; 8 Mastercard Inc; 7 PEGASYSTEMS INC; 7 NVR INC; 7 CNA FINANCIAL CORP; 6 USA Compression Partners, LP (next highest: 2)"
+ },
+ {
+  "claim": "All 10 training companies also filed a 10-K inside the evaluation window; 8 of 10 have two 10-Ks in that window, and the FY2024 training filing itself falls inside the eval window for all 10 (data.sec.gov submissions).",
+  "evidence_url": "https://data.sec.gov/submissions/CIK0000732717.json",
+  "confidence": "VERIFIED",
+  "quote": "AT&T: ('10-K','2025-02-12','2024-12-31') in_train_window in_eval_window; ('10-K','2024-02-23','2023-12-31') in_train_window in_eval_window; ('10-K','2023-02-13','2022-12-31') in_eval_window"
+ },
+ {
+  "claim": "NOT DISJOINT at company level: 4 of the 10 training companies have a filing in the evaluation set, each confirmed by independent single-CIK EDGAR hits in two sweeps (combined: AT&T 7, USAC 6, Loews 4, ACRE 3). AT&T eval = FY2023 10-K filed 2024-02-23 (70 eval rows mention AT&T; 0 say 'December 31, 2024'); USA Compression eval = FY2023 10-K filed 2024-02-13; Ares Commercial Real Estate eval = FY2023 10-K filed 2024-02-22 ('FL4 Notes were collateralized by interests in a pool of 9...' hits only 2024-02-22); Loews Corp (CIK 60086) eval = FY2024 10-K filed 2025-02-11 ('Reflects an increase of 114 million in Boardwalk Pipelines' hits only 2025-02-11; 21 eval rows say 'December 31, 2024'). Loews is the ~92% parent of training company CNA Financial and its 10-K reproduces CNA's segment disclosures, so for CNA the overlap is parent/subsidiary for the SAME fiscal year. No evidence that CVS, Welltower, Halliburton, Mastercard, Pegasystems or NVR are in the eval set (the 6 'CVS' and 2 'NVR' eval mentions are REIT tenant lists and a mining-royalty acronym).",
+  "evidence_url": "https://efts.sec.gov/LATEST/search-index?q=%22Upon+close+of+the+transaction+in+the+third+quarter+of+2021%22&forms=10-K&dateRange=custom&startdt=2023-02-13&enddt=2025-02-13",
+  "confidence": "VERIFIED",
+  "quote": "cid=24344 'Upon close of the transaction in the third quarter of 2021' -> [('732717','2024-02-23','10-K'),('732717','2023-02-13','10-K')]; ACRE cid=10005 'FL4 Notes were collateralized by interests in a pool of 9 mo' -> [('529377','2024-02-22')]; Loews cid=8089 'Reflects an increase of 114 million in Boardwalk Pipelines' -> [('060086','2025-02-11')]"
+ },
+ {
+  "claim": "Instance-level leakage: 78 of the 2,069 released training instances (58/1,116 sentences, 20/953 tables) appear verbatim (whitespace/HTML-normalized) in FinTagging_Original_v2, 55 of them as FinNI-eval-v2 contexts; 33 of the 78 are labelled positives in training and 30 of those carry identical (value, concept) label sets in the eval set. EDGAR FTS classifies 35 of the 78 as company-specific text (ACRE 8, AT&T 15, USAC 11, CNA/Loews 1; e.g. 'The maximum commitment for the Wells Fargo Facility ... $500.0 million', 'On April 8, 2022, we completed the separation and distribution of our WarnerMedia business') and 26 as cross-company boilerplate; plus 50 near-duplicates (same first 100 chars), mostly ACRE.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/annotation/TrainingSet_Annotation.json",
+  "confidence": "VERIFIED",
+  "quote": "EXACT instance overlap train->eval: sentences 58 / 1116  tables 20 / 953 ... overlap items that are POSITIVE (have labels) in train: 33 ... with identical (value,concept) label sets in eval: 30 ... company-specific= 35  boilerplate(>2 CIKs)= 26"
+ },
+ {
+  "claim": "Consequence for the paper's own baselines: BERT-large, FinBERT and SECBERT were fine-tuned on exactly this 10-filing set (20 epochs, lr 3e-5, bs 4, 2xA5000) and evaluated on the 142-filing benchmark, so the published PLM rows in Table 5 were produced under the same company-level overlap.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "We fine-tune three pretrained models, BERT-large, FinBERT, and SECBERT, on our training set using the HuggingFace Transformers library. All models are trained with a batch size of 4, a learning rate of 3e-5, and for 20 epochs."
+ },
+ {
+  "claim": "Evaluation manifest is recoverable by EDGAR FTS and was ~78% recovered here: two stratified passes (399 + 491 exact-phrase queries over FinTagging_Original_v2 sentence contexts, forms=10-K, window 2023-02-13..2025-02-13, keep queries with exactly one CIK, collapse co-registrant CIKs such as Vornado 899689/1040765, Federal Realty 34903/1901876, PG&E 75488/1004980) yielded 111 distinct registrants, 98 with >=2 independent hits. In pass 1, 34/399 queries had 0 hits and 54 hit >3 CIKs (boilerplate). Eval context_ids are shuffled, not grouped by filing. Full recovery of all 142 would need roughly 2-3k queries or the authors. Full list saved in recovered_eval_manifest.json.",
+  "evidence_url": "https://efts.sec.gov/LATEST/search-index?q=%22Discounted+expected+future+gross+premiums+at+the+upper+medium+grade%22&forms=10-K&dateRange=custom&startdt=2023-02-13&enddt=2025-02-13",
+  "confidence": "VERIFIED",
+  "quote": "pass2 queries: 491  combined queries: 890 ... Distinct registrant display-names (collapsing co-registrant CIKs): 111 ... registrants with >=2 single-CIK hits: 98"
+ },
+ {
+  "claim": "Top recovered eval registrants (combined single-CIK hit counts): Omega Healthcare 20, Hyatt 18, Kelly Services 17, Prudential 17, Healthpeak 15, then Vornado, RenaissanceRe, IQVIA, Corebridge, Kraft Heinz, Ventas, Cummins, Carrier, Corning, Shopify, Phillips Edison, NorthWestern, Verizon, Bristol Myers, Arrow Electronics, Equinix, Travelers, Pilgrim's Pride, Associated Banc-Corp, CNX, Nabors, Snap-on, Federal Realty, Credit Acceptance, Whirlpool, PPL, Exelon, PG&E, State Street, Albemarle, Illumina, Molina, PepsiCo, Masco, O-I Glass, etc.",
+  "evidence_url": "https://efts.sec.gov/LATEST/search-index",
+  "confidence": "VERIFIED",
+  "quote": "20 ['0000888491'] OMEGA HEALTHCARE INVESTORS INC (OHI); 18 ['0001468174'] Hyatt Hotels Corp (H); 17 ['0000055135'] KELLY SERVICES INC; 17 ['0001137774'] PRUDENTIAL FINANCIAL INC; 15 ['0000765880'] HEALTHPEAK PROPERTIES, INC."
+ },
+ {
+  "claim": "NORA (arXiv 2605.24910v1, 24 May 2026, Lu/Lai/Li/Yen) asserts iXBRL labels are inherently noisy, citing filing-error literature (Chang 2021; Al-Okaily 2024; Luo 2023; Bartley 2011; Du 2013; Basoglu & White 2015).",
+  "evidence_url": "https://arxiv.org/html/2605.24910",
+  "confidence": "VERIFIED",
+  "quote": "large-scale supervision in this domain is often obtained from inline XBRL (iXBRL), yet iXBRL is inherently noisy as a source for ground truth. Several studies document recurring filing mistakes such as mismatches between embedded tags and surrounding narrative, missing elements, incorrect monetary values, and sign errors"
+ },
+ {
+  "claim": "NORA's only measured noise rates: a CPA reviewed the 5 highest-g_tag and 5 highest-g_time training instances (10 total) and found 100% noisy, versus 'less than 5% label errors' in a randomly sampled comparison set whose size is not stated. No kappa, no disagreement statistics, and no per-attribute error rates beyond this.",
+  "evidence_url": "https://arxiv.org/html/2605.24910",
+  "confidence": "VERIFIED",
+  "quote": "A Certified Public Accountant (CPA) independently reviewed these instances and assigned the corresponding labels. Tables 7 to 16 in the Appendix summarize the ten inspected instances. The manual analysis shows that all inspected instances are noisy, in contrast to a randomly sampled comparison set, which contains less than 5% label errors."
+ },
+ {
+  "claim": "NORA dataset: 6.6M sentences / 12M+ tagged FNEs from >110,000 10-K and 10-Q filings covering 8,000+ companies, 2019-2024, 446,338 unique tags reduced to 978 final tags. It handles eval-label noise with NPK filtering, reporting on the 'top 90%' cleanest test subset as well as the unfiltered test set (Tag accuracy 0.6330 unfiltered / 0.6652 filtered).",
+  "evidence_url": "https://arxiv.org/html/2605.24910",
+  "confidence": "VERIFIED",
+  "quote": "6.6M sentences (12M+ tags) ... 10-K & 10-Q (more than 110,000 filings covering 8,000+ companies) ... Timeframe 2019–2024 ... 446K unique tags (978 final tags) ... In our experiments, we report results on the top 90% subsets."
+ },
+ {
+  "claim": "NORA benchmark/code is NOT released as of 2026-10-01: the HTML has zero occurrences of 'github', 'huggingface', 'release', or 'available at'; the arXiv entry has no comment/journal-ref/code link; GitHub repository search and Hugging Face dataset search return nothing relevant.",
+  "evidence_url": "https://export.arxiv.org/api/query?id_list=2605.24910",
+  "confidence": "VERIFIED",
+  "quote": "arxiv:comment : None ; links: ['https://arxiv.org/abs/2605.24910v1', 'https://arxiv.org/pdf/2605.24910v1']"
+ },
+ {
+  "claim": "Best published FinTagging v5 numbers anchoring the ceiling discussion: DeepSeek-V3 FinNI P/R/F1 = 0.5886/0.8430/0.6932, FinCL accuracy 0.1889 (GPT-4o 0.1829); rerank-only FinCL accuracy tops out at 0.2144; full pipeline 0.1074. Small models: Llama-3.2-3B FinCL 0.0415, Qwen3-1.7B and 0.6B near zero.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "DeepSeek-V3 0.5886 0.8430 0.6932 0.1889 ... Model Pipeline FinCL Rerank-only GPT-4o 0.1052 0.1829 0.2023 DeepSeek-V3 0.1074 0.1889 0.2144"
+ },
+ {
+  "claim": "No paper other than NORA re-audits FinTagging labels or measures its label-noise ceiling: Semantic Scholar lists only 4 citing papers for 2505.20650 (none on label noise); arXiv full-text search for 'XBRL' AND 'noisy'/'label noise'/'tagging errors' returns only 2605.24910.",
+  "evidence_url": "https://api.semanticscholar.org/graph/v1/paper/arXiv:2505.20650/citations?fields=title,year,venue,externalIds&limit=100",
+  "confidence": "VERIFIED",
+  "quote": "Conv-FinRe ... 2602.16990 ; The Illusion of Specialization ... 2601.03425 ; Cognitive Load and Information Processing in Financial Markets ... 2507.07037 ; Advances in Generalized Large Language Models: Performance on Undergraduate Financial Accounting Tasks"
+ },
+ {
+  "claim": "Third parties are already deriving train/test splits from FinTagging labelled data without company metadata: HF lm2445/FinTagging_1000 (MIT, July 2026) is an 800/200 split 'constructed from 3,641 labeled examples' with overlap checked only by context_id, not by company.",
+  "evidence_url": "https://huggingface.co/datasets/lm2445/FinTagging_1000/raw/main/README.md",
+  "confidence": "VERIFIED",
+  "quote": "The split was constructed from 3,641 labeled examples ... The split was also checked to ensure there is no overlap between train and test by source_sample_idx or context_id."
+ },
+ {
+  "claim": "FinTagging v1 vs v2 release sizes: GitHub benchmark_ground_truth_pipeline.json and HF FinNI-eval (v1) have 6,599 instances; FinNI-eval-v2 has 28,787 and FinTagging_Original_v2 has 46,496 contexts (22,742 tables, 23,754 sentences). The v5 paper reports the v2 sizes (28,787 / 261,457).",
+  "evidence_url": "https://huggingface.co/api/datasets/TheFinAI/FinNI-eval",
+  "confidence": "VERIFIED",
+  "quote": "num_examples: 6599"
+ }
+]
+
+### unknowns
+(1) The exact identity of the 1,949 audited instances is not recoverable from any public file (no flag; corrections merged back) - only the authors can provide it. (2) The share of auto-labels the annotators judged incorrect is not reported; the ~12% figure is a kappa-derived inference on a deliberately hard subset. (3) No random-sample precision/recall audit of FinTagging labels exists; NORA's '<5% label errors' is on its own 10-K/10-Q corpus with an unstated sample size, and no FiNER/FNXL-specific noise rates were found. (4) 111 of the 142 eval registrants were recovered from 890 FTS queries; a complete manifest needs more queries (~2-3k) or the authors. (5) Whether the authors consider the AT&T/USAC/ACRE/Loews-CNA overlap intentional is unknown; the paper is silent. (6) NORA's 6.6M-instance benchmark has no public release link as of 2026-10-01. (7) WebSearch budget was exhausted at session start, so discovery used arXiv/HF/GitHub/S2/EDGAR APIs via curl rather than web search.
+
+### notes
+Bottom line: (a) FinTagging's released training split is NOT company-disjoint from its evaluation split - 4 of 10 training companies (AT&T, USA Compression, Ares Commercial Real Estate as prior-fiscal-year filings; Loews as the same-fiscal-year parent of CNA Financial) are in the eval set, and 78 training instances (35 company-specific, 30 with identical labels) are verbatim eval contexts. A fine-tune on the released train set must drop those companies, or better, build a fresh training corpus from CIKs outside the recovered eval manifest and outside the 2023-02-13..2025-02-13 window. (b) The label-noise ceiling is unquantified by the authors; the usable handles are the kappa-implied ~10-14% flagged-incorrect rate on the audited hard subset, NORA's <5% random-sample tag-error rate on comparable iXBRL-derived labels, and the fact that 99.25% of FinTagging entities are unaudited. A credible write-up should re-audit a random ~300-500 instance sample of FinNI-eval-v2/FinCL-eval-v2 and report a noise-adjusted ceiling, or adopt an NPK-style filtered split. (c) The 142-CIK manifest is recoverable with the recipe used here (exact 11-12-word phrase, forms=10-K, custom date window, keep queries with 1-2 distinct CIKs, collapse co-registrant CIKs); 111/142 were recovered in ~15 minutes of throttled queries. Result JSON and all raw artifacts (fts_training.json, fts_eval.json, fts_eval_pass2.json, overlap_classification.json, edgar_submissions_train10.json, recovered_eval_manifest.json) are in /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/.

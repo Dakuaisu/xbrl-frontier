@@ -1,0 +1,294 @@
+### key
+sweep_concept_linking_methods
+
+### angle
+sweep_concept_linking_methods: methods for linking an extracted numeric fact to one of ~17k US-GAAP concepts (FinTagging FinCL, FNXL, FiNER-139); what accuracy, model size, and latency/cost each reports; whether a 1-3B model + retrieval/constrained decoding is already done.
+
+### queries_run
+[
+ "WebSearch (6 queries attempted; session search budget was already exhausted 200/200, so discovery moved to API fetches)",
+ "arXiv API all:\"XBRL\" (100 newest)",
+ "arXiv API all:\"FinTagging\" OR all:\"FNXL\" OR all:\"FiNER-139\"",
+ "arXiv API ti:XBRL",
+ "arXiv API all:\"extreme multi-label\" AND all:financial (0 results)",
+ "arXiv API all:\"XBRL agent\" OR ti:\"worth every penny\"",
+ "arXiv API (\"10-K\" OR \"SEC filings\") AND (tagging OR \"concept linking\" OR taxonomy) AND (LLM OR \"language model\")",
+ "arXiv API all:\"generative retrieval\" AND all:taxonomy",
+ "arXiv API all:\"constrained decoding\" AND all:taxonomy",
+ "arXiv API all:\"entity linking\" AND all:latency",
+ "arXiv API small-language-model + financial + latency/cost + extraction (compound phrase queries returned 0)",
+ "Semantic Scholar citations of arXiv:2505.20650 (FinTagging), arXiv:2306.03723 (FNXL), arXiv:2405.06671 (FLAN-FinXC), arXiv:2203.06482 (FiNER) -- search endpoint itself was rate-limited (429) on every attempt",
+ "OpenAlex search: 'XBRL tagging language model', 'FinTagging XBRL', 'XBRL financial numeral extreme classification taxonomy', 'XBRL tag recommendation machine learning classification', title search for 'Exploring LLMs for Financial Numeric Labelling and Summarization'",
+ "Hugging Face API: datasets?search=FinTagging / XBRL / FNXL / FinNI; models?search=FinTagging / XBRL / FiNER; models?author=lm2445 / bowang0911",
+ "Direct fetches: arXiv abs/html for 2603.25263, 2505.20650, 2405.06671, 2306.03723, 2203.06482, 2605.24910, 2505.19819, 2506.05700, 2510.08886, 2604.05966, 2609.38754, 2605.07454, 2604.17937, 2608.11772, 2501.10963, 2311.06102, 2608.06614 (+PDF extracted locally), 2609.15209, 2506.06806, 2506.15846 (+PDF extracted locally), 2502.15411, 2402.12659, 2507.07037, 2601.15247, 2508.00828, 2309.12075; GitHub The-FinAI/FinTagging, Open-Finance-Lab/FinLoRA, SarielMa/FHS; FinLoRA readthedocs; HF cards for lm2445/FinTagging_1000, lm2445/FinTagging1000_Grounding, bowang0911/sec-xbrl-hard-negatives, Ben16001/XBRL-LoRA*, binhminh1/GPT-OSS-20B-XBRL-finetuned, TheFinAI/lm-eval-xbrl-tagging-nen-0-shot-results-private"
+]
+
+### findings
+[
+ {
+  "title": "FinTagging: Benchmarking LLMs for Extracting and Structuring Financial Information (v5, May 2026)",
+  "url": "https://arxiv.org/abs/2505.20650",
+  "year": "2025 (v1 May 2025; v5 17 May 2026)",
+  "what": "The target benchmark. FinNI (numeric identification) + FinCL (link fact to one of 17,688 US-GAAP concepts; metric = exact-concept accuracy). Linking method: 'embed each taxonomy concept using text-embedding-3-small and retrieve the top-h candidates from the US-GAAP taxonomy by semantic similarity. The LLM then reranks candidates'; models 'select the final tag from the top-200 retrieved US-GAAP candidates'; retrieval ceiling (SAC context) Acc@200 = 0.3274 overall (0.6535 sentences, 0.2959 tables), Acc@1 = 0.0202. GitHub repo additionally ships a BM25 index (us_gaap_2024_BM25.jsonl). 13 zero-shot LLMs incl. small ones. FinCL accuracy: DeepSeek-V3 0.1889, GPT-4o 0.1829, Llama-4-Scout 0.1649, Llama-3.3-70B 0.1318, Qwen3-32B 0.1277, Qwen3-14B 0.1144, Llama-3.1-8B 0.0913, Fino1-8B 0.0807, Qwen3-1.7B 0.0735, Llama-3.2-3B 0.0415, Qwen3-0.6B 0.0414. FinNI F1: DeepSeek-V3 0.6932, GPT-4o 0.5397, Llama-3.1-8B 0.2421, Llama-3.2-3B 0.1460, Qwen3-1.7B 0.0541, Qwen3-0.6B 0.0038. Fine-tuned PLMs (BERT-large / FinBERT / SECBERT, 20 epochs on 2 A5000s for 24h) end-to-end micro-F1 0.1391 / 0.0656 / 0.1779; LLM end-to-end micro-F1: DeepSeek-V3 0.1162, GPT-4o 0.0863, Llama-3.2-3B 0.0114. GitHub leaderboard (older run): FinCL DeepSeek-V3 0.1715, GPT-4o 0.1664, Qwen2.5-14B 0.1072; SECBERT overall micro-F1 0.2145. No fine-tuned decoder LLM evaluated; no shared task mentioned.",
+  "reports_cost": "partial - aggregate only: 'Models are evaluated with the LM Evaluation Harness on a 4xH100 cluster and via APIs ... Total cost is approximately 500 GPU-hours and $1,500 in API usage.' No per-model cost.",
+  "reports_latency": "no - no latency, throughput or per-model inference time anywhere in the paper.",
+  "threat_to_novelty": "medium - it already benchmarks 0.6B/1.7B/3B/8B open models on FinCL (zero-shot, accuracy only), so 'nobody benchmarked small models on FinTagging' is false as stated; but no fine-tuned small LLM, no per-model cost, no latency, so the cost/latency frontier remains open.",
+  "verification": "VERIFIED (abs + HTML body fetched twice; GitHub README fetched)"
+ },
+ {
+  "title": "Factorized Hypothesis Search for Evidence-to-Taxonomy Retrieval (FHS)",
+  "url": "https://arxiv.org/abs/2608.06614",
+  "year": "2026 (6 Aug 2026)",
+  "what": "From the FinTagging group (The Fin AI). Concept-linking method on the FinTagging test split: 191 contexts (110 tables, 81 narratives), 2,509 facts, 388 gold concepts, 17,388-concept US-GAAP 2024 inventory; also CodiEsp ICD-10 coding. Pipeline: LLM generates factorized hypotheses over semantic dimensions -> structured query rendering -> BM25 retrieval at K=200 -> RRF fusion -> LLM dimension-level verification -> shared Qwen3-32B listwise selector; 'structured decoding' used for all LLM ops. 'all LLM-based operations across all methods use Qwen3-32B'. Financial results (Table 4): Direct retrieval R@1 0.041 / Acc 0.132; one-pass structured Acc 0.226; FHS R@1 0.185, R@10 0.397, MRR 0.257, Acc 0.255. Best-hypothesis oracle reaches Recall@200 0.734 vs 0.705 deployed. Code: github.com/SarielMa/FHS (README is empty). No model smaller than 32B anywhere.",
+  "reports_cost": "partial - compute proxies, no dollars: Appendix E.6 / Table 19 'reports the average numbers of model calls (LLM calls exclude the shared final listwise selector) and retrieval operations per fact, together with end-to-end wall-clock time on the CodiEsp set' (FHS full: J=2, 4.0 LLM calls, 4.0 retrievals per fact, wall time 5.31 +/- 1.71; units not recoverable from extracted text). Run on 'a single NVIDIA B200 GPU'. No cost table for the financial split.",
+  "reports_latency": "partial - wall-clock per full test-set run on CodiEsp only; paper notes 'the reported FHS wall time is not the optimal latency that would be obtained from a fully parallel implementation'. Nothing for FinTagging.",
+  "threat_to_novelty": "medium - strongest published FinCL linking number (0.255) and it does report per-fact call counts and wall-clock, but only with a 32B model, only on the clinical split, no dollars, no small/fine-tuned models.",
+  "verification": "VERIFIED (abs + HTML + local PDF text extraction of Appendix E.6)"
+ },
+ {
+  "title": "XBRLTagRec: Domain-Specific Fine-Tuning and Zero-Shot Re-Ranking with LLMs for Extreme Financial Numeral Labeling",
+  "url": "https://arxiv.org/abs/2603.25263",
+  "year": "2026 (26 Mar 2026; IJCNN 2026)",
+  "what": "FNXL (2,794 tags). FLAN-T5-Large fine-tuned with LoRA (r=2) to generate a tag 'document', Sentence-T5-XXL retrieves top-10 by cosine, ChatGPT-3.5-Turbo-1106 reranks in two groups of 5 with frequency voting over 1-8 iterations (GPT-4o, DeepSeek-V3, ERNIE-3.5 also tried). Table I: GalaXC Hits@1 0.3596 / M-F1 0.1870; AttentionXML 0.7676 / 0.4754; Label Semantics 0.5815 / 0.3058; FiNER 0.6736 / 0.3896; FLAN-FinXC 0.8354 / 0.4616; XBRLTagRec (1-2 iters) 0.8526 / 0.4777; XBRLTagRec (1-8 iters) 0.8618 / 0.5050. Hardware: 32GB Tesla V100.",
+  "reports_cost": "no - only the qualitative limitation 'iterative re-ranking with ChatGPT-3.5 increases computational and API costs'; no dollars.",
+  "reports_latency": "no - 'No per-sample inference time or total API call counts reported'.",
+  "threat_to_novelty": "medium - a sub-1B generator + dense retrieval + LLM rerank for XBRL concept selection is already published (on FNXL, not FinTagging); it sets the FNXL number to beat (Hits@1 0.8618) but reports no cost or latency.",
+  "verification": "VERIFIED (abs + HTML body fetched twice)"
+ },
+ {
+  "title": "FLAN-FinXC: Parameter-Efficient Instruction Tuning of LLMs for Extreme Financial Numeral Labelling",
+  "url": "https://arxiv.org/abs/2405.06671",
+  "year": "2024 (NAACL 2024)",
+  "what": "FNXL and FiNER-139. FLAN-T5-Large (780M) + LoRA (0.59M trainable params) generates the tag documentation; a sentence encoder matches it to the closest tag by cosine. FNXL: Macro-F1 66.23%, Hits@1 89.98% (AttentionXML pipeline 47.54 / 76.76; T5-Large 60.11 / 83.26; GalaXC 45.81 / 72.97; ChatGPT 500-sample 9.08 / 19.6). FiNER-139: Macro-F1 94.74%, Hits@1 86.03% (AttentionXML 82.22 / 83.25). Training 56 min/epoch (LoRA) vs 1h22 full FT on V100 32GB; output capped at 30 tokens.",
+  "reports_cost": "no - no dollar or GPU-hour totals.",
+  "reports_latency": "partial - states 'inference time: 2 minutes/sample' (as extracted; no throughput or batch figures, no API comparison).",
+  "threat_to_novelty": "medium - shows a <1B generative model already reaches strong FNXL/FiNER accuracy with a generate-then-embed linking scheme; latency reporting is minimal and there is no cost or API-vs-local comparison.",
+  "verification": "VERIFIED (abs + HTML body)"
+ },
+ {
+  "title": "FinLoRA: Benchmarking LoRA Methods for Fine-Tuning LLMs on Financial Datasets",
+  "url": "https://arxiv.org/abs/2505.19819",
+  "year": "2025 (26 May 2025)",
+  "what": "Llama-3.1-8B-Instruct fine-tuned with LoRA/QLoRA(4-bit)/DoRA/rsLoRA (8bit-r8, 4bit-r4 variants) on a suite incl. FiNER-139 (10.0k/7.4k) and FNXL (247 test), plus XBRL Term / tag-extraction / value-extraction / formula tasks. Results: FiNER-139 acc base 21.28 -> LoRA 74.10 (GPT-4o 72.29, Gemini 2.0 FL 80.32); FNXL base 3.64 -> LoRA 23.57 (GPT-4o 42.41, Gemini 2.0 FL 47.98); tag extraction 89.13, value extraction 98.49. Adapters public (wangd12/xbrl_*). Docs: finlora-docs.readthedocs.io.",
+  "reports_cost": "yes (fine-tuning) / no (inference): 'Fine-tuning ranged from 14.1 hours (QLoRA) to 15.9 hours (DoRA), corresponding to a total of approximately 56.4 to 63.6 GPU hours' at '$14.66 to $16.54' on 4xA5000 ($1.05/hr RunPod); docs compare Gemini 2.0 FL fine-tuning $162.02 and GPT-4o-mini $312.00. Docs page states 'The document contains no inference time, latency, or throughput measurements.' No cost-per-query.",
+  "reports_latency": "partial - 'Figure 3 illustrates the inference time of fine-tuned models on various datasets' and 'Gemini API generally exhibits lower inference latency and is less sensitive to increasing prompt lengths than local Llama 3.1 8B Instruct inference'; averaged across tasks, FiNER/FNXL not isolated, local hardware for inference not stated.",
+  "threat_to_novelty": "high - the closest prior: a fine-tuned, quantized 8B open model on FiNER-139 and FNXL with dollar training cost and an inference-time comparison against an API model. Gaps it leaves: no 1-3B model, no FinTagging/full-taxonomy linking, no serving cost per query, no vLLM throughput, latency not per task.",
+  "verification": "VERIFIED (HTML body fetched twice; GitHub README; readthedocs resources page)"
+ },
+ {
+  "title": "FLaME: Financial Language Model Evaluation",
+  "url": "https://arxiv.org/abs/2506.15846",
+  "year": "2025 (Findings of ACL 2025)",
+  "what": "23 foundation LMs on 20 FinNLP tasks including FNXL (zero-shot, F1) and FiNER-ORD (not FiNER-139). FNXL F1: Claude 3.5 Sonnet 0.655, DeepSeek R1 0.587, GPT-4o 0.523, Llama 3 70B 0.469, Claude 3 Haiku 0.015, Gemma 2 9B 0.005, Jamba 1.5 Mini 0.005, Mistral 7B 0.004, Llama 3 8B 0.003. No fine-tuned models ('Our study aims for a robust and holistic understanding of LM performance rather than use-case-specific adaptations').",
+  "reports_cost": "yes - per-dataset, per-model USD (Appendix F.4, Table 13, parsed from the PDF): FNXL column: Llama 3 8B Instruct $0.06, Mistral 7B $0.06, Gemma 2 9B $0.08, Jamba 1.5 Mini $0.07, Claude 3 Haiku $0.14, Llama 3 70B $0.25, DeepSeek-V3 $0.28, GPT-4o $0.96, Claude 3.5 Sonnet $1.79, o1-mini $6.39, DeepSeek R1 $11.21; totals 'DeepSeek R1 cost approximately $260 USD compared to Claude 3.5 Sonnet's and o1-mini's $105 USD and Meta Llama 3.1 8b's $4 USD.' Costs are API-provider prices for zero-shot runs.",
+  "reports_latency": "no - 'Although we do not report exhaustive speed benchmarks here, preliminary measurements show up to a 2x cost difference among similarly sized models.'",
+  "threat_to_novelty": "high - directly contradicts 'nobody reports cost for small models on FNXL': an ACL-venue paper tabulates dollar cost of a 7-9B model on FNXL. Mitigation: zero-shot only (near-zero F1), API-priced not self-hosted, no latency, no fine-tuning, no 1-3B, no FinTagging.",
+  "verification": "VERIFIED (abs + HTML + local PDF extraction of Table 13)"
+ },
+ {
+  "title": "Financial Numeric Extreme Labelling (FNXL): A Dataset and Benchmarking for XBRL Tagging",
+  "url": "https://arxiv.org/abs/2306.03723",
+  "year": "2023 (ACL 2023 Findings)",
+  "what": "FNXL: 79,088 sentences, 142,922 numerals, 2,794 labels, 10-Ks 2019-2021 from 2,339 companies; train 62,782 / val 6,823 / test 9,483 sentences. Baselines: sequence labelling (BERT-base/SEC-BERT; best Macro-F1 47.13, micro-F1 75.84) vs pipeline span-extraction + AttentionXML extreme classifier (Macro-F1 47.54, micro-F1 74.74, ~90% Hits@5, ~92% Hits@10). Pipeline better on tail labels.",
+  "reports_cost": "no",
+  "reports_latency": "no - only training time: 'AttentionXML model is trained in approximately 8 hours whereas FiNER takes approximately 10-12 hours'.",
+  "threat_to_novelty": "low - establishes the extreme-classification baselines (AttentionXML) the brief asked about; no efficiency metrics.",
+  "verification": "VERIFIED (abs + HTML body)"
+ },
+ {
+  "title": "FiNER: Financial Numeric Entity Recognition for XBRL Tagging",
+  "url": "https://arxiv.org/abs/2203.06482",
+  "year": "2022 (ACL 2022)",
+  "what": "FiNER-139: 1.1M sentences, 139 most frequent XBRL tags, token-level BIO tagging; numeric pseudo-tokens ([SHAPE]/[NUM]); SEC-BERT best. 65 citing papers on Semantic Scholar; the only citing papers about XBRL tagging methods are FNXL, FLAN-FinXC, XBRLTagRec.",
+  "reports_cost": "no (abstract-level check only)",
+  "reports_latency": "no (abstract-level check only)",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED (abs page; body not read)"
+ },
+ {
+  "title": "Noise-Robust Financial Numerical Entity Attribute Tagging (NORA)",
+  "url": "https://arxiv.org/abs/2605.24910",
+  "year": "2026 (24 May 2026)",
+  "what": "New NORA corpus: 6.6M sentences, ~12M numeric entities from 110k+ 10-K/10-Q filings, with tag/time/scale/sign attributes; also uses FiNER-139 and FNXL. Encoder = nlpaueb/sec-bert-base with instance re-weighting for noisy XBRL labels. Unfiltered test: tag accuracy 0.6330 / macro-F1 0.4148 (vs Co-teaching 0.3629, Mixup 0.3848).",
+  "reports_cost": "no",
+  "reports_latency": "no - 'None reported.'",
+  "threat_to_novelty": "low - encoder-only, attribute tagging rather than full-taxonomy linking, no efficiency metrics.",
+  "verification": "VERIFIED (HTML body)"
+ },
+ {
+  "title": "FinAuditing: A Financial Taxonomy-Structured Multi-Document Benchmark for Evaluating LLMs",
+  "url": "https://arxiv.org/abs/2510.08886",
+  "year": "2025 (v3 May 2026; SIGIR 2026 Resource Track)",
+  "what": "1,102 instances (~33k tokens each). FinSM task = retrieve the standardized US-GAAP concept for reported tags (HR@k/R@k/MF1@k, k<=20) using concept-centric taxonomy chunks. 13 LLMs; FinSM HR@20: DeepSeek-V3 12.42, Gemma-3-27B 10.30, Gemma-3-12B 10.30, GPT-4o 9.09, Llama-3.1-8B 6.06, Llama-3.2-3B 4.55, Qwen3-32B 0.00.",
+  "reports_cost": "no",
+  "reports_latency": "no - 'The document contains no statements regarding inference latency, inference time, or computational cost.'",
+  "threat_to_novelty": "low - adjacent concept-retrieval benchmark with zero-shot small models, accuracy only.",
+  "verification": "VERIFIED (abs + HTML body)"
+ },
+ {
+  "title": "FinBen: A Holistic Financial Benchmark for Large Language Models",
+  "url": "https://arxiv.org/abs/2402.12659",
+  "year": "2024 (NeurIPS 2024 D&B)",
+  "what": "Includes FNXL as a numeric-labelling task (F1 / exact match); 'All evaluated models performed extremely poorly on FNXL, with nearly universal zero scores'. FiNER-139 not included.",
+  "reports_cost": "partial - aggregate only: '16 NVIDIA A100 80G GPUs, taking approximately 600 hours ... total expenditure amounts to approximately $51,000.'",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED (HTML body)"
+ },
+ {
+  "title": "RKEFino1: A Regulation Knowledge-Enhanced Large Language Model",
+  "url": "https://arxiv.org/abs/2506.05700",
+  "year": "2025 (IEEE IDS 2025)",
+  "what": "Llama-3.1-8B-Instruct (Fino1) + LoRA r=64 on XBRL/CDM/MOF knowledge; 'Numerical NER' over 5 coarse datatypes (Integer/Monetary/PerShare/Percent/Shares) in sentences and tables, F1 14.99 -> 26.62. Not concept linking.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED (abs + HTML body)"
+ },
+ {
+  "title": "HiFi-KPI: A Dataset for Hierarchical KPI Extraction from Earnings Filings",
+  "url": "https://arxiv.org/abs/2502.15411",
+  "year": "2025 (LREC 2026 main)",
+  "what": "1.65M paragraphs, ~198k labels (us-gaap concepts plus company extensions) organised by iXBRL presentation (.pre, depth 21) and calculation (.cal) hierarchies; parents chosen by frequency. Encoders BERT-base, FLANG-BERT, EmbeddingGemma-300M reach >0.906 macro-F1 on presentation-taxonomy classification; sequence labelling on 1,000 most frequent tags ~0.914 macro-F1; LLM structured extraction (Gemma-3-27B, Qwen3-30B-A3B, Mistral-Small-24B, DeepSeek-V3.1) best full-entity F1 0.440.",
+  "reports_cost": "no",
+  "reports_latency": "no - 'None mentioned.'",
+  "threat_to_novelty": "low-medium - shows small encoders already do hierarchical XBRL-derived label classification well, but on a different (collapsed) label space and without efficiency numbers.",
+  "verification": "VERIFIED (abs + HTML body)"
+ },
+ {
+  "title": "TheFinAI/lm-eval-xbrl-tagging-nen-0-shot-results-private (HF eval-result dataset)",
+  "url": "https://huggingface.co/datasets/TheFinAI/lm-eval-xbrl-tagging-nen-0-shot-results-private",
+  "year": "2025 (Apr-May 2025)",
+  "what": "Auto-generated lm-eval results for the FinTagging 'XBRL tagging NEN' task across 49 runs: Qwen2.5 0.5B/1.5B/7B/14B/32B, DeepSeek-R1-Distill-Qwen 1.5B/7B/14B/32B, Llama 3.2 1B/3B, Llama 3.1 8B, Fino1-8B, finma-7b, plutus-8B, txgemma-27b, GPT-4o, deepseek-chat (exact match ~0.2%).",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low-medium - evidence that 0.5B-3B models were run zero-shot on FinTagging-style tagging (accuracy only, unpublished detail).",
+  "verification": "VERIFIED (HF API metadata)"
+ },
+ {
+  "title": "lm2445/FinTagging_1000, FinTagging1000_ER, FinTagging1000_text, FinTagging1000_table, FinTagging1000_Grounding (HF datasets)",
+  "url": "https://huggingface.co/datasets/lm2445/FinTagging1000_Grounding",
+  "year": "2026 (Jul 2026)",
+  "what": "SFT-formatted subsets of FinTagging: 800/200 split, 11,687 train entity triples over 1,248 concepts; Grounding set = 2,509 test rows (2,341 table, 168 text) for 'the second stage of a two-step tagging pipeline: given extracted numeric entities with their context, predict valid XBRL concept tags' as generative prediction ('No candidate lists are provided'). The 2,509-fact test split matches FHS's split, suggesting the same group. No linked model, paper, or results; the author's public models are unrelated (medical PVminer/TABPO on Qwen2.5-1.5B / Llama-3.2-3B / 8B / 70B).",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "medium (unresolved) - someone is preparing SFT data for small-model FinTagging concept tagging, and the same author routinely fine-tunes 1.5B/3B/8B models; no published results yet.",
+  "verification": "VERIFIED (HF cards and API listings); inference about authorship UNVERIFIED"
+ },
+ {
+  "title": "Ben16001/XBRL-LoRA5050V2, XBRL-LoRA300k-PlanB, XBRL-LoRa7525V2 (HF LoRA adapters)",
+  "url": "https://huggingface.co/Ben16001/XBRL-LoRA300k-PlanB",
+  "year": "2026 (Apr 2026)",
+  "what": "LoRA adapters on Qwen/Qwen3-4B-Instruct-2507 named 'XBRL'; model cards list dataset 'None', only train/val loss (val 0.0307), no task description, no evaluation.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low - undocumented hobby fine-tunes of a 4B model on some XBRL data; no benchmark numbers.",
+  "verification": "VERIFIED (HF cards)"
+ },
+ {
+  "title": "bowang0911/sec-xbrl-hard-negatives (HF dataset)",
+  "url": "https://huggingface.co/datasets/bowang0911/sec-xbrl-hard-negatives",
+  "year": "2026 (Aug 2026)",
+  "what": "461k retrieval triplets: NL financial query -> positive XBRL statement section + concept (e.g. LiabilitiesCurrent) + 1-13 hard negatives; CC0. Designed for training retrievers for US-GAAP concept linking. Author's models are generic ColBERT/embedding models (colgemma-300m etc.), none documented as trained on it.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low-medium - public training data for a small concept retriever exists; no published model or numbers.",
+  "verification": "VERIFIED (HF card + author model listing)"
+ },
+ {
+  "title": "Making LLMs Worth Every Penny: Resource-Limited Text Classification in Banking",
+  "url": "https://arxiv.org/abs/2311.06102",
+  "year": "2023 (ACM ICAIF 2023)",
+  "what": "Performance/cost trade-offs of few-shot fine-tuned models vs OpenAI/Cohere/Anthropic LLMs on Banking77 intent detection; RAG-style querying to cut LLM cost. Not XBRL.",
+  "reports_cost": "yes - cost trade-off study (exact figures not in abstract).",
+  "reports_latency": "no (abstract-level)",
+  "threat_to_novelty": "low - a methodological precedent for accuracy-vs-cost framing in FinNLP, different task.",
+  "verification": "VERIFIED (abs page)"
+ },
+ {
+  "title": "Finance Agent Benchmark",
+  "url": "https://arxiv.org/abs/2508.00828",
+  "year": "2025",
+  "what": "537 expert questions over SEC filings with agent harness; best model o3 46.8% 'at an average cost of $3.79 per query'. Not tagging.",
+  "reports_cost": "yes - '$3.79 per query'",
+  "reports_latency": "no",
+  "threat_to_novelty": "none - precedent for per-query cost reporting on SEC-filing tasks only.",
+  "verification": "VERIFIED (abs page)"
+ },
+ {
+  "title": "Prompt Tuned Embedding Classification for Multi-Label Industry Sector Allocation (PTEC)",
+  "url": "https://arxiv.org/abs/2309.12075",
+  "year": "2023 (NAACL 2024 industry track)",
+  "what": "Constrained decoding via Trie search over a proprietary industry taxonomy for text-to-text classification, then replaced by a classification head (PTEC) that 'improves performance significantly, while also reducing computational costs during inference'. Not XBRL; taxonomy size not in abstract.",
+  "reports_cost": "partial - qualitative inference-cost reduction claim.",
+  "reports_latency": "no (abstract-level)",
+  "threat_to_novelty": "low - only general evidence that trie-constrained decoding over a financial taxonomy has been tried.",
+  "verification": "VERIFIED (abs page)"
+ },
+ {
+  "title": "Label-semantics Aware Generative Approach for Domain-Agnostic Multilabel Classification (LAGAMC)",
+  "url": "https://arxiv.org/abs/2506.06806",
+  "year": "2025 (ACL 2025)",
+  "what": "Same group as FLAN-FinXC; FLAN-T5-Large + LoRA generates label descriptions, matched by fine-tuned Sentence-BERT; datasets CAVES, SemEval, Reuters, AAPD, PubMed (no FNXL/FiNER). Label matcher 'completes in 0.089s' for 10k sentences x 1k labels.",
+  "reports_cost": "no",
+  "reports_latency": "partial - matcher timing only.",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED (abs + HTML)"
+ },
+ {
+  "title": "Advancing Financial Standards Comprehension through Domain-Specific MoE Architecture",
+  "url": "https://doi.org/10.1109/IDS66066.2025.00027",
+  "year": "2025 (IEEE IDS 2025)",
+  "what": "FinRL Contest 2025 Task 4 (CDM/MOF/XBRL comprehension) under 45GB VRAM; Qwen 0.5B upcycled to a 16-expert 5.51B MoE vs Qwen 7B baseline. Not FNXL/FiNER tagging.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "SNIPPET-ONLY (OpenAlex metadata + reconstructed abstract)"
+ },
+ {
+  "title": "GRaSp (FiNER-139 ICL example optimisation) and ContraPrompt (FiNER-139 prompt optimisation)",
+  "url": "https://arxiv.org/abs/2605.07454",
+  "year": "2026",
+  "what": "GRaSp: genetic in-context example selection on FiNER-139, 45.84% micro-F1. ContraPrompt (https://arxiv.org/abs/2604.17937): +7.77pp over unoptimised baseline on FiNER-139. Both prompt-level, no fine-tuning, no concept linking beyond 139 tags.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED (abs pages)"
+ },
+ {
+  "title": "FinReporting (ACL 2026 demo) / Reclassified to Conform / Taxonomy-Aligned Risk Extraction from 10-K / DARC",
+  "url": "https://arxiv.org/abs/2604.05966",
+  "year": "2026",
+  "what": "FinReporting maps XBRL filings across US/JP/CN into a canonical ontology with LLMs 'as constrained verifiers' (no numbers in abstract). Reclassified to Conform (https://arxiv.org/abs/2609.38754) is an integer-program line-matching method, no LLM. Taxonomy-Aligned Risk Extraction (https://arxiv.org/abs/2601.15247) does embedding-based mapping of risk factors to a non-XBRL taxonomy. DARC (https://arxiv.org/abs/2608.11772) uses an 'XBRL Finance' agent setting. None do fact-to-US-GAAP concept linking with reported efficiency.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED (abs pages)"
+ },
+ {
+  "title": "Exploring LLMs for Financial Numeric Labelling and Summarization",
+  "url": "https://api.semanticscholar.org/graph/v1/paper/arXiv:2405.06671/citations",
+  "year": "unknown",
+  "what": "Appears only as a citing work of FLAN-FinXC in Semantic Scholar with no venue/year; not found in OpenAlex; could not be fetched (Semantic Scholar search endpoint rate-limited). Possibly a thesis.",
+  "reports_cost": "unknown",
+  "reports_latency": "unknown",
+  "threat_to_novelty": "low (unknown) - title suggests LLM numeric labelling; no evidence of cost/latency.",
+  "verification": "UNVERIFIED"
+ },
+ {
+  "title": "XBRL-Agent: Leveraging LLMs for Financial Report Analysis (Kang et al., ICAIF 2024)",
+  "url": "https://arxiv.org/abs/2603.25263",
+  "year": "2024",
+  "what": "Cited in XBRLTagRec's related work as an LLM agent for financial report analysis; not a tagging/linking method. Not fetched directly (no arXiv title hit for 'XBRL Agent').",
+  "reports_cost": "unknown",
+  "reports_latency": "unknown",
+  "threat_to_novelty": "none",
+  "verification": "UNVERIFIED (seen only as a citation inside XBRLTagRec)"
+ }
+]
+
+### verdict_on_novelty
+From the concept-linking angle the claim is DENTED, not dead. (1) The exact sub-claim 'nobody reports cost for small models on FNXL/FiNER' is false: FLaME (Findings ACL 2025, arXiv 2506.15846) tabulates per-dataset USD cost including FNXL for Llama 3 8B ($0.06), Mistral 7B ($0.06), Gemma 2 9B ($0.08) alongside GPT-4o ($0.96) and DeepSeek R1 ($11.21) -- but zero-shot, near-zero F1, API-priced, no latency ('we do not report exhaustive speed benchmarks'). (2) FinLoRA (arXiv 2505.19819) fine-tunes a quantized Llama-3.1-8B on FiNER-139/FNXL (74.10 / 23.57 acc vs GPT-4o 72.29 / 42.41), reports fine-tuning cost ($14.66-$16.54) and an inference-time figure vs the Gemini API -- the closest prior, but 8B not 1-3B, no per-query serving cost, latency not per task, not FinTagging. (3) FinTagging itself already scores Qwen3-0.6B/1.7B and Llama-3.2-3B on FinCL (0.0414 / 0.0735 / 0.0415) zero-shot, so 'nobody benchmarked small models on FinTagging' must be narrowed to 'no fine-tuned/distilled small model'; it reports only an aggregate '500 GPU-hours and $1,500'. (4) FHS (arXiv 2608.06614, Aug 2026) is the best published FinCL linker (Acc 0.255, R@1 0.185 on the 2,509-fact split with Qwen3-32B, BM25 K=200 + structured decoding) and does report calls/retrievals per fact and wall-clock, but only on CodiEsp and only at 32B. (5) XBRLTagRec (IJCNN 2026) and FLAN-FinXC (NAACL 2024) already do small-generator + retrieval (+LLM rerank) linking on FNXL (Hits@1 0.8618 / 0.8998, Macro-F1 0.505 / 0.662) with no cost and at most a stray '2 minutes/sample' timing. (6) Unpublished signals: lm2445's July-2026 FinTagging SFT/grounding datasets and the Aug-2026 sec-xbrl-hard-negatives retriever triplets show others are moving toward small-model FinCL. What remains genuinely unoccupied: a 1-3B fine-tuned (or distilled) model evaluated on FinTagging FinNI+FinCL over the full 17.7k-concept taxonomy with a measured accuracy / $-per-filing / p50-p95 latency frontier under vLLM and quantization, compared head-to-head with frontier APIs on the same split. Numbers to beat: FinCL acc 0.255 (FHS, 32B, 2,509-fact split) or 0.1889 (DeepSeek-V3, full FinCL-eval); retrieval ceiling Acc@200 0.3274 (text-embedding-3-small) vs FHS Recall@200 0.705; FNXL Hits@1 0.8618 / Macro-F1 0.505 (XBRLTagRec); FiNER-139 Macro-F1 94.74 (FLAN-FinXC) and 74.10 acc for FinLoRA's 8B.
+
+### gaps
+WebSearch budget was already exhausted (200/200) when this agent started, so discovery relied on arXiv API, OpenAlex, Semantic Scholar citation endpoints (its search endpoint returned 429 on every attempt), and HF API; non-arXiv venue papers (e.g., journal/ICAIF-only XBRL tag-classification work) may be under-covered. The FinTagging HF dataset card returned 401 (gated) so the license was not confirmed from the card (HF search lists FinTagging_Original as MIT). FHS Table 19 units for wall-clock and any financial-split cost rows could not be recovered from the extracted PDF text, and SarielMa/FHS README is empty. FinLoRA Figure 3 inference-time values were not readable (figure only). No FinTagging shared task/leaderboard competition was found (paper and GitHub mention none). 'Exploring LLMs for Financial Numeric Labelling and Summarization' and XBRL-Agent could not be fetched. FLaME's 'FiNER' column is FiNER-ORD, not FiNER-139. Compound-phrase arXiv API queries returned 0 results, so coverage of general-domain constrained-decoding/entity-linking-with-latency work is thin. Result JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/sweep_concept_linking_methods.json

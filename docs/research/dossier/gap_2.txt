@@ -1,0 +1,174 @@
+### key
+gap_2
+
+### question
+Which FinTagging test set is canonical for v5 numbers, and can an outsider reproduce the official FinNI/FinCL scoring? HF FinNI-eval-v2 = 28,787 rows, FinTagging_Original_v2 = 46,496 rows, a v2 HTML snippet said 6,151/62,668; the FinBen fork's FinCL YAMLs point at PRIVATE datasets (TheFinAI/XBRL_Tagging_Pipeline_GPT4o_Rerank_1 / DeepSeek_v3_Rerank_1, test_split 'train'); no FinNI pair-level P/R/F1 scorer for LLM outputs was found; the FinCL embedding index is on Google Drive (text-embedding-3-small, an OpenAI dependency).
+
+### topic
+gap_2: Which FinTagging test set is canonical for the arXiv v5 numbers, and can an outsider reproduce the official FinNI/FinCL scoring?
+
+### facts
+[
+ {
+  "claim": "arXiv v5 (17 May 2026) of FinTagging (2505.20650) reports FinNI-eval = 28,787 instances and FinCL-eval = 261,457 query-answer pairs (Table 4); v3 (Jan 2026) and v4 (Feb 2026) report the same sizes.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "we construct the FinNI-eval dataset with 28,787 instances derived from annotated sentences and tables ... we construct the FinCL-eval dataset with 261,457 query–answer pairs for numerical entity normalization, along with a US-GAAP taxonomy containing 17,688 concepts."
+ },
+ {
+  "claim": "HF TheFinAI/FinNI-eval-v2 has exactly 28,787 test rows (context_index, context, query, answer) and TheFinAI/FinCL-eval-v2 has exactly 261,457 test rows; TheFinAI/FinTagging_BIO_v2 also has 28,787 rows. These match v3-v5 exactly, so the v2 HF datasets are the canonical v5 sets.",
+  "evidence_url": "https://datasets-server.huggingface.co/info?dataset=TheFinAI/FinNI-eval-v2",
+  "confidence": "VERIFIED",
+  "quote": "\"splits\": [{\"name\": \"test\", \"num_examples\": 28787}] ... FinCL-eval-v2: \"num_examples\": 261457"
+ },
+ {
+  "claim": "The 6,151 / 62,668 figures come only from arXiv v2 (10 Oct 2025) Tables 3-4, describing a 'filtered' set (2,054 + 2,045 positives, 1,030 + 1,022 negatives = 6,151; 62,668 entities). v2 Appendix D.1 separately describes the 'complete unfiltered version' = 15,986 sentences + 12,801 tables = 28,787 with 261,457 entities. No public HF dataset with 6,151 rows exists; v3+ promoted the unfiltered set to the main Table 4.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v2",
+  "confidence": "VERIFIED",
+  "quote": "Different from the filtered dataset described in Section 3.3, we construct an overall annotation dataset based directly on the unfiltered raw data ... In total, we annotated 15,986 sentence instances and 12,801 table instances, including 7,768 positive and 8,218 negative sentences, as well as 8,709 positive and 4,092 negative tables."
+ },
+ {
+  "claim": "The headline FinNI/FinCL numbers are byte-identical in v2 (claims 6,151 instances) and v3/v4/v5 (claim 28,787): GPT-4o P/R/F1 0.5893/0.4977/0.5397, DeepSeek-V3 0.5886/0.8430/0.6932, FinCL acc 0.1829/0.1889; Table 4 token stats (Avg. Input Tokens 1101.50 +/- 992.00, Max 18,831) are also identical across v2-v5. The public record therefore does not establish which instance set the 0.6932/0.5397 numbers were computed on.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v2",
+  "confidence": "VERIFIED",
+  "quote": "v2: 'Category Model Precision Recall F1 Closed-source LLM GPT-4o 0.5893 0.4977 0.5397 Open-source LLMs Deepseek-V3 0.5886 0.8430 0.6932' ; v5: 'Model FinNI FinCL Precision Recall F1 Accuracy GPT-4o 0.5893 0.4977 0.5397 0.1829 DeepSeek-V3 0.5886 0.8430 0.6932 0.1889'"
+ },
+ {
+  "claim": "arXiv v1 (27 May 2025) used FinNI-eval = 6,599 and FinCL-eval = 52,572 with DeepSeek-V3 FinNI F1 0.7238 and GPT-4o 0.6022; these match the HF v1 datasets (FinNI-eval 6,599 rows, FinCL-eval 52,572 rows, FinTagging_Original 6,599 rows, license mit). The GitHub README (last commit 2025-10-13) still shows the v1 numbers (DeepSeek-V3 FinNI 0.7238, FinCL 0.1715) and links only to the v1 datasets.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/README.md",
+  "confidence": "VERIFIED",
+  "quote": "README FinNI table: 'DeepSeek-V3 0.6329 0.8452 0.7238'; arXiv v1: 'FinNI-eval 6,599 ... FinCL-eval 52,572'"
+ },
+ {
+  "claim": "Downloaded-parquet audit of FinNI-eval-v2: 28,787 rows; 12,310 empty-answer rows (= 8,218 + 4,092 paper negatives); 16,477 positive rows (= 7,768 + 8,709); total Fact/Type pairs = 261,457 (= FinCL-eval-v2 row count). The file is internally consistent with paper v5 Table 3.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinNI-eval-v2/resolve/main/data/test-00000-of-00001.parquet",
+  "confidence": "VERIFIED",
+  "quote": "computed locally with pandas: 'FinNI-eval-v2 empty-answer rows 12310', 'FinNI-eval-v2 total Fact/Type pairs 261457', 'FinNI-eval-v2 positive rows 16477'"
+ },
+ {
+  "claim": "FinNI-eval-v2 contains duplicate contexts: only 25,765 unique contexts out of 28,787 rows; 1,852 duplicate-context groups covering 4,874 rows, of which 204 groups have differing answers; dedup on (context, answer) leaves 25,969 rows; 7,903 Fact/Type pairs sit in duplicated rows. Whether the official score deduplicates is undocumented.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinNI-eval-v2/resolve/main/data/test-00000-of-00001.parquet",
+  "confidence": "VERIFIED",
+  "quote": "computed locally: 'FinNI context unique 25765', 'duplicate-context groups 1852 | rows in those groups 4874 | groups where answers differ 204', 'rows after dedup on (context,answer): 25969'"
+ },
+ {
+  "claim": "FinTagging_Original_v2 (46,496 rows) is NOT a clean superset of FinNI-eval-v2: 28,834 unique texts; 32,954 positive rows but only 16,165 unique positive texts; total entity triples = 522,914 = exactly 2 x 261,457 (positives duplicated); 16,552 texts occur more than once (250 duplicate groups carry differing entity lists); the 10,044 texts absent from FinNI-eval-v2 are all zero-entity rows; context_id does not align with FinNI context_index (0 of 28,787 match by id); ~6,521 whitespace-normalized FinNI contexts (e.g. sentence fragments) do not appear verbatim in Original_v2. Conclusion: use FinNI-eval-v2 as the instance set, not FinTagging_Original_v2.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinTagging_Original_v2/resolve/main/data/test-00000-of-00001.parquet",
+  "confidence": "VERIFIED",
+  "quote": "computed locally: 'Original_v2 total entity triples 522914', 'Orig_v2 positive rows 32954 | unique positive texts 16165', 'Orig-only rows 10044 | of which zero-entity 10044', 'rows where FinNI.context == Orig.text at same id: 0 of 28787'"
+ },
+ {
+  "claim": "The HF collection 'FinTagging' (last updated 2026-01-06) lists both v1 and v2 datasets side by side with no statement of which is canonical; the v2 dataset cards contain only auto-generated dataset_info (no description, no license). The v2 datasets were uploaded 2025-09-19..21, i.e. before arXiv v2 (2025-10-10) which still headlined the never-released 6,151 set.",
+  "evidence_url": "https://huggingface.co/api/collections/TheFinAI/fintagging-68270132372c6608ac069bef",
+  "confidence": "VERIFIED",
+  "quote": "collection items: FinNI-eval, FinCL-eval, FinTagging_BIO, FinTagging_Original, paper 2505.20650, FinTagging_Original_v2 (2025-09-19), FinNI-eval-v2 (2025-09-21), FinTagging_BIO_v2, FinCL-eval-v2 (2025-09-20)"
+ },
+ {
+  "claim": "No FinNI (pair-level P/R/F1) scorer for LLM outputs is public anywhere: the FinTagging repo tree contains only evaluate_NEN.ipynb (FinCL accuracy), BERT/evaluate_ner_model.py (token-level BIO for PLMs) and retrieval/retrieval.py; the FinBen fork's tasks/FinTagging holds only DeepSeekV3_NEN.yaml and GPT4o_NEN.yaml (FinCL rerank); upstream The-FinAI/FinBen has no xbrl/finni/fintag files; authenticated GitHub code search for 'FinNI-eval', 'FinNI-eval-v2', 'XBRL_NEN', 'XBRL_Tagging_Pipeline', 'FinCL-eval-v2' returns nothing except the FinTagging README.",
+  "evidence_url": "https://api.github.com/repos/The-FinAI/FinTagging/git/trees/main?recursive=1",
+  "confidence": "VERIFIED",
+  "quote": "tree: BERT/evaluate_ner_model.py, evaluate_NEN.ipynb, retrieval/retrieval.py, retrieval/run_retrieval.sh, subdata/FinNI-eval-subset.csv (200 rows), subdata/FinCL-eval-subset.csv (500 rows), taxonomy/us_gaap_2024_BM25.jsonl, annotation/benchmark_ground_truth_pipeline.json, annotation/TrainingSet_Annotation.json"
+ },
+ {
+  "claim": "The only written FinNI metric definition is paper v5 Appendix E: set-based Precision = |G ∩ P| / |P|, Recall = |G ∩ P| / |G|, F1 harmonic mean, where a pair matches iff entity span and type exactly match. It leaves unresolved: set vs multiset matching (gold answers repeat facts such as '—' many times per table), per-instance averaging vs global aggregation, string normalization of Fact values, and handling of unparseable model output.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "Precision = |G ∩ P| / |P| ... Recall = |G ∩ P| / |G| ... where (e_i, l_i) = (e'_j, l'_j) if and only if both the entity span e and its assigned type l exactly match."
+ },
+ {
+  "claim": "The FinCL scorer is public (evaluate_NEN.ipynb): it reads lm-eval sample jsonl, parses the model's {\"result\": tag}, computes exact-match accuracy against the gold tag, and on any parse failure substitutes the FIRST retrieved candidate (candidates[0]) rather than counting a miss; the candidate list is regex-parsed from the prompt text ('Candidate Tags: [...]').",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/evaluate_NEN.ipynb",
+  "confidence": "VERIFIED",
+  "quote": "if response == \"None\": response = candidates[0]; errors += 1 ... except: response = candidates[0]; errors += 1 ... correct = [g == p for g, p in zip(ground_truth, predict_answer)]"
+ },
+ {
+  "claim": "The FinBen-fork FinCL YAMLs point at private HF datasets and use lm-eval exact_match: dataset_path TheFinAI/XBRL_Tagging_Pipeline_DeepSeek_v3_Rerank_1 and TheFinAI/XBRL_Tagging_Pipeline_GPT4o_Rerank_1, test_split: train, doc_to_text '{{query}}', until 'JSON_END', max_gen_toks 1024, temperature 0.0. HF API returns HTTP 401 for both datasets, for TheFinAI/XBRL_Tagging_Entity_Normalization (retrieval.py default) and for the results repo lm-eval-fintag-rerank-pipeline-results; lm-eval-fincl-rerank-results-private and lm-eval-xbrl-tagging-nen-0-shot-results-private are gated=manual.",
+  "evidence_url": "https://raw.githubusercontent.com/Yan2266336/FinBen/master/tasks/FinTagging/DeepSeekV3_NEN.yaml",
+  "confidence": "VERIFIED",
+  "quote": "dataset_path: TheFinAI/XBRL_Tagging_Pipeline_DeepSeek_v3_Rerank_1 ... metric: exact_match ... test_split: train ; HF API: 'HTTP 401 error: Invalid username or password.'"
+ },
+ {
+  "claim": "The rerank prompt template is public (paper v5 Figure 10) but the per-query top-200 candidate lists are not released anywhere; FinCL-eval-v2 only contains the retrieval query string ('text: <entity> ... </entity> <entity type> ... </entity type> <context> ... </context>') and the gold concept.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "select the single most appropriate US-GAAP tag from a list of 200 candidate tags ... The output is a JSON format: {\"result\": <the best matched tag>}. Input Query: <entity> + <entity type> + <context> Candidate Tags: {Top 200 US-GAAP tags}"
+ },
+ {
+  "claim": "retrieval.py requires a local Elasticsearch (http://localhost:19200) and an index document './index_document/us_gaap_2024_final_embedder.jsonl' that is not in the repo; embedder 'gpt' = OpenAI text-embedding-3-small (1536-d, needs OPENAI_API_KEY) or 'bge' = BAAI/bge-en-icl (4096-d); run_retrieval.sh uses search_mode=embedding, embedder_name=gpt, size=200. The shipped taxonomy/us_gaap_2024_BM25.jsonl has 17,388 rows with keys {us_gaap_tag, entity_type, text} and no embeddings (and its 'text' key differs from the ES mapping field 'tag_text'), so it can only support a BM25/text-mode rebuild, not the paper's embedding retrieval.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/retrieval/retrieval.py",
+  "confidence": "VERIFIED",
+  "quote": "self.encoder = \"text-embedding-3-small\"; self.client = OpenAI() ... 'gpt_emb': {'type': 'dense_vector', 'dims': 1536} ... run_retrieval.sh: size=200 search_mode=\"embedding\" embedder_name=\"gpt\" index_document=\"./index_document/us_gaap_2024_final_embedder.jsonl\""
+ },
+ {
+  "claim": "The Google Drive embedding index linked in the README is not anonymously downloadable: both the view URL and the usercontent download URL return a Google sign-in wall (HTTP 401 'You must sign in to access this content').",
+  "evidence_url": "https://drive.google.com/file/d/1cyMONjP9WdHtD8-WGezmgh_LNhbY3qtR/view?usp=drive_link",
+  "confidence": "VERIFIED",
+  "quote": "HTTP 401 ... 'Sign in to your Google Account  You must sign in to access this content'"
+ },
+ {
+  "claim": "GitHub issue #1 on The-FinAI/FinTagging (opened 2025-07-02, still open, 0 comments) already asks for build_index.py or the us_gaap_2024_final_embedder.jsonl index; the repo (14 stars, 2 forks, no license file) has had no push since 2025-10-13. I did not open a new issue (posting public content requires the user's explicit permission).",
+  "evidence_url": "https://github.com/The-FinAI/FinTagging/issues/1",
+  "confidence": "VERIFIED",
+  "quote": "Provide build_index.py or instructions to generate us_gaap_2024_final_embedder.jsonl ... there's no script to actually generate this file from the US GAAP taxonomy."
+ },
+ {
+  "claim": "Paper v5 states FinCL is bounded by retrieval coverage: overall Acc@200 ~0.33 (sentence >0.65, table <0.30); v2 Table 16 gives SAC overall Acc@200 = 0.3274 vs FWC 0.0608. Because candidate lists are private and retrieval depends on the OpenAI embedding index, an outsider cannot reproduce the official FinCL candidate space; any own-pipeline FinCL number is not comparable to 0.1889/0.1829.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "structure-aware retrieval achieves over 0.65 Acc@200 for sentence-based entities but remains below 0.30 Acc@200 for table-based entities, resulting in an overall Acc@200 of approximately 0.33."
+ },
+ {
+  "claim": "Paper v5 reports only an aggregate compute cost and no latency/throughput: zero occurrences of 'latency' or 'throughput'; evaluation used LM Evaluation Harness on a 4xH100 cluster plus APIs with input limits of 24,576 (FinNI) and 8,192 (FinCL) tokens. This supports the project's novelty claim that FinTagging reports accuracy but not per-model serving cost or latency.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "Models are evaluated with the LM Evaluation Harness (Gao et al., 2024) on a 4 × H100 cluster and via APIs, using input limits of 24,576 (FinNI) and 8,192 (FinCL) tokens. Total cost is approximately 500 GPU-hours and $1,500 in API usage."
+ },
+ {
+  "claim": "Paper v5 benchmarks small open models only zero-shot: Qwen3-1.7B FinNI P/R/F1 0.7362/0.0281/0.0541, Qwen3-0.6B 0.2803/0.0019/0.0038, Llama-3.2-3B-Instruct 0.1856/0.1203/0.1460; the only fine-tuned baselines are PLMs (BERT-large, FinBERT, SECBERT; SECBERT overall micro-F1 0.1779). No fine-tuned 1-3B LLM appears.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "Llama-3.2-3B-Instruct 0.1856 0.1203 0.1460 0.0415 Qwen3-1.7B 0.7362 0.0281 0.0541 0.0735 Qwen3-0.6B 0.2803 0.0019 0.0038 0.0414"
+ },
+ {
+  "claim": "The FinNI task prompt is fully public inside the FinNI-eval-v2 'query' column; required output format is {\"result\":[{\"Fact\": <value>, \"Type\": <type>}]} with currency symbols, '%' and commas stripped and magnitude words not expanded, which defines the string form an outsider's scorer must compare against.",
+  "evidence_url": "https://datasets-server.huggingface.co/rows?dataset=TheFinAI/FinNI-eval-v2&config=default&split=test&offset=0&length=3",
+  "confidence": "VERIFIED",
+  "quote": "(5) Output the extracted financial entities in JSON list format without explanations, structured as follows: {\"result\":[{\"Fact\": <Extracted Numerical Entity>, \"Type\": <Identified Entity Type>}]}"
+ },
+ {
+  "claim": "Re-running the two frontier APIs on the canonical FinNI set is sized by paper v5 Table 4: 28,787 instances x 1,101.50 avg input tokens ~= 31.7M input tokens and x 175.24 avg output tokens ~= 5.0M output tokens per model (max input 18,831, max output 7,813). Token counts from the paper; no price page was fetched, so no dollar figure is asserted.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "Item FinNI-eval FinCL-eval #Instance 28,787 261,457 Avg. Input Tokens 1101.50 ± 992.00 ... Max Input Tokens 18,831 750 Avg. Output Tokens 175.24 ± 375.90 ... Max Output Tokens 7,813 41"
+ },
+ {
+  "claim": "Third-party activity in 2026: HF user lm2445 published FinTagging_1000 (July 2026; 800/200 split of the 3,641 labeled rows of FinTagging_Original v1), plus FinTagging1000_table/_text/_ER/_Grounding variants, and hosts many SFT checkpoints of Qwen2.5-1.5B / Llama-3.2-3B / Llama-3.1-8B. Someone is already fine-tuning small models on FinTagging v1 data; no cost/latency reporting is visible on those cards.",
+  "evidence_url": "https://huggingface.co/datasets/lm2445/FinTagging_1000",
+  "confidence": "VERIFIED",
+  "quote": "split_report.json: \"data_path\": \"FinTagging_Original/data/test-00000-of-00001.parquet\", \"labeled_sample_count\": 3641 ; README: 'This dataset is a sampled train/test subset of the labeled FinTagging data.'"
+ },
+ {
+  "claim": "GitHub SynthGL/fintag (pushed 2026-04-03) is a QLoRA fine-tuned Qwen3-4B US-GAAP tag classifier trained on 1.75M SEC EDGAR label-tag pairs with a benchmark.py and Modal serving endpoint; it does not use FinTagging/FNXL/FiNER and its README does not report cost or latency. The two other 'Fintagging' GitHub repos (sandeep-svg-45, Vyshnav-0) are a Gemini-API Node.js web app, not benchmarks.",
+  "evidence_url": "https://raw.githubusercontent.com/SynthGL/fintag/main/README.md",
+  "confidence": "VERIFIED",
+  "quote": "Model: QLoRA fine-tuned Qwen3-4B (r=16, alpha=32, 3 epochs on A100-40GB) ... Training data: 1.75M label-tag pairs extracted from 68 SEC quarterly datasets"
+ },
+ {
+  "claim": "As of 2026-10-01 the arXiv record for 2505.20650 has no journal reference, DOI or comments field (v5 posted 2026-05-17), i.e. no peer-reviewed venue is recorded. Semantic Scholar could not be queried (HTTP 429 rate limit), so citation count is unknown.",
+  "evidence_url": "https://export.arxiv.org/api/query?id_list=2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "arxiv:comment : None ; arxiv:journal_ref : None ; arxiv:doi : None ; v5 Sun, 17 May 2026 16:54:39 UTC"
+ },
+ {
+  "claim": "Paper v5 Table 1 frames FiNER (139 of 17,688 labels) and FNXL (2,800 of 17,688) as text-only extreme classification, while FinTagging covers 17,688/17,688 with text+table IE + alignment; none of the three report serving cost or latency in this paper's framing.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "FiNER (Loukas et al., 2022) XBRL tagging SEC 10-K Extreme classification text 0 139 / 17,688 ... FNXL (Sharma et al., 2023) XBRL tagging SEC 10-K Extreme classification text 0 2,800 / 17,688 ... FINTAGGING ... text/table 5 17,688 / 17,688"
+ }
+]
+
+### unknowns
+(1) Which instance set the v2-v5 headline numbers (DeepSeek-V3 0.6932, GPT-4o 0.5397) were actually computed on: identical scores and token statistics appear under both the 6,151 (v2) and 28,787 (v3-v5) claims, and no per-sample result files are public (results repos are private/gated). (2) The exact FinNI scoring implementation (set vs multiset, per-instance vs global aggregation, fact-string normalization, dedup of the 1,852 duplicated contexts, treatment of unparseable outputs) - only the Appendix E formulas exist. (3) The official top-200 candidate lists for FinCL (private datasets XBRL_Tagging_Pipeline_*_Rerank_1) and the embedding index (Google Drive requires sign-in; issue #1 unanswered since July 2025). (4) Why FinTagging_Original_v2 has exactly doubled entity triples and misaligned context ids - looks like an unclean concatenation; undocumented by the authors. (5) Citation count / venue (Semantic Scholar 429; arXiv has no journal_ref). (6) Whether the authors would share the FinNI scorer on request - not tested, since opening a GitHub issue is a public post that needs the user's go-ahead.
+
+### notes
+RESOLUTION: The canonical v5 FinNI set is TheFinAI/FinNI-eval-v2 (28,787 rows, split 'test'); it reproduces paper v5 Table 3/4 exactly (12,310 negatives, 16,477 positives, 261,457 Fact/Type pairs = FinCL-eval-v2 rows). FinTagging_Original_v2 (46,496) is a duplicated/misaligned union (2 x 261,457 triples, 10,044 extra all-negative rows, ids not aligned) and should not be used as the instance set. The 6,151/62,668 figure is a filtered subset that exists only in arXiv v2's text and was never released. REPRODUCIBILITY: FinNI - prompt and gold are public, the metric formula is public (Appendix E), but no official scorer or per-sample outputs exist, so the project must (a) implement the set-based pair P/R/F1 itself and document its dedup/normalization choices, and (b) re-run GPT-4o and DeepSeek-V3 itself on FinNI-eval-v2 (~31.7M input + ~5.0M output tokens per model, from paper Table 4) for a like-for-like comparison; quoting 0.6932/0.5397 next to own numbers is not defensible because neither the scorer nor even the instance set behind those numbers is pinned down publicly. FinCL - not reproducible as published: candidate lists are in private HF datasets, the embedding index is behind a Google sign-in, retrieval needs Elasticsearch + OpenAI text-embedding-3-small, and the scorer silently credits candidates[0] on parse failure; the shipped BM25 jsonl permits only a text-mode rebuild. Recommendation: scope the cost/latency frontier to FinNI (where a clean, public, self-run comparison is possible), treat FinCL as optional with an own-retrieval caveat, and ask the authors (GitHub issue, with user approval) for the FinNI scorer, the two rerank datasets, and clarification of which instance set the v2-v5 numbers used. Novelty support: paper v5 has zero mentions of latency/throughput and only an aggregate '500 GPU-hours and $1,500' cost line; small models (0.6B-3B) appear only zero-shot. Scoop-risk flag: lm2445 (HF, July-Aug 2026) is fine-tuning 1.5B-8B models on a FinTagging v1 split, though without any visible cost/latency reporting. Tooling caveat: the WebSearch budget was already exhausted when this task started, so discovery relied on direct fetches, HF/GitHub/arXiv APIs, and authenticated gh code/repo search; Semantic Scholar was rate-limited. Result JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/gap_2.json; supporting local files (v1-v5 text extractions, parquets, bm25.jsonl, subset CSVs) are in the same directory.

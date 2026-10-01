@@ -1,0 +1,267 @@
+### key
+sweep_fintagging_followups
+
+### angle
+sweep_fintagging_followups: everything that cites or builds on FinTagging (arXiv 2505.20650) - follow-ups, shared tasks/contests, leaderboards, fine-tuned FinNI/FinCL models, agent approaches, TheFinAI later work; for each, models/sizes, small-model fine-tuning, and whether cost/latency is reported.
+
+### queries_run
+[
+ "S2 citations API: /paper/arXiv:2505.20650/citations (stale, 4 results) and /paper/5d05ef163ef270b9eabe80e9633e281f05097080/citations (15 citing papers; offset 15 empty)",
+ "arXiv API: export.arxiv.org/api/query?search_query=all:%22FinTagging%22 (1 result) and all:XBRL sorted by submittedDate desc (20 results)",
+ "WebSearch: FinTagging benchmark XBRL LLM FinNI FinCL follow-up",
+ "WebSearch: FinTagging shared task FinNLP 2026 XBRL tagging LLM",
+ "WebSearch: \"FinTagging\" arXiv 2505.20650 cited by",
+ "WebSearch: TheFinAI FinTagging leaderboard huggingface XBRL financial information extraction",
+ "WebSearch: FinNLP 2026 shared task financial XBRL tagging FinTagging FinNI FinCL",
+ "WebSearch: IJCAI 2026 FinLLM challenge XBRL tagging task",
+ "WebSearch: fine-tuned small language model XBRL tagging US-GAAP concept linking 2026 Qwen Llama FinTagging",
+ "WebSearch: \"FinTagging\" agent XBRL tagging retrieval concept linking 2026 arXiv",
+ "WebSearch: FinNLP 2026 workshop shared task financial LLM",
+ "WebSearch: \"FinTagging\" huggingface model fine-tuned FinNI FinCL Qwen Llama LoRA",
+ "WebSearch: \"FinGPT\" \"FinLoRA\" XBRL agent CSCloud 2025 reinforcement fine-tuned Llama",
+ "WebSearch: XBRL tagging LLM \"latency\" OR \"inference cost\" small model distillation financial numeric extraction 2026",
+ "WebSearch: FinEval 2026 FinNLP EMNLP shared task list XBRL OR financial numeric OR tagging",
+ "WebSearch: FinAI Contest 2025 OR 2026 FinGPT agents XBRL task Open-Finance-Lab regulatory reporting",
+ "WebSearch: openreview \"FinTagging\" XBRL benchmark review ICLR OR NeurIPS OR ACL 2026",
+ "WebSearch: \"FinTagging\" OR \"FinCL-eval\" OR \"FinNI-eval\" results fine-tuning retrieval reranking concept linking 2026",
+ "WebSearch: \"FinTagging\" \"Factorized Hypothesis Search\" OR \"evidence-to-taxonomy\" XBRL taxonomy retrieval",
+ "WebSearch: Open Financial LLM Leaderboard digital regulatory reporting XBRL tag extraction value extraction",
+ "WebSearch: \"FinGPT Agents: Reinforcement-Fine-Tuned LLMs for Financial Analytics\" CSCloud 2025",
+ "WebSearch: \"FinGPT: Agent for Real-World Financial Analytics\" \"Cross-Domain Enhancement with FinLoRA\"",
+ "WebSearch: \"FinTagging\" \"small language model\" OR SLM OR distill OR Qwen3 fine-tune XBRL concept linking 2026",
+ "WebSearch: \"Open Financial LLM Leaderboard\" OR FinBen FinTagging task added XBRL tagging evaluation 2026",
+ "WebSearch: XBRL tagging 10-K small model fine-tuning vLLM quantized tokens per second OR latency OR cost per filing",
+ "Crossref: FinGPT Agents / FinGPT Agent FinLoRA (CSCloud 2025) DOIs; XBRL Agent (ICAIF 2024) DOI",
+ "WebFetch reads: arXiv 2505.20650 (abs + html v5), 2510.08886, 2605.29586, 2603.25263 (abs+html), 2608.06614 (abs+html+PDF text extraction), 2604.05966, 2505.19819 (html x2), 2412.11159, 2508.05201, 2605.24910 (abs+html), 2609.38754, 2606.03031, 2506.05700 (abs+html), 2603.07223, 2504.13125, 2502.15411, 2405.06671, 2602.10886, 2501.10963",
+ "WebFetch reads: GitHub The-FinAI/FinTagging, The-FinAI/FinBen, Open-Finance-Lab/FinLoRA, Open-Finance-Lab/FinAI_Contest_2025 (root + Task 2 raw README), SarielMa/FHS; HF TheFinAI org, collections/TheFinAI/fintagging, datasets/TheFinAI/FinNI-eval, LbbbbbY/FinAI_Contest_FinGPT raw README, papers/2505.20650; finlora-docs (index, resources, overview, reporting_results); FinRL Contest 2025, FinAI Contest 2025, SecureFinAI Contest 2025, FinAI_Contest_2026 (404); sigfintech FinNLP 2026 + call-for-challenges; finrl-contest readthedocs finai2025 overview"
+]
+
+### findings
+[
+ {
+  "title": "FinTagging: Benchmarking LLMs for Extracting and Structuring Financial Information (v5, the benchmark itself)",
+  "url": "https://arxiv.org/abs/2505.20650",
+  "year": "2025 (v1 May 2025; v5 17 May 2026)",
+  "what": "Benchmark: FinNI (numeric identification from text+tables) and FinCL (link to full 17,688-concept US-GAAP taxonomy); 142 10-Ks. v5 evaluates zero-shot DeepSeek-V3, GPT-4o, Llama-4-Scout, Llama-3.3-70B, DeepSeek-R1-Distill-Qwen-32B, Qwen3-32B/14B/1.7B/0.6B, gemma-2-27b, Llama-3.1-8B, Llama-3.2-3B, Fino1-8B, PLUS fine-tuned PLMs BERT-large/FinBERT/SECBERT ('Training is conducted on two NVIDIA A5000 GPUs (24GB each) using data parallelism for 24 hours'). Small-model numbers (FinNI macro-F1 / FinCL acc): Qwen3-0.6B 0.0038/0.0414; Qwen3-1.7B 0.0541/0.0735; Llama-3.2-3B 0.1460/0.0415; Llama-3.1-8B 0.2421/0.0913; DeepSeek-V3 0.6932/0.1889; GPT-4o 0.5397/0.1829. GitHub README: 'Local Model Inference: Conducted via FinBen (VLLM framework)'. HF collection = 8 datasets, zero model checkpoints.",
+  "reports_cost": "partial - aggregate evaluation budget only: 'Total cost is approximately 500 GPU-hours and $1,500 in API usage.' No per-model cost.",
+  "reports_latency": "no - v5 body has no latency, inference time, throughput, quantization or distillation discussion.",
+  "threat_to_novelty": "medium - small (0.6B-3B) and a distilled 32B model ARE already benchmarked on FinTagging zero-shot, and BERT-class fine-tuned models are included; but there is no fine-tuned 1-3B LLM and no per-model cost/latency frontier.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "FinAI Contest 2025 @ IEEE CSCloud 2025 - Task 2 'FinGPT Agents in Real Life' (uses FinNI and FinCL as evaluation tasks)",
+  "url": "https://github.com/Open-Finance-Lab/FinAI_Contest_2025/tree/main/Task_2_FinGPT_Agents_Real_Life",
+  "year": "2025",
+  "what": "Contest task: fine-tune open LLMs for CFA, BloombergGPT benchmarks and seven XBRL tasks incl. XBRL tag extraction (2.9k), value extraction (2.5k), formula construction/calculation (835 each), FiNER-139/FNXL subsets, 'FinNI (6.6k sampled at 200, F1)' and 'FinCL (52.6k sampled at 500, Accuracy)', training data pointed at github.com/The-FinAI/FinTagging/tree/main/subdata. Constraint quoted: 'The model size should not exceed 8B parameters.' Metric: 'The model evaluation in each domain is the average score of all tasks.' No public results/leaderboard found on contest site, GitHub or readthedocs.",
+  "reports_cost": "no - no cost, latency or hardware criteria in the README",
+  "reports_latency": "no",
+  "threat_to_novelty": "medium - an organized competition already benchmarked <=8B fine-tuned models on FinNI/FinCL subsets, so 'nobody has benchmarked small models on FinTagging' is false as literally stated; but evaluation was accuracy-only on 200/500-sample subsets and results are not published.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "LbbbbbY/FinAI_Contest_FinGPT (Hugging Face) - Llama-3.1-8B LoRA adapters fine-tuned for FinNI/FinCL, 8-bit and 4-bit",
+  "url": "https://huggingface.co/LbbbbbY/FinAI_Contest_FinGPT",
+  "year": "2025",
+  "what": "Contest-submission repo: 17 LoRA adapters on Meta-Llama-3.1-8B-Instruct incl. 'fintagging_finni_rag_llama_3_1_8b_8bits_r8 - FinNI RAG-enhanced model', 'fintagging_fincl_rag_llama_3_1_8b_8bits_r8 - FinCL RAG-enhanced model', 'fintagging_combined_rag_llama_3_1_8b_8bits_r8', 'apollo_fintagging_combined_llama_3_1_8b_8bits_r8', plus xbrl_extract / xbrl_term / finer adapters in 8-bit r8 and 4-bit r4 variants. README gives no results, no paper link, no team name.",
+  "reports_cost": "no",
+  "reports_latency": "no - 'No information regarding latency, cost, or throughput is disclosed.'",
+  "threat_to_novelty": "medium - public, quantized, FinTagging-fine-tuned 8B checkpoints already exist; but no accuracy numbers, no serving metrics, and 8B rather than 1-3B.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "FinLoRA: Benchmarking LoRA Methods for Fine-Tuning LLMs on Financial Datasets",
+  "url": "https://arxiv.org/abs/2505.19819",
+  "year": "2025",
+  "what": "Open-Finance-Lab. Llama 3.1 8B Instruct with LoRA/QLoRA/DoRA/rsLoRA (8-bit r8, 4-bit r4) vs Llama 70B, GPT-4o, DeepSeek-V3, Gemini 2.0 FL on 19 datasets incl. FiNER-139 (10.0k/7.4k), FNXL (247 test), XBRL tag extraction (10.1k/2.9k), XBRL value extraction (10.1k/2.5k). FiNER-139 F1: base 8B 0.232 -> LoRA 0.759 vs GPT-4o 0.725; FNXL: 0.045 -> 0.250 vs DeepSeek-V3 0.288, GPT-4o 0.398. Predates FinTagging (does not cite it) but is the direct basis for the FinAI Contest Task 2.",
+  "reports_cost": "yes (training cost) - 'Using four NVIDIA A5000 GPUs, the wall-clock time for fine-tuning ranged from 14.1 hours (QLoRA) to 15.9 hours (DoRA), corresponding to a total of approximately 56.4 to 63.6 GPU hours. At an estimated rate of $0.26 per GPU hour, this translates to a cost of roughly $14.66 to $16.54.' vs 'Gemini 2.0 FL: $162.02', 'GPT-4o-mini: $312.00'. Memory: 'Llama-3.1-8B-r8-4bit' 4.02 GB vs 16.06 GB base. No per-query / serving $ cost.",
+  "reports_latency": "partial - Sec. 4.3 / Fig. 3 'Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks'; text: 'Gemini API generally exhibits lower inference latency and is less sensitive to increasing prompt lengths than local Llama 3.1 8B Instruct inference, even when accounting for network overhead for the API.' Docs: 'the inference speed of locally deployed Llama models can be significantly enhanced through the use of larger batch sizes.' No ms / tok-per-s numbers in text; no vLLM throughput.",
+  "threat_to_novelty": "high - closest prior work: fine-tuned + quantized 8B on FiNER-139/FNXL/XBRL extraction with both training cost and an inference-time comparison vs an API model. Weaknesses: 8B not 1-3B, not FinTagging, latency only as a figure vs a single API, no serving-cost frontier.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Factorized Hypothesis Search for Evidence-to-Taxonomy Retrieval (TheFinAI; evaluates on FinTagging FinCL)",
+  "url": "https://arxiv.org/abs/2608.06614",
+  "year": "2026",
+  "what": "Co-authored by FinTagging authors (Peng, Wang, Qian). 'we evaluate on the financial tagging benchmark of Wang et al. (2025b) using the 2024 US-GAAP inventory of 17,388 concepts' - 2,509 test facts (110 tables, 81 narratives). All LLM ops use Qwen3-32B zero-shot ('all LLM-based operations across all methods use Qwen3-32B'); BM25 retriever K=200; no fine-tuning. Financial tagging: FHS Recall@1 0.185 vs 0.141 best baseline; final accuracy 0.255 vs 0.234. 'sequential refinement provides no additional gain over FHS's strong parallel first round despite substantially greater inference cost'.",
+  "reports_cost": "partial - Appendix E.6 'Computational Cost': 'Table 19 reports the average numbers of model calls (LLM calls exclude the shared final listwise selector) and retrieval operations per fact, together with end-to-end wall-clock time on the CodiEsp set.' Call counts per fact, no $ cost.",
+  "reports_latency": "partial - Table 19 'Average inference cost per fact and wall-clock time on the CodiEsp test split' in hours (e.g. direct retrieval 1.18 +/- 0.01 h) 'on a single NVIDIA B200 GPU'; authors note 'the reported FHS wall time is not the optimal latency'. Wall-clock is reported for the clinical split only, not the financial one.",
+  "threat_to_novelty": "medium - a direct FinTagging follow-up from the benchmark's own group reports compute (call counts) and wall-clock, but with a 32B zero-shot model, no $ cost, no small/fine-tuned models, and latency only on the clinical task.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "XBRLTagRec: Domain-Specific Fine-Tuning and Zero-Shot Re-Ranking with LLMs for Extreme Financial Numeral Labeling",
+  "url": "https://arxiv.org/abs/2603.25263",
+  "year": "2026",
+  "what": "Cites FinTagging (per S2). FNXL dataset (79,088 sentences, 2,794 tags). FLAN-T5-Large (~780M) LoRA (rank 2, alpha 32) generator + Sentence-T5-XXL encoder + zero-shot re-ranking with ChatGPT-3.5-Turbo-1106 (also GPT-4o, DeepSeek-V3, ERNIE-3.5). Hits@1 0.8618 / Macro-F1 0.5050 vs FLAN-FinXC 0.8354 / 0.4616.",
+  "reports_cost": "partial, qualitative only - 'iterative re-ranking with ChatGPT-3.5 increases computational and API costs'; no numbers.",
+  "reports_latency": "no - no latency, throughput or timing data.",
+  "threat_to_novelty": "low-medium - sub-1B fine-tuned model on FNXL (already established by FLAN-FinXC), no cost/latency numbers, not FinTagging.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "FinReporting: An Agentic Workflow for Localized Reporting of Cross-Jurisdiction Financial Disclosures",
+  "url": "https://arxiv.org/abs/2604.05966",
+  "year": "2026",
+  "what": "Agentic pipeline over XBRL-tagged US/Japan filings and Chinese PDFs; LLM used as 'bounded verifier'. Models: GPT-5.2, GPT-5 mini, GPT-4o, Gemini-2.5-Flash/-Lite, DeepSeek-Chat. No fine-tuning, no small open models, not a tagging benchmark.",
+  "reports_cost": "yes - Table 2 API cost per model: GPT-5.2 '$36.96', GPT-5 mini '$17.77', GPT-4o '$34.04', Gemini-2.5-Flash '$7.27', Gemini-2.5-Flash-Lite '$1.47', DeepSeek-Chat '$2.41'; 'smaller/efficient backbones can match the strongest models on accuracy while being dramatically cheaper'.",
+  "reports_latency": "no",
+  "threat_to_novelty": "low-medium - precedent for reporting $ cost in XBRL-adjacent work, but API-only, not tagging, not FinTagging, no latency.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "FinGPT: Agent for Real-World Financial Analytics: Cross-Domain Enhancement with FinLoRA (IEEE CSCloud 2025; cites FinTagging)",
+  "url": "https://doi.org/10.1109/CSCloud66326.2025.00062",
+  "year": "2025",
+  "what": "FinAI Contest 2025 Task 2 submission (Dong, Liu, Yang, Su). S2 abstract: 'a modular, LoRA-enhanced agent designed for CFA-style reasoning, Bloomberg benchmarks, and XBRL tag analysis', built on FinLoRA (Llama-3.1-8B class) with FAISS retrieval. IEEE full text not accessible.",
+  "reports_cost": "no (per abstract)",
+  "reports_latency": "no (per abstract)",
+  "threat_to_novelty": "low-medium - likely evaluated an 8B LoRA model on FinNI/FinCL subsets per contest rules, but abstract reports no cost/latency; full text unverified.",
+  "verification": "SNIPPET-ONLY"
+ },
+ {
+  "title": "FinGPT Agents: Reinforcement-Fine-Tuned LLMs for Financial Analytics (IEEE CSCloud 2025; cites FinTagging)",
+  "url": "https://doi.org/10.1109/CSCloud66326.2025.00066",
+  "year": "2025",
+  "what": "FinAI Contest 2025 Task 2 submission (Chandra, Balakrishna). 'meta-llama/Llama-2-7b-chat-hf' SFT/RFT for CFA-style reasoning; BLEU/ROUGE-L/accuracy. Abstract says fine-tuning 'offers cost-effective specialization' (qualitative).",
+  "reports_cost": "no (qualitative 'cost-effective' only)",
+  "reports_latency": "no",
+  "threat_to_novelty": "low - 7B SFT on CFA QA, no XBRL tagging results, no serving metrics.",
+  "verification": "SNIPPET-ONLY"
+ },
+ {
+  "title": "A Report on Financial Regulations Challenge at COLING 2025 (Task 9 XBRL Analytics)",
+  "url": "https://arxiv.org/abs/2412.11159",
+  "year": "2024/2025",
+  "what": "Shared task; Task 9 'XBRL Analytics' = term explanation, domain/numeric query, financial math, tag query (50 q), ratio formulas (50 q). Teams: FinMind-Y-Me 'fine-tuned the Qwen 2.5-7B-Instruct model' (winner, 0.54801), IntelliChain Stars 'fine-tune Llama 3.2-3B-Instruct', Uniandes Llama-3.1-8B continual pretraining, Audit-FT Qwen-7B-chat. Predates FinTagging; not FinNI/FinCL.",
+  "reports_cost": "no - report has no latency, cost, inference time, throughput, efficiency or model-size-limit mentions",
+  "reports_latency": "no",
+  "threat_to_novelty": "low-medium - a 3B fine-tuned model was already entered on XBRL QA-style tasks; no cost/latency, not full-taxonomy tagging.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "RKEFino1: A Regulation Knowledge-Enhanced Large Language Model (TheFinAI)",
+  "url": "https://arxiv.org/abs/2506.05700",
+  "year": "2025",
+  "what": "Fino1 ('a lightweight financial reasoning model built upon LLaMA-3.1-8B-Instruct') fine-tuned with XBRL/CDM/MOF knowledge; introduces a 'Numerical NER' task 'inspired by FiNER and FNXL' over sentences AND tables with five item types (Integer, Monetary, Per Share, Percent, Shares) - i.e. FinNI-like. F1 26.62% vs Fino1 14.99%.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low-medium - 8B fine-tuned on a FinNI-style task from the same group, but no serving metrics and no 1-3B.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "FinAuditing: A Financial Taxonomy-Structured Multi-Document Benchmark for Evaluating LLMs (TheFinAI; SIGIR 2026 per S2)",
+  "url": "https://arxiv.org/abs/2510.08886",
+  "year": "2025",
+  "what": "1,102 instances from XBRL filings; FinSM/FinRE/FinMR tasks; 13 LLMs zero-shot. Same authors as FinTagging. No fine-tuning.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "AuditFlow: Executable Symbolic Environments for Structured Financial Reporting Verification (TheFinAI)",
+  "url": "https://arxiv.org/abs/2606.03031",
+  "year": "2026",
+  "what": "Graph-grounded multi-agent system over 'a static US-GAAP taxonomy graph and a dynamic XBRL filing graph'; GPT-4o 82.09% accuracy, 17.91% without deterministic checks; no small/fine-tuned models.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Noise-Robust Financial Numerical Entity Attribute Tagging (NORA)",
+  "url": "https://arxiv.org/abs/2605.24910",
+  "year": "2026",
+  "what": "'6.6 million narrative instances aligned to iXBRL facts ... from more than 110,000 10-K and 10-Q filings'; predicts concept name + time relation under noisy labels; encoder 'initializes the text encoder with the nlpaueb/sec-bert-base' (~110M); compares against noisy-label baselines, not FiNER/FNXL/FinTagging head-to-head.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low-medium - a small encoder on iXBRL tagging at large scale, but no LLMs, no cost/latency, not FinTagging.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "FinVerBench: Benchmark Validity and Calibration in LLM Financial Statement Verification (cites FinTagging)",
+  "url": "https://arxiv.org/abs/2605.29586",
+  "year": "2026",
+  "what": "10-K XBRL filings for 43 S&P 500 companies; 14 complete LLM runs on numeric-consistency verification; no fine-tuning, no small models.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "LLMs Meet Finance: Fine-Tuning Foundation Models for the Open FinLLM Leaderboard",
+  "url": "https://arxiv.org/abs/2504.13125",
+  "year": "2025",
+  "what": "Fine-tunes Qwen2.5-1.5B-Instruct and DeepSeek-R1-1.5B on Open FinLLM Leaderboard tasks (NER, FPB, FiQA-SA, Headline, CC, MultiFin, FOMC, TSA); no XBRL/FiNER/FNXL tasks.",
+  "reports_cost": "partial - training time only: 'Fine-tuning each 1.5B model required approximately 3 to 5 hours on 4x2080Ti.'",
+  "reports_latency": "no",
+  "threat_to_novelty": "low - 1.5B fine-tuning precedent in finance, but not XBRL tagging and no serving metrics.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Open FinLLM Leaderboard: Towards Financial AI Readiness (and FinBen README check)",
+  "url": "https://arxiv.org/abs/2501.10963",
+  "year": "2025",
+  "what": "Leaderboard incl. FNXL (318 test), NER (980), FinRED, FSRL; models GPT-4, Llama 3.1 8B/70B, Qwen2 7B/72B, Xuanyuan-70B. FinBen GitHub README (checked) does not list FinTagging/FinNI/FinCL tasks; FinTagging is not on the Open Financial LLM Leaderboard.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Parameter-Efficient Instruction Tuning of LLMs for Extreme Financial Numeral Labelling (FLAN-FinXC, NAACL 2024)",
+  "url": "https://arxiv.org/abs/2405.06671",
+  "year": "2024",
+  "what": "FLAN-T5 + LoRA generative tagging on FNXL (and FiNER); prior SOTA and the baseline XBRLTagRec beats.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low-medium - establishes sub-1B fine-tuned models on FNXL, but no cost/latency.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "HiFi-KPI: A Dataset for Hierarchical KPI Extraction from Earnings Filings (LREC 2026)",
+  "url": "https://arxiv.org/abs/2502.15411",
+  "year": "2025/2026",
+  "what": "1.65M paragraphs, 198k iXBRL-linked labels; 'encoder-based models achieve over 0.906 macro-F1 on classification, while Large Language Models (LLMs) reach 0.440 F1 on structured extraction'.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "XBRL Agent: Leveraging Large Language Models for Financial Report Analysis (ICAIF 2024)",
+  "url": "https://doi.org/10.1145/3677052.3698614",
+  "year": "2024",
+  "what": "Tool-augmented LLM agent for XBRL report analysis (Han et al., Columbia). Only the Crossref record was retrieved; content not read in this sweep.",
+  "reports_cost": "unknown (not fetched)",
+  "reports_latency": "unknown (not fetched)",
+  "threat_to_novelty": "low - API-model agent, not small-model tagging.",
+  "verification": "UNVERIFIED"
+ },
+ {
+  "title": "Other FinTagging citers from Semantic Scholar (15 total): EnterpriseBench 2609.37658; FinBalance 2606.15949; EPPCMinerBen 2603.00028; Ebisu 2602.01479; Conv-FinRe 2602.16990; Illusion of Specialization (MoE) 2601.03425; Cognitive Load & Disclosure Complexity 2507.07037; When Agents Trade 2510.11695; VeritasFi 2510.10828; FinCDM 2508.13491; FAITH 2508.05201; 'Advances in Generalized LLMs ... Undergraduate Financial Accounting' (J. Educ. for Business)",
+  "url": "https://api.semanticscholar.org/graph/v1/paper/5d05ef163ef270b9eabe80e9633e281f05097080/citations?fields=title,year,venue,externalIds,abstract&limit=100",
+  "year": "2025-2026",
+  "what": "None is an XBRL tagging method or small-model study; FAITH (abstract verified) is tabular-hallucination evaluation of LLMs on S&P 500 reports with no cost/latency. The rest are benchmarks/analyses in other sub-areas citing FinTagging as related work.",
+  "reports_cost": "no (per S2 abstracts; FAITH abstract verified)",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "SNIPPET-ONLY (FAITH abstract VERIFIED)"
+ },
+ {
+  "title": "Shared tasks checked for FinTagging usage: FinNLP/FinEval 2026 @ EMNLP; CLEF-2026 FinMMEval; FinRL Contest 2025 Task IV DRR; SecureFinAI Contest 2025",
+  "url": "https://sigfintech.github.io/finnlp2026/call-for-challenges.html",
+  "year": "2025-2026",
+  "what": "FinEval 2026 = one task, three subtasks: Greek financial NER ('Numeric and textual named-entity recognition over company filings from Athens Stock Exchange firms'), Japanese JF-ICR, multilingual financial QA - no XBRL. CLEF FinMMEval 2026 (arXiv 2602.10886): exam QA, PolyFiQA, decision making - no XBRL. FinRL Contest 2025 Task IV 'Digital Regulatory Reporting' covers CDM/MOF/XBRL but names no datasets or efficiency criteria. SecureFinAI 2025: compliance agents, no XBRL tagging. FinAI_Contest_2026 page returns 404. Only FinAI Contest 2025 Task 2 used FinNI/FinCL.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none - no shared task evaluates cost/latency on FinTagging.",
+  "verification": "VERIFIED"
+ }
+]
+
+### verdict_on_novelty
+From this angle the claim is DENTED, not dead, and should be reworded. (1) "Nobody has benchmarked small or distilled models on FinTagging" is false as literally stated: FinTagging v5 itself reports Qwen3-0.6B/1.7B, Llama-3.2-3B and DeepSeek-R1-Distill-Qwen-32B zero-shot plus fine-tuned BERT-large/FinBERT/SECBERT (https://arxiv.org/abs/2505.20650); FinAI Contest 2025 Task 2 @ IEEE CSCloud evaluated <=8B fine-tuned entries on FinNI (200) / FinCL (500) subsets ("The model size should not exceed 8B parameters", https://github.com/Open-Finance-Lab/FinAI_Contest_2025/tree/main/Task_2_FinGPT_Agents_Real_Life), and public 8-bit/4-bit Llama-3.1-8B FinNI/FinCL LoRA adapters exist (https://huggingface.co/LbbbbbY/FinAI_Contest_FinGPT). However, no published accuracy numbers for a FINE-TUNED 1-3B model on FinTagging were found anywhere. (2) "Prior work reports accuracy but NOT serving cost or latency" is partially false on FiNER/FNXL: FinLoRA (https://arxiv.org/abs/2505.19819) reports fine-tuning cost ("$14.66 to $16.54"), 4-bit memory (4.02 GB), and an inference-time comparison (LoRA Llama-3.1-8B local vs Gemini 2.0 FL API, Fig. 3) on FiNER-139/FNXL/XBRL extraction; on FinTagging, FHS (https://arxiv.org/abs/2608.06614) reports LLM-call counts per fact and wall-clock hours (Qwen3-32B, single B200, CodiEsp split only), and FinTagging itself gives only an aggregate "500 GPU-hours and $1,500 in API usage" budget; FinReporting (https://arxiv.org/abs/2604.05966) reports per-model API $ for an XBRL-adjacent pipeline. (3) What remains INTACT: no work found that (a) fine-tunes a 1-3B open model on FinTagging FinNI+FinCL, (b) serves it via vLLM in quantized variants, and (c) reports a per-model accuracy vs $/filing vs latency/throughput frontier against frontier APIs on FinTagging; no FinTagging result anywhere carries serving cost or throughput numbers, and no shared task (FinNLP/FinEval 2026, CLEF FinMMEval 2026, FinRL/SecureFinAI 2025) scores cost or latency. The defensible claim is the narrower one: "no published accuracy-cost-latency frontier for fine-tuned small (1-3B) models on FinTagging (or FiNER/FNXL), and no serving-cost or throughput numbers for any FinTagging result"; FinLoRA must be cited and differentiated explicitly (8B, no FinTagging, latency only as a single figure vs one API, no serving $ or throughput).
+
+### gaps
+WebSearch hit the session-wide 200-call cap partway through (about 25 queries ran in this subagent), and Semantic Scholar rate-limited (HTTP 429) several calls, so the S2 keyword search for 2026 XBRL-tagging papers and the XBRL Agent (ICAIF 2024) abstract were not retrieved; Google Scholar is not directly accessible. IEEE full texts of the two CSCloud 2025 FinGPT papers (DOIs 10.1109/CSCloud66326.2025.00062 and .00066) were not readable, so whether they report FinNI/FinCL numbers or any cost/latency is unverified. No results/leaderboard for FinAI Contest 2025 Task 2 was found on the contest site, GitHub or readthedocs. FinLoRA Fig. 3 (inference time) numeric values were not extractable from the HTML. FHS Table 19 wall-clock is for CodiEsp only; whether the financial split has separate call-count rows could not be confirmed from the PDF text dump. alphaxiv's TheFinAI organization page did not render, and the Columbia openfin XBRL-FinGPT page returned 403. The S2 "arXiv:2505.20650" citations endpoint returned a stale 4-paper list; the S2-ID endpoint returned 15 and was used. Result JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/sweep_fintagging_followups.json

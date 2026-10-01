@@ -1,0 +1,327 @@
+### key
+feas_training_data_scale
+
+### topic
+feas_training_data_scale: fine-tuning data/compute scale for XBRL-style financial fact extraction with 1-8B models; small-model generation of long taxonomy concept names; constrained decoding / retrieve-then-classify effects; 4-bit quantization effects on small fine-tuned extractors
+
+### facts
+[
+ {
+  "claim": "FiNER-139 train split is 900,384 sentences (dev 112,494; test 108,378), with 44.7 +/- 33.9 tokens per train sentence (spaCy), i.e. roughly 40M tokens of training text, not ~900k tokens; the 139 tags were chosen from 6,008 XBRL tags as those with >=1,000 occurrences.",
+  "evidence_url": "https://arxiv.org/pdf/2203.06482",
+  "confidence": "VERIFIED",
+  "quote": "Train 900,384 44.7 ± 33.9 1.8 ± 1.2 Dev 112,494 45.4 ± 35.9 1.7 ± 1.2 Test 108,378 46.5 ± 38.9 1.7 ± 1.1 ... we selected the 139 (out of 6,008) most frequent xbrl tags with at least 1,000 appearances"
+ },
+ {
+  "claim": "FiNER-139 Hugging Face card confirms splits 900,384 / 112,494 / 108,378, IOB2 scheme with 279 token labels, license cc-by-sa-4.0, built from ~10k 10-K/10-Q reports 2016-2020.",
+  "evidence_url": "https://huggingface.co/datasets/nlpaueb/finer-139",
+  "confidence": "VERIFIED",
+  "quote": "cc-by-sa-4.0 ... IOB2 annotation scheme ... 279 possible token labels"
+ },
+ {
+  "claim": "FiNER-139 best encoder result: SEC-BERT-SHAPE reaches 82.1 entity-level micro-F1 on test (SEC-BERT-NUM 80.4); BERT models fine-tuned 10 epochs with early stopping (patience 2) on a DGX with 4x V100 GPUs.",
+  "evidence_url": "https://arxiv.org/pdf/2203.06482",
+  "confidence": "VERIFIED",
+  "quote": "sec-bert-num and sec-bert-shape achieve the best overall performance, boosting the test µ-F1 to 80.4 and 82.1, respectively ... fine-tuning for 10 epochs, using early stopping with patience 2 ... Training was performed mainly on a dgx station with 4 nvidia v100 gpus"
+ },
+ {
+  "claim": "FNXL (ACL 2023 Findings) has 79,088 sentences / 142,922 numerals / 2,794 US-GAAP labels; train 62,782 sentences (111,493 datapoints, 2,692 labels), dev 6,823 (13,191), test 9,483 (18,238, 1,374 labels), company-disjoint split ~78:9:13; test contains 69 labels unseen in training.",
+  "evidence_url": "https://aclanthology.org/2023.findings-acl.219.pdf",
+  "confidence": "VERIFIED",
+  "quote": "Train 62,782 798 111,493 2,692 Dev 6,823 756 13,191 1,273 Test 9,483 794 18,238 1,374 Total 79,088 840 142,922 2,794"
+ },
+ {
+  "claim": "FNXL baselines: sequence labelling (FiNER-style BERT) reaches 75.84% micro-F1 / 47.13% macro-F1 vs the span-extraction + AttentionXML extreme-classification pipeline at 74.74% micro-F1 / 47.54% macro-F1; the pipeline reaches ~90% Hits@5 and ~92% Hits@10, i.e. a retrieve-top-k-then-rerank design has a high ceiling. Trained on a single Tesla P100 16GB: AttentionXML ~8 h, FiNER tagger 10-12 h.",
+  "evidence_url": "https://aclanthology.org/2023.findings-acl.219.pdf",
+  "confidence": "VERIFIED",
+  "quote": "We observe that ∼90% Hits@5 and ∼92% Hits@10 is achieved for all the AttentionXML pipeline models ... We use a single Tesla P100-PCIE (16GB) GPU. AttentionXML model is trained in approximately 8 hours whereas FiNER takes approximately 10-12 hours to train."
+ },
+ {
+  "claim": "FLAN-FinXC (NAACL 2024) LoRA-tunes FLAN-T5-Large (780M) with rank 2 (0.08% of params), 10 epochs, lr 5e-4, on a Tesla V100 32GB using the full FNXL training set; reported timing is '56 minutes/epoch' training and '2 minutes/sample' inference (units as printed; ~9.3 GPU-hours for 10 epochs over ~111k numerals).",
+  "evidence_url": "https://arxiv.org/html/2405.06671",
+  "confidence": "VERIFIED",
+  "quote": "with an lr of 5e-4 with LoRA (training time: 56 minutes/epoch, inference time: 2 minutes/sample)"
+ },
+ {
+  "claim": "FLAN-FinXC results on FNXL: LoRA Macro-F1 66.23 / Hits@1 89.98 vs full fine-tuning 65.77 / 86.21 and prefix-tuning 64.65 / 85.69; zero-shot Macro-F1 58.89 on the 67 unseen tags. The model does NOT generate the tag name: it generates the tag's documentation text and maps it to a tag by cosine similarity with Sentence-T5-XXL embeddings.",
+  "evidence_url": "https://arxiv.org/html/2405.06671",
+  "confidence": "VERIFIED",
+  "quote": "generate the XBRL tag documentations instead of the tag themselves ... Macro-F1 of 58.89 over these 67 unseen labels"
+ },
+ {
+  "claim": "XBRLTagRec (arXiv 2603.25263, Mar 2026) fine-tunes FLAN-T5-Large with LoRA (r=2, alpha=32, dropout 0.05, lr 5e-4, 5 epochs, max len 128, batch 8, one V100 32GB), retrieves top-10 tag documents, then re-ranks with ChatGPT-3.5; improves FNXL Hits@1 0.8354->0.8618 and Macro-F1 0.4616->0.5050 at the price of up to 26 ChatGPT calls per instance; it acknowledges but does not quantify API cost or latency.",
+  "evidence_url": "https://arxiv.org/html/2603.25263",
+  "confidence": "VERIFIED",
+  "quote": "iterative re-ranking with ChatGPT-3.5 increases computational and API costs"
+ },
+ {
+  "claim": "FinLoRA (arXiv 2505.19819) uses only 10.0k FiNER-139 training examples (7.4k test) and FNXL as test-only (247 examples); no sentence explains the subsetting. LoRA adapters are trained per task category (9 adapters per LoRA method), so the FNXL 'LoRA-tuned' score comes from the reporting-category adapter, not FNXL training data.",
+  "evidence_url": "https://arxiv.org/html/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "FiNER-139 XBRL Tagging 10.0k/7.4k ... FNXL XBRL Tagging -/247 ... For each LoRA method, we fine-tuned 9 LoRA adapters based on their respective training sets merged by task categories."
+ },
+ {
+  "claim": "FinLoRA accuracy: Llama 3.1 8B zero-shot FiNER 21.28 acc / 0.232 F1 -> LoRA 74.10 / 0.759 after 10k examples; FNXL 3.64 -> 23.57 (no FNXL training data). GPT-4o zero-shot: FiNER 72.29 acc, FNXL 42.41. FinLoRA's FiNER prompt asks the model to generate the full US-GAAP tag name without candidate options; its FNXL prompt supplies tag options.",
+  "evidence_url": "https://arxiv.org/html/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "Base Llama 3.1 8B: 21.28 0.232 ... LoRA-tuned 74.10 0.759 ... FNXL ... 3.64 0.045 ... 23.57 0.250 ... GPT-4o ... 72.29 0.725 ... 42.41 0.398"
+ },
+ {
+  "claim": "FinLoRA task docs confirm the FiNER prompt requires generating the full tag name (e.g. 'LeaseAndRentalExpense', 'CapitalizedComputerSoftwareAccumulatedAmortization') with no options, while the FNXL prompt includes tag options.",
+  "evidence_url": "https://finlora-docs.readthedocs.io/en/latest/tasks/xbrl_reporting_tasks.html",
+  "confidence": "VERIFIED",
+  "quote": "What is the appropriate XBRL US GAAP tag for the specified numerical entity in the given sentence? ... FNXL Regular Approach: Prompt includes tag options"
+ },
+ {
+  "claim": "FinLoRA total compute: all 46 fine-tuning rounds on 4x A5000 took 14.1 h (QLoRA) to 15.9 h (DoRA) wall-clock = ~56-64 GPU-hours, costed at $0.26/GPU-h = ~$15 per LoRA method for all 19 datasets (README: General 122.9k/31.7k, Certificate 472/346, Reporting 15.9k/8.3k, Statement Analysis 27.9k/7.3k train/test); comparable GPT-4o-mini fine-tuning estimated at $312 for 4 epochs. Hyperparameters: lr 1e-4, batch 2-8, r=4/8, alpha:r 8:1 or 4:1.",
+  "evidence_url": "https://arxiv.org/html/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "Using four NVIDIA A5000 GPUs, the wall-clock time for fine-tuning ranged from 14.1 hours (QLoRA) to 15.9 hours (DoRA), corresponding to a total of approximately 56.4 to 63.6 GPU hours. ... GPT-4o cost is estimated based on 4 epochs of fine-tuning at OpenAI fine-tuning pricing."
+ },
+ {
+  "claim": "FinLoRA: 4-bit QLoRA (NF4 base, r=4) scored 74.32 on FiNER vs 74.10 for 8-bit LoRA r=8, i.e. training-time 4-bit quantization of the 8B base did not hurt tag-name generation accuracy; QLoRA 8B r8 4-bit used 4.72M trainable params and ~8.3-8.7 GB GPU memory.",
+  "evidence_url": "https://arxiv.org/html/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "Llama-3.1-8B-r8-4bit 4.72 M 8.26 GB 8.65 GB 4.02 GB 25.0% ... Llama 3.1 8B LoRA 8bit-r8 achieved 74.10, while QLoRA 4bit-r4 reached 74.32"
+ },
+ {
+  "claim": "FinLoRA does report fine-tuned-model inference time (Figure 3) but only as a chart comparing LoRA-tuned Llama 3.1 8B vs LoRA-tuned Gemini 2.0 Flash Lite; no per-sample seconds or cost-per-inference numbers appear in the text, and no quantized-serving (AWQ/GPTQ via vLLM) latency is reported.",
+  "evidence_url": "https://arxiv.org/html/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks"
+ },
+ {
+  "claim": "FinLoRA README: minimum hardware 'NVIDIA GPU with at least 24GB VRAM for 8-bit quantization' / '16GB VRAM for 4-bit'; code released under OpenMDW-1.0 with per-dataset licenses.",
+  "evidence_url": "https://github.com/Open-Finance-Lab/FinLoRA",
+  "confidence": "VERIFIED",
+  "quote": "NVIDIA GPU with at least 24GB VRAM for 8-bit quantization ... released under OpenMDW-1.0"
+ },
+ {
+  "claim": "FinTagging (arXiv 2505.20650) corpus: 142 10-K filings, 319,893 narrative sentences, 21,576 tables, 261,457 numeric entities linked to 3,953 US-GAAP concepts; FinNI-eval 28,787 instances, FinCL-eval 261,457 query-answer pairs. Concept linking is retrieve-then-rerank: text-embedding-3-small retrieves top-200 US-GAAP candidates, then the LLM reranks (GitHub pipeline also ships a BM25 index).",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "We embed each taxonomy concept using text-embedding-3-small and retrieve the top-h candidates from the US-GAAP taxonomy by semantic similarity. The LLM then reranks candidates ... 261,457 numerical entities linked to 3,953 unique US-GAAP concepts"
+ },
+ {
+  "claim": "FinTagging zero-shot results for small open models: Llama-3.2-3B-Instruct FinNI F1 0.1460 / FinCL acc 0.0415; Qwen3-1.7B FinNI F1 0.0541 (P 0.7362, R 0.0281); Qwen3-0.6B F1 0.0038; Llama-3.1-8B 0.2421; Fino1-8B 0.1878; Qwen3-14B 0.2448; gemma-2-27b 0.4778; vs DeepSeek-V3 0.6932 / 0.1889 and GPT-4o 0.5397 / 0.1829. FinCL accuracy is below 0.19 for every model; small Qwen3 models show 'high precision but extremely low recall'.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "several models (e.g., Qwen3 variants) exhibit high precision but extremely low recall, indicating that they extract only a small fraction of target facts."
+ },
+ {
+  "claim": "FinTagging's only fine-tuned baselines are encoders (BERT-large FinNI F1 0.1391, FinBERT 0.0656, SECBERT 0.1779) trained on a small separate set from 10 additional 10-K filings (1,116 instances, 25,199 entities, 1,435 concepts) on 2x A5000 for 24 h; no LLM fine-tuning, no quantization, and no per-model latency/cost are reported. Total evaluation cost is stated as ~500 GPU-hours (4x H100) plus ~$1,500 API usage.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "Training is conducted on two NVIDIA A5000 GPUs (24GB each) ... for 24 hours ... Total cost is approximately 500 GPU-hours and $1,500 in API usage"
+ },
+ {
+  "claim": "FinTagging public data: TheFinAI/FinTagging_Original (test, 6,599 rows, MIT license), TheFinAI/FinNI-eval (test, 6,599 rows), TheFinAI/FinTagging_BIO (test, 6,599 rows); the GitHub repo ships TrainingSet_Annotation.json / train_data_all.bio as a training set but the HF cards expose only test splits, so a solo engineer would need to assemble training data from the repo files or from FiNER-139/FNXL/raw XBRL.",
+  "evidence_url": "https://github.com/The-FinAI/FinTagging",
+  "confidence": "VERIFIED",
+  "quote": "TrainingSet_Annotation.json ... train_data_all.bio ... TheFinAI/FinNI-eval ... TheFinAI/FinCL-eval ... TheFinAI/FinTagging_Original ... TheFinAI/FinTagging_BIO"
+ },
+ {
+  "claim": "Hugging Face card for TheFinAI/FinTagging_Original: single 'test' split, 6,599 rows, 3.16 MB, license 'mit', numeric_entities lists up to 322 items per context with full concept names such as us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinTagging_Original",
+  "confidence": "VERIFIED",
+  "quote": "test · 6.6k rows ... 6,599 ... mit"
+ },
+ {
+  "claim": "arXiv export API search for \"XBRL tagging\" returns six papers (FiNER 2203.06482, FNXL 2306.03723, FLAN-FinXC 2405.06671, FinTagging 2505.20650, XBRLTagRec 2603.25263, 'Reclassified to Conform' 2609.38754); none of the tagging papers reports serving cost or latency for small or quantized models, and a second search restricted to XBRL + small-language-model/quantized/latency returns only FinTagging itself.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:%22XBRL%20tagging%22&max_results=50",
+  "confidence": "VERIFIED",
+  "quote": "None of these papers explicitly emphasize quantization, latency reduction, cost optimization, or constrained decoding strategies."
+ },
+ {
+  "claim": "The only other recent FiNER-139 papers found (ContraPrompt 2604.17937, +7.77 pp via prompt optimization; GRaSp 2605.07454, 45.84% micro-F1 via in-context example selection) are prompting/ICL methods and report no cost or latency.",
+  "evidence_url": "https://arxiv.org/abs/2605.07454",
+  "confidence": "VERIFIED",
+  "quote": "With non-synthetic data, GRaSp achieves 45.84% micro-F1, consistently outperforming both zero-shot and random few-shot baselines."
+ },
+ {
+  "claim": "A Jan-2026 paper LoRA-tunes Llama-3-8B for financial NER with only 1,693 annotated sentences (r=8, alpha=16, 3 epochs, lr 5e-5, batch 4 x grad-accum 6, 400-token cutoff, bf16) and reaches micro-F1 0.894, ~6 points above zero-shot Qwen3-8B; its 'learning curve' is a training-loss plot, not F1 vs data size, and no GPU-hours are given.",
+  "evidence_url": "https://arxiv.org/pdf/2601.10043",
+  "confidence": "VERIFIED",
+  "quote": "a low-rank value r of 8, and a LoRA scaling factor α set to 16 ... The model is optimized for 3 epochs ... achieving a precision of 0.893, a recall of 0.895, and an F1 score of 0.894"
+ },
+ {
+  "claim": "LoRA Land (310 LoRA fine-tunes, 10 base models, 31 tasks, single A10 24GB, 40,000 steps at batch 1 / effective 16, rank 8, 4-bit bitsandbytes) finds 4-bit LoRA models beat base by 34 points and GPT-4 by 10 points on average, and that fine-tuning gains show no significant correlation with training-set size (sets ranged e.g. 5,228 for bc5cdr to 99,842 for MMLU).",
+  "evidence_url": "https://arxiv.org/html/2405.00732",
+  "confidence": "VERIFIED",
+  "quote": "No significant correlation was found with the number of training examples, pointing to the possibility that once a sufficient sample size is achieved, additional examples do not necessarily contribute to improved fine-tuning efficacy."
+ },
+ {
+  "claim": "OpenAI's supervised fine-tuning guide: minimum 10 examples; recommends starting with 50 well-crafted demonstrations; improvements seen from 50-100 examples.",
+  "evidence_url": "https://developers.openai.com/api/docs/guides/supervised-fine-tuning",
+  "confidence": "VERIFIED",
+  "quote": "We see improvements from fine-tuning on 50–100 examples, but the right number for you varies greatly and depends on the use case"
+ },
+ {
+  "claim": "LIMA: a 65B model fine-tuned on only 1,000 curated prompt/response pairs is equivalent or preferred to GPT-4 in 43% of cases; supports the 'small, clean SFT set' regime for format/behaviour learning.",
+  "evidence_url": "https://arxiv.org/abs/2305.11206",
+  "confidence": "VERIFIED",
+  "quote": "fine-tuned with the standard supervised loss on only 1,000 carefully curated prompts and responses"
+ },
+ {
+  "claim": "Fine-tuning scaling law (ICLR 2024): performance follows a multiplicative power law in fine-tuning data size with small data exponents, and LoRA's data exponent (beta 0.025-0.081) is lower than full fine-tuning's (0.087-0.15): LoRA gains saturate earlier with more data, while full FT is 'more data-hungry and also benefits more from increasing finetuning data'; model scaling helps more than data scaling.",
+  "evidence_url": "https://arxiv.org/html/2402.17193",
+  "confidence": "VERIFIED",
+  "quote": "the scaling exponent β for FMT is often significantly higher than that for PET across settings, indicating that FMT is more data-hungry and also benefits more from increasing finetuning data."
+ },
+ {
+  "claim": "LoRA Learns Less and Forgets Less: at ~100K instruction pairs or 20B tokens LoRA 'substantially underperforms full finetuning' because full FT learns perturbations of rank 10-100x typical LoRA ranks; relevant if the extraction SFT set grows large (e.g. full FiNER-139).",
+  "evidence_url": "https://arxiv.org/abs/2405.09673",
+  "confidence": "VERIFIED",
+  "quote": "full finetuning learns perturbations with a rank that is 10-100X greater than typical LoRA configurations"
+ },
+ {
+  "claim": "GLiNER: 50M/90M/0.3B bidirectional NER models trained on Pile-NER (44,889 passages, 240k entity spans, 13k entity types); GLiNER-L zero-shot avg F1 60.9 vs ChatGPT 47.5 and UniNER-13B 55.6; GLiNER-L trains in 5 hours on one A100 and extracts entities in parallel rather than by sequential token generation.",
+  "evidence_url": "https://arxiv.org/html/2311.08526",
+  "confidence": "VERIFIED",
+  "quote": "The larger variant of our model, GLiNER-L, takes 5 hours to train on an A100 GPU"
+ },
+ {
+  "claim": "NuExtract (NuMind blog): 0.5B (Qwen1.5-0.5B), 3.8B (Phi-3-mini) and 7B (Phi-3-small) extractors fine-tuned on ~50k synthetic examples (filtered from 300k C4 texts annotated by Llama 3 70B); the 7B 'is reaching GPT-4o levels while being at least 100 times smaller'; no latency/throughput numbers given.",
+  "evidence_url": "https://numind.ai/blog/nuextract-a-foundation-model-for-structured-extraction",
+  "confidence": "VERIFIED",
+  "quote": "NuExtract-large is reaching GPT-4o levels while being at least 100 times smaller"
+ },
+ {
+  "claim": "Distilling Step-by-Step: a 770M T5 outperforms 540B PaLM using 80% of the available data, where standard fine-tuning fails even with 100% - evidence that small models can beat frontier models on narrow tasks with modest data.",
+  "evidence_url": "https://arxiv.org/abs/2305.02301",
+  "confidence": "VERIFIED",
+  "quote": "our 770M T5 model outperforms the 540B PaLM model using only 80% of available data on a benchmark"
+ },
+ {
+  "claim": "Unsloth minimum VRAM table: 3B model QLoRA 3.5 GB / 16-bit LoRA 8 GB; 7B 5 GB / 19 GB; 8B 6 GB / 22 GB (no 1B row) - a 1-3B LoRA fits a single consumer or $0.16-0.27/h A5000-class GPU.",
+  "evidence_url": "https://unsloth.ai/docs/get-started/fine-tuning-for-beginners/unsloth-requirements",
+  "confidence": "VERIFIED",
+  "quote": "3B ... QLoRA (4-bit): 3.5 GB ... LoRA (16-bit): 8 GB"
+ },
+ {
+  "claim": "RunPod hourly GPU prices observed 2026-10-01 (community / secure): RTX A5000 $0.16 / $0.27; A40 $0.35 / $0.49; L4 $0.44 / $0.49; L40S $0.79 / $1.09; A100 80GB PCIe $1.19 / $1.59; A100 SXM $1.39 / $1.59; H100 PCIe $1.99 / $2.89; H100 SXM $2.69 / $3.49.",
+  "evidence_url": "https://www.runpod.io/pricing",
+  "confidence": "VERIFIED",
+  "quote": "RTX A5000: Community Cloud $0.16/hr, Secure Cloud $0.27/hr"
+ },
+ {
+  "claim": "GENRE retrieves entities by generating their names token-by-token under constrained beam search over a prefix trie of valid names (HF prefix_allowed_tokens_fn), so memory scales with vocabulary not entity count; this is the canonical trie-constrained pattern for generating long canonical identifiers such as us-gaap concept names.",
+  "evidence_url": "https://github.com/facebookresearch/GENRE",
+  "confidence": "VERIFIED",
+  "quote": "generating the unique entity name conditioned on the input text using constrained beam search to only generate valid identifiers"
+ },
+ {
+  "claim": "Grammar-constrained decoding without fine-tuning (2023): on closed IE, 4-shot LLaMA-7B F1 rises 11.9->23.5, 13B 12.9->30.6, 33B 17.5->36.0 (vs fine-tuned GenIE T5-base 34.8); on entity disambiguation LLaMA-33B 54.1%->80.3% (vs fine-tuned GENRE 88.8%); added latency 'negligible' for ED and 'modest' for cIE.",
+  "evidence_url": "https://arxiv.org/html/2305.13971",
+  "confidence": "VERIFIED",
+  "quote": "The added latency from GCD is negligible for the ED and CP tasks. For cIE, GCD adds a modest additional latency comparable or inferior to the latency of pure decoding."
+ },
+ {
+  "claim": "'Let Me Speak Freely?' (2024): strict format/JSON constraints hurt reasoning tasks (GSM8K GPT-3.5-Turbo text 76.6% vs JSON 49.3% vs XML 45.1%) but help classification tasks (DDXPlus Gemini 1.5 Flash text 41.6% vs JSON 60.3%), because constraining the answer space reduces selection errors - supporting constrained output for concept selection.",
+  "evidence_url": "https://arxiv.org/html/2408.02442",
+  "confidence": "VERIFIED",
+  "quote": "JSON-mode improves classification task performance by constraining possible answers resulted in reducing errors in answer selection"
+ },
+ {
+  "claim": "XGrammar: token-mask generation under 40 microseconds per token for JSON schema (up to 3x faster than prior engines, >100x on CFGs) and 'nearly zero overhead in TPOT' end-to-end with Llama-3.1-8B-Instruct on an H100; ablation reduces per-token mask latency from 65.776 ms to 0.018 ms.",
+  "evidence_url": "https://arxiv.org/html/2411.15100",
+  "confidence": "VERIFIED",
+  "quote": "enabling XGrammar enhances output quality with nearly zero overhead in TPOT"
+ },
+ {
+  "claim": "DOMINO (2024) warns that naive constrained decoding can 'significantly impair task accuracy, if they do not correctly align the underlying LLM sub-word vocabularies with external constraints', and achieves 'virtually no overhead and in some cases even almost 2x speedup over unconstrained decoding'.",
+  "evidence_url": "https://arxiv.org/abs/2403.06988",
+  "confidence": "VERIFIED",
+  "quote": "virtually no overhead and in some cases even almost 2× speedup over unconstrained decoding"
+ },
+ {
+  "claim": "vLLM structured outputs support 'choice' (exactly one of a list of strings), regex, JSON schema and EBNF grammar, with xgrammar or guidance backends and an 'auto' default - so trie-like constraint over a candidate concept list can be done natively in vLLM.",
+  "evidence_url": "https://docs.vllm.ai/en/latest/features/structured_outputs.html",
+  "confidence": "VERIFIED",
+  "quote": "The default backend is `auto`, which will try to choose an appropriate backend based on the details of the request."
+ },
+ {
+  "claim": "Explainable ICD coding via entity linking (2025) is the closest analog to generating long taxonomy codes: BioMistral-7B with QLoRA (r=64, NF4) and GENRE-style prefix-tree constrained decoding over ICD code titles (15,104 distinct codes in training data); CodiEsp micro-accuracy 66.85; inference 'took 8 hours for all datasets'; no constrained-vs-unconstrained ablation reported.",
+  "evidence_url": "https://arxiv.org/html/2503.20508",
+  "confidence": "VERIFIED",
+  "quote": "a prefix tree of all possible outputs, and by forcing the generated tokens to stay within the set of possible continuations for titles of ICD codes ... Inference took 8 hours for all datasets"
+ },
+ {
+  "claim": "Lazy-k (EMNLP 2023): constrained decoding for token-classification IE 'can significantly improve the models' performances, especially when using smaller models', trading decoding time for accuracy.",
+  "evidence_url": "https://arxiv.org/abs/2312.03367",
+  "confidence": "VERIFIED",
+  "quote": "constrained decoding approaches can significantly improve the models' performances, especially when using smaller models"
+ },
+ {
+  "claim": "arXiv listing of constrained-decoding IE papers (2020-2026) includes 2026 edge-deployment work (ARID 2609.23582: grammar-constrained IE on embedded hardware, 84.8% token-F1, 99.8% parser success) and 'Strategies for Span Labeling with LLMs' (2601.16946, LogitMatch constrained decoding), none on XBRL.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:%22constrained%20decoding%22%20AND%20(all:%22entity%20linking%22%20OR%20all:%22named%20entity%22%20OR%20all:%22information%20extraction%22)&max_results=40&sortBy=submittedDate&sortOrder=descending",
+  "confidence": "VERIFIED",
+  "quote": "ARID ... 84.8% token-F1, 99.8% parser success"
+ },
+ {
+  "claim": "'Give Me BF16 or Give Me Death?' (Neural Magic, 500k+ evals): Llama-3.1-8B-Instruct W4A16 recovers 98.57% (GPTQ) / 98.16% (AWQ) of BF16 on Open LLM Leaderboard v1 and 96.06% / 99.28% on v2; HumanEval 67.1 vs 67.3; the 8B recovers 97.2% on reasoning under INT4 vs 99.7% for 70B (smaller models lose more); W4A16 gives 1.45x single-stream speedup for 70B on 2x A100.",
+  "evidence_url": "https://arxiv.org/html/2411.02355",
+  "confidence": "VERIFIED",
+  "quote": "smaller quantized models exhibit slightly higher variability, with ROUGE-1 and ROUGE-L dropping to 0.62 and 0.46"
+ },
+ {
+  "claim": "Empirical LLaMA3 quantization study: LLaMA3-8B CommonSenseQA average 68.6 (FP16) -> 64.8 (GPTQ 4-bit) / 67.0 (AWQ 4-bit); WikiText2 PPL 6.1 -> 6.5 / 6.6; 3-bit GPTQ collapses to 44.9; the 70B is markedly more robust than the 8B.",
+  "evidence_url": "https://arxiv.org/html/2404.14047",
+  "confidence": "VERIFIED",
+  "quote": "the LLaMA3-70B model shows significant robustness to different quantization methods, even for ultra-low bit-width quantization"
+ },
+ {
+  "claim": "Qwen official quantization benchmark (Qwen2 generation; page says Qwen2.5 'To be updated'): Qwen2-0.5B-Instruct average BF16 34.4 -> GPTQ-Int4 29.7 (-4.7 pts) / AWQ 31.1 (-3.3); IFEval 20.0 -> 16.8; Qwen2-1.5B-Instruct average 48.4 -> Int4 45.0 (-3.4) / AWQ 46.5 (-1.9), C-Eval 63.8 -> 57.4; Qwen2-7B 66.9 -> 64.1; Qwen2-72B 81.3 -> 81.2 - i.e. 4-bit loss grows sharply as model size shrinks below 7B.",
+  "evidence_url": "https://qwen.readthedocs.io/en/v2.5/benchmark/quantization_benchmark.html",
+  "confidence": "VERIFIED",
+  "quote": "Qwen2-0.5B-Instruct: BF16 | 34.4 | 37.9 | 45.2 | 20.0 ... GPTQ-Int4 | 29.7 | 33.0 | 39.2 | 16.8"
+ },
+ {
+  "claim": "Meta's official Llama 3.2 INT4 variants: 3B-Instruct MMLU 63.4 (BF16) -> 62.4 (QLoRA-INT4) / 62.0 (SpinQuant); IFEval 77.4 -> 75.9 / 73.5; BFCL V2 (structured function-calling) 67.0 -> 63.5 / 60.1; 1B BFCL V2 25.7 -> 23.7 / 15.9 (-38% relative with PTQ SpinQuant); quantized decode 2.4-2.6x faster, TTFT -76%, model size -54 to -60%. Structured-output tasks degrade most, and quantization-aware (QLoRA) beats post-training SpinQuant at 1-3B.",
+  "evidence_url": "https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct-QLORA_INT4_EO8",
+  "confidence": "VERIFIED",
+  "quote": "BFCL V2 | 67.0 | 60.1 | 63.5 ... Decode (tokens/sec): 7.6 baseline, 19.7 SpinQuant (2.6x), 18.5 QLoRA (2.4x)"
+ },
+ {
+  "claim": "'Low-Bit Quantization Favors Undertrained LLMs' (1,500+ checkpoints): quantization-induced degradation is larger for smaller models trained on more tokens, so modern over-trained 1-3B models are the worst case for 4-bit PTQ.",
+  "evidence_url": "https://arxiv.org/abs/2411.17691",
+  "confidence": "VERIFIED",
+  "quote": "low-bit quantization favors undertrained large language models (LLMs)"
+ },
+ {
+  "claim": "DharmaOCR (arXiv 2604.14314, 2026) is the closest measured case of AWQ on a fine-tuned 3B structured-JSON extractor served with vLLM on an L40S: Lite 3B (Nanonets-OCR2-3B) score 0.921 unquantized -> 0.911 AWQ (-0.010), degeneration 0.20% unchanged, time/page 1.668 s -> 1.464 s, relative cost 38.73% -> 33.99%; Full 7B 0.927 -> 0.925, 2.730 s -> 2.132 s (~22% cheaper); trained on 39,680 pages.",
+  "evidence_url": "https://arxiv.org/html/2604.14314",
+  "confidence": "VERIFIED",
+  "quote": "AWQ quantization reduced up to 22% per-page cost with negligible quality loss"
+ },
+ {
+  "claim": "Biomedical quantization study (arXiv 2509.04534): bitsandbytes 8-bit and 4-bit NF4 on 12 LLMs across NER/RE/QA shows 'negligible performance degradation' and up to 75% memory savings, but NER numbers are reported only for 65-72B models and no fine-tuned/QLoRA models are tested - so it does not settle the 1-3B question.",
+  "evidence_url": "https://arxiv.org/html/2509.04534",
+  "confidence": "VERIFIED",
+  "quote": "quantization substantially reduces GPU memory requirements-by up to 75%-while preserving model performance across diverse tasks"
+ },
+ {
+  "claim": "'Accuracy is Not All You Need' (2024): quantized models with matched aggregate accuracy still show many answer 'flips' (correct<->incorrect) and are 'significantly worse' on free-form generation, so an extraction benchmark should report per-fact flips/KL, not only F1, when comparing AWQ/GPTQ variants.",
+  "evidence_url": "https://arxiv.org/abs/2407.09141",
+  "confidence": "VERIFIED",
+  "quote": "even when the accuracy of baseline and compressed model are similar, we observe the phenomenon of flips, wherein answers change from correct to incorrect and vice versa"
+ },
+ {
+  "claim": "QLoRA: training through a frozen 4-bit NF4 base with LoRA adapters preserves 'full 16-bit finetuning task performance' (Guanaco 99.3% of ChatGPT on Vicuna after 24 h on one GPU), supporting 4-bit training-time quantization for a budget run.",
+  "evidence_url": "https://arxiv.org/abs/2305.14314",
+  "confidence": "VERIFIED",
+  "quote": "backpropagat[ing] gradients through a frozen, 4-bit quantized pretrained language model into Low Rank Adapters (LoRA) ... preserving full 16-bit finetuning task performance"
+ },
+ {
+  "claim": "arXiv search for quantization x small-language-model x structured output surfaced only three 2026 papers (DharmaOCR 2604.14314; TerraMARS 2606.19700 - Gemma 3 1B QLoRA JSON extraction with no accuracy numbers in abstract; QU-NLP 2604.16396 - Qwen3-4B NF4 rank-128), none in finance.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=(all:%22quantization%22%20OR%20all:%22quantized%22)%20AND%20(all:%22structured%20output%22%20OR%20all:%22JSON%22%20OR%20all:%22information%20extraction%22)%20AND%20all:%22small%20language%20model%22&max_results=40&sortBy=submittedDate&sortOrder=descending",
+  "confidence": "VERIFIED",
+  "quote": "DharmaOCR models (7B and 3B) use AWQ quantization achieving 0.925 and 0.911 scores with 0.40% and 0.20% degeneration rates"
+ }
+]
+
+### unknowns
+1) No paper was found that fine-tunes a 1-3B decoder LLM on FiNER-139, FNXL or FinTagging; the smallest fine-tuned generative XBRL tagger found is FLAN-T5-Large (780M, encoder-decoder, generates tag documentation + embedding match), the smallest fine-tuned decoder is Llama-3.1-8B (FinLoRA), and FinTagging only evaluates 0.6B-3B models zero-shot (FinNI F1 0.004-0.146, FinCL acc <=0.04). 2) No learning curve (F1 vs number of training examples) exists for XBRL tagging; saturation evidence is indirect (FinLoRA 10k FiNER examples -> 74% acc for 8B; LoRA Land finds no correlation with set size; OpenAI 50-100 examples; LoRA data exponent 0.025-0.081). 3) No published measurement of post-training 4-bit AWQ/GPTQ on a fine-tuned 1-3B model for a concept-name generation task; nearest numbers are DharmaOCR 3B AWQ (-0.010 score, -12% latency), Meta Llama 3.2 3B/1B INT4 (BFCL -3.5 to -9.8 pts), Qwen2 0.5B/1.5B Int4 (-3 to -5 avg pts), and FinLoRA's training-time QLoRA (no loss on FiNER). 4) FinLoRA's Figure 3 inference-time values are not extractable from the HTML text. 5) FLAN-FinXC's '2 minutes/sample' inference figure is printed as-is and its unit is ambiguous. 6) Semantic Scholar API returned 429 on every call and the WebSearch budget was exhausted at session start (200/200), so coverage relies on arXiv export API queries and direct fetches; Red Hat AI quantized model cards (W4A16 recovery tables for Llama 3.2 1B/3B, Qwen2.5 1.5B) returned HTTP 401 and could not be read; the vLLM structured-decoding blog redirect returned 404; Qwen's quantization page has no Qwen2.5/Qwen3 small-model table yet.
+
+### notes
+JSON saved to /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/feas_training_data_scale.json (52 facts). PDFs WebFetch could not parse (FNXL ACL 2023, FiNER-139, Llama-3-8B financial NER) were text-extracted locally with PyMuPDF from the WebFetch-saved copies. Compute takeaways for a 1-3B LoRA: FinLoRA's 8B needed ~1.2-1.4 A5000 GPU-hours per fine-tuning round on average (56-64 GPU-h / 46 rounds) at $0.26/GPU-h; FLAN-T5-Large LoRA on the full FNXL train set (62,782 sentences / 111k numerals) took ~56 min/epoch on a V100 for 10 epochs; GLiNER-L 0.3B trains in 5 A100-hours; Unsloth lists 3.5 GB (QLoRA) / 8 GB (LoRA) VRAM for a 3B model; RunPod A5000 is $0.16-0.27/h (observed 2026-10-01). Data takeaways: FiNER-139 offers 900k training sentences (~40M tokens) for 139 tags; FNXL 62.8k sentences for 2,794 tags with a long tail (69 unseen test tags); FinTagging's own training file covers only 10 filings (1,116 instances, 25k entities, 1,435 concepts) while FinCL-eval spans 3,953 concepts, so a 1-3B generator must handle unseen concepts, which argues for retrieve-then-rerank or trie/choice-constrained decoding over the US-GAAP concept list (FNXL pipeline Hits@10 ~92%; FinTagging retrieves top-200; XBRLTagRec top-10 + 26 ChatGPT calls/instance). Constrained decoding is near-free in latency with XGrammar/vLLM and helps classification-style selection, but naive implementations can hurt accuracy (DOMINO) and strict formats hurt reasoning-style tasks. Novelty check: across FiNER, FNXL, FLAN-FinXC, FinLoRA, FinTagging and XBRLTagRec, none reports serving latency/cost for small or quantized models; FinLoRA reports training cost and a relative inference-time chart for 8B vs Gemini only, and FinTagging reports only aggregate evaluation cost (500 GPU-h + $1,500 API).

@@ -1,0 +1,64 @@
+### key
+verifin
+
+### query_name
+verifin
+
+### found
+True
+
+### title
+VeriFin: A Neurosymbolic Framework for Verifying LLM-Generated Financial Claims
+
+### authors
+Bethel Hall (bhall2@stevens.edu, Stevens Institute of Technology, Hoboken NJ; PhD student advised by Eiers), Sachi Shome, William Eiers (Stevens). VERIFIED from arXiv HTML header and bethelhall.tech.
+
+### venue_year
+arXiv preprint 2608.10213v1, cs.CE, submitted 10 Aug 2026 (PDF metadata compile date 12 Aug 2026). No peer-reviewed venue found. Repo is an anonymous review snapshot (CITATION.cff "intentionally anonymous for review"), implying submission under review. Semantic Scholar API returned HTTP 429 on 4 attempts, so S2 venue/citationCount UNAVAILABLE.
+
+### identifiers
+arXiv:2608.10213 (https://arxiv.org/abs/2608.10213, https://arxiv.org/html/2608.10213v1, https://arxiv.org/pdf/2608.10213). No DOI, no ACL id. Code/data: https://github.com/verifiedfinance/anon (VERIFIED exists; named in paper footnote). Third-party pages: https://pith.science/paper/2608.10213, https://www.alphaxiv.org/@bethel-hall. NOTE: https://github.com/223456png/verifin is an UNRELATED project with the same name (FinQA/ConvFinQA, LangGraph MCP server; no citation of the paper) - VERIFIED.
+
+### task_summary
+VERIFIED. VeriFin is a VERIFIER of LLM-generated numerical answers to financial questions over 10-K filings - not an XBRL tagger or fact extractor. Input: a question plus a candidate numeric claim produced by some answer-generator LLM; output: Verified / Violated / Abstain with traceable evidence, plus Z3 unsat cores used for guided repair. Pipeline (sections 3.2-3.6): Evidence Retriever -> Verification Planner (LLM parser that specifies metric, period, unit, operand roles, formula) -> Provenance Verifier grounds operands in filed XBRL facts and authorizes the formula from non-generative sources in a strict hierarchy (explicit operations in the question, the filing's calculation linkbase, a curated metric registry, disclosure text) -> Claim Verifier encodes quantifier-free real-arithmetic constraints and checks with Z3; tolerance is half a unit in the last place reported by the filing. XBRL facts are the ground-truth data source (structured, from EDGAR), so the paper is XBRL-adjacent but consumes already-tagged XBRL facts rather than producing tags from text/tables. Zero mentions of FinTagging, FNXL, FiNER, "tagging", "extraction", fine-tuning, distillation or quantization in the body (programmatic grep of the downloaded HTML).
+
+### data
+VERIFIED. (1) XBRLFiling: new 600-question evaluation benchmark; "We collect 86 10-K submissions from EDGAR" across 28 U.S. companies (incl. Apple, Microsoft, Amazon, Nvidia, Exxon Mobil) for fiscal years 2021-2026; built "in reverse" from each filing's XBRL calculation linkbase (subtotal p = sum w_i c_i recorded as ground truth, then a templated question e.g. "What were Apple's FY2025 total operating expenses, in USD millions?"); 15 subtotal metrics across income statement, balance sheet, cash-flow statement. No train/dev/test split - evaluation-only. Released as JSONL in repo at data/multicompany_provable/data/provable_calcrequired.jsonl (some artifacts call it "XBRLBench"); full fact-binding reruns additionally need a pinned XBRL/companyfacts archive NOT included. License: README table says "Authors' annotation license pending"; "A software license and a license for the authors' XBRLFiling questions and annotations must be selected before public redistribution." No Hugging Face dataset found. (2) FinanceBench numeric subset: 67 questions (Islam et al., 2023), CC BY-NC 4.0, exact subset shipped in repo. Repo also ships 14 VeriFin runs, 8 baseline results, 5,202 .smt2 traces, prompts (docs/PROMPTS.md). pith.science reviewer note (third-party, fetched): gold labels and VeriFin's formula authority both derive from the same calculation linkbase, i.e. a circularity caveat.
+
+### models_and_results
+VERIFIED. Candidate-claim generators (six): GPT-5.5 and Claude Haiku 4.5 (closed, via APIs); Qwen3-30B, Llama-3.1-8B, Qwen2.5-7B (open-weight; "We served the open-weight claim models with vLLM, calling them through its OpenAI-compatible endpoint; weights were downloaded from HuggingFace"); Fin-o1-8B (domain model; repo notes checkpoint identity not pinned). Verifier/planner backbone and all baseline backbones: Claude Haiku 4.5. "All calls use temperature 0 and a 2048-token response limit." Baselines: Direct LLM, LLM Judge, Judge+Formula, Program-of-Thought (PoT). Headline (Table 2, Haiku-4.5 candidate pool): XBRLFiling n=600 -> 455 true accepts, 0 false accepts, 92.2% accuracy, 98.8% coverage; "VeriFin rejects all 92 incorrect candidates ... returning a decision on 593 of 600"; baselines accept 6 (PoT) to 92 incorrect claims. FinanceBench n=67 -> 28 TA, 0 FA, 83.3% acc, 80.6% coverage; baselines accept 4-21 incorrect. Robustness (per generator, XBRLFiling): Qwen2.5-7B TA 35 / FA 0 / FR 73 / Abs 10 / acc 87.6 / cov 98.3; Llama-3.1-8B TA 74 / FA 0 / FR 50 / Abs 16 / acc 91.4 / cov 97.3; Qwen3-30B TA 245 / FA 0 / FR 69 / Abs 0 / acc 88.5 / cov 100. Zero false accepts across all six generators. Repair (Table 3): pass@1 verifier-guided repair raises recovery 6.5->46.3% (Qwen3-30B), 26.1->57.0% (Fin-o1-8B), 23.1->40.5% (Haiku); pass@3 reaches 69.9% (Fin-o1-8B, XBRLFiling). Repo caveat: "No auditable FinanceBench GPT-5.5 result artifact is present".
+
+### reports_serving_cost
+no. VERIFIED by grep of full HTML body: zero occurrences of "$", "price", "dollar", "GPU", "hours", "throughput". The word "cost" appears only as "coverage cost" (abstention / correct-claim rejection), e.g. "We find that the principal remaining cost is the conservative handling of correct claims." No table of compute or cost.
+
+### reports_latency_or_throughput
+partial: Section 5 (Results and Discussion, preamble before 5.1) states verbatim: "For VeriFin, verification requires 4–6 LLM calls and 12k–17k tokens per question, taking 3–9 seconds on average. Symbolic checking adds negligible overhead: Z3 takes a median of 5 ms, less than 0.2% of total processing time." That is the ONLY timing statement: a coarse average wall-time and token count for VeriFin's own pipeline; no per-baseline latency, no throughput, no hardware specified, no latency table, no latency-vs-accuracy trade-off. The words "latency", "inference time", "runtime", "wall-clock" do not appear.
+
+### reports_training_cost
+no - there is no training or fine-tuning in the paper; all models are used off the shelf (API or vLLM-served open weights). VERIFIED (grep: "fine-tun", "distill", "quantiz" = 0 hits).
+
+### small_models_evaluated
+Llama-3.1-8B, Qwen2.5-7B and Fin-o1-8B (all 7-8B) are evaluated ONLY as candidate-claim generators whose outputs VeriFin verifies; the verifier itself always uses Claude Haiku 4.5. No sub-7B, no 1-3B, no BERT-scale models, no quantized variants. VERIFIED.
+
+### relevance_to_idea
+Does NOT refute the novelty claim, but requires precise framing. (1) Different task: VeriFin verifies numeric QA answers using already-filed XBRL facts; it does not do XBRL tagging / fact extraction from 10-K text or tables and never touches FinTagging, FNXL or FiNER. (2) Cost: it reports no dollar/serving cost and no training cost, consistent with the claim. (3) Latency: the project must NOT say VeriFin reports no latency - it reports a single coarse figure (3-9 s avg, 12k-17k tokens, 4-6 LLM calls per question, Z3 5 ms median) for its own pipeline only; phrase the claim as "reports accuracy but not a serving cost/latency frontier and no small-model cost comparison". (4) It does use vLLM-served open 7-30B models via an OpenAI-compatible endpoint, so "open models + vLLM in XBRL-adjacent evaluation" exists in prior work, though not fine-tuned, not quantized, not 1-3B, and not costed. (5) Cite it as adjacent work on XBRL-grounded numerical reliability and as motivation (LLMs confuse period/unit/line item - exactly the fields the project extracts). (6) Possible reuse: XBRLFiling's 600 calculation-linkbase-derived questions (concept/period/unit-specific) could serve as a downstream consistency check for extracted facts, but its license is "pending" and the software license is unselected, so do not redistribute; FinanceBench-67 is CC BY-NC 4.0. (7) Avoid confusing it with the unrelated github.com/223456png/verifin.
+
+### confidence
+high. VERIFIED: existence, title, authors, date, category, abstract (arXiv abs page + export.arxiv.org API + my own curl of the HTML body); all quoted sentences on timing/tokens/Z3, model list, vLLM/HuggingFace serving, temperature, dataset construction (86 10-Ks, 28 companies, FY2021-2026, calculation linkbase), headline numbers, and absence of cost/latency/FinTagging/FNXL/FiNER/fine-tuning terms (programmatic grep of the downloaded HTML, ~50k chars of text); GitHub repo existence, dataset table, licenses (raw README and docs/DATA.md curled). SNIPPET-ONLY / third-party: pith.science circularity critique; alphaXiv author list. UNAVAILABLE: Semantic Scholar record (HTTP 429 x4); PDF text extraction via WebFetch failed (binary), but HTML v1 is the same version. Minor: one WebFetch summarizer wrongly listed DeepSeek-v4-flash as a generator - the actual body names GPT-5.5, Claude Haiku-4.5, Qwen3-30B, Llama-3.1-8B, Qwen2.5-7B, Fin-o1-8B (grep: "DeepSeek" = 0 hits). JSON saved to /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/verifin.json
+
+### sources
+[
+ "https://arxiv.org/abs/2608.10213",
+ "https://arxiv.org/html/2608.10213v1",
+ "https://arxiv.org/pdf/2608.10213",
+ "https://export.arxiv.org/api/query?id_list=2608.10213",
+ "https://export.arxiv.org/api/query?search_query=all:VeriFin&max_results=50",
+ "https://github.com/verifiedfinance/anon",
+ "https://raw.githubusercontent.com/verifiedfinance/anon/main/README.md",
+ "https://raw.githubusercontent.com/verifiedfinance/anon/main/docs/DATA.md",
+ "https://pith.science/paper/2608.10213",
+ "https://bethelhall.tech/",
+ "https://www.alphaxiv.org/@bethel-hall",
+ "https://github.com/223456png/verifin",
+ "https://api.semanticscholar.org/graph/v1/paper/arXiv:2608.10213 (HTTP 429, not retrieved)"
+]

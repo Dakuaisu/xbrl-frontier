@@ -1,0 +1,273 @@
+### key
+data_fintagging_release
+
+### topic
+Exact release status of FinTagging data (TheFinAI HF repos, GitHub repo, splits, schema, labels, metadata, scoring)
+
+### facts
+[
+ {
+  "claim": "HF search for 'fintagging' returns exactly 10 dataset repos: 5 under TheFinAI (FinTagging_BIO, FinTagging_Original, FinTagging_Original_v2, FinTagging_BIO_v2, FinTagging-Untagged-Data) and 5 third-party derivatives under lm2445 (FinTagging_1000, FinTagging1000_ER, FinTagging1000_table, FinTagging1000_text, FinTagging1000_Grounding, all dated Jul 2026).",
+  "evidence_url": "https://huggingface.co/api/datasets?search=fintagging",
+  "confidence": "VERIFIED",
+  "quote": "TheFinAI/FinTagging_BIO ... TheFinAI/FinTagging_Original ... TheFinAI/FinTagging_Original_v2 ... TheFinAI/FinTagging_BIO_v2 ... TheFinAI/FinTagging-Untagged-Data ... lm2445/FinTagging_1000 ..."
+ },
+ {
+  "claim": "HF search 'FinNI' returns TheFinAI/FinNI-eval and TheFinAI/FinNI-eval-v2; search 'FinCL' returns TheFinAI/FinCL-eval, TheFinAI/FinCL-eval-v2 and TheFinAI/lm-eval-fincl-rerank-results-private (name indicates a private results repo; contents not inspectable).",
+  "evidence_url": "https://huggingface.co/api/datasets?search=FinCL",
+  "confidence": "VERIFIED",
+  "quote": "TheFinAI/FinCL-eval ... TheFinAI/FinCL-eval-v2 ... TheFinAI/lm-eval-fincl-rerank-results-private"
+ },
+ {
+  "claim": "The TheFinAI author listing (149 datasets) contains 8 tagging-related repos: FinTagging_BIO, FinTagging_Original, FinNI-eval, FinCL-eval, FinTagging_BIO_v2, FinNI-eval-v2, FinCL-eval-v2, finben-finer-ord. No repo named FinTagging_Trainset or FinTagging_Subset exists on HF (both URLs return 401 = not found/private; a search for 'Train' under TheFinAI returns no FinTagging item).",
+  "evidence_url": "https://huggingface.co/api/datasets?author=TheFinAI&limit=500",
+  "confidence": "VERIFIED",
+  "quote": "Total datasets returned: 149 ... Matching datasets found: 8"
+ },
+ {
+  "claim": "The official HF collection 'TheFinAI/fintagging' (id fintagging-68270132372c6608ac069bef) shows 9 items: the paper plus 8 datasets (FinNI-eval, FinCL-eval, FinTagging_BIO, FinTagging_Original, FinTagging_Original_v2, FinNI-eval-v2, FinTagging_BIO_v2, FinCL-eval-v2). Dataset cards say the collection has '17 items' but only 9 are rendered on the fetched page.",
+  "evidence_url": "https://huggingface.co/collections/TheFinAI/fintagging-68270132372c6608ac069bef",
+  "confidence": "VERIFIED",
+  "quote": "The page displays 9 items total."
+ },
+ {
+  "claim": "TheFinAI/FinTagging_Original: single 'test' split, 6,599 rows (no train/validation); license: mit in YAML; tags question-answering, table-question-answering, finance, en; one parquet file data/test-00000-of-00001.parquet; created 2025-05-22, last modified 2025-06-01.",
+  "evidence_url": "https://huggingface.co/api/datasets/TheFinAI/FinTagging_Original",
+  "confidence": "VERIFIED",
+  "quote": "Splits: test (6,599 examples ...) ... License: MIT"
+ },
+ {
+  "claim": "FinTagging_Original schema (datasets-server /info): text (string), numeric_entities (list of {concept: string, type: string, value: string}), context_id (int64). Labels are concept QNames such as 'us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest' with type e.g. 'monetaryItemType' and value as a string. There is NO period, unit, decimals, scale, sign, CIK, company, fiscal year, accession number or document URL field.",
+  "evidence_url": "https://datasets-server.huggingface.co/info?dataset=TheFinAI/FinTagging_Original",
+  "confidence": "VERIFIED",
+  "quote": "numeric_entities (array of objects containing: concept [string], type [string], value [string])"
+ },
+ {
+  "claim": "In FinTagging_Original the 'text' field for table instances is raw reconstructed HTML (<table><tr><td>...), e.g. row 0 begins '<table><tr><td></td>...<td>(in millions, except per share amounts)</td><td>Common Stock</td>...'; sentence instances are plain text (row 4002 is a plain sentence with an empty numeric_entities list, i.e. a negative instance).",
+  "evidence_url": "https://datasets-server.huggingface.co/rows?dataset=TheFinAI/FinTagging_Original&config=default&split=test&offset=4000&length=3",
+  "confidence": "VERIFIED",
+  "quote": "Row 4002 ... Numeric Entities: Empty list (negative instance) ... Plain-text Sentence? Yes"
+ },
+ {
+  "claim": "TheFinAI/FinTagging_Original_v2: single 'test' split, 46,496 rows; same 3-column schema; NO license key in README YAML; created/modified 2025-09-19.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinTagging_Original_v2/raw/main/README.md",
+  "confidence": "VERIFIED",
+  "quote": "- name: test\n    num_bytes: 118280539\n    num_examples: 46496 ... Is there a 'license:' key? No."
+ },
+ {
+  "claim": "TheFinAI/FinNI-eval: single 'test' split, 6,599 rows; columns context_index (int64), context (string), query (string), answer (string); NO license key in YAML.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinNI-eval/raw/main/README.md",
+  "confidence": "VERIFIED",
+  "quote": "- name: test\n    num_bytes: 35350815\n    num_examples: 6599"
+ },
+ {
+  "claim": "TheFinAI/FinNI-eval-v2: single 'test' split, 28,787 rows; same 4 columns; NO license key; created 2025-09-19, modified 2025-09-21.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinNI-eval-v2/raw/main/README.md",
+  "confidence": "VERIFIED",
+  "quote": "- name: test\n    num_bytes: 162781087\n    num_examples: 28787"
+ },
+ {
+  "claim": "FinNI entity types are exactly five XBRL item types: integerItemType, monetaryItemType, perShareItemType, sharesItemType, percentItemType. The FinNI-eval 'query' column embeds the full prompt with these definitions and the output format {\"result\":[{\"Fact\": <value>, \"Type\": <type>}]}; the 'answer' column is that JSON (e.g. {\"result\": [{\"Fact\": \"58166\", \"Type\": \"monetaryItemType\"}, ...]}).",
+  "evidence_url": "https://datasets-server.huggingface.co/first-rows?dataset=TheFinAI/FinNI-eval-v2&config=default&split=test",
+  "confidence": "VERIFIED",
+  "quote": "classify them into one of five categories: - \"integerItemType\" ... - \"monetaryItemType\" ... - \"perShareItemType\" ... - \"sharesItemType\" ... - \"percentItemType\""
+ },
+ {
+  "claim": "FinNI value-normalization rules exist only as prompt instructions (not as a scoring-time normalizer): keep magnitude unexpanded ('10.6 million' -> '10.6', 'Two hundred' -> 'two'), remove currency symbols, '%' and commas, convert word-form numbers, ignore dates/phone numbers/IDs.",
+  "evidence_url": "https://datasets-server.huggingface.co/first-rows?dataset=TheFinAI/FinNI-eval-v2&config=default&split=test",
+  "confidence": "VERIFIED",
+  "quote": "(3) If a number is followed by a magnitude term (e.g., Hundred, Thousand, Million, Billion), do not expand it into the full numerical value. ... (4) Standardize numerical formatting by removing currency symbols (e.g., \"USD\"), percentage signs (\"%\"), and commas (\",\")"
+ },
+ {
+  "claim": "TheFinAI/FinCL-eval: single 'test' split, 52,572 rows; columns context, category, entity, entity_type, query, answer (all string); NO license key. category = 'text' (4,252) or 'table' (48,320); entity_type counts: monetaryItemType 46,763, percentItemType 2,579, sharesItemType 1,820, perShareItemType 1,114, integerItemType 296.",
+  "evidence_url": "https://datasets-server.huggingface.co/statistics?dataset=TheFinAI/FinCL-eval&config=default&split=test",
+  "confidence": "VERIFIED",
+  "quote": "\"text\": 4,252 \"table\": 48,320 ... \"monetaryItemType\": 46,763"
+ },
+ {
+  "claim": "TheFinAI/FinCL-eval-v2: single 'test' split, 261,457 rows in 4 parquet shards; same 6 columns; NO license key; category text 19,859 / table 241,598; entity_type monetaryItemType 233,749, percentItemType 11,848, sharesItemType 9,119, perShareItemType 5,702, integerItemType 1,039.",
+  "evidence_url": "https://datasets-server.huggingface.co/statistics?dataset=TheFinAI/FinCL-eval-v2&config=default&split=test",
+  "confidence": "VERIFIED",
+  "quote": "text: 19,859 table: 241,598 ... monetaryItemType: 233,749"
+ },
+ {
+  "claim": "FinCL query format: for table entities the row is linearized with pipes, e.g. 'table: <entity> 19 </entity> <entity type> monetaryItemType </entity type> <context> Electric — Other revenues | $ | 25 | $ | 22 | $ | 19 </context>'; for text entities 'text: <entity> four </entity> <entity type> integerItemType </entity type> <context> <sentence> </context>'. The answer is a single concept QName such as 'us-gaap:RevenueNotFromContractWithCustomerOther'. The full HTML table is kept in the separate 'context' column.",
+  "evidence_url": "https://datasets-server.huggingface.co/rows?dataset=TheFinAI/FinCL-eval&config=default&split=test&offset=30000&length=2",
+  "confidence": "VERIFIED",
+  "quote": "table: <entity> 6039801 </entity> <entity type> monetaryItemType </entity type> <context> Property, plant, and equipment, net | 6,398,275 | 6,039,801 </context> ... us-gaap:PropertyPlantAndEquipmentNet"
+ },
+ {
+  "claim": "TheFinAI/FinTagging_BIO: single 'test' split, 6,599 rows; columns context_index (int64), context (string, HTML for tables), bio_label (string = JSON list of tags per token: 'O', 'B-us-gaap:<Concept>', 'I-us-gaap:<Concept>'); NO license key.",
+  "evidence_url": "https://datasets-server.huggingface.co/first-rows?dataset=TheFinAI/FinTagging_BIO&config=default&split=test",
+  "confidence": "VERIFIED",
+  "quote": "'B-us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest' ... 'B-us-gaap:ProfitLoss'"
+ },
+ {
+  "claim": "TheFinAI/FinTagging_BIO_v2: single 'test' split, 28,787 rows; same 3 columns; NO license key; modified 2025-09-21.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinTagging_BIO_v2/raw/main/README.md",
+  "confidence": "VERIFIED",
+  "quote": "- name: test\n    num_bytes: 176213315\n    num_examples: 28787"
+ },
+ {
+  "claim": "TheFinAI/FinTagging-Untagged-Data (created 2025-12-22, license apache-2.0, README body empty, no dataset viewer) contains only 10 raw .htm 10-K filings from 2008 (pre-iXBRL era), with filenames encoding CIK_filingdate_company_10-K_file, e.g. '66740_2008-02-15_3M_CO_10-K_a08-2453_110k.htm'. It is not a labeled training set.",
+  "evidence_url": "https://huggingface.co/api/datasets/TheFinAI/FinTagging-Untagged-Data/tree/main",
+  "confidence": "VERIFIED",
+  "quote": "1800_2008-02-19_ABBOTT_LABORATORIES_10-K_a2182445z10-k.htm ... 66740_2008-02-15_3M_CO_10-K_a08-2453_110k.htm"
+ },
+ {
+  "claim": "TheFinAI/finben-finer-ord is NOT FinTagging data: it is FiNER-ORD (PER/LOC/ORG BIO NER), license cc-by-nc-4.0, test split only (1,080 rows).",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/finben-finer-ord",
+  "confidence": "VERIFIED",
+  "quote": "Test split: 1,080 instances ... CC-BY-NC-4.0 ... B-PER, I-PER ... B-LOC ... B-ORG"
+ },
+ {
+  "claim": "No TheFinAI HF FinTagging repo carries per-example filing metadata (CIK, company name, fiscal year, accession number, document URL): every schema is limited to text/context, labels and an integer context index. Company names appear only incidentally inside the HTML/sentence text.",
+  "evidence_url": "https://datasets-server.huggingface.co/first-rows?dataset=TheFinAI/FinTagging_Original&config=default&split=test",
+  "confidence": "VERIFIED",
+  "quote": "Accession/CIK: Not explicitly provided in this dataset export - URL: Not provided"
+ },
+ {
+  "claim": "lm2445/FinTagging_1000 (MIT, Jul 2026, third-party) is the only HF repo with a train split: train 800 / test 200 rows sampled from the FinTagging parquet, filtered to rows with >=1 entity; columns source_sample_idx, split, text (HTML), numeric_entities, context_id. Companion repos: FinTagging1000_ER (800/200, query/answer), FinTagging1000_table (464/110), FinTagging1000_text (304/81), FinTagging1000_Grounding (test 2,509, concept prediction given entity + row/column context). No paper or GitHub is linked.",
+  "evidence_url": "https://huggingface.co/datasets/lm2445/FinTagging_1000",
+  "confidence": "VERIFIED",
+  "quote": "Train: 800 rows - Test: 200 rows ... source_sample_idx (int64): original row index from the source FinTagging parquet file"
+ },
+ {
+  "claim": "The official code repo is github.com/The-FinAI/FinTagging (org 'The-FinAI', not 'TheFinAI'): created 2025-05-16, last push 2025-10-13, 14 stars, GitHub license field null (no LICENSE file in the tree).",
+  "evidence_url": "https://api.github.com/repos/The-FinAI/FinTagging",
+  "confidence": "VERIFIED",
+  "quote": "license: Not specified (null) ... pushed_at: 2025-10-13T01:20:52Z ... stargazers_count: 14"
+ },
+ {
+  "claim": "GitHub tree (22 files) includes a TRAINING SET: annotation/TrainingSet_Annotation.json (9.09 MB) and BERT/data/train_data_all.bio (10.7 MB); plus annotation/benchmark_ground_truth_pipeline.json (19.9 MB), BERT/data/test_data_benchmark.bio (26.8 MB), BERT/train_ner_model.py, BERT/evaluate_ner_model.py, evaluate_NEN.ipynb, parse_xbrl_report.ipynb, parse_taxonomy.ipynb, sample_pos&neg_data.ipynb, construct_train&test_data(bert).ipynb, retrieval/retrieval.py, subdata/FinNI-eval-subset.csv, subdata/FinCL-eval-subset.csv, taxonomy/us-gaap-2024.xsd, taxonomy/us_gaap_2024_BM25.jsonl.",
+  "evidence_url": "https://api.github.com/repos/The-FinAI/FinTagging/git/trees/main?recursive=1",
+  "confidence": "VERIFIED",
+  "quote": "annotation/TrainingSet_Annotation.json | 9,091,474 ... BERT/data/train_data_all.bio | 10,706,755"
+ },
+ {
+  "claim": "README defines 'FinTagging_Trainset' as a GitHub-only (not HF) training set intended for the BERT baselines.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/README.md",
+  "confidence": "VERIFIED",
+  "quote": "FinTagging_Trainset: The training set for the BERT-series models is provided in two formats: the JSON format, located in the 'annotation' folder under the name 'TrainingSet_Annotation.json,' and the BIO format, located in the 'BERT/data' folder under the name 'train_data_all.bio'."
+ },
+ {
+  "claim": "TrainingSet_Annotation.json is {\"text_data\": [{\"text\": ..., \"numeric_entities\": [{\"value\",\"type\",\"concept\"}]}]} — the same minimal label schema as the HF test sets; it carries no CIK, company, fiscal year, accession, URL, period, unit, decimals or scale.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/annotation/TrainingSet_Annotation.json",
+  "confidence": "VERIFIED",
+  "quote": "\"value\": \"256220000\", \"type\": \"monetaryItemType\", \"concept\": \"us-gaap:RedeemableNoncontrollingInterestEquityCarryingAmount\" ... Absent: CIK, company name, fiscal year, accession number, filing URL, period, unit, decimals, scale"
+ },
+ {
+  "claim": "The training set comes from 10 additional 10-K filings (Feb 13 2024 – Feb 13 2025), disjoint from the benchmark: 1,116 sentences (558 pos/558 neg) + 953 tables (594 pos/359 neg), 25,199 entities, 1,435 unique US-GAAP concepts; used to fine-tune BERT-large, FinBERT, SECBERT (bs 4, lr 3e-5, 20 epochs, max len 512, 2x A5000).",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "We gathered an additional 10 annual 10-K financial reports filed with the SEC for the period from February 13, 2024, to February 13, 2025 ... we generated a total of 1,116 sentences and 953 tables as the training set for PTMs"
+ },
+ {
+  "claim": "The LLM evaluation is zero-shot only; the paper never defines a train split for LLMs, and the HF releases are test-only.",
+  "evidence_url": "https://arxiv.org/abs/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "Evaluating diverse LLMs in zero shot settings reveals that while models generalize well in extraction, they struggle significantly with fine grained concept linking"
+ },
+ {
+  "claim": "Data construction script parse_xbrl_report.ipynb parses local iXBRL .htm files with BeautifulSoup/lxml (folder names carry accession numbers, e.g. 0000766704-25-000009-xbrl), keeps only concepts starting with 'us-gaap:', only the five item types, strips commas from values, dedups on (value, concept), rebuilds tables as '<table>{rows}</table>' with <tr>/<td>/<th>, keeps text blocks >20 chars, and stores NO context/period/unit/decimals/scale/sign/CIK/company/accession metadata.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/parse_xbrl_report.ipynb",
+  "confidence": "VERIFIED",
+  "quote": "Filtering: Only concepts starting with \"us-gaap:\" retained ... Value cleaning: Commas removed via replace(\",\", \"\") ... Excluded fields: context, period, unit, decimals, scale, sign, CIK, company name, accession number, fiscal year"
+ },
+ {
+  "claim": "The notebook construct_train&test_data(bert).ipynb builds BIO labels as B-<concept>/I-<concept>/O from final_simple_annotation.json (6,599 records; 2,288 concepts) and writes an internal 5,829/1,320 train/test split — this is an internal BERT split of the v1 benchmark and is NOT what is published on HF (HF has test-only).",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/construct_train%26test_data(bert).ipynb",
+  "confidence": "VERIFIED",
+  "quote": "annotation/train_data.json (5,829 records) - annotation/test_data.json (1,320 records) ... Total concepts: 2,288"
+ },
+ {
+  "claim": "The only public scoring code for LLM outputs in the repo is evaluate_NEN.ipynb (FinCL): accuracy by exact string match of the normalized JSON answer against the gold concept, defaulting to the first candidate tag on parse failure; reported 0.1715 over 52,572 samples. No lowercasing/numeric normalization is applied.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/evaluate_NEN.ipynb",
+  "confidence": "VERIFIED",
+  "quote": "Exact string matching after normalization ... Defaults to the first candidate tag if parsing fails ... 0.1715 (17.15% accuracy) across 52,572 samples"
+ },
+ {
+  "claim": "BERT/evaluate_ner_model.py scores the BIO baselines with seqeval classification_report (entity-level), reporting both micro and macro P/R/F1, ignoring -100 subword labels.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/BERT/evaluate_ner_model.py",
+  "confidence": "VERIFIED",
+  "quote": "from seqeval.metrics import classification_report"
+ },
+ {
+  "claim": "The FinBen fork used for evaluation (github.com/Yan2266336/FinBen, default branch master, fork of The-FinAI/FinBen) contains only two FinTagging task configs, tasks/FinTagging/GPT4o_NEN.yaml and DeepSeekV3_NEN.yaml (FinCL rerank): metric exact_match (mean), temperature 0.0, max_gen_toks 1024, until 'JSON_END', dataset_path TheFinAI/XBRL_Tagging_Pipeline_GPT4o_Rerank_1 / ..._DeepSeek_v3_Rerank_1 with test_split 'train'. Those two HF datasets are not public (401; HF search returns nothing). No FinNI task YAML or pair-level P/R/F1 scorer for LLM outputs was found in the fork or upstream FinBen.",
+  "evidence_url": "https://raw.githubusercontent.com/Yan2266336/FinBen/master/tasks/FinTagging/GPT4o_NEN.yaml",
+  "confidence": "VERIFIED",
+  "quote": "Dataset Path: TheFinAI/XBRL_Tagging_Pipeline_GPT4o_Rerank_1 ... Test Split: train ... Metrics: Type: exact_match"
+ },
+ {
+  "claim": "subdata/FinNI-eval-subset.csv (~15 rows; columns context_index,context,query,answer) and subdata/FinCL-eval-subset.csv (~20-25 rows; columns context,category,entity,entity_type,query,answer) are tiny samples with the same columns as the HF sets and no filing metadata.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/subdata/FinNI-eval-subset.csv",
+  "confidence": "VERIFIED",
+  "quote": "context_index,context,query,answer ... Approximately 15 rows total"
+ },
+ {
+  "claim": "Paper metric definitions: FinNI = pair-level Precision/Recall/F1 where a prediction counts only if entity span AND type exactly match; FinCL = accuracy with delta=1 iff predicted concept equals gold; end-to-end FinTagging = triplet {Tag, Fact, Type} macro and micro P/R/F1. No scoring-time numeric normalization (scaling, sign, period, unit) is defined.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "where (ei,li)=(ej′,lj′) if and only if both the entity span e and its assigned type l exactly match ... δ(ĉi,ci∗)=1 if ĉi=ci∗, and 0 otherwise"
+ },
+ {
+  "claim": "FinCL is evaluated as retrieval+rerank: taxonomy concepts embedded with text-embedding-3-small (ElasticSearch), top-h candidates retrieved, LLM selects the final tag from the top-200 retrieved US-GAAP candidates. The taxonomy database in v1 had 17,388 concepts; repo ships us-gaap-2024.xsd and a BM25 jsonl index plus a Google Drive embedding index.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "models select the final tag from the top-200 retrieved US-GAAP candidates"
+ },
+ {
+  "claim": "The paper reports an aggregate compute cost but no latency/throughput/per-sample cost: v5 says 'Total cost is approximately 500 GPU-hours and $1,500 in API usage' on a 4xH100 cluster plus APIs (input limits 24,576 tokens FinNI / 8,192 FinCL). v1 ran all open models through the TogetherAI API 'without local deployment' and contains no cost or latency numbers at all.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "Models are evaluated with the LM Evaluation Harness on a 4×H100 cluster and via APIs, using input limits of 24,576 (FinNI) and 8,192 (FinCL) tokens. Total cost is approximately 500 GPU-hours and $1,500 in API usage."
+ },
+ {
+  "claim": "Paper v5 (2026-05-17) evaluates small open models zero-shot — Qwen3-0.6B, Qwen3-1.7B, Llama-3.2-3B-Instruct — with end-to-end macro F1 of 0.0010 / 0.0080 / 0.0100; best model DeepSeek-V3: FinNI F1 0.6932, FinCL acc 0.1889, end-to-end F1 0.1356; GPT-4o FinNI F1 0.5397, FinCL 0.1829. No fine-tuned small LLM is evaluated (only fine-tuned BERT-large/FinBERT/SECBERT).",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "Qwen3-0.6B (End-to-end): F1 = 0.0010 (macro) ... Llama-3.2-3B-Instruct (End-to-end): F1 = 0.0100 (macro)"
+ },
+ {
+  "claim": "arXiv 2505.20650 has 5 versions: v1 2025-05-27, v2 2025-10-10, v3 2026-01-06, v4 2026-02-19, v5 2026-05-17; arXiv license CC BY 4.0; subjects cs.CL, cs.AI, cs.CE. The abstract does not mention cost, latency or throughput.",
+  "evidence_url": "https://arxiv.org/abs/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "v1: May 27, 2025 ... v5: May 17, 2026"
+ },
+ {
+  "claim": "v1 paper (= HF v1 datasets): 30 annual 10-K filings filed 2024-02-13 to 2025-02-13 (81,325 facts, 69,451 standard-tag); benchmark = 3,354 sentences + 3,245 tables = 6,599 instances (1,627+2,014 positive, 1,727+1,231 negative); 52,740 entities; 2,288 unique concepts; FinNI-eval 6,599 (avg input 986 tokens, max 13,205; cl100k_base), FinCL-eval 52,572. Appendix C Table 9 lists all 30 companies with CIK, name, ticker, filing date (e.g. 0000048898 HUBBELL INC, 0000936340 DTE ENERGY CO, 0000922224 PPL Corp, 0001713445 Reddit, Inc.).",
+  "evidence_url": "https://arxiv.org/pdf/2505.20650v1",
+  "confidence": "VERIFIED",
+  "quote": "We collected 30 annual 10-K reports filed in 2024 by publicly listed companies from SEC ... we annotated a total of 3,354 sentences and 3,245 table sequences"
+ },
+ {
+  "claim": "v5 paper (= HF v2 datasets): 142 10-K filings 2023–2024 (period 2023-02-13 to 2025-02-13), 11 sectors, 31 states + outside US; 319,893 sentences and 21,576 tables in raw; annotated 15,986 sentences + 12,801 tables = 28,787 instances (positives 7,768 sentence / 8,709 table; negatives 8,218 / 4,092); 261,457 entities; 3,953 unique concepts; FinNI-eval 28,787, FinCL-eval 261,457. Appendix C of v5 gives only aggregate sector/market-cap/geography figures and does NOT enumerate the 142 filings; no filing list file exists in the GitHub repo either.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "We compiled 142 annual 10-K filings from publicly listed U.S. companies submitted to the U.S. Securities and Exchange Commission (SEC) in 2023–2024 (Table 2)."
+ },
+ {
+  "claim": "Ground truth is produced automatically by a rule-based iXBRL parser (ix:nonfraction leaf elements -> value, concept, type); only a sampled 1,949 instances (928 sentences + 1,021 tables) were human-reviewed (96% raw agreement, Cohen's kappa 0.81). The remaining labels are unverified machine-derived iXBRL tags.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "validating all 261,457 entities is infeasible ... a diversity-maximized subset consisting of 928 sentence instances and 1,021 table instances ... 96% raw agreement and Cohen's κ=0.81"
+ },
+ {
+  "claim": "FinTagging_Original_v2 has 46,496 rows versus 28,787 in FinNI-eval-v2/FinTagging_BIO_v2 — the 'Original_v2' repo evidently contains more raw contexts than the curated 28,787-instance benchmark; no card text explains the difference.",
+  "evidence_url": "https://datasets-server.huggingface.co/info?dataset=TheFinAI/FinTagging_Original_v2",
+  "confidence": "VERIFIED",
+  "quote": "Test: 46,496 examples"
+ },
+ {
+  "claim": "Semantic Scholar venue/citation lookup could not be completed (HTTP 429 on every attempt); the arXiv HTML header contains only an ACM template placeholder, so the publication venue is unknown from the sources fetched.",
+  "evidence_url": "https://api.semanticscholar.org/graph/v1/paper/arXiv:2505.20650?fields=title,year,venue,citationCount,externalIds,publicationVenue",
+  "confidence": "UNVERIFIED",
+  "quote": "The server returned HTTP 429 Too Many Requests."
+ }
+]
+
+### unknowns
+(1) WebSearch budget was exhausted before this task started, so discovery relied solely on direct HF/arXiv/GitHub API fetches; a Google-Scholar-style sweep for citing work was not possible. (2) Contents of TheFinAI/lm-eval-fincl-rerank-results-private and the two TheFinAI/XBRL_Tagging_Pipeline_*_Rerank_1 datasets referenced by the FinBen task YAMLs are not public. (3) Why FinTagging_Original_v2 has 46,496 rows while the v2 benchmark has 28,787 instances is undocumented. (4) The list of the 142 filings behind the v2/v5 release is not published anywhere found (only the 30 v1 filings are listed, in the v1 PDF Appendix C). (5) No public pair-level P/R/F1 scorer for LLM FinNI outputs was located — only the FinCL accuracy notebook, the seqeval BERT script and the exact_match FinBen YAMLs. (6) Publication venue unknown (Semantic Scholar 429). (7) The 'collection has 17 items' claim on dataset cards could not be reconciled with the 9 items rendered.
+
+### notes
+BOTTOM LINE ON TRAINING SPLIT: every TheFinAI FinTagging dataset on Hugging Face (FinTagging_Original, _Original_v2, FinTagging_BIO, _BIO_v2, FinNI-eval, FinNI-eval-v2, FinCL-eval, FinCL-eval-v2) has a single 'test' split and no train/validation split. A training set DOES exist but only on GitHub (The-FinAI/FinTagging: annotation/TrainingSet_Annotation.json + BERT/data/train_data_all.bio), built from 10 extra 10-K filings (1,116 sentences + 953 tables, 25,199 entities, 1,435 concepts) for the BERT baselines; its schema is {text, numeric_entities:[{value,type,concept}]}. The only HF repo with a train split is the third-party lm2445/FinTagging_1000 (800/200, Jul 2026). LABELS: concept QName + 5-way item type + value string only — NO period, unit, decimals, scale, sign, or filing metadata (CIK/company/fiscal year/accession/URL) anywhere in HF or GitHub data; the paper's own parse_xbrl_report.ipynb discards those fields. TABLES are raw reconstructed HTML (<table><tr><td>) in FinNI/Original/BIO; FinCL queries linearize the row with ' | ' separators. LICENSES: FinTagging_Original = MIT; FinTagging-Untagged-Data = Apache-2.0; all other six TheFinAI repos have no license key; GitHub repo has no LICENSE file; paper is CC BY 4.0. SCORING: FinNI exact match on (entity string, type) pairs; FinCL exact concept match (accuracy) over top-200 retrieved candidates; end-to-end triplet P/R/F1; normalization is prompt-side only (strip $, %, commas; don't expand 'million'). COST/LATENCY: the paper states only an aggregate '500 GPU-hours and $1,500 in API usage' (v5) and reports no latency, throughput, or per-sample cost; v1 ran open models via TogetherAI API. Small models (Qwen3-0.6B/1.7B, Llama-3.2-3B) are evaluated zero-shot only and score ~0.001-0.01 end-to-end F1 — consistent with the project's novelty claim that no fine-tuned/distilled small model with a cost-latency frontier has been reported on FinTagging. JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/data_fintagging_release.json; extracted v1 paper text at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/fintagging_v1.txt.

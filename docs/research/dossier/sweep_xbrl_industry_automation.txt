@@ -1,0 +1,382 @@
+### key
+sweep_xbrl_industry_automation
+
+### angle
+XBRL tagging automation outside the FinNLP paper cluster: industry vendors (Workiva, DFIN, Toppan Merrill, IRIS CARBON, CoreFiling, ESEF tooling), patents, older ML papers (2007-2025), public iXBRL-derived datasets, plus every paper found that reports cost or latency on XBRL/SEC extraction tasks. Result file: /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/sweep_xbrl_industry_automation.json
+
+### queries_run
+[
+ "WebSearch: automated XBRL tagging machine learning accuracy US-GAAP concept recommendation",
+ "WebSearch: iXBRL tagging machine learning paper taxonomy element prediction financial statements",
+ "WebSearch: Workiva machine learning XBRL tagging automation AI tag suggestions",
+ "WebSearch: Toppan Merrill OR DFIN OR Donnelley Financial AI automated XBRL tagging accuracy",
+ "WebSearch: XBRL tag recommendation system paper 2015-2019 financial statement classification taxonomy elements",
+ "WebSearch: ESEF iXBRL tagging automation machine learning ESMA tool accuracy",
+ "WebSearch: EDGAR-CORPUS dataset 10-K Hugging Face",
+ "WebSearch: XBRL latency OR throughput OR cost per filing LLM tagging financial statements benchmark",
+ "WebSearch: XBRL deep learning concept classification paper 2019-2021 financial statement line items neural network taxonomy",
+ "WebSearch: SEC Financial Statement Data Sets XBRL training data machine learning dataset Hugging Face",
+ "WebSearch: iXBRL dataset Hugging Face XBRL facts extracted 10-K dataset financial facts concept value period",
+ "WebSearch: FinTabNet dataset financial tables structure recognition S&P 500 annual reports",
+ "WebSearch: Deloitte OR EY OR PwC OR KPMG research paper machine learning XBRL tagging automation accuracy study",
+ "WebSearch: XBRL custom tags OR extension elements ML mapping standard taxonomy FinBERT TF-IDF (refused: session search budget exhausted)",
+ "arXiv API: all:XBRL (50 newest)",
+ "arXiv API: FNXL OR FiNER-139 OR FinTagging",
+ "arXiv API: (10-K OR SEC filings) AND (latency OR inference cost OR small language model OR distilled)",
+ "arXiv API: iXBRL; FiNER-139; us-gaap; financial numeral (partially rate-limited)",
+ "Semantic Scholar API: XBRL tagging machine learning; XBRL tag recommendation; financial numeric entity recognition XBRL (mostly HTTP 429)",
+ "OpenAlex API: 8 phrasings (XBRL tagging ML; XBRL taxonomy element classification; iXBRL automatic tagging; financial numeric entity recognition XBRL; XBRL tag recommendation; US GAAP taxonomy concept prediction; FS line item classification taxonomy neural; FinNum numeral classification)",
+ "OpenAlex API: works citing FiNER (W4285137661) and FNXL (W4385571939); DOI lookups for JCIS 2025, XBRL Agent, KD-for-FinLLM review",
+ "Hugging Face API: datasets search xbrl / FinTagging / FNXL / finer-139 / ixbrl; models search FinTagging / FNXL / xbrl / finer",
+ "GitHub search API: FinTagging; XBRL tagging LLM"
+]
+
+### findings
+[
+ {
+  "title": "FinLoRA: Benchmarking LoRA Methods for Fine-Tuning LLMs on Financial Datasets",
+  "url": "https://arxiv.org/abs/2505.19819",
+  "year": "2025",
+  "what": "LoRA/QLoRA/DoRA/rsLoRA on Llama 3.1 8B Instruct (plus base Llama 3.1 70B, DeepSeek V3, GPT-4o, fine-tuned Gemini 2.0 Flash Lite) across 19 financial datasets incl. FiNER-139, FNXL, and four new XBRL tag/value extraction + formula tasks from 150 SEC filings. No model under 8B.",
+  "reports_cost": "yes (fine-tuning USD, no per-query inference cost). Table 5: 'LoRA 14.9h 4 x A5000 $15.50 ... Gemini 2.0 FL 8.8h - $162.02 GPT-4o-mini - - $312.00'; 'At an estimated rate of $0.26 per GPU hour, this translates to a cost of roughly $14.66 to $16.54.' Table 3: GPU memory for 16/8/4-bit Llama-3.1-8B.",
+  "reports_latency": "yes (figure-level, averaged). 'Figure 3: Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks'; 'Gemini API generally exhibits lower inference latency and is less sensitive to increasing prompt lengths than local Llama 3.1 8B Instruct inference, even when accounting for network overhead for the API.' Abstract: 'report computational cost in terms of time and GPU memory during fine-tuning and inference stages.'",
+  "threat_to_novelty": "high - closest prior work: fine-tuned open model on FiNER-139/FNXL with dollar cost and inference-time comparison vs API models; but 8B not 1-3B, no quantized-serving or per-fact/per-filing cost, no FinTagging.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Parameter-Efficient Instruction Tuning of LLMs For Extreme Financial Numeral Labelling (FLAN-FinXC)",
+  "url": "https://arxiv.org/abs/2405.06671",
+  "year": "2024",
+  "what": "Instruction-tunes FLAN-T5-Base (220M) and FLAN-T5-Large (780M) with LoRA/prefix tuning to generate XBRL tags; SOTA on FNXL (2,794 tags) and FiNER-139; Tesla V100 32GB.",
+  "reports_cost": "no (training time per epoch only: 'training time: 1hr 22 minutes/epoch' / '56 minutes/epoch' with LoRA)",
+  "reports_latency": "partial - one crude figure: 'FLAN-T5-Large models were instruction-tuned for 10 epochs ... (training time: 1hr 22 minutes/epoch, inference time: 2 minutes/sample)'. No throughput or serving setup.",
+  "threat_to_novelty": "medium - a sub-1B model on FNXL/FiNER with an inference-time number already exists, weakening the literal 'nobody reports latency' wording; but it is a one-off timing, not a cost/latency frontier.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "FinTagging: Benchmarking LLMs for Extracting and Structuring Financial Information",
+  "url": "https://arxiv.org/abs/2505.20650",
+  "year": "2025 (v5 May 2026)",
+  "what": "Target benchmark. Zero-shot: DeepSeek-V3, GPT-4o, Llama-4-Scout, Llama-3.3-70B, R1-Distill-Qwen-32B, Qwen3-32B/14B/1.7B/0.6B, gemma-2-27b, Llama-3.1-8B, Llama-3.2-3B, Fino1-8B; fine-tuned PLMs BERT-large/FinBERT/SECBERT. Small models already present zero-shot: Llama-3.2-3B FinNI F1 0.1460, Qwen3-1.7B 0.0541, Qwen3-0.6B 0.0038; FinCL acc 0.0415/0.0735/0.0414; best FinCL (DeepSeek-V3) 0.1889; fine-tuned SECBERT FinCL micro 0.1779 beats zero-shot LLMs. Paper CC BY 4.0; HF FinTagging_Original MIT, test-only 6,599 rows; eval via LM Evaluation Harness on 4xH100.",
+  "reports_cost": "partial - aggregate only: 'Total cost is approximately 500 GPU-hours and $1,500 in API usage.' No per-model cost.",
+  "reports_latency": "no ('latency' and 'throughput' absent from paper)",
+  "threat_to_novelty": "medium - 0.6B-3B models are already on the leaderboard (zero-shot, near-zero), so novelty must be 'fine-tuned small model + per-model cost/latency frontier', not 'first small model on FinTagging'.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Benchmarking Multi-Agent LLM Architectures for Financial Document Processing: Orchestration Patterns, Cost-Accuracy Tradeoffs and Production Scaling (Kulkarni & Kulkarni)",
+  "url": "https://arxiv.org/abs/2603.22651",
+  "year": "2026",
+  "what": "Field extraction from 10,000 SEC 10-K/10-Q/8-K filings (HTML/XBRL to text) with GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Pro, Llama 3 70B, Mixtral 8x22B; open models 'served on 4xA100 80GB nodes using vLLM'. Compares orchestration patterns; no small models, no XBRL concept tagging, not FinTagging/FNXL/FiNER.",
+  "reports_cost": "yes - per document (Claude 3.5 Sonnet): Sequential '$0.187', Parallel '$0.221', Hierarchical '$0.261', Reflexive '$0.430', Hierarchical-Optimized '$0.148'; 'reflexive architectures achieve the highest field-level F1 (0.943) but at 2.3x the cost'",
+  "reports_latency": "yes - p50 seconds: Sequential 38.7, Parallel 21.3, Hierarchical 46.2, Reflexive 74.1; throughput-accuracy at 1K-100K docs/day",
+  "threat_to_novelty": "medium - shows cost/latency-vs-accuracy reporting on SEC extraction exists in 2026, but on a private schema with frontier/70B models, not public XBRL benchmarks or small fine-tuned models.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "A Report on Financial Regulations Challenge at COLING 2025",
+  "url": "https://arxiv.org/abs/2412.11159",
+  "year": "2024/2025",
+  "what": "Shared task incl. Task 9 'XBRL Analytics' (e.g., 'What is the value of Walt Disney Company's total assets for the fiscal year ending in 2023?'). Baselines Llama 3.1-8B, GPT-4o, Mistral Large 2; teams fine-tuned Qwen 2.5-7B-Instruct (winner), Llama 3.2-3B-Instruct, Llama 3.1-8B QLoRA, Qwen 7B-chat.",
+  "reports_cost": "no ('cost' absent)",
+  "reports_latency": "no ('latency' absent)",
+  "threat_to_novelty": "low - a fine-tuned 3B model was applied to an XBRL value task, but no cost/latency and a small QA set rather than FinTagging/FNXL/FiNER.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "XBRLTagRec: Domain-Specific Fine-Tuning and Zero-Shot Re-Ranking with LLMs for Extreme Financial Numeral Labeling",
+  "url": "https://arxiv.org/abs/2603.25263",
+  "year": "2026",
+  "what": "Fine-tuned FLAN-T5-Large tag-doc generation + Sentence-T5-XXL retrieval + ChatGPT-3.5 re-ranking on FNXL; +2.64-4.47% Hits@1/Macro over FLAN-FinXC; 32GB V100.",
+  "reports_cost": "no (qualitative 'balancing performance improvement with computational cost')",
+  "reports_latency": "no ('latency', 'inference time', 'seconds', 'throughput' absent)",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Noise-Robust Financial Numerical Entity Attribute Tagging (NORA)",
+  "url": "https://arxiv.org/abs/2605.24910",
+  "year": "2026",
+  "what": "sec-bert-base encoder predicting concept, time relation, scale, sign for numerals; new 6.6M-sentence iXBRL-derived benchmark (no release URL found); noisy-label training.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low - encoder-only, no efficiency metrics; relevant as evidence that iXBRL labels are noisy.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "HiFi-KPI: A Dataset for Hierarchical KPI Extraction from Earnings Filings",
+  "url": "https://arxiv.org/abs/2502.15411",
+  "year": "2025 (LREC 2026)",
+  "what": "1.65M paragraphs / 198k hierarchical labels from SEC iXBRL 10-K/10-Q with value, period, unit per entity; Lite 8K subset. Encoders >0.906 macro-F1; LLM extraction: Qwen3-30B-A3B 0.440 F1, DeepSeek-V3.1 0.436, Mistral-small-24B 0.422, Gemma-3-27B 0.356. HF AAU-NLP/HiFi-KPI (3.36 GB); github.com/aaunlp/HiFi-KPI; dataset license not stated on card.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low-medium - strongest public training-data candidate (concept+value+period+unit) with LLM baselines, but no sub-4B models and no cost/latency.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Making LLMs Worth Every Penny: Resource-Limited Text Classification in Banking",
+  "url": "https://arxiv.org/abs/2311.06102",
+  "year": "2023 (ICAIF)",
+  "what": "FiNER authors' group; MLMs vs SetFit vs GPT-4/Cohere/Anthropic ICL on Banking77 with a 'Cost Analysis' section and RAG to cut LLM cost. Not XBRL.",
+  "reports_cost": "yes (section '6.1 Cost Analysis'; 'able to reduce operational costs multiple times compared to classic few-shot approaches')",
+  "reports_latency": "no",
+  "threat_to_novelty": "low - methodological precedent for accuracy-vs-cost framing in financial NLP, different task.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Knowledge distillation for financial large language models: a systematic review",
+  "url": "https://doi.org/10.1631/fitee.2500282",
+  "year": "2025",
+  "what": "Survey citing FNXL: 'excessive deployment expenditures and considerable inference latency constitute major obstacles'; proposes an evaluation framework; no experiments on XBRL benchmarks.",
+  "reports_cost": "no (discussion only)",
+  "reports_latency": "no (discussion only)",
+  "threat_to_novelty": "low - confirms the gap is recognised but not filled.",
+  "verification": "VERIFIED abstract via OpenAlex; full text paywalled"
+ },
+ {
+  "title": "FiNER: Financial Numeric Entity Recognition for XBRL Tagging",
+  "url": "https://arxiv.org/abs/2203.06482",
+  "year": "2022 (ACL)",
+  "what": "FiNER-139 (1.1M sentences, 139 tags, CC-BY-SA-4.0, nlpaueb/finer-139); BiLSTM vs BERT vs FinBERT vs SEC-BERT.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Financial Numeric Extreme Labelling (FNXL): A Dataset and Benchmarking for XBRL Tagging",
+  "url": "https://arxiv.org/abs/2306.03723",
+  "year": "2023 (ACL Findings)",
+  "what": "FNXL, 2,794 labels; sequence labelling vs span extraction + extreme classification. HF mirrors TheFinAI/flare-fnxl, soummyaah-space/FNXL.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Standardizing XBRL Tags with Natural Language Processing (Richard Zhe Wang)",
+  "url": "https://doi.org/10.1080/08874417.2025.2507710",
+  "year": "2025 (JCIS; SSRN 2023)",
+  "what": "Maps custom XBRL extension tags 2009-2022 to nearest US-GAAP standard tag with TF-IDF, Word2Vec, FinBERT. Abstract: 'the algorithm is fast, efficient, and has a reasonable level of accuracy.' Not LLM, not fact extraction.",
+  "reports_cost": "no",
+  "reports_latency": "no numbers in abstract (qualitative 'fast, efficient'); full text HTTP 403",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED abstract (OpenAlex/Crossref); body UNVERIFIED"
+ },
+ {
+  "title": "Workiva patents: Systems and methods for XBRL tag suggestion and validation (US11087070B1, US11694020, US12106037B2)",
+  "url": "https://patents.google.com/patent/US12106037",
+  "year": "priority 2020-11-04; grants 2021-2024",
+  "what": "ML model (decision tree/random forest/SVM/neural net with concatenate+dropout, softmax confidence) suggests tags from row-header text plus SIC code and table type; 'a trained machine learning model can predict XBRL tags with higher than 95% accuracy.'",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low - production ML tag suggestion exists in industry, but no public benchmark, cost or latency.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Workiva XBRL Tagging Outliers (ML feature) and 'Workiva AI - XBRL' community thread",
+  "url": "https://support.workiva.com/hc/en-us/articles/5552431365652-XBRL-Tagging-Outliers-by-Workiva",
+  "year": "2022-2026",
+  "what": "Snippet: 'machine-learning-powered feature based on historical, filed XBRL data' flagging tags differing from peers; community reply says Workiva 'will be looking into possible tagging assistance' with generative AI. Pages returned HTTP 403.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "SNIPPET-ONLY"
+ },
+ {
+  "title": "DFIN Introduces AI-Powered iXBRL Tagging for SEC Filings",
+  "url": "https://www.dfinsolutions.com/knowledge-hub/newsroom/dfin-introduces-ai-powered-ixbrl-tagging-sec-filings-delivering-breakthrough",
+  "year": "2026-06-10",
+  "what": "LLM-based initial tag generation with client-specific knowledge base, human-in-the-loop; pilot for TSR/N-CSR in Arc Suite, broader availability 2H 2026. No model named; no accuracy, speed, or cost numbers.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "IRIS CARBON ML iXBRL auto-tagging blog posts",
+  "url": "https://iriscarbon.com/machine-learning-aids-quicker-more-accurate-ixbrl-tagging/",
+  "year": "2019",
+  "what": "ML auto-tagging of primary financial statements for ESEF (EN/FR/NL): 'up to 95% of the Primary Financial Statements getting auto-tagged even for first-time filers'; 'tagging accuracy of 100%' (for exact taxonomy matches). Marketing, no methodology.",
+  "reports_cost": "no (qualitative 'save money')",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "CoreFiling Seahorse ESEF software (ML tag-selection engine)",
+  "url": "https://www.corefiling.com/esef-reporting-software/",
+  "year": "2026 (page)",
+  "what": "'Machine learning takes the first pass. Seahorse suggests a tag for each line from the patterns in hundreds of thousands of earlier filings, and scores how confident it is in each one.' No numbers.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "XBRL Europe ESEF Hub tools list (ABZ, BRS Analytics, CoreFiling, IRIS CARBON, Ez-XBRL)",
+  "url": "https://www.xbrleurope.org/?page_id=1243",
+  "year": "2026 (page)",
+  "what": "Vendor directory; several claim AI/ML auto-tagging; none give accuracy or speed numbers.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Toppan Merrill SEC Reporting / Bridge",
+  "url": "https://www.toppanmerrill.com/solutions/sec-reporting/",
+  "year": "2026 (page)",
+  "what": "'3M+ XBRL tags applied annually', '2M+ XBRL consulting hours'; human-expert positioning; no AI/ML, accuracy, or pricing claims.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "LP&M Research: AI Turbocharges XBRL Tagging & Validation",
+  "url": "https://www.lpmresearch.com/blog/ai-turbocharges-xbrl-tagging-and-validation",
+  "year": "2025-07-28",
+  "what": "Consultancy blog citing FLAN-FinXC/SEC-BERT ('over 80% micro-F1'); unsourced before/after: 'Average tagging hours per 10-K' 120 -> 35 (71% reduction); 'External service provider costs' $60,000/year -> $15,000/year; validation error rate 4.5% -> 0.8%.",
+  "reports_cost": "partial (unsourced human/outsourced tagging cost, not model serving cost)",
+  "reports_latency": "no",
+  "threat_to_novelty": "low - usable only as a human-baseline cost anchor.",
+  "verification": "VERIFIED (page fetched; figures unsourced)"
+ },
+ {
+  "title": "houseblend.io: SEC Filing Software: Platforms, Pricing & Compliance",
+  "url": "https://www.houseblend.io/articles/sec-filing-software-platforms-pricing-compliance",
+  "year": "2025-2026",
+  "what": "'pricing from roughly $2,000 to $25,000 per month'; 'typical per-document pricing from $500 to $5,000 per disclosure'; Workiva/DFIN/Toppan enterprise custom pricing.",
+  "reports_cost": "partial (service pricing baseline)",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Microsoft patent US8176003B2: Automatic designation of XBRL taxonomy tags",
+  "url": "https://patents.google.com/patent/US8176003B2",
+  "year": "priority 2007",
+  "what": "Rule-based: parses taxonomy into a DOM and string-matches data descriptors to taxonomy labels; menu for ambiguous matches; no ML, no metrics.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "XBRL Agent: Leveraging Large Language Models for Financial Report Analysis",
+  "url": "https://doi.org/10.1145/3677052.3698614",
+  "year": "2024 (ICAIF)",
+  "what": "LLM + retriever + calculator agent on XBRL term explanation and numeric queries; accuracy gains up to 17%/42%. Analysis, not tagging.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED abstract (OpenAlex)"
+ },
+ {
+  "title": "FinAuditing: A Financial Taxonomy-Structured Multi-Document Benchmark for Evaluating LLMs",
+  "url": "https://arxiv.org/abs/2510.08886",
+  "year": "2025 (rev. 2026)",
+  "what": "1,102 instances from real XBRL filings (semantic matching, relation extraction, math reasoning); 13 LLMs.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED abstract"
+ },
+ {
+  "title": "RKEFino1: A Regulation Knowledge-Enhanced Large Language Model",
+  "url": "https://arxiv.org/abs/2506.05700",
+  "year": "2025",
+  "what": "Fino1 (8B) fine-tuned on XBRL/CDM/MOF knowledge; Numerical NER over sentences and tables; released on HF.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low",
+  "verification": "VERIFIED abstract"
+ },
+ {
+  "title": "GRaSp: Automatic Example Optimization for In-Context Learning in Low-Data Tasks",
+  "url": "https://arxiv.org/abs/2605.07454",
+  "year": "2026",
+  "what": "ICL example selection on FiNER-139 (45.84% micro-F1); models not stated in abstract.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED abstract"
+ },
+ {
+  "title": "Hobbyist small models fine-tuned on FiNER-139 / XBRL on Hugging Face (nbroad/finer-139-xtremedistil-l12-h384; muhtasham/bert-tiny-finetuned-finer-139-full-intel-cpu; AlbelTec/TinyLlama-Unsloth-FinGPT-Finered; Ben16001/XBRL-LoRA300k-PlanB on Qwen3-4B)",
+  "url": "https://huggingface.co/nbroad/finer-139-xtremedistil-l12-h384",
+  "year": "2022-2026",
+  "what": "xtremedistil-l12-h384 (33.3M) on FiNER-139: F1 0.6334, acc 0.9961; bert-tiny (4.41M) no card; TinyLlama-1B 4-bit adapter no metrics; Qwen3-4B LoRA on 300k XBRL examples with only val loss 0.0307. None report latency or cost.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "low - distilled/tiny FiNER models exist informally, with no published cost/latency and no FinTagging/FNXL results.",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "SEC Financial Statement Data Sets; Financial Statement and Notes Data Sets; EDGAR XBRL APIs (companyfacts/companyconcept/frames)",
+  "url": "https://www.sec.gov/data-research/sec-markets-data/financial-statement-data-sets",
+  "year": "2009-2026",
+  "what": "Official flattened XBRL facts (tag, value, ddate, qtrs, uom; segments since Dec 2024) quarterly; Notes variant adds text blocks and dimensions monthly (num.tsv/txt.tsv, 41-632 MB per release, Jan 2009-Aug 2026); APIs return concept/value/period/unit JSON with no API key. No explicit license (public SEC data).",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none - training-data source",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "Hugging Face XBRL/iXBRL-derived datasets: CyberMax-tools figurewell/tallyfold-sec-xbrl-financials (5.89M facts, 26.7k filings, CC0, through Q2 2026); bowang0911/sec-xbrl-hard-negatives (461k, CC0); ridcl/xbrl-tables (5,000 page images + query + value + bbox); wangd12/XBRL_analysis (34k rows); mirageco/XBRLBench (100 rows); mmajange/UKCH-iXBRL (107 GB, AFL-3.0); fabsssss/ixbrl-disclosure-benchmark (8,856 UK filings, OGL v3)",
+  "url": "https://huggingface.co/datasets/CyberMax-tools/tallyfold-sec-xbrl-financials",
+  "year": "2024-2026",
+  "what": "Fact-level XBRL tables and retrieval hard-negatives usable for building a fine-tuning set disjoint from FinTagging test filings; none include model baselines with cost or latency.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none - data sources",
+  "verification": "VERIFIED"
+ },
+ {
+  "title": "EDGAR-CORPUS (eloukas/edgar-corpus; ECONLP 2021)",
+  "url": "https://huggingface.co/datasets/eloukas/edgar-corpus",
+  "year": "2021",
+  "what": "~220k 10-K filings 1993-2020 split into Items 1-15, 40.7 GB, Apache 2.0; text sections only, no XBRL facts; companion EDGAR-CRAWLER.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none",
+  "verification": "VERIFIED (HF card); paper PDF text not parseable"
+ },
+ {
+  "title": "FinTabNet (IBM GTE, arXiv 2005.00589) and Doc-LD/fintabnet-bench",
+  "url": "https://github.com/Doc-LD/fintabnet-bench",
+  "year": "2020 / 2026",
+  "what": "FinTabNet: ~113k tables from S&P 500 annual-report PDFs with cell bboxes/HTML structure (layout, no XBRL concept labels). DocLD bench: '82.1% average table accuracy on 500 FinTabNet tables'; IBM DAX hosting page deprecated.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none - layout dataset, not concept tagging",
+  "verification": "GitHub README VERIFIED; FinTabNet details SNIPPET-ONLY"
+ },
+ {
+  "title": "Big-4 (EY/Deloitte/PwC/KPMG) research on ML XBRL tagging",
+  "url": "https://lakshyacommerce.com/blog/how-big4-are-using-ai-and-automation",
+  "year": "n/a",
+  "what": "No published Big-4 research paper or whitepaper on automated XBRL tagging accuracy/cost was found; only generic audit-AI platforms (EY Helix, KPMG Ignite, PwC GL.ai, Deloitte Zora) surfaced.",
+  "reports_cost": "no",
+  "reports_latency": "no",
+  "threat_to_novelty": "none (not found)",
+  "verification": "SNIPPET-ONLY / NOT FOUND"
+ },
+ {
+  "title": "PTM4Tag+: Tag recommendation of Stack Overflow posts with pre-trained models",
+  "url": "https://doi.org/10.1007/s10664-024-10576-z",
+  "year": "2024",
+  "what": "Not XBRL; Semantic Scholar hit for 'tag recommendation': smaller PTMs keep '93.96% of the performance on average while reducing the mean inference time by more than 47.2%'. Generic small-model latency precedent only.",
+  "reports_cost": "no",
+  "reports_latency": "yes (inference time) - different domain",
+  "threat_to_novelty": "none",
+  "verification": "SNIPPET-ONLY"
+ }
+]
+
+### gaps
+WebSearch budget was exhausted after 14 queries (session cap), so later discovery ran through arXiv/OpenAlex/HF/GitHub APIs; Semantic Scholar returned HTTP 429 on every call. Could not read: Workiva support/community pages (403), CCH Tagetik iXBRL page (403), Taylor & Francis full text of the JCIS 2025 paper (403), Springer full text of the KD-for-FinLLM review (login redirect), the SEC 2018 Inline XBRL adopting release PDF (no pdftotext locally, so no official SEC cost-per-filer figure), and the gated HF card TheFinAI/FinTagging (401). FinLoRA's Figure 3 inference-time values exist only as a figure, so absolute seconds for Llama-3.1-8B vs Gemini on FiNER/FNXL were not captured. No Big-4 research paper on XBRL tagging automation was found. No SEC-authored ML tagging study was found (only SEC data products). Pre-2022 academic ML XBRL-tagging papers appear essentially absent from OpenAlex beyond patents and ontology/taxonomy-design papers; pre-2022 automation lives in vendor patents (Microsoft 2007, Workiva 2020) and marketing pages without benchmarks.
+
+### verdict_on_novelty
+DENTED, not dead. The literal claim 'prior work reports accuracy but NOT serving cost or latency' is false as stated: (1) FinLoRA (arXiv 2505.19819, VERIFIED) evaluates LoRA-fine-tuned Llama-3.1-8B on FiNER-139, FNXL and its own XBRL tag/value-extraction tasks and reports fine-tuning cost in USD ($14.66-$16.54 on 4xA5000 vs $162.02 Gemini 2.0 FL vs $312 GPT-4o-mini), GPU memory at 16/8/4-bit, and 'Figure 3: Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks'; (2) FLAN-FinXC (arXiv 2405.06671, VERIFIED) reports 'inference time: 2 minutes/sample' for a 780M FLAN-T5-Large on FNXL/FiNER; (3) FinTagging itself (VERIFIED) already scores Qwen3-0.6B/1.7B and Llama-3.2-3B zero-shot and states 'Total cost is approximately 500 GPU-hours and $1,500 in API usage'; (4) Kulkarni & Kulkarni 2026 (arXiv 2603.22651, VERIFIED) report per-document cost ($0.148-$0.430) and p50 latency (21-74 s) for SEC 10-K/10-Q field extraction with frontier and 70B vLLM-served models. What remains open and defensible: no work found that fine-tunes a 1-3B model, serves it with vLLM/quantization, and reports a per-model accuracy-cost-latency frontier against frontier APIs on FinTagging (or on FNXL/FiNER with per-fact or per-filing serving cost). Industry (Workiva patents '>95% accuracy', DFIN June-2026 AI tagging, IRIS CARBON '95% auto-tagged', CoreFiling Seahorse) publishes no benchmarks, costs, or latencies, so the industry angle poses no threat but offers no citable baseline beyond unsourced consultancy numbers (LP&M: 120h->35h per 10-K; $60k->$15k/yr). Recommended rewording: 'FinLoRA and FLAN-FinXC report training cost or coarse inference time for 8B/780M models on FiNER/FNXL; FinTagging reports only aggregate evaluation cost; no prior work reports a serving cost/latency frontier for fine-tuned sub-4B models on FinTagging.'

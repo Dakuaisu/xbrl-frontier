@@ -1,0 +1,138 @@
+### key
+gap_7
+
+### question
+Do three unread titles contain small-model or efficiency results on XBRL tagging: 'Detecting Semantic Mismatches in XBRL Tag Mapping for SEC 10-K Filings: A Text Comparison and Historical Consistency Analysis' (2026, cites FiNER-139), 'Exploring LLMs for Financial Numeric Labelling and Summarization' (cites FLAN-FinXC; possibly Khatuya's KDD-24 PhD consortium paper), and 'Knowledge distillation for financial LLMs: a systematic review' (FITEE 2025, DOI 10.1631/fitee.2500282, cites FNXL)?
+
+### topic
+gap_7: Do three unread FiNER/FNXL-citing titles contain small-model or efficiency (latency/cost) results on XBRL tagging?
+
+### facts
+[
+ {
+  "claim": "Paper 1 'Detecting Semantic Mismatches in XBRL Tag Mapping for SEC 10-K Filings: A Text Comparison and Historical Consistency Analysis' is by Dun Liang (Fordham), Zijie Chen (U Toronto), Chuanli Wei (USC), Journal of Computing Innovations and Applications Vol.4 No.1, 2026, DOI 10.63575/CIA.2026.40113, ISSN 3068-5516, open access (CC-BY 4.0).",
+  "evidence_url": "https://ciajournal.com/index.php/jcia/article/view/73",
+  "confidence": "VERIFIED",
+  "quote": "Keywords: XBRL tag mapping, semantic mismatch detection, SEC financial reporting, text similarity analysis"
+ },
+ {
+  "claim": "Paper 1 contains NO fine-tuned LLM, NO 1-3B model, NO latency/cost/throughput benchmark, and NO evaluation on FiNER-139/FNXL/FinTagging. Its method is TF-IDF + BM25 lexical similarity plus FinBERT embeddings, cross-period consistency and SIC-code peer benchmarking over SEC Financial Statement Data Sets.",
+  "evidence_url": "https://ciajournal.com/index.php/jcia/article/download/73/68",
+  "confidence": "VERIFIED",
+  "quote": "A tiered text comparison approach combining lexical similarity scoring (TF-IDF and BM25) with domain-specific contextual features is applied to evaluate the semantic alignment between reported line items and assigned taxonomy tags."
+ },
+ {
+  "claim": "Paper 1 cites FiNER-139 only in Related Work as background (ref [7], Loukas et al. 2022); it does not train or evaluate on it.",
+  "evidence_url": "https://ciajournal.com/index.php/jcia/article/download/73/68",
+  "confidence": "VERIFIED",
+  "quote": "A study formalizing XBRL tagging as a numeric entity recognition task with 139 entity types released the FiNER-139 dataset containing 1.1 million sentences extracted from SEC annual reports, demonstrating that domain-specific models trained on SEC filing text outperform general-purpose language models on tag classification tasks [7]."
+ },
+ {
+  "claim": "Paper 1's only efficiency statement is qualitative (seconds on CPU for TF-IDF/BM25); there is no latency/cost table and no model-size comparison.",
+  "evidence_url": "https://ciajournal.com/index.php/jcia/article/download/73/68",
+  "confidence": "VERIFIED",
+  "quote": "The computational requirements are modest. TF-IDF and BM25 scoring process the approximately 500-2,000 tagged elements in a typical 10-K filing within seconds on standard hardware without GPU acceleration."
+ },
+ {
+  "claim": "Paper 1 reports no measured accuracy for its own detector; its result figures are explicitly illustrative, and it defers error-detection-rate measurement to future work.",
+  "evidence_url": "https://ciajournal.com/index.php/jcia/article/download/73/68",
+  "confidence": "VERIFIED",
+  "quote": "illustrative estimates based on element-level tag change frequency and are intended to demonstrate the detection framework's output format rather than constitute independently audited benchmarks."
+ },
+ {
+  "claim": "Paper 1's only LLM-related number is a second-hand citation of XBRL Agent (Han et al., ICAIF'24), not its own experiment.",
+  "evidence_url": "https://ciajournal.com/index.php/jcia/article/download/73/68",
+  "confidence": "VERIFIED",
+  "quote": "domain-adapted language models can achieve up to 17% accuracy improvement on general financial analysis tasks and 42% improvement on numeric extraction tasks compared to base models, indicating the potential for AI-assisted tag recommendation to reduce unnecessary custom element creation [14]."
+ },
+ {
+  "claim": "Paper 2 'Exploring LLMs for Financial Numeric Labelling and Summarization' is confirmed to be the single-author PhD-consortium paper by Subhendu Khatuya (IIT Kharagpur), hosted on the KDD 2024 site as paper_24.pdf (kdd2024.kdd.org redirects to kdd.org/kdd2024). The running header still carries a 'SIGIR '22' template string. The KDD 2024 consortium listing page itself could not be fetched (404 at /kdd2024/phd-consortium/ and /kdd2024/doctoral-consortium/).",
+  "evidence_url": "https://kdd.org/kdd2024/wp-content/uploads/2024/07/paper_24.pdf",
+  "confidence": "VERIFIED",
+  "quote": "In my PhD, in the last three years, I have addressed the following Research Questions and exploring further."
+ },
+ {
+  "claim": "Paper 2 is a summary of FLAN-FinXC (NAACL 2024) and FLAN-FinBPS: FLAN-T5 encoder-decoder models from T5-Base to FLAN-T5-Large (i.e., 220M-780M, not 1-3B decoder LLMs) instruction-tuned with LoRA on FNXL and FiNER. It contains NO latency, cost, throughput, quantization or serving results; the only 'cost' wording refers to human experts and the only time wording refers to training time.",
+  "evidence_url": "https://kdd.org/kdd2024/wp-content/uploads/2024/07/paper_24.pdf",
+  "confidence": "VERIFIED",
+  "quote": "We perform extensive experiments to devise a total of five different model variants as part of our proposed framework, ranging from T5-Base to FLAN-T5-Large, and with varying training strategies."
+ },
+ {
+  "claim": "Paper 2 headline accuracy numbers (FNXL): zero-shot Macro-F1 58.89% on 67 unseen tags; +41% Macro-F1 and +23% Hits@1 vs AttentionXML on tags appearing <5 times in training.",
+  "evidence_url": "https://kdd.org/kdd2024/wp-content/uploads/2024/07/paper_24.pdf",
+  "confidence": "VERIFIED",
+  "quote": "We find that our model achieves impressive zero-shot Macro-F1 scores of 58.89% for the 67 XBRL tags that were unseen during training."
+ },
+ {
+  "claim": "NUANCE FOR THE NOVELTY CLAIM: the underlying FLAN-FinXC paper (Khatuya et al., NAACL 2024, arXiv 2405.06671) DOES print wall-clock training time per epoch and an 'inference time' figure per sample on a Tesla V100 32GB, in its Experimental Setup. It does NOT report dollar cost, throughput, quantization, or any API-vs-local comparison, and the figure is a single hyperparameter footnote rather than a benchmarked accuracy/latency/cost frontier. So 'no latency at all' is slightly too strong; 'no cost and no latency-vs-accuracy frontier' is accurate.",
+  "evidence_url": "https://arxiv.org/pdf/2405.06671v2",
+  "confidence": "VERIFIED",
+  "quote": "FLAN-T5-Large models were instruction-tuned for 10 epochs with a learning rate (lr) of 1e-4 (training time: 1hr 22 minutes/epoch, inference time: 2 minutes/sample); with an lr of 1e-2 with Prefix Tuning (training time: 29 minutes/epoch, inference time: 2 minutes/sample); and with an lr of 5e-4 with LoRA (training time: 56 minutes/epoch, inference time: 2 minutes/sample)."
+ },
+ {
+  "claim": "FLAN-FinXC model sizes and FNXL Macro-F1: T5-Base 220M -> 54.21; T5-Large 780M -> 60.11; FLAN-T5-Large 780M instruction-tuned -> 65.77; Prefix Tuning / LoRA update only 0.13% / 0.08% of parameters. It also tested gpt-3.5-turbo via API as a baseline (poor). No 1-3B decoder model and no cost reported.",
+  "evidence_url": "https://arxiv.org/pdf/2405.06671v2",
+  "confidence": "VERIFIED",
+  "quote": "comparing the results of T5-Large (780M parameters, Macro-F1 60.11) with T5-Base (220M parameters, Macro-F1 54.21)."
+ },
+ {
+  "claim": "Paper 3 'Knowledge distillation for financial large language models: a systematic review of strategies, applications, and evaluation' is by Jiaqi Shi, Xulong Zhang, Xiaoyang Qu, Junfei Xie, Jianzong Wang (USTC / Ping An Technology), Frontiers of Information Technology & Electronic Engineering 26(10):1793-1808, Oct 2025, DOI 10.1631/fitee.2500282, 91 references (Crossref).",
+  "evidence_url": "https://api.crossref.org/works/10.1631/fitee.2500282",
+  "confidence": "VERIFIED",
+  "quote": "Knowledge distillation for financial large language models: a systematic review of strategies, applications, and evaluation"
+ },
+ {
+  "claim": "Paper 3's abstract (OpenAlex + Semantic Scholar DOI endpoint) frames it as a survey/taxonomy with an evaluation framework; it motivates KD by inference latency and deployment cost but describes no original experiments or benchmark tables.",
+  "evidence_url": "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1631/fitee.2500282?fields=title,abstract,tldr,openAccessPdf",
+  "confidence": "VERIFIED",
+  "quote": "While excessive deployment expenditures and considerable inference latency constitute major obstacles, as a prominent compression methodology, knowledge distillation (KD) offers an effective solution to these difficulties. A comprehensive survey is conducted in this work on how KD interacts with FinLLMs, covering three core aspects: strategy, application, and evaluation."
+ },
+ {
+  "claim": "Paper 3 full text is closed access and could NOT be read: OpenAlex is_oa=false/oa_status=closed, Unpaywall is_oa=false with 0 OA locations, Semantic Scholar openAccessPdf status CLOSED, Springer article and PDF URLs redirect to idp.springer.com and then serve a 'Client Challenge' bot wall, the zjujournals SPA exposes no fetchable article endpoint, no arXiv preprint exists under the title or author+keywords.",
+  "evidence_url": "https://api.openalex.org/works/https://doi.org/10.1631/fitee.2500282",
+  "confidence": "VERIFIED",
+  "quote": "oa: {'is_oa': False, 'oa_status': 'closed', 'oa_url': None, 'any_repository_has_fulltext': False}"
+ },
+ {
+  "claim": "Paper 3's Crossref reference list confirms it cites FNXL (ref 10.18653/v1/2023.findings-acl.219 = 'Financial Numeric Extreme Labelling: A dataset and benchmarking') and FiNER-ORD (Shah 2023a), but NOT FiNER-139 (Loukas et al. 2022) and NOT FinTagging. Other cited works are generic KD/compression papers (MiniLLM, LLM-QAT, f-divergence KD, layer-wise distillation) plus finance benchmarks/datasets (FinBen, FinTral, PIXIU, FinQA, ConvFinQA, ECTSum, REFinD, MultiFin, XuanYuan 2.0) and one distilled finance model, DiFiLE (HICSS 2025). This pattern is consistent with FNXL appearing in a benchmark/dataset catalogue section of the survey.",
+  "evidence_url": "https://api.crossref.org/works/10.1631/fitee.2500282",
+  "confidence": "VERIFIED",
+  "quote": "10.18653/v1/2023.findings-acl.219 => Financial Numeric Extreme Labelling: A dataset and benchmarking | Findings of the Association for Computational Linguistics"
+ },
+ {
+  "claim": "Whether Paper 3's body contains an original small-model XBRL-tagging accuracy/latency/cost table cannot be confirmed because the full text is paywalled. Given (a) the abstract describes a survey with a taxonomy and an evaluation framework, (b) S2 counts only 32 parsed references and 0 citations, and (c) no cited work in its reference list reports distilled-model results on FNXL/FiNER, the probability that it holds such a table is low, but this remains UNVERIFIED.",
+  "evidence_url": "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1631/fitee.2500282?fields=title,abstract,tldr,openAccessPdf,citationCount,referenceCount",
+  "confidence": "UNVERIFIED",
+  "quote": "\"referenceCount\": 32, \"citationCount\": 0, \"openAccessPdf\": {\"url\": \"\", \"status\": \"CLOSED\""
+ },
+ {
+  "claim": "DiFiLE (Hristova et al., HICSS 2025, DOI 10.24251/hicss.2025.191), the only distilled finance model on 10-K text in Paper 3's reference list, is a Longformer teacher->student KD evaluated on DJIA 10-K reports with a '30% fewer resources' claim; it is NOT XBRL tagging and does not involve FNXL/FiNER. (Abstract obtained from OpenAlex API; ScholarSpace landing page returned HTTP 503.)",
+  "evidence_url": "https://api.openalex.org/works?filter=title.search:DiFiLE&select=id,title,publication_year,doi,primary_location,open_access,abstract_inverted_index",
+  "confidence": "VERIFIED",
+  "quote": "We evaluate DiFiLE on the 10-K reports of the DJIA companies. The results show high performance of the teacher model, which is then well mimicked by its distilled version, requiring 30% fewer resources."
+ },
+ {
+  "claim": "BONUS (surfaced by arXiv title search for 'Financial Numeric Labelling'): XBRLTagRec (Hu, Zhang, Luo, Jiang, Chai, Ding; arXiv 2603.25263, 26 Mar 2026) fine-tunes FLAN-T5-Large (780M, LoRA) and re-ranks with ChatGPT-3.5 on FNXL, beating FLAN-FinXC (Hits@1 0.8618 vs 0.8354; Macro-F1 0.5050 vs 0.4616). It reports NO latency, cost, throughput or quantization; it only acknowledges unquantified API cost. It also compares GPT-4o, DeepSeek-V3 and ERNIE-3.5 as re-rankers without cost figures. This is the most recent FNXL paper found and it still leaves the cost/latency gap open.",
+  "evidence_url": "https://arxiv.org/html/2603.25263v1",
+  "confidence": "VERIFIED",
+  "quote": "We implement our framework on a 32GB Tesla V100 GPU and use the pretrained checkpoints of FLAN-T5-Large and Sentence-T5-XXL from Hugging Face."
+ },
+ {
+  "claim": "XBRLTagRec abstract confirms dataset (FNXL only) and models (FLAN-T5-Large, ChatGPT-3.5); no efficiency terms appear in the abstract.",
+  "evidence_url": "https://arxiv.org/abs/2603.25263",
+  "confidence": "VERIFIED",
+  "quote": "Experiments on the FNXL dataset show that XBRLTagRec outperforms the state-of-the-art FLAN-FinXC framework, achieving 2.64%-4.47% improvements in Hits@1 and Macro metrics."
+ },
+ {
+  "claim": "Semantic Scholar search endpoint returned HTTP 429 on every attempt (search by all three titles, 3 retries each); only the DOI-keyed paper endpoint succeeded once after a 6 s sleep. DBLP is behind an Anubis proof-of-work bot wall and returned no data. WebSearch quota for the session was exhausted (200/200) before this task started, so all discovery was via WebFetch/curl against arXiv export API, OpenAlex, Crossref, Unpaywall and publisher sites.",
+  "evidence_url": "https://api.semanticscholar.org/graph/v1/paper/search?query=Detecting+Semantic+Mismatches+in+XBRL+Tag+Mapping+for+SEC+10-K+Filings&fields=title,year,venue,externalIds,abstract,openAccessPdf",
+  "confidence": "VERIFIED",
+  "quote": "The server returned HTTP 429 Too Many Requests."
+ }
+]
+
+### unknowns
+1) The body of the FITEE review (10.1631/fitee.2500282) was not read: closed access on Springer (bot wall + institutional login), no OA copy on OpenAlex/Unpaywall/S2, no arXiv preprint, zjujournals SPA not scrapeable. Its reference list (Crossref) and abstract strongly suggest a survey without original small-model XBRL experiments, but a benchmark-catalogue table listing FNXL cannot be ruled out. 2) The KDD 2024 PhD/doctoral consortium listing page could not be fetched (404 at two guessed URLs); venue attribution rests on the PDF being hosted under kdd.org/kdd2024/wp-content/uploads/2024/07/paper_24.pdf and its 'In my PhD' text. 3) FLAN-FinXC's 'inference time: 2 minutes/sample' may be a typo (per-batch or per-test-set is more plausible); the paper gives no definition, so it should be cited cautiously. 4) DiFiLE full text (HICSS 2025) not read; ScholarSpace returned 503; only the OpenAlex abstract was used.
+
+### notes
+RESOLUTION: None of the three titles contains a small-model (1-3B) or latency/cost efficiency result on XBRL tagging. (1) The 2026 CIA tag-mapping paper is a TF-IDF/BM25/FinBERT heuristic with no LLM training, no benchmark accuracy, and only a qualitative 'seconds on CPU' remark. (2) The 'Exploring LLMs...' paper is Khatuya's one-page KDD-24 PhD-consortium summary of FLAN-FinXC/FLAN-FinBPS (FLAN-T5 220M-780M + LoRA on FNXL/FiNER) with no cost/latency. (3) The FITEE review is a paywalled knowledge-distillation survey whose reference list includes FNXL but no distilled-model XBRL results in any cited work; its own body could not be inspected. CAVEAT for the novelty claim wording: the FLAN-FinXC NAACL-24 paper does print per-epoch training time and a per-sample 'inference time' on a V100, so the claim should be phrased as 'no serving COST and no accuracy-vs-latency/cost FRONTIER' rather than 'no latency figure at all'. BONUS: XBRLTagRec (arXiv 2603.25263, Mar 2026) is a newer FNXL SOTA using FLAN-T5-Large + ChatGPT-3.5 re-ranking and still reports no cost/latency, which reinforces the gap. JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/gap_7.json; local text extracts alongside it: cia_xbrl.txt, kdd_paper24.txt, flanfinxc.txt, fitee_crossref.json, fitee_openalex.json.

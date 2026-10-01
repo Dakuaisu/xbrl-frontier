@@ -1,0 +1,333 @@
+### key
+data_finer_fnxl_alternatives
+
+### topic
+data_finer_fnxl_alternatives: FiNER-139 / FNXL dataset details, FinTagging overlap, and public iXBRL-derived corpora + SEC data/tooling for auto-labelled training
+
+### facts
+[
+ {
+  "claim": "FiNER-139 (HF nlpaueb/finer-139) license tag is cc-by-sa-4.0.",
+  "evidence_url": "https://huggingface.co/api/datasets/nlpaueb/finer-139",
+  "confidence": "VERIFIED",
+  "quote": "license:cc-by-sa-4.0"
+ },
+ {
+  "claim": "FiNER-139 split sizes: train 900,384 / validation 112,494 / test 108,378 examples (1,121,256 total), 103 MB on disk, chronological 80/10/10 split.",
+  "evidence_url": "https://huggingface.co/datasets/nlpaueb/finer-139",
+  "confidence": "VERIFIED",
+  "quote": "Total file size: 103 MB"
+ },
+ {
+  "claim": "FiNER-139 source: ~10k annual and quarterly (10-K/10-Q) EDGAR filings spanning 2016-2020.",
+  "evidence_url": "https://arxiv.org/html/2203.06482",
+  "confidence": "VERIFIED",
+  "quote": "The downloaded reports span a 5-year period, from 2016 to 2020."
+ },
+ {
+  "claim": "FiNER-139 label vocabulary: 139 of 6,008 XBRL tags (those with >=1,000 occurrences); IOB2 scheme gives 279 token labels.",
+  "evidence_url": "https://arxiv.org/html/2203.06482",
+  "confidence": "VERIFIED",
+  "quote": "we selected the 139 (out of 6,008) most frequent xbrl tags with at least 1,000 appearances"
+ },
+ {
+  "claim": "FiNER-139 format is token-level sequence labeling (fields: id, tokens, ner_tags) in IOB2.",
+  "evidence_url": "https://huggingface.co/datasets/nlpaueb/finer-139",
+  "confidence": "VERIFIED",
+  "quote": "IOB2 annotation scheme ... which leads to 279 possible token labels"
+ },
+ {
+  "claim": "FiNER-139 is text-only: sentences from financial-statement text notes; tables were deliberately excluded.",
+  "evidence_url": "https://arxiv.org/html/2203.06482",
+  "confidence": "VERIFIED",
+  "quote": "we focus on automatically tagging text notes"
+ },
+ {
+  "claim": "FiNER paper: ACL 2022 long paper, DOI 10.18653/v1/2022.acl-long.303; code repo nlpaueb/finer is MIT; OpenAlex cited_by_count 54.",
+  "evidence_url": "https://aclanthology.org/2022.acl-long.303/",
+  "confidence": "VERIFIED",
+  "quote": "Pages: 4419-4431"
+ },
+ {
+  "claim": "FiNER paper reports no inference latency/cost (abstract/metadata contain none).",
+  "evidence_url": "https://arxiv.org/abs/2203.06482",
+  "confidence": "VERIFIED",
+  "quote": "Not reported in the abstract or metadata shown."
+ },
+ {
+  "claim": "FNXL paper (arXiv 2306.03723, ACL 2023 Findings): releases dataset annotated with 2,794 US-GAAP labels; benchmarks sequence labeling vs span-extraction+extreme classification.",
+  "evidence_url": "https://arxiv.org/abs/2306.03723",
+  "confidence": "VERIFIED",
+  "quote": "we release a dataset, Financial Numeric Extreme Labelling (FNXL), annotated with 2,794 labels"
+ },
+ {
+  "claim": "FNXL source filings: annual 10-K reports from 2019-2021 for 2,339 companies.",
+  "evidence_url": "https://arxiv.org/pdf/2306.03723",
+  "confidence": "VERIFIED",
+  "quote": "We use the publicly available annual 10-K reports from 2019-2021 for 2,339 companies as the source of our FNXL dataset."
+ },
+ {
+  "claim": "FNXL split sizes (Table 1): Train 62,782 sentences / 798 companies / 111,493 datapoints / 2,692 labels; Dev 6,823 / 756 / 13,191 / 1,273; Test 9,483 / 794 / 18,238 / 1,374; Total 79,088 sentences / 142,922 numerals / 2,794 labels.",
+  "evidence_url": "https://arxiv.org/pdf/2306.03723",
+  "confidence": "VERIFIED",
+  "quote": "contains a total of 79,088 sentences containing 142,922 annotated numerals with a label set of size 2,794"
+ },
+ {
+  "claim": "FNXL is text-only; tagged tables were discarded.",
+  "evidence_url": "https://arxiv.org/pdf/2306.03723",
+  "confidence": "VERIFIED",
+  "quote": "In this work, we focus only on annotated textual data and discard annotated tables."
+ },
+ {
+  "claim": "FNXL splits are by company to avoid leakage (~78:9:13); dev/test contain 40 and 69 labels unseen in train; only US-GAAP labels kept (custom-extension labels filtered); 100 of FiNER-139's labels appear in FNXL's label set.",
+  "evidence_url": "https://arxiv.org/pdf/2306.03723",
+  "confidence": "VERIFIED",
+  "quote": "We find that 100 labels from the FiNER-139 dataset are part of our label set."
+ },
+ {
+  "claim": "FNXL on-disk format: CSV with columns sentence, numerals-tags (dict label -> list of numeral strings, e.g. {'us-gaap:GeneralAndAdministrativeExpense': ['7.2', '9.0']}), company, docEndDate, docType, fileName, year, ner_tags (integer per token), tokens. No character offsets; numeral spans are given as token-level tags plus numeral strings.",
+  "evidence_url": "https://raw.githubusercontent.com/soummyaah/FNXL/main/train_sample.csv",
+  "confidence": "VERIFIED",
+  "quote": "sentence,numerals-tags,company,docEndDate,docType,fileName,year,ner_tags,tokens"
+ },
+ {
+  "claim": "FNXL full data is hosted on HF soummyaah-space/FNXL under data/fnxl/finer/{train.csv 120.8 MB, dev.csv 13.4 MB, test.csv 18.5 MB, labels.json 394 KB}; HF repo ~1.17 GB total including binary_tagger and xml variants.",
+  "evidence_url": "https://huggingface.co/api/datasets/soummyaah-space/FNXL/tree/main/data/fnxl/finer",
+  "confidence": "VERIFIED",
+  "quote": "train.csv - 120,834,474 bytes"
+ },
+ {
+  "claim": "FNXL license is unclear: GitHub repo license field is null, HF repo has no license tag, but the inner data README states research-only use.",
+  "evidence_url": "https://huggingface.co/datasets/soummyaah-space/FNXL/resolve/main/data/fnxl/README.md",
+  "confidence": "VERIFIED",
+  "quote": "Research-only use"
+ },
+ {
+  "claim": "FNXL GitHub repo (soummyaah/FNXL) has license null, 2 stars, created 2023-01-21.",
+  "evidence_url": "https://api.github.com/repos/soummyaah/FNXL",
+  "confidence": "VERIFIED",
+  "quote": "License: Not specified (null)"
+ },
+ {
+  "claim": "HF dataset-viewer row counts for soummyaah-space/FNXL (1.34M train / 158k val / 219k test) are line-based auto-conversion artifacts, not sentence counts; the paper's sentence counts are 62,782 / 6,823 / 9,483.",
+  "evidence_url": "https://huggingface.co/datasets/soummyaah-space/FNXL",
+  "confidence": "VERIFIED",
+  "quote": "Train: 1.34M rows"
+ },
+ {
+  "claim": "FNXL benchmark numbers: FiNER (BERT-base, no masking) micro-F1 75.84 / macro-F1 47.13; AttentionXML pipeline [SHAPE] macro-F1 47.54 / micro-F1 74.74; Hits@5 ~90%. No inference latency or cost reported anywhere in the paper.",
+  "evidence_url": "https://arxiv.org/pdf/2306.03723",
+  "confidence": "VERIFIED",
+  "quote": "achieves a 47.54% Macro-F1 vis-a-vis 47.13% Macro-F1 for best the FiNER model with no-masking"
+ },
+ {
+  "claim": "FNXL (Findings of ACL 2023 version) OpenAlex cited_by_count 8.",
+  "evidence_url": "https://api.openalex.org/works?search=Financial%20Numeric%20Extreme%20Labelling%20Dataset%20Benchmarking%20XBRL%20Tagging&per-page=3&select=id,title,publication_year,cited_by_count,primary_location",
+  "confidence": "VERIFIED",
+  "quote": "Cited By Count: 8"
+ },
+ {
+  "claim": "FinTagging (arXiv 2505.20650) is built from 142 annual 10-K filings submitted to the SEC in 2023-2024 across 11 sectors: 319,893 narrative sentences, 21,576 financial tables, 261,457 numerical entities linked to 3,953 unique US-GAAP concepts; taxonomy of 17,688 concepts.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "142 annual 10-K filings from publicly listed U.S. companies submitted to the U.S. Securities and Exchange Commission (SEC) in 2023–2024"
+ },
+ {
+  "claim": "FinTagging labels are derived from SEC Inline XBRL (iXBRL) and cover both text and tables; output is {Fact, Type, Tag} triplets with 5 types (monetaryItemType, percentItemType, sharesItemType, perShareItemType, integerItemType).",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "All filings follow the SEC Inline XBRL (iXBRL) format, which embeds machine-readable tags within HTML disclosures and links textual and tabular values to US-GAAP taxonomy concepts."
+ },
+ {
+  "claim": "FinTagging year overlap: FinTagging = 10-Ks filed 2023-2024; FiNER-139 = 10-K/10-Q 2016-2020; FNXL = 10-K 2019-2021. So FinTagging does not overlap FiNER-139 or FNXL by filing year, while FiNER-139 and FNXL overlap on 2019-2020. (Company-level overlap unknown; v2 of FinTagging_Original shows fiscal dates 2021-2024 in its viewer.)",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "in 2023–2024"
+ },
+ {
+  "claim": "FinTagging paper reports macro/micro P/R/F1 (FinNI) and accuracy (FinCL) for 13 LLMs (GPT-4o, DeepSeek-V3, Llama, Qwen, Fino1-8B) plus BERT baselines; no latency, cost, or throughput metrics.",
+  "evidence_url": "https://arxiv.org/html/2505.20650v5",
+  "confidence": "VERIFIED",
+  "quote": "No latency or throughput metrics reported."
+ },
+ {
+  "claim": "FinTagging GitHub (The-FinAI/FinTagging) has no license set (null), 14 stars; README says local model inference is run via FinBen on vLLM; data offered in JSON (TrainingSet_Annotation.json) and BIO formats; no latency/cost in README.",
+  "evidence_url": "https://github.com/The-FinAI/FinTagging",
+  "confidence": "VERIFIED",
+  "quote": "Local Model Inference: Conducted via FinBen (VLLM framework)"
+ },
+ {
+  "claim": "FinTagging HF releases: TheFinAI/FinTagging_Original (MIT; test 6,599 rows; fields text, numeric_entities[{concept,type,value}], context_id), FinNI-eval (test 6,599; context/query/answer; tables serialized), FinCL-eval (test 52,600; entity/entity_type/query/answer), FinTagging_BIO (test 6,599; context + bio_label with HTML tables inline), FinTagging_Original_v2 (test 46,496 rows), FinTagging-Untagged-Data (Apache-2.0, 22 MB, no viewer).",
+  "evidence_url": "https://huggingface.co/api/datasets?search=FinTagging&limit=50",
+  "confidence": "VERIFIED",
+  "quote": "TheFinAI/FinTagging_Original ... license:mit"
+ },
+ {
+  "claim": "FinTagging_Original rows carry concept/type/value only (no character offsets); FinTagging_BIO is token-level BIO over contexts that include raw HTML <table> markup.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinTagging_BIO",
+  "confidence": "VERIFIED",
+  "quote": "Tables are serialized as HTML markup within the context field"
+ },
+ {
+  "claim": "FinTagging OpenAlex cited_by_count: 1 (arXiv record) and 3 (SSRN record, 2026).",
+  "evidence_url": "https://api.openalex.org/works?search=FinTagging%20Benchmarking%20LLMs%20for%20Extracting%20and%20Structuring%20Financial%20Information&per-page=3&select=id,title,publication_year,cited_by_count,primary_location",
+  "confidence": "VERIFIED",
+  "quote": "Cited By Count: 1"
+ },
+ {
+  "claim": "Community derivatives lm2445/FinTagging_1000, FinTagging1000_ER/_table/_text/_Grounding (MIT) exist: sampled labeled subsets with JSON-list targets for LLM instruction tuning, split into table and text inputs.",
+  "evidence_url": "https://huggingface.co/api/datasets?search=FinTagging&limit=50",
+  "confidence": "VERIFIED",
+  "quote": "HTML table inputs with JSON list targets of numeric entity/datatype pairs enriched with row/column context."
+ },
+ {
+  "claim": "EDGAR-CORPUS (HF eloukas/edgar-corpus): Apache-2.0; 10-K filings 1993-2020; full config train 176,289 / val 22,050 / test 22,036; 15 item sections (section_1 ... section_15) as raw text; no XBRL tags; 40.7 GB.",
+  "evidence_url": "https://huggingface.co/datasets/eloukas/edgar-corpus",
+  "confidence": "VERIFIED",
+  "quote": "Total file size: 40.7 GB"
+ },
+ {
+  "claim": "EDGAR10-Q / Context-NER (HF him1411/EDGAR10-Q, MIT): 10-Q and 10-K reports 2019-2021, 18,752 docs, 1,009,712 sentences, 2,780,969 entities; HF splits 1,498,995 / 187,383 / 187,383; labels are context phrases from the SEC tagging process (not XBRL concept tags).",
+  "evidence_url": "https://arxiv.org/pdf/2109.08079",
+  "confidence": "VERIFIED",
+  "quote": "The EDGAR10-Q dataset was created by scraping quarterly (10-Q) and annual (10-K) reports from the years 2019, 2020, and 2021."
+ },
+ {
+  "claim": "NORA (arXiv 2605.24910, May 2026) builds a 6.6M-instance benchmark from >110,000 10-K/10-Q filings 2019-2024 (8,000+ companies) with iXBRL-derived labels for tag, time relation, scale, sign; text sentences only; no public release link given; no latency/cost/small-model discussion.",
+  "evidence_url": "https://arxiv.org/html/2605.24910",
+  "confidence": "VERIFIED",
+  "quote": "iXBRL is inherently noisy as a source for ground truth"
+ },
+ {
+  "claim": "FinLoRA (arXiv 2505.19819) created four XBRL analysis datasets from 150 SEC filings (HF wangd12/XBRL_analysis: tag identification 13k, value extraction 12.6k, formula extraction/calc 4.2k each; 30 companies, FY2019-2022 10-Ks) and reports computational cost (time and GPU memory) for fine-tuning AND inference - a partial precedent for cost reporting on XBRL tasks, though not on FinTagging/FNXL/FiNER.",
+  "evidence_url": "https://arxiv.org/abs/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "report computational cost in terms of time and GPU memory during fine-tuning and inference stages"
+ },
+ {
+  "claim": "FLAN-FinXC (arXiv 2405.06671, NAACL 2024) uses LoRA instruction tuning of FLAN models on financial numeral labelling datasets (FNXL); no inference latency/cost reported.",
+  "evidence_url": "https://arxiv.org/abs/2405.06671",
+  "confidence": "VERIFIED",
+  "quote": "The page contains no information regarding inference latency, computational cost, or throughput measurements."
+ },
+ {
+  "claim": "XBRLTagRec (arXiv 2603.25263, Mar 2026) fine-tunes FLAN-T5-Large + ChatGPT-3.5 re-ranking on FNXL; no latency/cost reported.",
+  "evidence_url": "https://arxiv.org/abs/2603.25263",
+  "confidence": "VERIFIED",
+  "quote": "Experiments on the FNXL dataset show that XBRLTagRec outperforms the state-of-the-art FLAN-FinXC framework"
+ },
+ {
+  "claim": "SEC Financial Statement Data Sets: four tab-delimited files SUB, NUM, TAG, PRE; NUM has one row per numeric fact from the primary financial statements (key: adsh, tag, version, ddate, qtrs, uom, coreg); coverage from 4/15/2009; quarterly; numeric only (no narrative text).",
+  "evidence_url": "https://www.sec.gov/files/aqfs.pdf",
+  "confidence": "VERIFIED",
+  "quote": "NUM is a data set of all numeric XBRL facts presented on the primary financial statements"
+ },
+ {
+  "claim": "SEC Financial Statement Data Sets page: coverage January 2009 - June 2026, updated quarterly; Dec 2024 reprocessing limited them to primary-statement numeric data.",
+  "evidence_url": "https://www.sec.gov/data-research/sec-markets-data/financial-statement-data-sets",
+  "confidence": "VERIFIED",
+  "quote": "Data sets will be updated quarterly."
+ },
+ {
+  "claim": "SEC Financial Statement and Notes Data Sets include text and detailed numeric information from all statements and their notes (num.tsv, txt.tsv etc.); monthly since Nov 2020 (quarterly before); files through 2026_08.",
+  "evidence_url": "https://www.sec.gov/data-research/financial-statement-notes-data-sets",
+  "confidence": "VERIFIED",
+  "quote": "These data sets will be updated monthly. Prior to November 2020, the data sets were updated quarterly."
+ },
+ {
+  "claim": "SEC XBRL APIs (submissions, companyconcept, companyfacts, frames) return facts from 10-Q/10-K/8-K/20-F/40-F/6-K; no auth or API key; xbrl APIs update with under a minute delay; bulk companyfacts.zip and submissions.zip republished nightly ~3:00 a.m. ET.",
+  "evidence_url": "https://www.sec.gov/search-filings/edgar-application-programming-interfaces",
+  "confidence": "VERIFIED",
+  "quote": "These APIs do not require any authentication or API keys to access."
+ },
+ {
+  "claim": "SEC fair-access policy: max 10 requests/second; declare a User-Agent of the form 'Sample Company Name AdminContact@<sample company domain>.com'; SEC reserves right to throttle; no technical support for scripts.",
+  "evidence_url": "https://www.sec.gov/os/accessing-edgar-data",
+  "confidence": "VERIFIED",
+  "quote": "Current max request rate: 10 requests/second."
+ },
+ {
+  "claim": "SEC.gov content is public information that may be copied/redistributed without permission (attribution encouraged; SEC seals/logos excluded).",
+  "evidence_url": "https://www.sec.gov/privacy#dissemination",
+  "confidence": "VERIFIED",
+  "quote": "Information presented on sec.gov is considered public information and may be copied or further distributed by users of the web site without the SEC's permission."
+ },
+ {
+  "claim": "Inline XBRL phase-in for operating companies: large accelerated filers (US GAAP) fiscal periods ending on/after June 15, 2019; accelerated filers June 15, 2020; all other filers June 15, 2021 - so essentially all 10-K/10-Q since mid-2021 carry iXBRL facts in the HTML.",
+  "evidence_url": "https://www.sec.gov/news/press-release/2018-117",
+  "confidence": "VERIFIED",
+  "quote": "All other filers will be required to comply beginning with fiscal periods ending on or after June 15, 2021."
+ },
+ {
+  "claim": "SEC Inline XBRL page: 10-Q, 10-K and certain registration statements must file cover page and financial statement information in Inline XBRL; EDGAR has a built-in iXBRL viewer.",
+  "evidence_url": "https://www.sec.gov/data-research/inline-xbrl",
+  "confidence": "VERIFIED",
+  "quote": "Inline XBRL is a structured data language that allows filers to prepare a single document that is both human-readable and machine-readable."
+ },
+ {
+  "claim": "SEC monthly XBRL RSS archives (xbrlrss-YYYY-MM.xml) list every XBRL submission from 2005-04 through 2026-09 - a complete index for bulk iXBRL crawling.",
+  "evidence_url": "https://www.sec.gov/Archives/edgar/monthly/",
+  "confidence": "VERIFIED",
+  "quote": "xbrlrss-2026-09.xml"
+ },
+ {
+  "claim": "edgartools (dgunning/edgartools): MIT, pip install edgartools, 2.8k stars; parses XBRL financials/facts with query by concept, statement type, period, dimensions; requires set_identity(email) per SEC policy; docs do not describe mapping facts back to HTML/text locations.",
+  "evidence_url": "https://raw.githubusercontent.com/dgunning/edgartools/main/docs/getting-xbrl.md",
+  "confidence": "VERIFIED",
+  "quote": "The documentation does not address inline XBRL (iXBRL) parsing from HTML or whether facts can be mapped back to their locations in HTML/text documents."
+ },
+ {
+  "claim": "Arelle: Apache-2.0 end-to-end open-source XBRL platform; supports XBRL 2.1, Dimensions 1.0, Inline XBRL 1.1, xBRL-JSON/CSV; EDGAR Filer Manual validation; pip arelle-release.",
+  "evidence_url": "https://github.com/Arelle/Arelle",
+  "confidence": "VERIFIED",
+  "quote": "Arelle is an end-to-end open source XBRL platform, which provides the XBRL community with an easy to use set of tools."
+ },
+ {
+  "claim": "ixbrl-parse (drkane/ixbrl-parse; pip ixbrlparse): MIT; lightweight iXBRL/XBRL fact extractor, UK Companies House origin; README does not mention fact offsets. (github.com/ixbrl-parse/ixbrl-parse returns 404.)",
+  "evidence_url": "https://github.com/drkane/ixbrl-parse",
+  "confidence": "VERIFIED",
+  "quote": "A lightweight python module for getting useful data out of iXBRL™ and XBRL™ files."
+ },
+ {
+  "claim": "py-xbrl (manusimidt/py-xbrl): GPL-3.0; parses SEC XBRL 2.1 instance docs and iXBRL 1.1, auto-downloads taxonomies/linkbases.",
+  "evidence_url": "https://github.com/manusimidt/py-xbrl",
+  "confidence": "VERIFIED",
+  "quote": "Py-xbrl will automatically download and parse all referenced XBRL-Files like taxonomy schemas and linkbases"
+ },
+ {
+  "claim": "sec-parser (alphanome-ai/sec-parser): MIT; parses EDGAR HTML into a semantic tree of titles/paragraphs/tables (10-Q, 10-K, 8-K, S-1); README does not mention inline XBRL fact handling.",
+  "evidence_url": "https://github.com/alphanome-ai/sec-parser",
+  "confidence": "VERIFIED",
+  "quote": "The documentation does not mention handling inline XBRL facts."
+ },
+ {
+  "claim": "No Hugging Face dataset was found that pairs SEC inline-XBRL facts with character-level spans in source text; HF searches for 'xbrl', 'ixbrl', 'edgar', '10-K', 'sec filings' return none with offsets. Closest: FinTagging_BIO (token BIO incl. HTML tables), FNXL (token ner_tags + numeral strings), FiNER-139 (token IOB2).",
+  "evidence_url": "https://huggingface.co/api/datasets?search=xbrl&limit=50&full=false",
+  "confidence": "VERIFIED",
+  "quote": "ridcl/xbrl-tables - Table extraction from XBRL documents (5K examples)"
+ },
+ {
+  "claim": "Other HF XBRL/EDGAR corpora found: DenyTranDFW/edgar_xbrl_companyfacts (GPL; ~125.4M rows of flattened companyfacts: cik, accn, fy, fp, form, unit, val, label - no text); ridcl/xbrl-tables (5,000 SEC page images with QA bounding boxes, license unspecified); Volavion/finer-139-xbrl-nonempty (FiNER-139 filtered to rows with tags: 179k/21.6k/18.8k); TeraflopAI/SEC-EDGAR (Apache-2.0; 8,055,455 filings, 43.7B tokens, plaintext with iXBRL tags stripped); alea-institute/kl3m-data-edgar-10k (CC BY 4.0 markdown 10-Ks); UK iXBRL sets mmajange/UKCH-iXBRL (AFL-3.0) and fabsssss/ixbrl-disclosure-benchmark.",
+  "evidence_url": "https://huggingface.co/datasets/TeraflopAI/SEC-EDGAR",
+  "confidence": "VERIFIED",
+  "quote": "The dataset contains 590 gbs of data, spanning 8 million samples and 43 billion tokens from all major filings in the SEC EDGAR database."
+ },
+ {
+  "claim": "emperor-mew/sec-filings (CC0-1.0) advertises XBRL financial facts but the HF repo is empty and data is served from an external API; it cites 17 USC 105 for US-government public-domain status.",
+  "evidence_url": "https://huggingface.co/datasets/emperor-mew/sec-filings",
+  "confidence": "VERIFIED",
+  "quote": "Underlying federal works are US public domain under 5 USC 105 / 17 USC 105."
+ },
+ {
+  "claim": "arXiv listing search (all:'XBRL' AND 'tagging', 50 most recent) surfaces only 8 papers: FiNER (2203.06482), FNXL (2306.03723), FLAN-FinXC (2405.06671), FinTagging (2505.20650), XBRLTagRec (2603.25263), FinReporting (2604.05966), NORA (2605.24910), Reclassified to Conform (2609.38754); none flagged for latency, cost, distillation, or quantization.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:%22XBRL%22+AND+all:%22tagging%22&max_results=50&sortBy=submittedDate&sortOrder=descending",
+  "confidence": "VERIFIED",
+  "quote": "Efficiency/Optimization: 2405.06671v2 emphasizes parameter-efficient LoRA fine-tuning"
+ }
+]
+
+### unknowns
+1) FNXL dataset license is contradictory/unclear: GitHub license null, HF repo untagged, inner data README says 'Research-only use' (the arXiv paper itself is CC BY 4.0) - treat as research-only unless authors confirm. 2) FinTagging training-split sizes were not visible on HF/GitHub pages (README references TrainingSet_Annotation.json; HF cards show only 'test' splits of 6,599 rows for v1 and 46,496 for v2). 3) Company-level overlap between FinTagging (2023-24 10-Ks) and FiNER-139/FNXL filers was not determinable from public pages. 4) FinNI-eval / FinCL-eval / FinTagging_BIO license tags are not shown on their HF cards (FinTagging_Original is MIT). 5) Semantic Scholar API returned HTTP 429 on every attempt; citation counts come from OpenAlex instead. 6) NORA's 6.6M-instance benchmark has no public release link in the paper HTML. 7) edgartools/ixbrl-parse/py-xbrl READMEs do not state whether parsed iXBRL facts retain HTML element/character positions; building span-labelled training data from iXBRL will likely require custom parsing of ix:nonFraction elements. 8) WebSearch budget was exhausted at session start, so discovery relied on direct fetches of arXiv export API, HF API listings, OpenAlex, GitHub API and SEC pages; coverage of non-arXiv venues is incomplete.
+
+### notes
+Key takeaways for the project: (a) FiNER-139 (text-only, 2016-20, 139 tags, CC-BY-SA-4.0) and FNXL (text-only, 10-K 2019-21, 2,794 tags, research-only per README) are both sentence/token-level and exclude tables, whereas FinTagging (10-K 2023-24, iXBRL-derived, text+tables, ~17.7k-concept taxonomy, MIT on FinTagging_Original) is the only one covering tables; filing years do not overlap FinTagging, so training on FiNER/FNXL and evaluating on FinTagging has no temporal leakage. (b) Since all 10-K/10-Q have been iXBRL since mid-2021, auto-labelled training data can be generated at scale from SEC public-domain filings (monthly XBRL RSS index + companyfacts/frames APIs + Arelle or custom ix:nonFraction parsing) under the 10 req/s + User-Agent policy; no existing public corpus already provides iXBRL facts with character spans. (c) Among prior XBRL-tagging papers fetched (FiNER, FNXL, FLAN-FinXC, XBRLTagRec, FinTagging, NORA), none reports serving latency or cost; the closest precedent is FinLoRA, which reports fine-tuning and inference time/GPU memory for LoRA'd LLMs on its own XBRL-analysis tasks (not FinTagging/FNXL/FiNER). JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/data_finer_fnxl_alternatives.json

@@ -1,0 +1,79 @@
+### key
+finauditing
+
+### query_name
+finauditing
+
+### found
+True
+
+### title
+FinAuditing: A Financial Taxonomy-Structured Multi-Document Benchmark for Evaluating LLMs
+
+### authors
+Yan Wang, Keyi Wang, Shanshan Yang, Jaisal Patel, Jeff Zhao, Fengran Mo, Xueqing Peng, Lingfei Qian, Yankai Chen, Victor Gutierrez-Basulto, Jimin Huang, Guojun Xiong, Xiao-Yang Liu, Xue Liu, Jian-Yun Nie (The Fin AI, Columbia, Stevens, RPI, UT Austin, U Montreal, McGill/MBZUAI, Cardiff, U Manchester)
+
+### venue_year
+VERIFIED: arXiv:2510.08886 v1 2025-10-10, v2 2026-02-19, v3 2026-05-17; arXiv Comments field = "Accepted by SIGIR 2026 Resource Track. Pre-camera-ready version". Crossref record for DOI 10.1145/3805712.3808578: container-title "Proceedings of the 49th International ACM SIGIR Conference on Research and Development in Information Retrieval", SIGIR '26 Melbourne, pages 3456-3463, published 2026-07-19. Semantic Scholar lists venue = SIGIR, citationCount 17 (HF paper page shows 20). SNIPPET-ONLY: presented as poster P003 at SIGIR 2026.
+
+### identifiers
+arXiv 2510.08886 (v3 current); ACM DOI 10.1145/3805712.3808578 (SIGIR '26); arXiv DOI 10.48550/arXiv.2510.08886; dblp journals/corr/abs-2510-08886; S2 CorpusId 282055589. URLs: https://arxiv.org/abs/2510.08886 ; https://arxiv.org/html/2510.08886v3 ; https://github.com/The-FinAI/FinAuditing ; https://huggingface.co/collections/TheFinAI/finauditing-68e5f80606e22454027075e7 ; https://huggingface.co/papers/2510.08886
+
+### task_summary
+VERIFIED (arXiv HTML v1, v2, v3 downloaded and grepped locally). Benchmark of LLMs on professional-grade financial AUDITING over real US-GAAP XBRL filings (instance doc + schema + linkbases + US-GAAP taxonomy chunks) — NOT text/table-to-XBRL tagging. Three zero-shot tasks: (1) FinSM, Financial Semantic Matching, 330 instances: IR-style — given a query describing a financial term, the XBRL filing and taxonomy, return the set of mismatched/erroneous US-GAAP tags (HR@k, Recall@k, Macro-F1@k, k=5/10/20). (2) FinRE, Financial Relationship Extraction, 440 instances: 3-way classification of the relation error type between two given concepts (Reversal / Inappropriateness / CombinationErr; Acc, Macro P/R/F1). (3) FinMR, Financial Mathematical Reasoning, 332 instances: extract the reported value for a concept and recompute the correct value from calculation-linkbase relations; output JSON {extracted_value, calculated_value}; Accuracy via LLM-as-judge plus SER/EER/CER error rates. Inputs are long: avg 33,849 tokens (FinSM), 33,681 (FinRE), 35,678 (FinMR), max 65,030 (cl100k_base); paper sets max input 81,920 tokens, 512 generation tokens. Ground truth derived deterministically from 4,545 XBRL US Data Quality Committee (DQC) error messages (372 companies, 2020-2024), filtered to the 9 most frequent DQC error types and 218 SEC EDGAR filings; GPT-4o-mini used only as a parser of DQC messages. XBRL concept linking is central (taxonomy-grounded concept alignment, calculation/presentation relations), but the task is error detection/verification on an already-tagged filing, not extraction of (value, concept, period, unit) tuples from raw 10-K text or tables.
+
+### data
+VERIFIED. Hugging Face, license CC-BY-4.0 on all three dataset cards, not gated, test split only: TheFinAI/FinSM (330 rows; fields query, dqc_id, answer, id; query 51k-179k chars), TheFinAI/FinRE (440 rows; query, dqc_id, answer, choices, gold, id), TheFinAI/FinMR (332 rows; query 17.5k-167k chars; dqc_id mostly DQC_US_0015; answer = JSON of extracted/calculated values). Also FinSM_Sub / FinRE_Sub / FinMR_Sub subsets (last modified 2025-10-12) released for the ICAIF 2026 / SecureFinAI Contest 2026 shared task. Source filings: 218 US-GAAP XBRL filings from SEC EDGAR, 2022-2024 (v1: "restricting the scope to data from 2022 to 2024"); DQC error messages 2020-2024 from xbrl.us/data-quality/filing-results and the DQC US rules repo. No train split — zero-shot evaluation only. Code: https://github.com/The-FinAI/FinAuditing — README + StartKit/{pipeline-hf.ipynb, pipeline-vllm.ipynb, evaluateFinSM/RE/MR.ipynb}; GitHub API reports NO LICENSE file on the repo (5 stars, created 2025-10-11, last push 2026-02-02); full eval via FinBen fork run_finaudit.sh (https://github.com/Yan2266336/FinBen). Paper PDF is CC BY 4.0.
+
+### models_and_results
+VERIFIED from Tables 5/6 and the appendix model table in arXiv HTML v3. 13 models, all zero-shot via LM Evaluation Harness: GPT-4o (gpt-4o-2024-08-06, API); DeepSeek-V3 685B (API); Qwen3-235B-A22B-Instruct-2507; Llama-4-Scout-17B-16E (109B); Qwen2.5-72B; Llama-3.3-70B; Qwen3-32B; gemma-3-27b-it; gemma-3-12b-it; Llama-3.1-8B-Instruct; Llama-3.2-3B-Instruct; Fin-o1-14B; Fin-R1 7B. FinSM HR@20: DeepSeek-V3 12.42 (best), gemma-3-27b 10.30, gemma-3-12b 10.30, Qwen3-235B 10.00, GPT-4o 9.09, Qwen2.5-72B 8.48, Llama-3.1-8B 6.06, Llama-3.3-70B 5.15, Llama-3.2-3B 4.55, Llama-4-Scout 3.03, Fin-R1 2.73, Qwen3-32B 0.00, Fin-o1-14B 0.00. FinRE Acc/Macro-F1: GPT-4o 91.82/90.09 (best), DeepSeek-V3 82.73/80.68, Qwen2.5-72B 67.50/68.27, Qwen3-235B 62.73/63.56, gemma-3-27b 45.91/40.85, Fin-R1 32.73/25.97, Llama-3.1-8B 30.45/19.34, Llama-3.3-70B 28.86/21.54, gemma-3-12b 27.95/27.37, Llama-4-Scout 27.50/22.71, Llama-3.2-3B 17.73/15.70, Qwen3-32B 0/0, Fin-o1-14B 0/0. FinMR: per-model accuracies appear only in Figure 4 (bar chart); text states best model Fin-o1-14B = 13.86% and "Calculation errors (CER) dominate across most models, typically accounting for 70–83% of failures." No fine-tuning experiments; no quantized variants.
+
+### small_models_evaluated
+VERIFIED. Sub-8B: Llama-3.2-3B-Instruct (3B) and Fin-R1 (7B); then Llama-3.1-8B-Instruct, gemma-3-12b-it, Fin-o1-14B. All zero-shot, unquantized, run locally on 4xH200. Llama-3.2-3B: FinSM HR@20 4.55 / R@20 3.98 / MF1@20 2.94; FinRE Acc 17.73 / Macro-F1 15.70; FinMR in Figure 4 only (not extractable). No BERT-scale encoders, no distilled or fine-tuned small models. Appendix E (v2/v3 only) suggests but does not test "compact instruction-tuned models" for FinSM and "fine-tuning lightweight classifiers" for FinRE.
+
+### reports_serving_cost
+partial: NOT per-model and NOT serving cost. v1 (2025-10-10) Section 4.5 contains one aggregate budget sentence: "In total, the evaluation required approximately 320 GPU hours and incurred around $200 in API costs for GPT (via OpenAI) and DeepSeek (via TogetherAI)." This sentence was REMOVED in v2 and v3 (SIGIR pre-camera-ready): local grep of v2/v3 full text finds 0 hits for "GPU hour", "API cost", "TogetherAI", "$200". v3 says only "Proprietary models are accessed via APIs, while open-source models are run locally on a 4 × H200 GPU cluster." and, in Appendix E, "tiered or hybrid deployment strategies that balance performance with computational cost ... compact instruction-tuned models to achieve high recall at low cost" — qualitative, no measurements. No $/instance, $/filing, or cost-vs-accuracy frontier anywhere.
+
+### reports_latency_or_throughput
+no. Local grep over arXiv HTML v1, v2, v3 full text incl. appendices: "latency" 0 hits, "throughput" 0 hits, "inference time" 0, "second(s)" 0, "vLLM" 0 (vLLM appears only as the GitHub StartKit notebook name pipeline-vllm.ipynb — an inference backend, not a measured quantity). The only timing-adjacent statement is the v1-only aggregate "approximately 320 GPU hours".
+
+### reports_training_cost
+no. No training or fine-tuning is performed; the benchmark is zero-shot only. Annotation cost is not quantified (GPT-4o-mini used as a parser).
+
+### relevance_to_idea
+FinAuditing is a sibling benchmark from the same group as FinTagging (The Fin AI / Xiao-Yang Liu / Jimin Huang) but is an XBRL AUDITING / error-detection benchmark over already-tagged filings (mismatched tags, relation-error classification, calculation re-verification), not text/table -> (value, concept, period, unit) extraction. It does not directly compete with a FinTagging-style extraction target but must be cited as the closest taxonomy-grounded XBRL work. Effect on the novelty claim: (a) SUPPORTS it — accuracy only, no per-model latency/throughput/serving cost, no fine-tuned or quantized small models, no cost-accuracy frontier; (b) WORD IT CAREFULLY — v1 did disclose an aggregate budget ("320 GPU hours ... around $200 in API costs"), so claim "no per-model serving cost or latency / no cost-accuracy frontier" rather than "no mention of cost"; (c) the authors themselves (Appendix E, v2/v3) flag compact instruction-tuned models and lightweight fine-tuned classifiers as the natural low-cost deployment path but leave it unmeasured — a citable motivation; (d) it DOES include Llama-3.2-3B, Fin-R1 7B and Llama-3.1-8B zero-shot baselines, so "nobody has benchmarked small models" is false in the strict sense — the defensible statement is "no fine-tuned/distilled small models and no cost/latency measurements on FinTagging/FinAuditing/FNXL/FiNER". Reuse: FinMR (extract reported value + recompute) and FinSM could be a secondary long-context (~34k-token) stress test for a 1-3B extractor, though inputs far exceed typical small-model context budgets; the StartKit pipeline-vllm.ipynb gives a ready vLLM harness. Citing works checked: AuditFlow (arXiv 2606.03031, same group; GPT-5.5 agents on a FinMR sample, 82.09%) — no cost/latency in abstract; VERA-8B (2608.28402) — 8B audit model, no XBRL/FinAuditing/cost; Finch (2512.13168, ACL 2026 Findings) — reports minutes-per-workflow for frontier agents on spreadsheets, not XBRL. Nothing found that benchmarks small/distilled models on FinAuditing with cost or latency. Contest: paper names it the official benchmark of SecureFinAI Contest 2026 (IEEE IDS 2026 special track; _Sub subsets "for ICAIF 2026" per README); the contest README and cloud-conf.net page contain no cost/latency/model-size criteria (2026 task pages not found on readthedocs).
+
+### confidence
+high. VERIFIED by direct fetch: arXiv abstract page (version history, SIGIR acceptance comment); arXiv HTML v1/v2/v3 full text downloaded and grepped locally for every requested keyword; Crossref DOI record (SIGIR '26 proceedings, pp. 3456-3463); Semantic Scholar record and citation list; GitHub README and GitHub API (StartKit files, no LICENSE file); HF collection page, HF API listing, all three HF dataset cards (CC-BY-4.0, row counts, fields); HF papers page; AuditFlow / VERA-8B / Finch arXiv abstracts; SecureFinAI contest GitHub README and cloud-conf.net page. UNVERIFIED: per-model FinMR accuracies beyond the 13.86% headline (figure only). SNIPPET-ONLY: SIGIR 2026 poster slot P003; HF citation count 20. researchr.org SIGIR 2026 listing did not surface the paper and dl.acm.org returned 403, so venue confirmation rests on arXiv Comments + Crossref + Semantic Scholar (three independent sources). Could NOT find any paper benchmarking small/distilled models on FinAuditing with cost or latency. Result JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/finauditing.json
+
+### sources
+[
+ "https://arxiv.org/abs/2510.08886",
+ "https://arxiv.org/html/2510.08886v1",
+ "https://arxiv.org/html/2510.08886v2",
+ "https://arxiv.org/html/2510.08886v3",
+ "https://arxiv.org/pdf/2510.08886",
+ "https://api.crossref.org/works/10.1145/3805712.3808578",
+ "https://api.semanticscholar.org/graph/v1/paper/arXiv:2510.08886?fields=title,year,venue,externalIds,citationCount,abstract,publicationVenue",
+ "https://api.semanticscholar.org/graph/v1/paper/arXiv:2510.08886/citations?fields=title,year,venue,externalIds,abstract&limit=100",
+ "https://export.arxiv.org/api/query?search_query=all:%22FinAuditing%22&max_results=50",
+ "https://github.com/The-FinAI/FinAuditing",
+ "https://raw.githubusercontent.com/The-FinAI/FinAuditing/main/README.md",
+ "https://api.github.com/repos/The-FinAI/FinAuditing",
+ "https://api.github.com/repos/The-FinAI/FinAuditing/contents/StartKit",
+ "https://huggingface.co/collections/TheFinAI/finauditing",
+ "https://huggingface.co/papers/2510.08886",
+ "https://huggingface.co/datasets/TheFinAI/FinSM",
+ "https://huggingface.co/datasets/TheFinAI/FinRE",
+ "https://huggingface.co/datasets/TheFinAI/FinMR",
+ "https://huggingface.co/api/datasets?search=TheFinAI/Fin&limit=100",
+ "https://github.com/Open-Finance-Lab/SecureFinAI_Contest_2026",
+ "https://www.cloud-conf.net/datasec/2026/ids/SecureFinAI.html",
+ "https://finrl-contest.readthedocs.io/en/latest/",
+ "https://arxiv.org/abs/2606.03031",
+ "https://arxiv.org/abs/2608.28402",
+ "https://arxiv.org/abs/2512.13168",
+ "https://beancount.io/bean-labs/research-logs/2026/06/03/finauditing-xbrl-taxonomy-benchmark-llm",
+ "https://pith.science/paper/2510.08886",
+ "https://researchr.org/publication/sigir-2026"
+]

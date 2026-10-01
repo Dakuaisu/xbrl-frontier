@@ -1,0 +1,306 @@
+### key
+data_contamination_practices
+
+### topic
+data_contamination_practices: train/eval contamination control for FinTagging (10-K-derived eval) vs auto-labelled 10-K/10-Q training data
+
+### facts
+[
+ {
+  "claim": "FinTagging's evaluation corpus is 142 annual 10-K filings (2023-2024), 319,893 narrative sentences and 21,576 tables; filing dates span 2023-02-13 to 2025-02-13.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "We compiled 142 annual 10-K filings from publicly listed U.S. companies submitted to the U.S. Securities and Exchange Commission (SEC) in 2023–2024."
+ },
+ {
+  "claim": "The FinTagging paper does not publish CIKs, accession numbers, company names, fiscal years or filing dates for the 142 filings; full-text search of the HTML for 'accession', 'CIK', 'fiscal year', 'company name', 'filing date' returned no matches. 'ticker' appears only in Appendix C.1 'The Statistics of the Tickers' as distribution figures (sector, market-cap, geography), with no enumeration of tickers.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "C.1. The Statistics of the Tickers"
+ },
+ {
+  "claim": "The FinTagging paper contains no discussion of contamination, leakage, memorization, held-out or unseen data (zero matches for those terms), and no Limitations section.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "FinTagging ground truth is auto-derived from Inline XBRL fact elements in the filings themselves.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "the parser extracts iXBRL fact elements (e.g., ix:nonfraction) and retrieves the value v, concept c, and data type τ"
+ },
+ {
+  "claim": "FinTagging's training set for PLM baselines is 10 additional 10-K reports filed between 2024-02-13 and 2025-02-13 (1,116 sentences, 953 tables); this window overlaps the evaluation filing window and the paper does not state whether these 10 companies are disjoint from the 142 evaluation companies.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "VERIFIED",
+  "quote": "We gathered an additional 10 annual 10-K financial reports filed with the SEC for the period from February 13, 2024, to February 13, 2025."
+ },
+ {
+  "claim": "The HF evaluation datasets carry no filing identifiers: TheFinAI/FinNI-eval rows have only context_index, context, query, answer; TheFinAI/FinCL-eval rows have context, category, entity, entity_type, query, answer.",
+  "evidence_url": "https://datasets-server.huggingface.co/first-rows?dataset=TheFinAI/FinNI-eval&config=default&split=test",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "TheFinAI/FinTagging_Original_v2 (46,496 rows, single 'test' split, updated Sep 2025) has only text, numeric_entities, context_id fields; no CIK/accession/ticker/fiscal-year metadata.",
+  "evidence_url": "https://huggingface.co/datasets/TheFinAI/FinTagging_Original_v2",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "The FinTagging HF collection lists FinNI-eval, FinNI-eval-v2, FinCL-eval, FinCL-eval-v2, FinTagging_Original(_v2), FinTagging_BIO(_v2); the v2 sets were updated Sept 2025. The README-referenced 'FinTagging_Trainset' is not accessible via the HF datasets-server ('does not exist, or is not accessible without authentication'); training annotations are instead in the GitHub file annotation/TrainingSet_Annotation.json.",
+  "evidence_url": "https://huggingface.co/collections/TheFinAI/fintagging",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "The FinTagging GitHub repo tree contains no filing manifest; data files are annotation/benchmark_ground_truth_pipeline.json (19.9 MB), annotation/TrainingSet_Annotation.json, subdata/FinNI-eval-subset.csv, subdata/FinCL-eval-subset.csv, BERT/data/*.bio, plus parse_xbrl_report.ipynb and taxonomy files. The README states no license; the paper says CC BY 4.0.",
+  "evidence_url": "https://api.github.com/repos/The-FinAI/FinTagging/git/trees/main?recursive=1",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Filing identifiers for FinTagging contexts are recoverable by exact-phrase query against SEC EDGAR full-text search: the first sentence in TrainingSet_Annotation.json resolves to 10-K accession 0000766704-25-000009 (WELLTOWER INC., CIK 0000766704, filed 2025-02-12, period 2024-12-31; the only other hit is the ARS), and the first FinNI-eval-subset.csv context resolves uniquely to 10-K accession 0000106640-25-000011 (WHIRLPOOL CORP, CIK 0000106640, filed 2025-02-13).",
+  "evidence_url": "https://efts.sec.gov/LATEST/search-index?q=%22The%20net%20amount%20of%20unrealized%20gain%20or%20loss%20on%20derivative%20instruments%20included%20in%20accumulated%20other%20comprehensive%20income%20(loss)%20related%20to%20contracts%20maturing%20and%20expected%20to%20be%20realized%20during%20the%20next%20twelve%20months%20is%20a%20gain%20of%20approximately%20%2446%20million%20at%20December%2031%2C%202024%22",
+  "confidence": "VERIFIED",
+  "quote": "0000106640-25-000011:whr-20241231.htm | WHIRLPOOL CORP /DE/ (WHR) (CIK 0000106640) | 10-K | 2025-02-13"
+ },
+ {
+  "claim": "Company names are visible inside FinTagging eval contexts (e.g. Hubbell, PPL, NorthWestern Corporation in the first FinNI-eval row), so company-level de-anonymization is trivial even without metadata.",
+  "evidence_url": "https://datasets-server.huggingface.co/first-rows?dataset=TheFinAI/FinNI-eval&config=default&split=test",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "FinTagging arXiv v1 was posted 2025-05-27 (v5 2026-05-17); evaluated models include GPT-4o, DeepSeek-V3, Llama-4-Scout, Llama-3.3-70B, Qwen3 (32B/14B/1.7B/0.6B), gemma-2-27b-it, Llama-3.1-8B, Llama-3.2-3B, Fino1-8B, and fine-tuned BERT-large/FinBERT/SEC-BERT.",
+  "evidence_url": "https://arxiv.org/abs/2505.20650",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "GPT-3 (Brown et al. 2020) defined the canonical n-gram contamination check: 'clean' benchmark versions remove examples with a 13-gram overlap with the pretraining set, and clean-vs-full scores are compared.",
+  "evidence_url": "https://arxiv.org/pdf/2005.14165",
+  "confidence": "VERIFIED",
+  "quote": "For each benchmark, we produce a 'clean' version which removes all potentially leaked examples, defined roughly as examples that have a 13-gram overlap with anything in the pretraining set (or that overlap with the whole example when it is shorter than 13-grams)."
+ },
+ {
+  "claim": "GPT-3 Appendix C: N is the 5th-percentile example length in words (punctuation/case ignored), minimum 8 for non-synthetic tasks, maximum 13; a 'dirty' example has any N-gram collision with any training document; exact collisions computed with Spark; a bug left overlaps in training data so they reported clean-subset deltas instead; they warn of false positives for datasets whose background text comes from the web.",
+  "evidence_url": "https://arxiv.org/pdf/2005.14165",
+  "confidence": "VERIFIED",
+  "quote": "Due to spurious collisions at lower values of N we use a minimum value of 8 on non-synthetic tasks. For performance reasons, we set a maximum value of 13 for all tasks."
+ },
+ {
+  "claim": "Llama 2 Appendix A.6 moved to token-level contamination: a token is contaminated if it appears in a >10-token n-gram shared with the training set; 'Clean' samples have <20% contaminated tokens, 'Dirty' >=80%; evidence of benefit requires BOTH cleanest examples scoring worse and dirtiest scoring better than their complements. It also summarizes PaLM's rule (contaminated if 70% of 8-grams are found in training data).",
+  "evidence_url": "https://arxiv.org/pdf/2307.09288",
+  "confidence": "VERIFIED",
+  "quote": "We consider a token to be contaminated if it appears in any token n-gram longer than 10 tokens in both the evaluation sample and the training set, and define the contamination percentage of a sample to be the percentage of tokens contaminated."
+ },
+ {
+  "claim": "GPT-4 Technical Report Appendix C used substring matching: strip spaces/symbols, sample three random 50-character substrings per eval example, flag a match if any is a substring of a training example, discard flagged examples and re-run to get uncontaminated scores; they acknowledge false negatives and false positives.",
+  "evidence_url": "https://arxiv.org/pdf/2303.08774",
+  "confidence": "VERIFIED",
+  "quote": "For each evaluation example, we randomly select three substrings of 50 characters (or use the entire example if it's less than 50 characters). A match is identified if any of the three sampled evaluation substrings is a substring of the processed training example."
+ },
+ {
+  "claim": "Llama 3 (2024) scores examples by 8-gram overlap following Singh et al. (2024), with a per-dataset token-ratio threshold chosen to maximize significant estimated performance gain; post-training data was decontaminated by exact match with benchmark prompts; pretraining data has knowledge 'until the end of 2023'.",
+  "evidence_url": "https://arxiv.org/pdf/2407.21783",
+  "confidence": "VERIFIED",
+  "quote": "We consider an example of a dataset D to be contaminated if a ratio TD of its tokens are part of an 8-gram occurring at least once in the pre-training corpus."
+ },
+ {
+  "claim": "Singh et al. 2024 (ConTAM) find contamination 'may have a much larger effect than reported in recent LLM releases', that using the longest contaminated substring is a better signal than the union of all matches, and that large n and ignoring infrequent matches cause many false negatives.",
+  "evidence_url": "https://arxiv.org/abs/2411.03923",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Qwen2.5 (18T tokens) decontaminates by LCS: a training sequence is removed if a test sequence exists with |LCS| >= 13 and |LCS| >= 0.6 x min(|s_t|,|s_e|); no knowledge cutoff is stated.",
+  "evidence_url": "https://arxiv.org/html/2412.15115",
+  "confidence": "VERIFIED",
+  "quote": "a training sequence is removed from the training data if there exists a test sequence such that the length of the longest common subsequence (LCS) satisfies both |LCS| ≥ 13 and |LCS| ≥ 0.6 × min(|s_t|,|s_e|)"
+ },
+ {
+  "claim": "Gemma 3 states it decontaminates evaluation sets from the pre-training mixture (web documents, code, math; 2T tokens for 1B, 4T for 4B) but gives no knowledge cutoff and no source itemization.",
+  "evidence_url": "https://arxiv.org/html/2503.19786",
+  "confidence": "VERIFIED",
+  "quote": "We decontaminate evaluation sets from our pre-training data mixture, and reduce the risk of recitation by minimizing the proliferation of sensitive outputs."
+ },
+ {
+  "claim": "Qwen3 (report submitted 2025-05-14, i.e. 13 days before FinTagging v1) was pretrained on 36T tokens including text recognized from 'a large volume of PDF-like documents' via Qwen2.5-VL; the report describes no benchmark decontamination procedure and no knowledge cutoff.",
+  "evidence_url": "https://arxiv.org/html/2505.09388",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Dolma/OLMo decontamination rule: any paragraph longer than 13 Unicode-segmented tokens that appears in the Paloma eval suite is marked contaminated and the whole document is removed (<=0.02% of documents); implemented with a Bloom filter seeded with test examples; WIMBD analysis found entire GLUE datasets inside Dolma.",
+  "evidence_url": "https://arxiv.org/pdf/2402.00159",
+  "confidence": "VERIFIED",
+  "quote": "we mark any paragraph in Dolma as contaminated if (i) it is longer than 13 Unicode-segmented tokens and (ii) it appears in any of the documents in Paloma. To train OLMo-1B, we remove any document with at least one paragraph marked as contaminated."
+ },
+ {
+  "claim": "EleutherAI lm-evaluation-harness ships a decontamination implementation that follows GPT-3 Appendix C and uses 13-grams uniformly.",
+  "evidence_url": "https://github.com/EleutherAI/lm-evaluation-harness/blob/main/docs/decontamination.md",
+  "confidence": "VERIFIED",
+  "quote": "OpenAI defined a test document as contaminated if any N-gram overlap existed with any training document. They used a range of N values between 8 and 13 depending on dataset, while we just used 13 for simplicity."
+ },
+ {
+  "claim": "Lee et al. (ACL 2022) show exact-substring + near-duplicate (MinHash) deduplication reduces memorized output ~10x and that train-test overlap affected over 4% of a validation set; released dedup tooling.",
+  "evidence_url": "https://arxiv.org/abs/2107.06499",
+  "confidence": "VERIFIED",
+  "quote": "We can also reduce train-test overlap, which affects over 4% of the validation set"
+ },
+ {
+  "claim": "Dodge et al. (EMNLP 2021) documented that C4 (Common-Crawl-derived) contains evaluation examples from other benchmark NLP datasets.",
+  "evidence_url": "https://arxiv.org/abs/2104.08758",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Yang et al. 2023 show paraphrase/translation variants bypass n-gram and embedding decontamination and propose an LLM-based decontaminator; found 8-18% of HumanEval overlapping popular pretraining sets.",
+  "evidence_url": "https://arxiv.org/abs/2311.04850",
+  "confidence": "VERIFIED",
+  "quote": "simple variations of test data (e.g., paraphrasing, translation) can easily bypass these decontamination measures"
+ },
+ {
+  "claim": "Jiang et al. 2024 distinguish 'text contamination' (eval inputs) from 'ground-truth contamination' (prompts + desired outputs) and report inadequacy of n-gram-based contamination definitions; relevant because iXBRL filings carry labels inline with text.",
+  "evidence_url": "https://arxiv.org/abs/2401.06059",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Golchin & Surdeanu (ICLR 2024 spotlight) 'Time Travel in LLMs': black-box instance- and partition-level contamination detection via guided-instruction completion (dataset name + split + prefix of an instance), 92-100% accuracy; applicable to API models.",
+  "evidence_url": "https://arxiv.org/abs/2308.08493",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Oren et al. 2023 give a provable black-box test (likelihood of canonical ordering vs shuffled) that works for 1.4B models and 1000-example datasets but requires log-probabilities.",
+  "evidence_url": "https://arxiv.org/abs/2310.17623",
+  "confidence": "VERIFIED",
+  "quote": "flags potential contamination whenever the likelihood of a canonically ordered benchmark dataset is significantly higher than the likelihood after shuffling the examples"
+ },
+ {
+  "claim": "Deng et al. (NAACL 2024) propose TS-Guessing (mask part of a test item and ask the model to fill it); GPT-4 reached 57% exact match guessing masked MMLU options.",
+  "evidence_url": "https://arxiv.org/abs/2311.09783",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Sainz et al. (EMNLP 2024 Findings) argue each benchmark paper must measure and report contamination; the CONDA 2024 shared-task report compiled 566 contamination entries over 91 sources in a public GitHub database.",
+  "evidence_url": "https://arxiv.org/abs/2407.21530",
+  "confidence": "VERIFIED",
+  "quote": "566 reported entries over 91 contaminated sources from a total of 23 contributors"
+ },
+ {
+  "claim": "Magar & Schwartz (ACL 2022) separate memorization from exploitation by comparing seen vs unseen test samples; exploitation is inconsistent and depends on duplication and model size.",
+  "evidence_url": "https://arxiv.org/abs/2203.08242",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Surveys: Xu et al. 2024 'Benchmark Data Contamination of LLMs: A Survey' (arXiv 2406.04244) and Cheng et al. 2025 'A Survey on Data Contamination for LLMs' (categorizes prevention as data-updating, data-rewriting, prevention-based; detection as white/gray/black-box).",
+  "evidence_url": "https://arxiv.org/abs/2502.14425",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Sun et al. 2025 evaluated 20 mitigation strategies across 10 LLMs/5 benchmarks and found none significantly improves contamination resistance over no mitigation across all benchmarks; recommends question-level analysis.",
+  "evidence_url": "https://arxiv.org/abs/2503.16402",
+  "confidence": "VERIFIED",
+  "quote": "no existing strategy significantly improves resistance over the vanilla case (i.e., no benchmark update) across all benchmarks"
+ },
+ {
+  "claim": "LiveBench's contamination-limiting design is temporal: frequently updated questions from recently released sources, scored objectively; the same logic applies to building a post-cutoff 10-Q/10-K slice.",
+  "evidence_url": "https://arxiv.org/abs/2406.19314",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Lazaridou et al. (NeurIPS 2021) argue for time-stratified evaluation (train on past, test on future) because 'we currently train and evaluate our models on utterances from overlapping time periods'.",
+  "evidence_url": "https://arxiv.org/abs/2102.01951",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Kapoor & Narayanan (2022) taxonomize 8 leakage types across 329 papers and propose 'model info sheets' to report leakage safeguards.",
+  "evidence_url": "https://arxiv.org/abs/2207.07048",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Precedent in XBRL tagging for company-level splits: FNXL (ACL 2023 Findings; 10-Ks 2019-2021, 2,339 companies) split by company to avoid leakage.",
+  "evidence_url": "https://arxiv.org/pdf/2306.03723",
+  "confidence": "VERIFIED",
+  "quote": "To avoid data leakage, we divide the sentences according to the companies they belong to and create the train, validation and test set. We ensure that the companies in train set do not contribute to the validation or test set and vice-versa."
+ },
+ {
+  "claim": "Precedent for temporal splits: FiNER-139 (ACL 2022; ~10k EDGAR annual/quarterly filings 2016-2020) split chronologically 80/10/10.",
+  "evidence_url": "https://arxiv.org/pdf/2203.06482",
+  "confidence": "VERIFIED",
+  "quote": "We split chronologically the remaining sentences into training, development, and test sets with an 80/10/10 ratio"
+ },
+ {
+  "claim": "Scaria et al. (Nov 2025) studied 23 small LMs (270M-4B) under fine-tuning data contamination/corruption and call for contamination-aware training protocols; directly relevant to a 1-3B fine-tune.",
+  "evidence_url": "https://arxiv.org/abs/2511.06763",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Silvestri et al. (2025) provide a framework to detect contamination of tabular datasets via controlled transformed queries; found clear contamination in 4 of 8 tabular datasets; a template for probing FinTagging tables.",
+  "evidence_url": "https://arxiv.org/abs/2510.20351",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Common Crawl does capture EDGAR archive pages: the CC-MAIN-2025-05 index returns captures under https://www.sec.gov/Archives/edgar/data/320193/... (Form 4 XSL renderings), and a wildcard query for www.sec.gov/Archives/edgar/data/* reports {pages:3, blocks:15}. However the specific Apple FY2024 10-K folder (000032019324000123) returned 'No Captures found' in that crawl, so coverage of individual 10-K documents is partial; other folder probes timed out (504).",
+  "evidence_url": "https://index.commoncrawl.org/CC-MAIN-2025-05-index?url=www.sec.gov/Archives/edgar/data/320193/*&output=json&limit=3",
+  "confidence": "VERIFIED",
+  "quote": "\"url\": \"https://www.sec.gov/Archives/edgar/data/320193/000032019323000048/xslF345X04/wf-form4_168064750462974.xml\" ... \"filename\": \"crawl-data/CC-MAIN-2025-05/segments/...\""
+ },
+ {
+  "claim": "sec.gov's robots.txt does not disallow /Archives/ (only /core/, /profiles/, /admin/, /search/, etc.), so nothing prevents crawlers from indexing EDGAR filings.",
+  "evidence_url": "https://www.sec.gov/robots.txt",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Open models are predominantly trained on web crawls: FineWeb is 15T tokens from 96 Common Crawl snapshots; Llama 3 says 'Much of the data we utilize is obtained from the web'; Llama 3.1-8B and Llama 3.2-3B model cards state 'publicly available online data' with pretraining cutoff December 2023.",
+  "evidence_url": "https://huggingface.co/meta-llama/Llama-3.2-3B",
+  "confidence": "VERIFIED",
+  "quote": "The pretraining data has a cutoff of December 2023."
+ },
+ {
+  "claim": "BloombergGPT's FinPile explicitly contains SEC filings: Filings = 14B tokens (2.04% of training), 'a majority of the filings come from EDGAR' (1.90% of total), dated 2007-03-01 to 2022-07-31.",
+  "evidence_url": "https://ar5iv.labs.arxiv.org/html/2303.17564",
+  "confidence": "VERIFIED",
+  "quote": "In our dataset, a majority of the filings come from EDGAR, which is the SEC's online database (1.90% of total)."
+ },
+ {
+  "claim": "Open-FinLLMs/FinLLaMA (continual pretraining of LLaMA3-8B on 52B tokens) includes 6B tokens of SEC 10-K/10-Q filings from EDGAR (1994-2020); its comparison table lists FinTral with 2.55B SEC-filing tokens and BloombergGPT with 14B.",
+  "evidence_url": "https://arxiv.org/pdf/2408.11878",
+  "confidence": "VERIFIED",
+  "quote": "SEC Filings: This section includes 6 billion tokens from U.S. SEC filings, such as 10-K and 10-Q reports, spanning from 1994 to 2020."
+ },
+ {
+  "claim": "EDGAR-CORPUS (ECONLP 2021) packages all 10-K filings 1993-2020 (176k train / 22k val / 22k test docs, fields cik, filename, year, section_*) on Hugging Face with ~6,570 downloads/month and has been used to pretrain models (SEC-BERT; legal-financial-modernbert-150m).",
+  "evidence_url": "https://huggingface.co/datasets/eloukas/edgar-corpus",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Pile of Law includes an 'edgar' subset ('Contracts filed with the SEC and made available on the SEC's Edgar tool'), another route for EDGAR text into open pretraining corpora.",
+  "evidence_url": "https://huggingface.co/datasets/pile-of-law/pile-of-law",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Since the 2018 Inline XBRL rule, the filed 10-K HTML is simultaneously human- and machine-readable, i.e. the us-gaap concept tags (FinTagging's labels) are embedded in the same public document a crawler would fetch; the SEC also publishes all XBRL numeric facts quarterly as Financial Statement Data Sets.",
+  "evidence_url": "https://www.sec.gov/structureddata/osd-inline-xbrl.html",
+  "confidence": "VERIFIED",
+  "quote": "Inline XBRL is a structured data language that allows filers to prepare a single document that is both human-readable and machine-readable"
+ },
+ {
+  "claim": "SEC EDGAR access policy: free public data, max 10 requests/second, declared User-Agent required; relevant for building a reproducible, manifest-driven training-corpus pipeline.",
+  "evidence_url": "https://www.sec.gov/os/accessing-edgar-data",
+  "confidence": "VERIFIED",
+  "quote": "Current max request rate: 10 requests/second."
+ },
+ {
+  "claim": "Timeline inference: FinTagging eval filings were filed 2023-02-13 to 2025-02-13; Llama 3.x's Dec-2023 cutoff means filings filed in 2023 (roughly the FY2022/FY2023 10-K cohort) predate the cutoff and could be in pretraining if crawled, while Qwen3/Gemma 3 give no cutoff; vendor decontamination (Qwen2.5, Gemma 3, Llama 3) targets named public benchmarks and could not have targeted FinTagging, which was released after those reports.",
+  "evidence_url": "https://arxiv.org/html/2505.20650",
+  "confidence": "UNVERIFIED"
+ }
+]
+
+### unknowns
+Could not confirm whether specific FinTagging 10-K documents are present in Common Crawl / FineWeb / Dolma: the only successful CC-index probes returned Form 4 renderings under sec.gov/Archives/edgar/data, one 10-K folder probe returned 'No Captures found', and three others timed out (504). Semantic Scholar API was rate-limited (429) and the session's WebSearch budget was already exhausted (200/200) before this task started, so discovery relied on the arXiv export API and known URLs; no finance-specific contamination study of FinTagging/FNXL/FiNER was found via arXiv title search for 'data contamination' or 'XBRL'. Knowledge cutoffs for Qwen2.5/Qwen3/Gemma 3 are not stated in their reports or model cards. The FinTagging paper does not say whether the 10 training-set companies overlap the 142 eval companies, nor what filings were added in the Sept-2025 v2 datasets. The HF 'FinTagging_Trainset' named in the README is not accessible on the datasets-server. Whether common web-text extraction pipelines preserve iXBRL tag attributes (label leakage) vs only text is not verified; most HTML-to-text extractors drop attributes, so pretraining 'ground-truth contamination' via tags is plausible but unproven. The GPT-3, GPT-4, Llama 2/3, FiNER, FNXL, Open-FinLLMs and Dolma quotes were extracted from the arXiv PDFs locally with PyMuPDF (ar5iv/HTML pages truncated before the appendices).
+
+### notes
+JSON saved to /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/data_contamination_practices.json (51 facts). Extracted paper texts for re-checking quotes are in the same scratchpad directory (GPT3.txt, GPT4.txt, LLAMA2.txt, LLAMA3.txt, FiNER139.txt, FNXL.txt, OpenFinLLMs.txt, Dolma.txt).
+
+RECOMMENDATIONS (each citable from the facts above):
+(1) Recover the eval manifest yourself. FinTagging publishes no CIK/accession, but every context is verbatim 10-K text: run an exact-phrase query per context (and per distinctive table-cell string) against EDGAR full-text search (efts.sec.gov/LATEST/search-index?q="...", forms=10-K, dates 2023-02-13..2025-02-13) and record (CIK, accession, period, filing date). Verified on two samples (Welltower 0000766704-25-000009; Whirlpool 0000106640-25-000011). Publish the manifest as a supplementary CSV so reviewers can audit exclusion. Also resolve the 10 FinTagging_Trainset companies (window Feb-2024..Feb-2025 overlaps the eval window and disjointness is unstated).
+(2) Exclude at two levels, with precedent: company-level (FNXL: 'we ensure that the companies in train set do not contribute to the validation or test set') by dropping every manifest CIK from ALL training filings (10-K and 10-Q, any year), and chronological (FiNER-139 split chronologically) by restricting training filings to filing dates < 2023-02-13. Report both variants if feasible.
+(3) Run and report a document-level overlap audit between every training example (text + serialized table + target JSON) and every eval context: GPT-3-style 13-gram word overlap (lm-evaluation-harness implementation; choose n via GPT-3's 5th-percentile-length rule, min 8, max 13), GPT-4-style 3x50-char normalized substring match, and MinHash near-duplicate detection (Lee et al.). Report % flagged, remove flagged training docs, and report Llama-2-style clean (<20%) vs dirty (>=80%) eval deltas. Expect GPT-3's false-positive caveat: 10-K text is boilerplate-heavy.
+(4) Pretraining exposure cannot be controlled; measure and disclose it. State each model's data cutoff vs manifest filing dates (Llama 3.x: Dec 2023; Qwen/Gemma: unstated). Run black-box probes on small models AND frontier APIs: Golchin-style guided completion of eval contexts, Deng-style TS-guessing adapted to numbers (mask the value or the us-gaap concept, test exact recovery), and the tabular transformation test of Silvestri et al. Oren's exchangeability test only where log-probs are available (vLLM-served small models). Note Jiang et al.'s 'ground-truth contamination': the public iXBRL HTML carries the us-gaap labels inline.
+(5) Add a contamination-proof 'fresh slice': auto-label 10-Q/10-K filings filed AFTER the newest evaluated model's release using the same iXBRL pipeline (LiveBench / Lazaridou logic), from companies outside the manifest, and report FinTagging and fresh-slice numbers side by side; a large gap is the contamination signal, and it also supports the latency/cost study since the pipeline is the same.
+(6) Write a 'contamination statement' in model-info-sheet form (Kapoor & Narayanan) listing manifests, exclusion rules, overlap statistics, probe results, cutoffs, and the iXBRL-label caveat.
+(7) Framing: FinTagging, FNXL and FiNER report no contamination analysis against LLM pretraining, so a documented protocol is itself a contribution; but Sun et al. 2025 found no mitigation fully restores resistance, so claim 'documented and bounded', not 'guaranteed'. The counterargument is strong: BloombergGPT (14B filing tokens, mostly EDGAR), Open-FinLLMs (6B EDGAR tokens), EDGAR-CORPUS and Pile of Law show EDGAR text is routinely used for pretraining, Common Crawl demonstrably captures sec.gov/Archives/edgar pages, and sec.gov robots.txt does not block /Archives/, though per-10-K coverage in any single crawl is partial.

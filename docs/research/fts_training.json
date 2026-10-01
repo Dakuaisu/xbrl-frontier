@@ -1,0 +1,4293 @@
+{
+ "queries": [
+  {
+   "train_idx": 8,
+   "phrase": "in cash net of cash and restricted cash acquired The properties",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 24,
+   "phrase": "agreements with a tenant to sell 15 properties which are included",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 46,
+   "phrase": "mark interest rate during the period leading up to the probable",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2024-02-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 76,
+   "phrase": "by and among the Company Welltower OP Inc the lenders and",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 80,
+   "phrase": "Average occupancy includes our minority ownership share related to unconsolidated properties",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2024-02-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 95,
+   "phrase": "The total allowance for credit losses balance is deemed sufficient to",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 98,
+   "phrase": "Interest income on loans is recognized as earned based on the",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001574540"
+     ],
+     "names": [
+      "Physicians Realty Trust  (CIK 0001574540)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 101,
+   "phrase": "The following is a summary of the construction projects that were",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2024-02-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 107,
+   "phrase": "000 of secured debt at a blended average interest rate o",
+   "total": 0,
+   "hits": []
+  },
+  {
+   "train_idx": 110,
+   "phrase": "Conversion Year Properties Square Feet Anticipated Remaining Funding Construction in Progress",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2024-02-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 118,
+   "phrase": "5 Occupancy represents the percentage of total rentable square feet leased",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2024-02-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 120,
+   "phrase": "We value and are committed to our employees We believe that",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2024-02-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 121,
+   "phrase": "ownership of which is held by 100 or more persons in",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2024-02-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 122,
+   "phrase": "the holder fails to furnish the holder s taxpayer identification number",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2024-02-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 124,
+   "phrase": "The following table represents the changes in outstanding common stock for",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2024-02-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 126,
+   "phrase": "our top five relationships comprised 26 of total NOI for the",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 127,
+   "phrase": "2015 between the Company and The Bank of New York Mellon",
+   "total": 12,
+   "hits": [
+    {
+     "ciks": [
+      "0001499200"
+     ],
+     "names": [
+      "Sabine Pass Liquefaction, LLC  (CIK 0001499200)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000007536"
+     ],
+     "names": [
+      "ARROW ELECTRONICS, INC.  (ARW)  (CIK 0000007536)"
+     ],
+     "file_date": "2024-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000007536"
+     ],
+     "names": [
+      "ARROW ELECTRONICS, INC.  (ARW)  (CIK 0000007536)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000317540"
+     ],
+     "names": [
+      "Coca-Cola Consolidated, Inc.  (COKE)  (CIK 0000317540)"
+     ],
+     "file_date": "2024-02-21",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2024-02-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000766704"
+     ],
+     "names": [
+      "WELLTOWER INC.  (WELL)  (CIK 0000766704)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000051434"
+     ],
+     "names": [
+      "INTERNATIONAL PAPER CO /NEW/  (IP, INPAP)  (CIK 0000051434)"
+     ],
+     "file_date": "2024-02-16",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000908255"
+     ],
+     "names": [
+      "BORGWARNER INC  (BWA)  (CIK 0000908255)"
+     ],
+     "file_date": "2025-02-06",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001022079"
+     ],
+     "names": [
+      "QUEST DIAGNOSTICS INC  (DGX)  (CIK 0001022079)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001156039"
+     ],
+     "names": [
+      "Elevance Health, Inc.  (ELV)  (CIK 0001156039)"
+     ],
+     "file_date": "2024-02-21",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 128,
+   "phrase": "Pursuant to the requirements of the Securities Exchange Act of 1934",
+   "total": 5535,
+   "hits": [
+    {
+     "ciks": [
+      "0001799191"
+     ],
+     "names": [
+      "Oncology Institute, Inc.  (TOI, TOIIW)  (CIK 0001799191)"
+     ],
+     "file_date": "2024-05-22",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001621906"
+     ],
+     "names": [
+      "Western Uranium & Vanadium Corp.  (WSTRF)  (CIK 0001621906)"
+     ],
+     "file_date": "2024-08-14",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001593034"
+     ],
+     "names": [
+      "Endo International plc  (CIK 0001593034)"
+     ],
+     "file_date": "2024-03-06",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001415404"
+     ],
+     "names": [
+      "EchoStar CORP  (SATS)  (CIK 0001415404)"
+     ],
+     "file_date": "2024-02-29",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001945422"
+     ],
+     "names": [
+      "Oak Woods Acquisition Corp  (OAKU, OAKUR, OAKUU, OAKUW)  (CIK 0001945422)"
+     ],
+     "file_date": "2024-04-16",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001866816"
+     ],
+     "names": [
+      "SYNTEC OPTICS HOLDINGS, INC.  (OPTX, OPTXW)  (CIK 0001866816)"
+     ],
+     "file_date": "2024-05-23",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000876427"
+     ],
+     "names": [
+      "MONRO, INC.  (MNRO)  (CIK 0000876427)"
+     ],
+     "file_date": "2024-05-28",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001531177"
+     ],
+     "names": [
+      "Sight Sciences, Inc.  (SGHT)  (CIK 0001531177)"
+     ],
+     "file_date": "2024-03-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000944695"
+     ],
+     "names": [
+      "HANOVER INSURANCE GROUP, INC.  (THG)  (CIK 0000944695)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001601485"
+     ],
+     "names": [
+      "Elicio Therapeutics, Inc.  (ELTX)  (CIK 0001601485)"
+     ],
+     "file_date": "2024-03-29",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 133,
+   "phrase": "consulting and ancillary services to long term care facilities and other",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 137,
+   "phrase": "During the fourth quarter of 2024 the Company performed its required",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 140,
+   "phrase": "Street Health Acquisition Date the Company acquired 100 of the outstanding",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 143,
+   "phrase": "During the period from the Oak Street Health Acquisition Date through",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 148,
+   "phrase": "During the period from the Signify Health Acquisition Date through December",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 149,
+   "phrase": "incurred transaction costs of 37 million associated with the Signify Health",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 158,
+   "phrase": "During the second quarter of 2023 the Company developed an enterprise",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 165,
+   "phrase": "of other payables and 46 million of other receivables at December",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 167,
+   "phrase": "and 2022 respectively The projected annual amortization expense for the Company",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 169,
+   "phrase": "2024 the Company s liabilities for IBNR plus expected development on",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 176,
+   "phrase": "billion net of discounts and underwriting fees The net proceeds of",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 185,
+   "phrase": "The assets in the underlying funds of common collective trusts consist",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 191,
+   "phrase": "Company had net operating and capital loss carryovers of 272 million",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 192,
+   "phrase": "The Company records interest expense related to unrecognized tax benefits and",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 199,
+   "phrase": "was 829 million of total unrecognized compensation cost related to the",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 211,
+   "phrase": "In November 2021 the Company was among the chain pharmacies found",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 212,
+   "phrase": "Beginning in December 2021 the Company has received three demands for",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 239,
+   "phrase": "By causing members and other consumers to decide to postpone or",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 241,
+   "phrase": "216 Total cash cash equivalents and restricted cash in the consolidated",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 253,
+   "phrase": "All of the Company s residential mortgage backed securities at December",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 257,
+   "phrase": "In our Health Services segment by causing drug utilization to decline",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 264,
+   "phrase": "the Company s ability to conduct business on commercially reasonable terms",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 272,
+   "phrase": "causing non performance of or defaults on their obligations to us",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 280,
+   "phrase": "or whistleblower lawsuits on behalf of the federal or state government",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001710155"
+     ],
+     "names": [
+      "National Vision Holdings, Inc.  (EYE)  (CIK 0001710155)"
+     ],
+     "file_date": "2024-02-27",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 295,
+   "phrase": "By causing an increasing in the prevalence of high deductible health",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 298,
+   "phrase": "Represents loans where collections are potentially at risk if necessary an",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 309,
+   "phrase": "The competitive success of our Pharmacy Consumer Wellness segment and our",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000064803"
+     ],
+     "names": [
+      "CVS HEALTH Corp  (CVS)  (CIK 0000064803)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 311,
+   "phrase": "In 2024 the Company acquired businesses for total cash consideration of",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 332,
+   "phrase": "The effective income tax rates for the years ended December 31",
+   "total": 8,
+   "hits": [
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2024-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001046311"
+     ],
+     "names": [
+      "CHOICE HOTELS INTERNATIONAL INC /DE  (CHH)  (CIK 0001046311)"
+     ],
+     "file_date": "2024-02-20",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000012239"
+     ],
+     "names": [
+      "Dominari Holdings Inc.  (DOMH)  (CIK 0000012239)"
+     ],
+     "file_date": "2024-04-01",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001474735"
+     ],
+     "names": [
+      "GENERAC HOLDINGS INC.  (GNRC)  (CIK 0001474735)"
+     ],
+     "file_date": "2024-02-21",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001400810"
+     ],
+     "names": [
+      "HCI Group, Inc.  (HCI, HCIIP)  (CIK 0001400810)"
+     ],
+     "file_date": "2024-03-08",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001413754"
+     ],
+     "names": [
+      "MARIZYME, INC.  (CIK 0001413754)"
+     ],
+     "file_date": "2025-02-06",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001413754"
+     ],
+     "names": [
+      "MARIZYME, INC.  (MRZM)  (CIK 0001413754)"
+     ],
+     "file_date": "2024-05-13",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 337,
+   "phrase": "In 2018 the parties to the Damages Class litigation entered into",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 340,
+   "phrase": "Since 2012 a number of United Kingdom U K merchants filed",
+   "total": 0,
+   "hits": []
+  },
+  {
+   "train_idx": 344,
+   "phrase": "Mastercard has been named as a defendant in a proposed consumer",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2024-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 360,
+   "phrase": "Environment We focus on creating an environment that benefits and provides",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 368,
+   "phrase": "Restricted cash Restricted cash includes cash segregated to meet regulatory commitments",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 370,
+   "phrase": "As we drive value our services and other solutions generate revenue",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 373,
+   "phrase": "billion in 2024 versus the prior year primarily due to cash",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 384,
+   "phrase": "The Valuation Hierarchy is based upon the transparency of inputs to",
+   "total": 56,
+   "hits": [
+    {
+     "ciks": [
+      "0001418076"
+     ],
+     "names": [
+      "SLR Investment Corp.  (SLRC)  (CIK 0001418076)"
+     ],
+     "file_date": "2024-02-27",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000949961"
+     ],
+     "names": [
+      "INCOME OPPORTUNITY REALTY INVESTORS INC /TX/  (IOR)  (CIK 0000949961)"
+     ],
+     "file_date": "2024-03-21",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000083350"
+     ],
+     "names": [
+      "RESERVE PETROLEUM CO  (RSRV)  (CIK 0000083350)"
+     ],
+     "file_date": "2024-03-28",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000089089"
+     ],
+     "names": [
+      "SERVICE CORP INTERNATIONAL  (SCI)  (CIK 0000089089)"
+     ],
+     "file_date": "2025-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000089089"
+     ],
+     "names": [
+      "SERVICE CORP INTERNATIONAL  (SCI)  (CIK 0000089089)"
+     ],
+     "file_date": "2025-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000089089"
+     ],
+     "names": [
+      "SERVICE CORP INTERNATIONAL  (SCI)  (CIK 0000089089)"
+     ],
+     "file_date": "2024-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000065172"
+     ],
+     "names": [
+      "MESABI TRUST  (MSB)  (CIK 0000065172)"
+     ],
+     "file_date": "2024-04-24",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000733590"
+     ],
+     "names": [
+      "TRANSCONTINENTAL REALTY INVESTORS INC  (TCI)  (CIK 0000733590)"
+     ],
+     "file_date": "2024-03-21",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001102238"
+     ],
+     "names": [
+      "AMERICAN REALTY INVESTORS INC  (ARL)  (CIK 0001102238)"
+     ],
+     "file_date": "2024-03-21",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001849380"
+     ],
+     "names": [
+      "OneMedNet Corp  (ONMD, ONMDW)  (CIK 0001849380)"
+     ],
+     "file_date": "2024-04-09",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 390,
+   "phrase": "management s judgment using internal and external data these fair value",
+   "total": 3,
+   "hits": [
+    {
+     "ciks": [
+      "0001439095"
+     ],
+     "names": [
+      "MRC GLOBAL INC.  (MRC)  (CIK 0001439095)"
+     ],
+     "file_date": "2024-02-16",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2024-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001141391"
+     ],
+     "names": [
+      "Mastercard Inc  (MA)  (CIK 0001141391)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 421,
+   "phrase": "In May 2024 the Company entered into an amendment to the",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 427,
+   "phrase": "Certain of the Company s subsidiaries were party to two separate",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 439,
+   "phrase": "and 2022 the total compensation cost related to non vested awards",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001847398"
+     ],
+     "names": [
+      "NorthEast Community Bancorp, Inc./MD/  (NECB)  (CIK 0001847398)"
+     ],
+     "file_date": "2024-03-28",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 446,
+   "phrase": "FL4 Co Issuer both wholly owned indirect subsidiaries of the Company",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 452,
+   "phrase": "Our Manager is subject to extensive regulation as an investment adviser",
+   "total": 4,
+   "hits": [
+    {
+     "ciks": [
+      "0001547546"
+     ],
+     "names": [
+      "Lument Finance Trust, Inc.  (LFT, LFT-PA)  (CIK 0001547546)"
+     ],
+     "file_date": "2024-03-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001822523"
+     ],
+     "names": [
+      "AFC Gamma, Inc.  (AFCG)  (CIK 0001822523)"
+     ],
+     "file_date": "2024-03-07",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 457,
+   "phrase": "See the Related Party Expenses Other Expenses and Expenses from Real",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 472,
+   "phrase": "The failure of our Manager to apply our capital effectively or",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 475,
+   "phrase": "Our Management Agreement with our Manager was not negotiated on an",
+   "total": 4,
+   "hits": [
+    {
+     "ciks": [
+      "0001867949"
+     ],
+     "names": [
+      "Chicago Atlantic Real Estate Finance, Inc.  (REFI)  (CIK 0001867949)"
+     ],
+     "file_date": "2024-03-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001822523"
+     ],
+     "names": [
+      "AFC Gamma, Inc.  (AFCG)  (CIK 0001822523)"
+     ],
+     "file_date": "2024-03-07",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 477,
+   "phrase": "to the extent we enter into interest rate swap agreements as",
+   "total": 6,
+   "hits": [
+    {
+     "ciks": [
+      "0001674356"
+     ],
+     "names": [
+      "Terra Property Trust, Inc.  (TPTA)  (CIK 0001674356)"
+     ],
+     "file_date": "2024-03-15",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001614806"
+     ],
+     "names": [
+      "Great Ajax Corp.  (AJX)  (CIK 0001614806)"
+     ],
+     "file_date": "2024-02-28",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001717547"
+     ],
+     "names": [
+      "BrightSpire Capital, Inc.  (BRSP)  (CIK 0001717547)"
+     ],
+     "file_date": "2024-02-21",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001876255"
+     ],
+     "names": [
+      "AB Commercial Real Estate Private Debt Fund, LLC  (CIK 0001876255)"
+     ],
+     "file_date": "2024-04-01",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 492,
+   "phrase": "Portions of the registrant s Proxy Statement for its 2025 Annual",
+   "total": 7,
+   "hits": [
+    {
+     "ciks": [
+      "0000315374"
+     ],
+     "names": [
+      "HURCO COMPANIES INC  (HURC)  (CIK 0000315374)"
+     ],
+     "file_date": "2025-01-10",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001408198"
+     ],
+     "names": [
+      "MSCI Inc.  (MSCI)  (CIK 0001408198)"
+     ],
+     "file_date": "2025-02-07",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000200406"
+     ],
+     "names": [
+      "JOHNSON & JOHNSON  (JNJ)  (CIK 0000200406)"
+     ],
+     "file_date": "2025-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000927066"
+     ],
+     "names": [
+      "DAVITA INC.  (DVA)  (CIK 0000927066)"
+     ],
+     "file_date": "2025-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001758730"
+     ],
+     "names": [
+      "Tradeweb Markets Inc.  (TW)  (CIK 0001758730)"
+     ],
+     "file_date": "2025-02-07",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001287750"
+     ],
+     "names": [
+      "ARES CAPITAL CORP  (ARCC)  (CIK 0001287750)"
+     ],
+     "file_date": "2025-02-05",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 499,
+   "phrase": "5 The master repurchase and securities contract with Morgan Stanley the",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001529377"
+     ],
+     "names": [
+      "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 508,
+   "phrase": "The change in deferred revenue in 2024 was primarily due to",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 538,
+   "phrase": "7 million of unrecognized stock based compensation expense related to all",
+   "total": 0,
+   "hits": []
+  },
+  {
+   "train_idx": 552,
+   "phrase": "Our partners are recognized through our Pega partner program helping those",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 569,
+   "phrase": "The occurrence of any of those factors could cause governments and",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2024-02-14",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 570,
+   "phrase": "and data models For clients who want to extend intelligence and",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2024-02-14",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 577,
+   "phrase": "In November 2019 and as since amended we entered into a",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2024-02-14",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 582,
+   "phrase": "The market price of our common stock may be highly volatile",
+   "total": 127,
+   "hits": [
+    {
+     "ciks": [
+      "0000105016"
+     ],
+     "names": [
+      "WATSCO INC  (WSO, WSO-B)  (CIK 0000105016)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001577445"
+     ],
+     "names": [
+      "Odysight.ai Inc.  (ODYS)  (CIK 0001577445)"
+     ],
+     "file_date": "2024-03-26",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001005284"
+     ],
+     "names": [
+      "UNIVERSAL DISPLAY CORP \\PA\\  (OLED)  (CIK 0001005284)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001468492"
+     ],
+     "names": [
+      "Heart Test Laboratories, Inc.  (HSCS, HSCSW)  (CIK 0001468492)"
+     ],
+     "file_date": "2024-07-29",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000889900"
+     ],
+     "names": [
+      "PATTERSON UTI ENERGY INC  (PTEN)  (CIK 0000889900)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001505512"
+     ],
+     "names": [
+      "Regulus Therapeutics Inc.  (RGLS)  (CIK 0001505512)"
+     ],
+     "file_date": "2024-03-21",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000889900"
+     ],
+     "names": [
+      "PATTERSON UTI ENERGY INC  (PTEN)  (CIK 0000889900)"
+     ],
+     "file_date": "2024-02-27",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001789192"
+     ],
+     "names": [
+      "N2OFF, Inc.  (NITO)  (CIK 0001789192)"
+     ],
+     "file_date": "2024-04-01",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001625288"
+     ],
+     "names": [
+      "NEXIEN BIOPHARMA, INC.  (NXEN)  (CIK 0001625288)"
+     ],
+     "file_date": "2024-10-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001834105"
+     ],
+     "names": [
+      "IMPACT BIOMEDICAL INC.  (IBO)  (CIK 0001834105)"
+     ],
+     "file_date": "2024-02-20",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 588,
+   "phrase": "Pega Cloud allows clients to develop test and deploy on an",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2024-02-14",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 589,
+   "phrase": "Deloitte Touche LLP our independent registered public accounting firm which also",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2024-02-14",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001013857"
+     ],
+     "names": [
+      "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 593,
+   "phrase": "We build single family detached homes townhomes and condominium buildings which",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2024-02-14",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 613,
+   "phrase": "Incentive Plan the 2018 Plan authorizes us to issue Options and",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2024-02-14",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 614,
+   "phrase": "Vesting for half of the Options issued is contingent solely upon",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2024-02-14",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 631,
+   "phrase": "We are committed under multiple non cancellable operating and finance leases",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 634,
+   "phrase": "Our operations may also be adversely affected by other economic factors",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2024-02-14",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 642,
+   "phrase": "upon any of its Mortgage Notes Additional covenants include i a",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2024-02-14",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 643,
+   "phrase": "2023 respectively We made the following share repurchases during the years",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000906163"
+     ],
+     "names": [
+      "NVR INC  (NVR)  (CIK 0000906163)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 652,
+   "phrase": "of our common stock at an aggregate purchase price of 2",
+   "total": 0,
+   "hits": []
+  },
+  {
+   "train_idx": 663,
+   "phrase": "Our segments are comprised of strategic business units or other operations",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, TBC, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 696,
+   "phrase": "2024 we had combined net operating and capital loss carryforwards tax",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 700,
+   "phrase": "The purchase of the group annuity contracts was funded directly by",
+   "total": 9,
+   "hits": [
+    {
+     "ciks": [
+      "0000001750"
+     ],
+     "names": [
+      "AAR CORP  (AIR)  (CIK 0000001750)"
+     ],
+     "file_date": "2024-07-19",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001304421"
+     ],
+     "names": [
+      "Consolidated Communications Holdings, Inc.  (CNSL)  (CIK 0001304421)"
+     ],
+     "file_date": "2024-03-05",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000007084"
+     ],
+     "names": [
+      "Archer-Daniels-Midland Co  (ADM)  (CIK 0000007084)"
+     ],
+     "file_date": "2024-11-18",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, TBC, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001524741"
+     ],
+     "names": [
+      "U.S. SILICA HOLDINGS, INC.  (CIK 0001524741)"
+     ],
+     "file_date": "2024-02-27",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000007084"
+     ],
+     "names": [
+      "Archer-Daniels-Midland Co  (ADM)  (CIK 0000007084)"
+     ],
+     "file_date": "2024-03-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000732712"
+     ],
+     "names": [
+      "VERIZON COMMUNICATIONS INC  (VZ)  (CIK 0000732712)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001163302"
+     ],
+     "names": [
+      "UNITED STATES STEEL CORP  (X)  (CIK 0001163302)"
+     ],
+     "file_date": "2025-01-31",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 703,
+   "phrase": "Our assumed weighted average discount rates for pension and postretirement benefits",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 710,
+   "phrase": "was 666 of total unrecognized compensation cost related to nonvested share",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 717,
+   "phrase": "million Mobility preferred interests were put to AT T by a",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, TBC, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 727,
+   "phrase": "We determined that we did not transfer control of the tower",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, TBC, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 734,
+   "phrase": "Revenues from our traditional voice services continue to decline as customers",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, TBC, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 740,
+   "phrase": "Certain items were excluded from this table because the year of",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, TBC, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 748,
+   "phrase": "We also provide a variety of medical dental and life insurance",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, TBC, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 762,
+   "phrase": "Depreciation and amortization expense increased in 2024 primarily due to the",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 779,
+   "phrase": "Cash and Cash Flows We typically maintain our restricted cash balances",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, TBC, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 790,
+   "phrase": "Our consolidated statements of income include the share based compensation cost",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 800,
+   "phrase": "In connection with the WarnerMedia Discovery Transaction AT T received a",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, TBC, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 803,
+   "phrase": "3 We expect to fund the purchase obligations with cash provided",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000732717"
+     ],
+     "names": [
+      "AT&T INC.  (T, TBB, TBC, T-PA, T-PC)  (CIK 0000732717)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 807,
+   "phrase": "charges of which 45 million was attributable to our Completion and",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 812,
+   "phrase": "of our net trade receivables were from customers in the United",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 814,
+   "phrase": "There were no short term borrowings and 381 million of current",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 815,
+   "phrase": "We may redeem all of our senior notes from time to",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 817,
+   "phrase": "senior notes due in November 2025 The early redemption of the",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 820,
+   "phrase": "In the normal course of business we have in place agreements",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 822,
+   "phrase": "a total income tax provision of 701 million on pre tax",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 850,
+   "phrase": "We may utilize share repurchases as part of our capital return",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 856,
+   "phrase": "Large Accelerated Filer Accelerated Filer Non accelerated Filer Smaller Reporting Company",
+   "total": 5810,
+   "hits": [
+    {
+     "ciks": [
+      "0001805077"
+     ],
+     "names": [
+      "Eos Energy Enterprises, Inc.  (EOSE, EOSEW)  (CIK 0001805077)"
+     ],
+     "file_date": "2024-03-07",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0000031235"
+     ],
+     "names": [
+      "EASTMAN KODAK CO  (KODK)  (CIK 0000031235)"
+     ],
+     "file_date": "2024-03-15",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0000709005"
+     ],
+     "names": [
+      "NOBLE ROMANS INC  (NROM)  (CIK 0000709005)"
+     ],
+     "file_date": "2024-05-17",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001534155"
+     ],
+     "names": [
+      "Ameri Metro, Inc. (formerly Yellowwood)  (CIK 0001534155)"
+     ],
+     "file_date": "2024-04-23",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001918072"
+     ],
+     "names": [
+      "PG&E Wildfire Recovery Funding LLC  (CIK 0001918072)"
+     ],
+     "file_date": "2024-04-01",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001377149"
+     ],
+     "names": [
+      "CareView Communications Inc  (CRVW)  (CIK 0001377149)"
+     ],
+     "file_date": "2024-07-11",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001534155"
+     ],
+     "names": [
+      "Ameri Metro, Inc. (formerly Yellowwood)  (CIK 0001534155)"
+     ],
+     "file_date": "2024-04-23",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001715819"
+     ],
+     "names": [
+      "Electromedical Technologies, Inc  (EMED)  (CIK 0001715819)"
+     ],
+     "file_date": "2024-10-16",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0000944480"
+     ],
+     "names": [
+      "GSE SYSTEMS INC  (GVP)  (CIK 0000944480)"
+     ],
+     "file_date": "2024-04-02",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001556739"
+     ],
+     "names": [
+      "Thryv Holdings, Inc.  (THRY)  (CIK 0001556739)"
+     ],
+     "file_date": "2024-08-19",
+     "form": "10-K/A"
+    }
+   ]
+  },
+  {
+   "train_idx": 858,
+   "phrase": "The ongoing identification and development of leadership talent ensures business continuity",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 863,
+   "phrase": "For further information regarding foreign currency exchange risk and other risks",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 869,
+   "phrase": "the reported amounts of assets and liabilities and disclosure of contingent",
+   "total": 2208,
+   "hits": [
+    {
+     "ciks": [
+      "0001973047"
+     ],
+     "names": [
+      "MARKY CORP.  (CIK 0001973047)"
+     ],
+     "file_date": "2024-05-06",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001973047"
+     ],
+     "names": [
+      "MARKY CORP.  (CIK 0001973047)"
+     ],
+     "file_date": "2024-05-07",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001818550"
+     ],
+     "names": [
+      "Incordex Corp.  (ICDX)  (CIK 0001818550)"
+     ],
+     "file_date": "2024-09-24",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001816554"
+     ],
+     "names": [
+      "EVENTIKO INC.  (EVTK)  (CIK 0001816554)"
+     ],
+     "file_date": "2024-07-26",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001995920"
+     ],
+     "names": [
+      "E-Smart Corp.  (CIK 0001995920)"
+     ],
+     "file_date": "2024-12-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001852536"
+     ],
+     "names": [
+      "Intorio, Corp.  (ITOR)  (CIK 0001852536)"
+     ],
+     "file_date": "2024-05-02",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001490349"
+     ],
+     "names": [
+      "PhenixFIN Corp  (PFX, PFXNZ)  (CIK 0001490349)"
+     ],
+     "file_date": "2024-12-17",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001941360"
+     ],
+     "names": [
+      "Neolara Corp.  (CIK 0001941360)"
+     ],
+     "file_date": "2024-09-27",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001910975"
+     ],
+     "names": [
+      "Rapid Line Inc.  (RPDL)  (CIK 0001910975)"
+     ],
+     "file_date": "2024-04-10",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001781629"
+     ],
+     "names": [
+      "Ankam, Inc.  (ANKM)  (CIK 0001781629)"
+     ],
+     "file_date": "2024-02-28",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 875,
+   "phrase": "Cementing involves bonding the well and well casing while isolating fluid",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 881,
+   "phrase": "Artificial Lift provides services to maximize reservoir and wellbore recovery by",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 888,
+   "phrase": "to the current period provision for expected credit losses Favorable market",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001522727"
+     ],
+     "names": [
+      "USA Compression Partners, LP  (USAC)  (CIK 0001522727)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 902,
+   "phrase": "In connection with issuing the Senior Notes 2029 we incurred certain",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001522727"
+     ],
+     "names": [
+      "USA Compression Partners, LP  (USAC)  (CIK 0001522727)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 919,
+   "phrase": "aggregate amount of transaction price allocated to unsatisfied performance obligations related",
+   "total": 3,
+   "hits": [
+    {
+     "ciks": [
+      "0001767042"
+     ],
+     "names": [
+      "Kodiak Gas Services, Inc.  (KGS)  (CIK 0001767042)"
+     ],
+     "file_date": "2024-03-07",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001522727"
+     ],
+     "names": [
+      "USA Compression Partners, LP  (USAC)  (CIK 0001522727)"
+     ],
+     "file_date": "2024-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001522727"
+     ],
+     "names": [
+      "USA Compression Partners, LP  (USAC)  (CIK 0001522727)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 928,
+   "phrase": "These restricted units vest incrementally with 60 of the restricted units",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001522727"
+     ],
+     "names": [
+      "USA Compression Partners, LP  (USAC)  (CIK 0001522727)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 934,
+   "phrase": "of our trade accounts receivable net balance respectively As of December",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0001522727"
+     ],
+     "names": [
+      "USA Compression Partners, LP  (USAC)  (CIK 0001522727)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 935,
+   "phrase": "Our U S federal income tax returns for the years 2019",
+   "total": 0,
+   "hits": []
+  },
+  {
+   "train_idx": 945,
+   "phrase": "our debt level will make us more vulnerable than our competitors",
+   "total": 7,
+   "hits": [
+    {
+     "ciks": [
+      "0001538849"
+     ],
+     "names": [
+      "CrossAmerica Partners LP  (CAPL)  (CIK 0001538849)"
+     ],
+     "file_date": "2024-02-27",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001650372"
+     ],
+     "names": [
+      "Atlassian Corp  (TEAM)  (CIK 0001650372)"
+     ],
+     "file_date": "2024-08-16",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001522727"
+     ],
+     "names": [
+      "USA Compression Partners, LP  (USAC)  (CIK 0001522727)"
+     ],
+     "file_date": "2024-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001522727"
+     ],
+     "names": [
+      "USA Compression Partners, LP  (USAC)  (CIK 0001522727)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001657788"
+     ],
+     "names": [
+      "Kimbell Royalty Partners, LP  (KRP)  (CIK 0001657788)"
+     ],
+     "file_date": "2024-02-21",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001340122"
+     ],
+     "names": [
+      "Calumet Specialty Products Partners, L.P.  (CIK 0001340122)"
+     ],
+     "file_date": "2024-02-29",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001323468"
+     ],
+     "names": [
+      "GLOBAL PARTNERS LP  (GLP, GLP-PB)  (CIK 0001323468)"
+     ],
+     "file_date": "2024-02-29",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 953,
+   "phrase": "Exact name of registrant as Specified in its charter Delaware 75",
+   "total": 33,
+   "hits": [
+    {
+     "ciks": [
+      "0000860731"
+     ],
+     "names": [
+      "TYLER TECHNOLOGIES INC  (TYL)  (CIK 0000860731)"
+     ],
+     "file_date": "2024-02-27",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0000883569"
+     ],
+     "names": [
+      "Fossil Group, Inc.  (FOSL, FOSLL)  (CIK 0000883569)"
+     ],
+     "file_date": "2024-04-29",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0000850460"
+     ],
+     "names": [
+      "ENCORE WIRE CORP  (CIK 0000850460)"
+     ],
+     "file_date": "2024-02-16",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001038357"
+     ],
+     "names": [
+      "PIONEER NATURAL RESOURCES CO  (CIK 0001038357)"
+     ],
+     "file_date": "2024-04-29",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0000736012"
+     ],
+     "names": [
+      "INTRUSION INC  (INTZ)  (CIK 0000736012)"
+     ],
+     "file_date": "2024-04-01",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000839470"
+     ],
+     "names": [
+      "WESTWATER RESOURCES, INC.  (WWR)  (CIK 0000839470)"
+     ],
+     "file_date": "2024-03-19",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001185348"
+     ],
+     "names": [
+      "PRA GROUP INC  (PRAA)  (CIK 0001185348)"
+     ],
+     "file_date": "2024-02-29",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000045012"
+     ],
+     "names": [
+      "HALLIBURTON CO  (HAL)  (CIK 0000045012)"
+     ],
+     "file_date": "2025-02-12",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001165002"
+     ],
+     "names": [
+      "WESTWOOD HOLDINGS GROUP INC  (WHG)  (CIK 0001165002)"
+     ],
+     "file_date": "2024-03-07",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000816761"
+     ],
+     "names": [
+      "TERADATA CORP /DE/  (TDC)  (CIK 0000816761)"
+     ],
+     "file_date": "2024-02-23",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 970,
+   "phrase": "Indicate by check mark whether the registrant has submitted electronically every",
+   "total": 7053,
+   "hits": [
+    {
+     "ciks": [
+      "0000031235"
+     ],
+     "names": [
+      "EASTMAN KODAK CO  (KODK)  (CIK 0000031235)"
+     ],
+     "file_date": "2024-03-15",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0000709005"
+     ],
+     "names": [
+      "NOBLE ROMANS INC  (NROM)  (CIK 0000709005)"
+     ],
+     "file_date": "2024-05-17",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001918072"
+     ],
+     "names": [
+      "PG&E Wildfire Recovery Funding LLC  (CIK 0001918072)"
+     ],
+     "file_date": "2024-04-01",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001377149"
+     ],
+     "names": [
+      "CareView Communications Inc  (CRVW)  (CIK 0001377149)"
+     ],
+     "file_date": "2024-07-11",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001530746"
+     ],
+     "names": [
+      "Kaya Holdings, Inc.  (KAYS)  (CIK 0001530746)"
+     ],
+     "file_date": "2024-08-01",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001715819"
+     ],
+     "names": [
+      "Electromedical Technologies, Inc  (EMED)  (CIK 0001715819)"
+     ],
+     "file_date": "2024-10-16",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0001556739"
+     ],
+     "names": [
+      "Thryv Holdings, Inc.  (THRY)  (CIK 0001556739)"
+     ],
+     "file_date": "2024-08-19",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0000877860"
+     ],
+     "names": [
+      "NATIONAL HEALTH INVESTORS INC  (NHI)  (CIK 0000877860)"
+     ],
+     "file_date": "2024-02-26",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0000890066"
+     ],
+     "names": [
+      "GLEN BURNIE BANCORP  (GLBZ)  (CIK 0000890066)"
+     ],
+     "file_date": "2024-04-02",
+     "form": "10-K/A"
+    },
+    {
+     "ciks": [
+      "0000944480"
+     ],
+     "names": [
+      "GSE SYSTEMS INC  (GVP)  (CIK 0000944480)"
+     ],
+     "file_date": "2024-04-02",
+     "form": "10-K/A"
+    }
+   ]
+  },
+  {
+   "train_idx": 986,
+   "phrase": "The table also presents information with respect to Energy Transfer s",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0001522727"
+     ],
+     "names": [
+      "USA Compression Partners, LP  (USAC)  (CIK 0001522727)"
+     ],
+     "file_date": "2024-02-13",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001522727"
+     ],
+     "names": [
+      "USA Compression Partners, LP  (USAC)  (CIK 0001522727)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 993,
+   "phrase": "8 million of losses related to mortgage loans primarily due to",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000021175"
+     ],
+     "names": [
+      "CNA FINANCIAL CORP  (CNA)  (CIK 0000021175)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000060086"
+     ],
+     "names": [
+      "LOEWS CORP  (L)  (CIK 0000060086)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 1001,
+   "phrase": "CNA Tax Group had no loss carryforwards and a tax credit",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000021175"
+     ],
+     "names": [
+      "CNA FINANCIAL CORP  (CNA)  (CIK 0000021175)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 1011,
+   "phrase": "During 2023 the Company amended and restated its existing credit agreement",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000021175"
+     ],
+     "names": [
+      "CNA FINANCIAL CORP  (CNA)  (CIK 0000021175)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 1013,
+   "phrase": "Additionally in 2024 a subsidiary of CNAF as a sponsor of",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000021175"
+     ],
+     "names": [
+      "CNA FINANCIAL CORP  (CNA)  (CIK 0000021175)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 1016,
+   "phrase": "CNA employs a total return approach whereby a mix of equity",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000021175"
+     ],
+     "names": [
+      "CNA FINANCIAL CORP  (CNA)  (CIK 0000021175)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 1017,
+   "phrase": "its pension plans and 1 million to its postretirement health care",
+   "total": 1,
+   "hits": [
+    {
+     "ciks": [
+      "0000021175"
+     ],
+     "names": [
+      "CNA FINANCIAL CORP  (CNA)  (CIK 0000021175)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 1055,
+   "phrase": "Professional liability coverages and risk management services to various professional firms",
+   "total": 2,
+   "hits": [
+    {
+     "ciks": [
+      "0000021175"
+     ],
+     "names": [
+      "CNA FINANCIAL CORP  (CNA)  (CIK 0000021175)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000060086"
+     ],
+     "names": [
+      "LOEWS CORP  (L)  (CIK 0000060086)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    }
+   ]
+  },
+  {
+   "train_idx": 1088,
+   "phrase": "We also make available free of charge on or through our",
+   "total": 8,
+   "hits": [
+    {
+     "ciks": [
+      "0000888981"
+     ],
+     "names": [
+      "NOCOPI TECHNOLOGIES INC/MD/  (NNUP)  (CIK 0000888981)"
+     ],
+     "file_date": "2024-03-25",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000097745"
+     ],
+     "names": [
+      "THERMO FISHER SCIENTIFIC INC.  (TMO)  (CIK 0000097745)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001408198"
+     ],
+     "names": [
+      "MSCI Inc.  (MSCI)  (CIK 0001408198)"
+     ],
+     "file_date": "2025-02-07",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001823794"
+     ],
+     "names": [
+      "ARKO Corp.  (ARKO, ARKOW)  (CIK 0001823794)"
+     ],
+     "file_date": "2024-02-27",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000021175"
+     ],
+     "names": [
+      "CNA FINANCIAL CORP  (CNA)  (CIK 0000021175)"
+     ],
+     "file_date": "2025-02-11",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000944809"
+     ],
+     "names": [
+      "OPKO HEALTH, INC.  (OPK)  (CIK 0000944809)"
+     ],
+     "file_date": "2024-03-01",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0001401667"
+     ],
+     "names": [
+      "PUMA BIOTECHNOLOGY, INC.  (PBYI)  (CIK 0001401667)"
+     ],
+     "file_date": "2024-02-29",
+     "form": "10-K"
+    },
+    {
+     "ciks": [
+      "0000059558"
+     ],
+     "names": [
+      "LINCOLN NATIONAL CORP  (LNC, LNC-PD)  (CIK 0000059558)"
+     ],
+     "file_date": "2024-02-22",
+     "form": "10-K"
+    }
+   ]
+  }
+ ],
+ "cik_counts": {
+  "0000766704": 15,
+  "0001574540": 1,
+  "0000064803": 27,
+  "0001710155": 1,
+  "0001141391": 8,
+  "0001439095": 1,
+  "0001529377": 9,
+  "0001847398": 1,
+  "0001547546": 1,
+  "0001822523": 2,
+  "0001867949": 1,
+  "0001013857": 7,
+  "0000906163": 7,
+  "0000732717": 14,
+  "0000045012": 12,
+  "0001522727": 6,
+  "0001767042": 1,
+  "0000060086": 2,
+  "0000021175": 7
+ },
+ "names": {
+  "0000766704": "WELLTOWER INC.  (WELL)  (CIK 0000766704)",
+  "0001574540": "Physicians Realty Trust  (CIK 0001574540)",
+  "0001499200": "Sabine Pass Liquefaction, LLC  (CIK 0001499200)",
+  "0000007536": "ARROW ELECTRONICS, INC.  (ARW)  (CIK 0000007536)",
+  "0000317540": "Coca-Cola Consolidated, Inc.  (COKE)  (CIK 0000317540)",
+  "0000051434": "INTERNATIONAL PAPER CO /NEW/  (IP, INPAP)  (CIK 0000051434)",
+  "0000908255": "BORGWARNER INC  (BWA)  (CIK 0000908255)",
+  "0001022079": "QUEST DIAGNOSTICS INC  (DGX)  (CIK 0001022079)",
+  "0001156039": "Elevance Health, Inc.  (ELV)  (CIK 0001156039)",
+  "0000040729": "Ally Financial Inc.  (ALLY)  (CIK 0000040729)",
+  "0001326160": "Duke Energy CORP  (DUK, DUKB, DUKH, DUK-PA)  (CIK 0001326160)",
+  "0000020290": "Duke Energy CORP  (DUK, DUKB, DUKH, DUK-PA)  (CIK 0001326160)",
+  "0000030371": "Duke Energy CORP  (DUK, DUKB, DUKH, DUK-PA)  (CIK 0001326160)",
+  "0000078460": "Duke Energy CORP  (DUK, DUKB, DUKH, DUK-PA)  (CIK 0001326160)",
+  "0000081020": "Duke Energy CORP  (DUK, DUKB, DUKH, DUK-PA)  (CIK 0001326160)",
+  "0001094093": "Duke Energy CORP  (DUK, DUKB, DUKH, DUK-PA)  (CIK 0001326160)",
+  "0000017797": "Duke Energy CORP  (DUK, DUKB, DUKH, DUK-PA)  (CIK 0001326160)",
+  "0000037637": "Duke Energy CORP  (DUK, DUKB, DUKH, DUK-PA)  (CIK 0001326160)",
+  "0001799191": "Oncology Institute, Inc.  (TOI, TOIIW)  (CIK 0001799191)",
+  "0001621906": "Western Uranium & Vanadium Corp.  (WSTRF)  (CIK 0001621906)",
+  "0001593034": "Endo International plc  (CIK 0001593034)",
+  "0001415404": "EchoStar CORP  (SATS)  (CIK 0001415404)",
+  "0001945422": "Oak Woods Acquisition Corp  (OAKU, OAKUR, OAKUU, OAKUW)  (CIK 0001945422)",
+  "0001866816": "SYNTEC OPTICS HOLDINGS, INC.  (OPTX, OPTXW)  (CIK 0001866816)",
+  "0000876427": "MONRO, INC.  (MNRO)  (CIK 0000876427)",
+  "0001531177": "Sight Sciences, Inc.  (SGHT)  (CIK 0001531177)",
+  "0000944695": "HANOVER INSURANCE GROUP, INC.  (THG)  (CIK 0000944695)",
+  "0001601485": "Elicio Therapeutics, Inc.  (ELTX)  (CIK 0001601485)",
+  "0000883902": "Cornerstone Building Brands, Inc.  (CIK 0000883902)",
+  "0000812074": "O-I Glass, Inc. /DE/  (OI)  (CIK 0000812074)",
+  "0000203596": "WESBANCO INC  (WSBC, WSBCP)  (CIK 0000203596)",
+  "0000101382": "UMB FINANCIAL CORP  (UMBF)  (CIK 0000101382)",
+  "0001827090": "Certara, Inc.  (CERT)  (CIK 0001827090)",
+  "0000722572": "FRANKLIN WIRELESS CORP  (FKWL)  (CIK 0000722572)",
+  "0000031235": "EASTMAN KODAK CO  (KODK)  (CIK 0000031235)",
+  "0001556739": "Thryv Holdings, Inc.  (THRY)  (CIK 0001556739)",
+  "0000944480": "GSE SYSTEMS INC  (GVP)  (CIK 0000944480)",
+  "0001074828": "KNOW LABS, INC.  (KNW)  (CIK 0001074828)",
+  "0001837532": "Apollo Debt Solutions BDC  (CIK 0001837532)",
+  "0001482554": "Hartford Great Health Corp.  (HFUS)  (CIK 0001482554)",
+  "0001710340": "Eton Pharmaceuticals, Inc.  (ETON)  (CIK 0001710340)",
+  "0001326706": "NanoVibronix, Inc.  (NAOV)  (CIK 0001326706)",
+  "0001814287": "Abacus Life, Inc.  (ABL, ABLLL, ABLLW)  (CIK 0001814287)",
+  "0001865494": "IO Biotech, Inc.  (IOBT)  (CIK 0001865494)",
+  "0001282980": "Dror Ortho-Design, Inc.  (DROR)  (CIK 0001282980)",
+  "0000792966": "FARMERS & MERCHANTS BANCORP INC  (FMAO)  (CIK 0000792966)",
+  "0001837671": "Copper Property CTL Pass Through Trust  (CPPTL)  (CIK 0001837671)",
+  "0001295514": "MDWerks, Inc.  (MDWK)  (CIK 0001295514)",
+  "0001287032": "PROSPECT CAPITAL CORP  (PSEC, PSEC-PA)  (CIK 0001287032)",
+  "0001834543": "BlackRock Direct Lending Corp.  (CIK 0001834543)",
+  "0000205402": "GRAYBAR ELECTRIC CO INC  (CIK 0000205402)",
+  "0001903464": "Aimfinity Investment Corp. I  (AIMA, AIMAU, AIMAW, AIMBU)  (CIK 0001903464)",
+  "0001039466": "NovAccess Global Inc.  (XSNX)  (CIK 0001039466)",
+  "0001737523": "BioNexus Gene Lab Corp  (BGLC)  (CIK 0001737523)",
+  "0001530163": "Samsara Luggage, Inc.  (SAML)  (CIK 0001530163)",
+  "0001636422": "Health Catalyst, Inc.  (HCAT)  (CIK 0001636422)",
+  "0001785493": "Phoenix Plus Corp.  (PXPC)  (CIK 0001785493)",
+  "0001440799": "MMEX Resources Corp  (MMEX)  (CIK 0001440799)",
+  "0001222333": "SPDR GOLD TRUST  (GLD)  (CIK 0001222333)",
+  "0001618181": "World Gold Trust  (GLDM)  (CIK 0001618181)",
+  "0001876716": "ASPAC II Acquisition Corp.  (ASCBF, ASCRF, ASCWF, ASUUF)  (CIK 0001876716)",
+  "0001043150": "Eline Entertainment Group, Inc.  (EEGI)  (CIK 0001043150)",
+  "0001677576": "INNOVATIVE INDUSTRIAL PROPERTIES INC  (IIPR, IIPR-PA)  (CIK 0001677576)",
+  "0001005101": "Marygold Companies, Inc.  (MGLD)  (CIK 0001005101)",
+  "0000314227": "TOMI Environmental Solutions, Inc.  (TOMZ)  (CIK 0000314227)",
+  "0001658521": "MOUNTAIN TOP PROPERTIES, INC.  (MTPP)  (CIK 0001658521)",
+  "0001503707": "NorthStar Healthcare Income, Inc.  (NHHS)  (CIK 0001503707)",
+  "0001792581": "Kiromic Biopharma, Inc.  (KRBP)  (CIK 0001792581)",
+  "0001963533": "Harley-Davidson Motorcycle Trust 2023-A  (CIK 0001963533)",
+  "0001872446": "Harley-Davidson Motorcycle Trust 2021-B  (CIK 0001872446)",
+  "0001580808": "A10 Networks, Inc.  (ATEN)  (CIK 0001580808)",
+  "0001652539": "SusGlobal Energy Corp.  (SNRG)  (CIK 0001652539)",
+  "0001841508": "Harley-Davidson Motorcycle Trust 2021-A  (CIK 0001841508)",
+  "0001885336": "FORMATION MINERALS, INC.  (FOMI)  (CIK 0001885336)",
+  "0001623590": "Fintech Scion Ltd  (FINR)  (CIK 0001623590)",
+  "0001921031": "Harley-Davidson Motorcycle Trust 2022-A  (CIK 0001921031)",
+  "0001989332": "Harley-Davidson Motorcycle Trust 2023-B  (CIK 0001989332)",
+  "0001852131": "Nextracker Inc.  (NXT)  (CIK 0001852131)",
+  "0000726601": "CAPITAL CITY BANK GROUP INC  (CCBG)  (CIK 0000726601)",
+  "0001706524": "urban-gro, Inc.  (UGRO)  (CIK 0001706524)",
+  "0001549145": "BLUE BIOFUELS, INC.  (BIOF)  (CIK 0001549145)",
+  "0001847590": "Bowman Consulting Group Ltd.  (BWMN)  (CIK 0001847590)",
+  "0001746278": "GoLogiq, Inc.  (GOLQ)  (CIK 0001746278)",
+  "0001565228": "Vislink Technologies, Inc.  (VISL)  (CIK 0001565228)",
+  "0001173313": "ABVC BIOPHARMA, INC.  (ABVC)  (CIK 0001173313)",
+  "0001505497": "BioRestorative Therapies, Inc.  (BRTX)  (CIK 0001505497)",
+  "0001805077": "Eos Energy Enterprises, Inc.  (EOSE, EOSEW)  (CIK 0001805077)",
+  "0001673481": "Lottery.com Inc.  (LTRY, LTRYW)  (CIK 0001673481)",
+  "0001831270": "Bite Acquisition Corp.  (CIK 0001831270)",
+  "0001831868": "SeaStar Medical Holding Corp  (ICU, ICUCW)  (CIK 0001831868)",
+  "0001726173": "Biglari Holdings Inc.  (BH, BH-A)  (CIK 0001726173)",
+  "0000918251": "MOTORCAR PARTS OF AMERICA INC  (MPAA)  (CIK 0000918251)",
+  "0001279715": "Wright Investors Service Holdings, Inc.  (IWSH)  (CIK 0001279715)",
+  "0001267426": "BCTC V ASSIGNOR CORP  (CIK 0001267426)",
+  "0000075208": "OVERSEAS SHIPHOLDING GROUP INC  (CIK 0000075208)",
+  "0000828530": "ADMIRAL FINANCIAL CORP  (CIK 0000828530)",
+  "0001892492": "Eightco Holdings Inc.  (OCTO)  (CIK 0001892492)",
+  "0001642375": "Guardion Health Sciences, Inc.  (GHSI)  (CIK 0001642375)",
+  "0000039092": "FRIEDMAN INDUSTRIES INC  (FRD)  (CIK 0000039092)",
+  "0001003815": "BCTC IV ASSIGNOR CORP  (CIK 0001003815)",
+  "0000727510": "ENZON PHARMACEUTICALS, INC.  (ENZN)  (CIK 0000727510)",
+  "0001583771": "Hepion Pharmaceuticals, Inc.  (HEPA, CTRVP)  (CIK 0001583771)",
+  "0001973047": "MARKY CORP.  (CIK 0001973047)",
+  "0001362468": "Allegiant Travel CO  (ALGT)  (CIK 0001362468)",
+  "0001372299": "Ocugen, Inc.  (OCGN)  (CIK 0001372299)",
+  "0001328598": "Invesco CurrencyShares Euro Trust  (FXE)  (CIK 0001328598)",
+  "0001353613": "Invesco CurrencyShares Japanese Yen Trust  (FXY)  (CIK 0001353613)",
+  "0001353611": "Invesco CurrencyShares British Pound Sterling Trust  (FXB)  (CIK 0001353611)",
+  "0001353612": "Invesco CurrencyShares Canadian Dollar Trust  (FXC)  (CIK 0001353612)",
+  "0000064803": "CVS HEALTH Corp  (CVS)  (CIK 0000064803)",
+  "0001710155": "National Vision Holdings, Inc.  (EYE)  (CIK 0001710155)",
+  "0001141391": "Mastercard Inc  (MA)  (CIK 0001141391)",
+  "0001046311": "CHOICE HOTELS INTERNATIONAL INC /DE  (CHH)  (CIK 0001046311)",
+  "0000012239": "Dominari Holdings Inc.  (DOMH)  (CIK 0000012239)",
+  "0001474735": "GENERAC HOLDINGS INC.  (GNRC)  (CIK 0001474735)",
+  "0001400810": "HCI Group, Inc.  (HCI, HCIIP)  (CIK 0001400810)",
+  "0001413754": "MARIZYME, INC.  (MRZM)  (CIK 0001413754)",
+  "0001418076": "SLR Investment Corp.  (SLRC)  (CIK 0001418076)",
+  "0000949961": "INCOME OPPORTUNITY REALTY INVESTORS INC /TX/  (IOR)  (CIK 0000949961)",
+  "0000083350": "RESERVE PETROLEUM CO  (RSRV)  (CIK 0000083350)",
+  "0000089089": "SERVICE CORP INTERNATIONAL  (SCI)  (CIK 0000089089)",
+  "0000065172": "MESABI TRUST  (MSB)  (CIK 0000065172)",
+  "0000733590": "TRANSCONTINENTAL REALTY INVESTORS INC  (TCI)  (CIK 0000733590)",
+  "0001102238": "AMERICAN REALTY INVESTORS INC  (ARL)  (CIK 0001102238)",
+  "0001849380": "OneMedNet Corp  (ONMD, ONMDW)  (CIK 0001849380)",
+  "0001357971": "Energy Services of America CORP  (ESOA)  (CIK 0001357971)",
+  "0000063908": "MCDONALDS CORP  (MCD)  (CIK 0000063908)",
+  "0001289460": "Texas Roadhouse, Inc.  (TXRH)  (CIK 0001289460)",
+  "0001325618": "IRADIMED CORP  (IRMD)  (CIK 0001325618)",
+  "0000885275": "WILSON BANK HOLDING CO  (WBHC)  (CIK 0000885275)",
+  "0001514705": "SunCoke Energy, Inc.  (SXC)  (CIK 0001514705)",
+  "0001533615": "Global Medical REIT Inc.  (GMRE, GMRE-PA)  (CIK 0001533615)",
+  "0001617406": "Park Hotels & Resorts Inc.  (PK)  (CIK 0001617406)",
+  "0000880641": "EAGLE FINANCIAL SERVICES INC  (EFSI)  (CIK 0000880641)",
+  "0001262976": "CIMPRESS plc  (CMPR)  (CIK 0001262976)",
+  "0000101594": "US ENERGY CORP  (USEG)  (CIK 0000101594)",
+  "0001646972": "Albertsons Companies, Inc.  (ACI)  (CIK 0001646972)",
+  "0001016281": "CARRIAGE SERVICES INC  (CSV)  (CIK 0001016281)",
+  "0000712771": "ConnectOne Bancorp, Inc.  (CNOB, CNOBP)  (CIK 0000712771)",
+  "0001585689": "Hilton Worldwide Holdings Inc.  (HLT)  (CIK 0001585689)",
+  "0000906107": "EQUITY RESIDENTIAL  (EQR)  (CIK 0000906107)",
+  "0000931182": "EQUITY RESIDENTIAL  (EQR)  (CIK 0000906107)",
+  "0001522860": "Acutus Medical, Inc.  (AFIB)  (CIK 0001522860)",
+  "0000711669": "COLONY BANKCORP INC  (CBAN)  (CIK 0000711669)",
+  "0001085913": "FARMERS & MERCHANTS BANCORP  (FMCB)  (CIK 0001085913)",
+  "0001332349": "Brookdale Senior Living Inc.  (BKD, BKDT)  (CIK 0001332349)",
+  "0001839998": "American Oncology Network, Inc.  (AONC, AONCW)  (CIK 0001839998)",
+  "0001940177": "PodcastOne, Inc.  (PODC)  (CIK 0001940177)",
+  "0001591670": "Farmland Partners Inc.  (FPI)  (CIK 0001591670)",
+  "0001534120": "Avalo Therapeutics, Inc.  (AVTX)  (CIK 0001534120)",
+  "0001837240": "Symbotic Inc.  (SYM)  (CIK 0001837240)",
+  "0001591588": "A-Mark Precious Metals, Inc.  (AMRK)  (CIK 0001591588)",
+  "0001856236": "European Wax Center, Inc.  (EWCZ)  (CIK 0001856236)",
+  "0001004724": "REGIONAL HEALTH PROPERTIES, INC  (RHE, RHEPB, RHE-PA)  (CIK 0001004724)",
+  "0001637207": "Planet Fitness, Inc.  (PLNT)  (CIK 0001637207)",
+  "0001674168": "Hilton Grand Vacations Inc.  (HGV)  (CIK 0001674168)",
+  "0001051343": "COMMUNITY WEST BANCSHARES /  (CIK 0001051343)",
+  "0001982518": "Smith Douglas Homes Corp.  (SDHC)  (CIK 0001982518)",
+  "0000022356": "COMMERCE BANCSHARES INC /MO/  (CBSH)  (CIK 0000022356)",
+  "0001035976": "FNCB Bancorp, Inc.  (CIK 0001035976)",
+  "0001641631": "Beyond Air, Inc.  (XAIR)  (CIK 0001641631)",
+  "0001393726": "TIPTREE INC.  (TIPT)  (CIK 0001393726)",
+  "0001846510": "Soho House & Co Inc.  (SHCO)  (CIK 0001846510)",
+  "0001491419": "LiveOne, Inc.  (LVO)  (CIK 0001491419)",
+  "0001212545": "WESTERN ALLIANCE BANCORPORATION  (WAL, WAL-PA)  (CIK 0001212545)",
+  "0001831828": "Vera Therapeutics, Inc.  (VERA)  (CIK 0001831828)",
+  "0001115055": "PINNACLE FINANCIAL PARTNERS INC  (PNFP, PNFPP)  (CIK 0001115055)",
+  "0001734342": "Amerant Bancorp Inc.  (AMTB)  (CIK 0001734342)",
+  "0000947484": "ARCH CAPITAL GROUP LTD.  (ACGL, ACGLN, ACGLO)  (CIK 0000947484)",
+  "0001439095": "MRC GLOBAL INC.  (MRC)  (CIK 0001439095)",
+  "0001529377": "Ares Commercial Real Estate Corp  (ACRE)  (CIK 0001529377)",
+  "0001847398": "NorthEast Community Bancorp, Inc./MD/  (NECB)  (CIK 0001847398)",
+  "0001547546": "Lument Finance Trust, Inc.  (LFT, LFT-PA)  (CIK 0001547546)",
+  "0001822523": "AFC Gamma, Inc.  (AFCG)  (CIK 0001822523)",
+  "0001867949": "Chicago Atlantic Real Estate Finance, Inc.  (REFI)  (CIK 0001867949)",
+  "0001674356": "Terra Property Trust, Inc.  (TPTA)  (CIK 0001674356)",
+  "0001614806": "Great Ajax Corp.  (AJX)  (CIK 0001614806)",
+  "0001717547": "BrightSpire Capital, Inc.  (BRSP)  (CIK 0001717547)",
+  "0001876255": "AB Commercial Real Estate Private Debt Fund, LLC  (CIK 0001876255)",
+  "0000315374": "HURCO COMPANIES INC  (HURC)  (CIK 0000315374)",
+  "0001408198": "MSCI Inc.  (MSCI)  (CIK 0001408198)",
+  "0000200406": "JOHNSON & JOHNSON  (JNJ)  (CIK 0000200406)",
+  "0000927066": "DAVITA INC.  (DVA)  (CIK 0000927066)",
+  "0001758730": "Tradeweb Markets Inc.  (TW)  (CIK 0001758730)",
+  "0001287750": "ARES CAPITAL CORP  (ARCC)  (CIK 0001287750)",
+  "0001013857": "PEGASYSTEMS INC  (PEGA)  (CIK 0001013857)",
+  "0000105016": "WATSCO INC  (WSO, WSO-B)  (CIK 0000105016)",
+  "0001577445": "Odysight.ai Inc.  (ODYS)  (CIK 0001577445)",
+  "0001005284": "UNIVERSAL DISPLAY CORP \\PA\\  (OLED)  (CIK 0001005284)",
+  "0001468492": "Heart Test Laboratories, Inc.  (HSCS, HSCSW)  (CIK 0001468492)",
+  "0000889900": "PATTERSON UTI ENERGY INC  (PTEN)  (CIK 0000889900)",
+  "0001505512": "Regulus Therapeutics Inc.  (RGLS)  (CIK 0001505512)",
+  "0001789192": "N2OFF, Inc.  (NITO)  (CIK 0001789192)",
+  "0001625288": "NEXIEN BIOPHARMA, INC.  (NXEN)  (CIK 0001625288)",
+  "0001834105": "IMPACT BIOMEDICAL INC.  (IBO)  (CIK 0001834105)",
+  "0001740797": "AVANT TECHNOLOGIES INC.  (AVAI)  (CIK 0001740797)",
+  "0001065078": "NETWORK-1 TECHNOLOGIES, INC.  (NTIP)  (CIK 0001065078)",
+  "0001567264": "INTENSITY THERAPEUTICS, INC.  (INTS)  (CIK 0001567264)",
+  "0000046765": "Helmerich & Payne, Inc.  (HP)  (CIK 0000046765)",
+  "0001448431": "OptimizeRx Corp  (OPRX)  (CIK 0001448431)",
+  "0001661779": "STARTENGINE CROWDFUNDING, INC.  (STGC)  (CIK 0001661779)",
+  "0001708341": "Allied Gaming & Entertainment Inc.  (AGAE)  (CIK 0001708341)",
+  "0000874866": "CORVEL CORP  (CRVL)  (CIK 0000874866)",
+  "0001595248": "Genprex, Inc.  (GNPX)  (CIK 0001595248)",
+  "0001437226": "Mastech Digital, Inc.  (MHH)  (CIK 0001437226)",
+  "0001560143": "WYTEC INTERNATIONAL INC  (WYTC)  (CIK 0001560143)",
+  "0001566826": "LogicMark, Inc.  (LGMK)  (CIK 0001566826)",
+  "0000850209": "FOOT LOCKER, INC.  (FL)  (CIK 0000850209)",
+  "0001445942": "Texas Mineral Resources Corp.  (TMRC)  (CIK 0001445942)",
+  "0000069733": "NATHANS FAMOUS, INC.  (NATH)  (CIK 0000069733)",
+  "0001650696": "Laird Superfood, Inc.  (LSF)  (CIK 0001650696)",
+  "0000922247": "Cyclo Therapeutics, Inc.  (CYTH, CYTHW)  (CIK 0000922247)",
+  "0001304492": "Anterix Inc.  (ATEX)  (CIK 0001304492)",
+  "0001600438": "GMS Inc.  (GMS)  (CIK 0001600438)",
+  "0001866550": "Thoughtworks Holding, Inc.  (TWKS)  (CIK 0001866550)",
+  "0001349706": "TurnOnGreen, Inc.  (TOGI, TOGIW)  (CIK 0001349706)",
+  "0001876588": "ZimVie Inc.  (ZIMV)  (CIK 0001876588)",
+  "0001639438": "CAVA GROUP, INC.  (CAVA)  (CIK 0001639438)",
+  "0001471781": "GBT Technologies Inc.  (GTCH)  (CIK 0001471781)",
+  "0001847874": "Mobile Infrastructure Corp  (BEEP)  (CIK 0001847874)",
+  "0001042776": "Piedmont Office Realty Trust, Inc.  (PDM)  (CIK 0001042776)",
+  "0001600033": "e.l.f. Beauty, Inc.  (ELF)  (CIK 0001600033)",
+  "0000025743": "TherapeuticsMD, Inc.  (TXMD)  (CIK 0000025743)",
+  "0000946486": "WINDTREE THERAPEUTICS INC /DE/  (WINT, WINTW)  (CIK 0000946486)",
+  "0001591587": "AssetMark Financial Holdings, Inc.  (AMK)  (CIK 0001591587)",
+  "0001419536": "Capital Bancorp Inc  (CBNK)  (CIK 0001419536)",
+  "0001662574": "Grom Social Enterprises, Inc.  (GROM, GROMW)  (CIK 0001662574)",
+  "0001261333": "DOCUSIGN, INC.  (DOCU)  (CIK 0001261333)",
+  "0001680139": "HealthLynked Corp  (HLYK)  (CIK 0001680139)",
+  "0001625641": "CS Disco, Inc.  (LAW)  (CIK 0001625641)",
+  "0001314196": "OLB GROUP, INC.  (OLB)  (CIK 0001314196)",
+  "0001568100": "PagerDuty, Inc.  (PD)  (CIK 0001568100)",
+  "0001560327": "Rapid7, Inc.  (RPD)  (CIK 0001560327)",
+  "0001728205": "Piedmont Lithium Inc.  (PLL, PLLTL)  (CIK 0001728205)",
+  "0001579733": "Vital Farms, Inc.  (VITL)  (CIK 0001579733)",
+  "0001824920": "IonQ, Inc.  (IONQ, IONQ-WT)  (CIK 0001824920)",
+  "0001266806": "Vivani Medical, Inc.  (VANI)  (CIK 0001266806)",
+  "0001569340": "Cell Source, Inc.  (CLCS)  (CIK 0001569340)",
+  "0001689731": "Southern States Bancshares, Inc.  (SSBK)  (CIK 0001689731)",
+  "0001899883": "FTAI Infrastructure Inc.  (FIP)  (CIK 0001899883)",
+  "0001680367": "Shattuck Labs, Inc.  (STTK)  (CIK 0001680367)",
+  "0001630627": "TREACE MEDICAL CONCEPTS, INC.  (TMCI)  (CIK 0001630627)",
+  "0001808898": "Benitec Biopharma Inc.  (BNTC)  (CIK 0001808898)",
+  "0001752474": "KLDiscovery Inc.  (KLDI, KLDIW)  (CIK 0001752474)",
+  "0001840563": "Elevai Labs Inc.  (ELAB)  (CIK 0001840563)",
+  "0001551306": "Progyny, Inc.  (PGNY)  (CIK 0001551306)",
+  "0001876945": "Gold Flora Corp.  (GRAM, GRAMW)  (CIK 0001876945)",
+  "0001430723": "ServisFirst Bancshares, Inc.  (SFBS)  (CIK 0001430723)",
+  "0001666071": "Cardlytics, Inc.  (CDLX)  (CIK 0001666071)",
+  "0001518621": "Orchid Island Capital, Inc.  (ORC)  (CIK 0001518621)",
+  "0001850398": "TC Bancshares, Inc.  (TCBC)  (CIK 0001850398)",
+  "0001178253": "SCYNEXIS INC  (SCYX)  (CIK 0001178253)",
+  "0001064722": "GIVEMEPOWER CORP  (GMPW)  (CIK 0001064722)",
+  "0001571776": "Cherry Hill Mortgage Investment Corp  (CHMI, CHMI-PA, CHMI-PB)  (CIK 0001571776)",
+  "0001674335": "JELD-WEN Holding, Inc.  (JELD)  (CIK 0001674335)",
+  "0001693577": "MainStreet Bancshares, Inc.  (MNSB, MNSBP)  (CIK 0001693577)",
+  "0001287098": "MAXCYTE, INC.  (MXCT)  (CIK 0001287098)",
+  "0001828673": "HCW Biologics Inc.  (HCWB)  (CIK 0001828673)",
+  "0001465740": "TWO HARBORS INVESTMENT CORP.  (TWO, TWO-PA, TWO-PB, TWO-PC)  (CIK 0001465740)",
+  "0001581760": "Life360, Inc.  (LIF, LIFX)  (CIK 0001581760)",
+  "0001856365": "Finwise Bancorp  (FINW)  (CIK 0001856365)",
+  "0001738021": "Compass Therapeutics, Inc.  (CMPX)  (CIK 0001738021)",
+  "0001531048": "Inari Medical, Inc.  (NARI)  (CIK 0001531048)",
+  "0001432133": "KALTURA INC  (KLTR)  (CIK 0001432133)",
+  "0001582961": "DigitalOcean Holdings, Inc.  (DOCN)  (CIK 0001582961)",
+  "0001672013": "Acushnet Holdings Corp.  (GOLF)  (CIK 0001672013)",
+  "0000874716": "IDEXX LABORATORIES INC /DE  (IDXX)  (CIK 0000874716)",
+  "0001624322": "Business First Bancshares, Inc.  (BFST)  (CIK 0001624322)",
+  "0001127537": "Pulmonx Corp  (LUNG)  (CIK 0001127537)",
+  "0001515673": "Ultragenyx Pharmaceutical Inc.  (RARE)  (CIK 0001515673)",
+  "0001058867": "GUARANTY BANCSHARES INC /TX/  (GNTY)  (CIK 0001058867)",
+  "0001781730": "Third Coast Bancshares, Inc.  (TCBX)  (CIK 0001781730)",
+  "0000809248": "CARROLS RESTAURANT GROUP, INC.  (CIK 0000809248)",
+  "0000906163": "NVR INC  (NVR)  (CIK 0000906163)",
+  "0000732717": "AT&T INC.  (T, TBB, TBC, T-PA, T-PC)  (CIK 0000732717)",
+  "0000001750": "AAR CORP  (AIR)  (CIK 0000001750)",
+  "0001304421": "Consolidated Communications Holdings, Inc.  (CNSL)  (CIK 0001304421)",
+  "0000007084": "Archer-Daniels-Midland Co  (ADM)  (CIK 0000007084)",
+  "0001524741": "U.S. SILICA HOLDINGS, INC.  (CIK 0001524741)",
+  "0000732712": "VERIZON COMMUNICATIONS INC  (VZ)  (CIK 0000732712)",
+  "0001163302": "UNITED STATES STEEL CORP  (X)  (CIK 0001163302)",
+  "0000045012": "HALLIBURTON CO  (HAL)  (CIK 0000045012)",
+  "0000709005": "NOBLE ROMANS INC  (NROM)  (CIK 0000709005)",
+  "0001534155": "Ameri Metro, Inc. (formerly Yellowwood)  (CIK 0001534155)",
+  "0001918072": "PG&E Wildfire Recovery Funding LLC  (CIK 0001918072)",
+  "0001377149": "CareView Communications Inc  (CRVW)  (CIK 0001377149)",
+  "0001715819": "Electromedical Technologies, Inc  (EMED)  (CIK 0001715819)",
+  "0001414767": "Netcapital Inc.  (NCPL, NCPLW)  (CIK 0001414767)",
+  "0001018281": "INTEGRAL TECHNOLOGIES INC  (CIK 0001018281)",
+  "0001389050": "Archrock, Inc.  (AROC)  (CIK 0001389050)",
+  "0001590418": "FOCUS UNIVERSAL INC.  (FCUV)  (CIK 0001590418)",
+  "0001947244": "U.S. GoldMining Inc.  (USGO, USGOW)  (CIK 0001947244)",
+  "0001362004": "ICF International, Inc.  (ICFI)  (CIK 0001362004)",
+  "0001856161": "Pearl Holdings Acquisition Corp  (PRLH, PRLHU, PRLHW)  (CIK 0001856161)",
+  "0000885725": "BOSTON SCIENTIFIC CORP  (BSX)  (CIK 0000885725)",
+  "0001141197": "PEDEVCO CORP  (PED)  (CIK 0001141197)",
+  "0001519401": "Regional Management Corp.  (RM)  (CIK 0001519401)",
+  "0000924719": "SMITH MIDLAND CORP  (SMID)  (CIK 0000924719)",
+  "0001417926": "INVO Bioscience, Inc.  (INVO)  (CIK 0001417926)",
+  "0000748592": "Eterna Therapeutics Inc.  (ERNA)  (CIK 0000748592)",
+  "0001880438": "AN2 Therapeutics, Inc.  (ANTX)  (CIK 0001880438)",
+  "0000866729": "SCHOLASTIC CORP  (SCHL)  (CIK 0000866729)",
+  "0000006845": "APOGEE ENTERPRISES, INC.  (APOG)  (CIK 0000006845)",
+  "0001598646": "Minerva Neurosciences, Inc.  (NERV)  (CIK 0001598646)",
+  "0001737193": "Luduson G Inc.  (LDSN)  (CIK 0001737193)",
+  "0001977303": "Arcadium Lithium plc  (ALTM, ARLTF)  (CIK 0001977303)",
+  "0000750574": "AUBURN NATIONAL BANCORPORATION, INC  (AUBN)  (CIK 0000750574)",
+  "0001071840": "SolarWindow Technologies, Inc.  (WNDW)  (CIK 0001071840)",
+  "0000867840": "PRECISION OPTICS CORPORATION, INC.  (POCI)  (CIK 0000867840)",
+  "0000717720": "VALUE LINE INC  (VALU)  (CIK 0000717720)",
+  "0000764180": "ALTRIA GROUP, INC.  (MO)  (CIK 0000764180)",
+  "0001782430": "Strawberry Fields REIT, Inc.  (STRW)  (CIK 0001782430)",
+  "0001156041": "HOUSTON AMERICAN ENERGY CORP  (HUSA)  (CIK 0001156041)",
+  "0001065088": "EBAY INC  (EBAY)  (CIK 0001065088)",
+  "0001805833": "System1, Inc.  (SST, SST-WT)  (CIK 0001805833)",
+  "0001434740": "Ranger Gold Corp.  (CIK 0001434740)",
+  "0000915913": "ALBEMARLE CORP  (ALB, ALB-PA)  (CIK 0000915913)",
+  "0001284143": "LEHMAN ABS CORP GOLDMAN SACHS CAP 1 SEC BACKED SER 2004-6  (JBK)  (CIK 0001284143)",
+  "0001283337": "STRUCTURED PRODUCTS CORP CRED ENHANCE CORTS TR FOR AON CAP A  (KTN)  (CIK 0001283337)",
+  "0001802665": "Harmony Biosciences Holdings, Inc.  (HRMY)  (CIK 0001802665)",
+  "0001283450": "STRUCTURED PRODUCTS CORP TIERS PRI PRO CER TR SE FFH 2001-12  (CIK 0001283450)",
+  "0001283464": "STRUCTURED PRODUCTS CORP CORTS TR FOR PECO ENERGY CAP TR III  (KTH)  (CIK 0001283464)",
+  "0001959994": "Australian Oilseeds Holdings Ltd  (COOT, COOTW)  (CIK 0001959994)",
+  "0001468929": "NEXGEL, INC.  (NXGL, NXGLW)  (CIK 0001468929)",
+  "0001781162": "Momentus Inc.  (MNTS, MNTSW)  (CIK 0001781162)",
+  "0000890447": "Vertex Energy Inc.  (VTNR)  (CIK 0000890447)",
+  "0001353226": "STRATS(SM) Trust for Procter & Gamble Securities, Series 2006-1  (GJR)  (CIK 0001353226)",
+  "0001357660": "STRATS(SM) Trust for Allstate Corp Securities, Series 2006-3  (GJT)  (CIK 0001357660)",
+  "0001085243": "VirTra, Inc  (VTSI)  (CIK 0001085243)",
+  "0001286405": "STRATS SM TRUST FOR U S CELL CORP SEC SERIES 2004 6  (GJH)  (CIK 0001286405)",
+  "0001356284": "STRATS(SM) Trust for Goldman Sachs Group Securities, Series 2006-2  (GJS)  (CIK 0001356284)",
+  "0001568969": "APPYEA, INC  (APYP)  (CIK 0001568969)",
+  "0001293234": "Select Notes Trust LT 2004-1  (CIK 0001293234)",
+  "0001255604": "STRUCTURED OBLIGATIONS CORP LONG TERM CERT SER 2003 3  (CIK 0001255604)",
+  "0001223444": "STRUCTURED OBLIGATIONS CORP SELECT NOTES TRUST LT SER 2003-1  (CIK 0001223444)",
+  "0001264157": "STRUCTURED OBLIGATIONS CORP LONG TERM CERTS SER 2003-4  (CIK 0001264157)",
+  "0001269371": "STRUCTURED OBLIGATIONS CORP LONG TERM CERTS SER 2003-5  (CIK 0001269371)",
+  "0001843443": "AmeriCredit Automobile Receivables Trust 2021-1  (CIK 0001843443)",
+  "0001375205": "UR-ENERGY INC  (URG)  (CIK 0001375205)",
+  "0001615222": "Moody National REIT II, Inc.  (CIK 0001615222)",
+  "0001808503": "Nissan Auto Receivables 2020-A Owner Trust  (CIK 0001808503)",
+  "0001227090": "STRUCTURED OBLIGATIONS CORP SELECT NOTES TRUST LT SER 2003-2  (CIK 0001227090)",
+  "0001864913": "Nissan Auto Receivables 2021-A Owner Trust  (CIK 0001864913)",
+  "0001801390": "AmeriCredit Automobile Receivables Trust 2020-1  (CIK 0001801390)",
+  "0001929381": "AmeriCredit Automobile Receivables Trust 2022-2  (CIK 0001929381)",
+  "0001963240": "AmeriCredit Automobile Receivables Trust 2023-1  (CIK 0001963240)",
+  "0001784564": "AmeriCredit Automobile Receivables Trust 2019-3  (CIK 0001784564)",
+  "0001349577": "MS STRUCTURED TILES SERIES 2006-1  (CIK 0001349577)",
+  "0001861570": "AmeriCredit Automobile Receivables Trust 2021-2  (CIK 0001861570)",
+  "0001957685": "GM Financial Consumer Automobile Receivables Trust 2023-1  (CIK 0001957685)",
+  "0001916232": "GM Financial Consumer Automobile Receivables Trust 2022-2  (CIK 0001916232)",
+  "0001818550": "Incordex Corp.  (ICDX)  (CIK 0001818550)",
+  "0001816554": "EVENTIKO INC.  (EVTK)  (CIK 0001816554)",
+  "0001995920": "E-Smart Corp.  (CIK 0001995920)",
+  "0001852536": "Intorio, Corp.  (ITOR)  (CIK 0001852536)",
+  "0001490349": "PhenixFIN Corp  (PFX, PFXNZ)  (CIK 0001490349)",
+  "0001941360": "Neolara Corp.  (CIK 0001941360)",
+  "0001910975": "Rapid Line Inc.  (RPDL)  (CIK 0001910975)",
+  "0001781629": "Ankam, Inc.  (ANKM)  (CIK 0001781629)",
+  "0001977837": "ALIXO-YOLLOO CORP.  (CIK 0001977837)",
+  "0001885849": "Tofla Megaline Inc.  (TFLM)  (CIK 0001885849)",
+  "0001949864": "Mag Magna Corp.  (CIK 0001949864)",
+  "0001544400": "NFiniTi inc.  (NFTN)  (CIK 0001544400)",
+  "0001933359": "Natics Corp.  (CIK 0001933359)",
+  "0001909770": "KHEOBA CORP.  (KHOB)  (CIK 0001909770)",
+  "0001827855": "Medicale Corp.  (MCLE)  (CIK 0001827855)",
+  "0000350894": "SEI INVESTMENTS CO  (SEIC)  (CIK 0000350894)",
+  "0000745308": "ST JOE Co  (JOE)  (CIK 0000745308)",
+  "0001680689": "Natural Resource Holdings, Inc.  (NRHI)  (CIK 0001680689)",
+  "0001887912": "Welsis Corp.  (WLSS)  (CIK 0001887912)",
+  "0001664740": "MBC FUNDING II CORP.  (CIK 0001664740)",
+  "0001619227": "Cloudweb, Inc.  (CLOW)  (CIK 0001619227)",
+  "0001083220": "XCel Brands, Inc.  (XELB)  (CIK 0001083220)",
+  "0001414382": "Concrete Leveling Systems Inc  (CLEV)  (CIK 0001414382)",
+  "0001978111": "Naploy Corp.  (CIK 0001978111)",
+  "0000845385": "PRINCETON CAPITAL CORP  (PIAC)  (CIK 0000845385)",
+  "0000096869": "TEJON RANCH CO  (TRC)  (CIK 0000096869)",
+  "0001584480": "Startech Labs, Inc.  (LAAB)  (CIK 0001584480)",
+  "0001131903": "SPECTRAL CAPITAL Corp  (FCCN)  (CIK 0001131903)",
+  "0001310383": "Summit Healthcare REIT, Inc  (CIK 0001310383)",
+  "0001800373": "GOLDENWELL BIOTECH, INC.  (GWLL)  (CIK 0001800373)",
+  "0001182731": "ConneXionONE Corp.  (CNNN)  (CIK 0001182731)",
+  "0001680132": "CANNABIS SUISSE CORP.  (CSUI)  (CIK 0001680132)",
+  "0001593773": "AMJ Global Technology  (AMJT, KGNR)  (CIK 0001593773)",
+  "0001370755": "BlackRock TCP Capital Corp.  (TCPC)  (CIK 0001370755)",
+  "0001678105": "Caro Holdings Inc.  (CAHO)  (CIK 0001678105)",
+  "0000878932": "EQUUS TOTAL RETURN, INC.  (EQS)  (CIK 0000878932)",
+  "0001994582": "Oyocar Group Inc.  (CIK 0001994582)",
+  "0001610718": "Outdoor Specialty Products, Inc.  (ODRS)  (CIK 0001610718)",
+  "0001854816": "Minerva Gold Inc.  (MINR)  (CIK 0001854816)",
+  "0001616736": "Alpha Investment Inc.  (ALPC)  (CIK 0001616736)",
+  "0000820771": "Goliath Film & Media Holdings  (GFMH)  (CIK 0000820771)",
+  "0001989788": "Guru App Factory Corp  (GAFC)  (CIK 0001989788)",
+  "0001512886": "NEUTRA CORP.  (NTRR)  (CIK 0001512886)",
+  "0001508348": "AmeriCann, Inc.  (ACAN)  (CIK 0001508348)",
+  "0001726079": "Tipmefast, Inc.  (TMEF)  (CIK 0001726079)",
+  "0000108516": "WORTHINGTON ENTERPRISES, INC.  (WOR)  (CIK 0000108516)",
+  "0001532383": "VANJIA CORP  (VNJA)  (CIK 0001532383)",
+  "0001588014": "ADM ENDEAVORS, INC.  (ADMQ)  (CIK 0001588014)",
+  "0000716314": "GRAHAM CORP  (GHM)  (CIK 0000716314)",
+  "0001418372": "Salamander Innisbrook, LLC  (CIK 0001418372)",
+  "0001695473": "Greater Cannabis Company, Inc.  (GCAN)  (CIK 0001695473)",
+  "0001854183": "Orion Bliss Corp.  (ORIB)  (CIK 0001854183)",
+  "0001474558": "KAT EXPLORATION, INC.  (KATX)  (CIK 0001474558)",
+  "0001758699": "TRANSUITE.ORG INC.  (TRSO)  (CIK 0001758699)",
+  "0001325670": "Primis Financial Corp.  (FRST)  (CIK 0001325670)",
+  "0000814676": "CPS TECHNOLOGIES CORP/DE/  (CPSH)  (CIK 0000814676)",
+  "0000775057": "ALTEX INDUSTRIES INC  (ALTX)  (CIK 0000775057)",
+  "0001407704": "LINGERIE FIGHTING CHAMPIONSHIPS, INC.  (BOTY)  (CIK 0001407704)",
+  "0001411342": "Ellington Financial Inc.  (EFC, EFC-PA, EFC-PB, EFC-PC, EFC-PD, EFC-PE)  (CIK 0001411342)",
+  "0001533357": "DEFENSE TECHNOLOGIES INTERNATIONAL CORP.  (DTII)  (CIK 0001533357)",
+  "0001668523": "GSG GROUP INC.  (CIK 0001668523)",
+  "0001570132": "ANVI GLOBAL HOLDINGS, INC.  (ANVI)  (CIK 0001570132)",
+  "0001632121": "Balance Labs, Inc.  (BLNC)  (CIK 0001632121)",
+  "0001673431": "South East Asia Development, Corp.  (CIK 0001673431)",
+  "0001985554": "Londax Corp.  (CIK 0001985554)",
+  "0001543637": "Nu-Med Plus, Inc.  (NUMD)  (CIK 0001543637)",
+  "0001410187": "Cannonau Corp.  (CNNC)  (CIK 0001410187)",
+  "0000877860": "NATIONAL HEALTH INVESTORS INC  (NHI)  (CIK 0000877860)",
+  "0001918694": "Medies  (MEDE)  (CIK 0001918694)",
+  "0001939937": "LAMY  (LMMY)  (CIK 0001939937)",
+  "0000081061": "PUBLIX SUPER MARKETS INC  (CIK 0000081061)",
+  "0001842563": "Go Go Buyers, Inc.  (CIK 0001842563)",
+  "0000918545": "BALTIC INTERNATIONAL USA INC  (BISA)  (CIK 0000918545)",
+  "0001172069": "P2 Solar, Inc.  (PTOS)  (CIK 0001172069)",
+  "0001912540": "Sound Cave Technology Inc.  (CIK 0001912540)",
+  "0001171486": "NATURAL RESOURCE PARTNERS LP  (NRP)  (CIK 0001171486)",
+  "0001696411": "Crona Corp.  (CCCP)  (CIK 0001696411)",
+  "0001951051": "JAAG Enterprises Ltd.  (JAGL)  (CIK 0001951051)",
+  "0001130889": "CANCER CAPITAL CORP  (CNCL)  (CIK 0001130889)",
+  "0001999261": "StageWise Strategies Corp.  (CIK 0001999261)",
+  "0001261379": "Frontier Funds  (CIK 0001261379)",
+  "0001389123": "Frontier Funds  (CIK 0001261379)",
+  "0001450722": "Frontier Funds  (CIK 0001261379)",
+  "0001389125": "Frontier Funds  (CIK 0001261379)",
+  "0001389128": "Frontier Funds  (CIK 0001261379)",
+  "0001450720": "Frontier Funds  (CIK 0001261379)",
+  "0001389122": "Frontier Funds  (CIK 0001261379)",
+  "0001389124": "Frontier Funds  (CIK 0001261379)",
+  "0001118072": "SKINOVATION PHARMACEUTICAL INC  (CIK 0001118072)",
+  "0001304161": "Pharma-Bio Serv, Inc.  (PBSV)  (CIK 0001304161)",
+  "0001794942": "Stark Focus Group, Inc.  (SKFG)  (CIK 0001794942)",
+  "0001980295": "IMA Tech Inc.  (CIK 0001980295)",
+  "0000730669": "FCCC INC  (FCIC)  (CIK 0000730669)",
+  "0001522727": "USA Compression Partners, LP  (USAC)  (CIK 0001522727)",
+  "0001767042": "Kodiak Gas Services, Inc.  (KGS)  (CIK 0001767042)",
+  "0001538849": "CrossAmerica Partners LP  (CAPL)  (CIK 0001538849)",
+  "0001650372": "Atlassian Corp  (TEAM)  (CIK 0001650372)",
+  "0001657788": "Kimbell Royalty Partners, LP  (KRP)  (CIK 0001657788)",
+  "0001340122": "Calumet Specialty Products Partners, L.P.  (CIK 0001340122)",
+  "0001323468": "GLOBAL PARTNERS LP  (GLP, GLP-PB)  (CIK 0001323468)",
+  "0000860731": "TYLER TECHNOLOGIES INC  (TYL)  (CIK 0000860731)",
+  "0000883569": "Fossil Group, Inc.  (FOSL, FOSLL)  (CIK 0000883569)",
+  "0000850460": "ENCORE WIRE CORP  (CIK 0000850460)",
+  "0001038357": "PIONEER NATURAL RESOURCES CO  (CIK 0001038357)",
+  "0000736012": "INTRUSION INC  (INTZ)  (CIK 0000736012)",
+  "0000839470": "WESTWATER RESOURCES, INC.  (WWR)  (CIK 0000839470)",
+  "0001185348": "PRA GROUP INC  (PRAA)  (CIK 0001185348)",
+  "0001165002": "WESTWOOD HOLDINGS GROUP INC  (WHG)  (CIK 0001165002)",
+  "0000816761": "TERADATA CORP /DE/  (TDC)  (CIK 0000816761)",
+  "0000723125": "MICRON TECHNOLOGY INC  (MU)  (CIK 0000723125)",
+  "0001579157": "VINCE HOLDING CORP.  (VNCE)  (CIK 0001579157)",
+  "0001043000": "SONIDA SENIOR LIVING, INC.  (SNDA)  (CIK 0001043000)",
+  "0001077428": "TEXAS CAPITAL BANCSHARES INC/TX  (TCBI, TCBIO)  (CIK 0001077428)",
+  "0001401521": "AMERICAN COASTAL INSURANCE Corp  (ACIC)  (CIK 0001401521)",
+  "0000802481": "PILGRIMS PRIDE CORP  (PPC)  (CIK 0000802481)",
+  "0000022444": "COMMERCIAL METALS Co  (CMC)  (CIK 0000022444)",
+  "0000099780": "TRINITY INDUSTRIES INC  (TRN)  (CIK 0000099780)",
+  "0000882184": "HORTON D R INC /DE/  (DHI)  (CIK 0000882184)",
+  "0001346830": "Cara Therapeutics, Inc.  (CARA)  (CIK 0001346830)",
+  "0000944809": "OPKO HEALTH, INC.  (OPK)  (CIK 0000944809)",
+  "0001193311": "ONCOR ELECTRIC DELIVERY CO LLC  (CIK 0001193311)",
+  "0001425205": "IOVANCE BIOTHERAPEUTICS, INC.  (IOVA)  (CIK 0001425205)",
+  "0000006201": "American Airlines Group Inc.  (AAL)  (CIK 0000006201)",
+  "0000004515": "American Airlines Group Inc.  (AAL)  (CIK 0000006201)",
+  "0001530746": "Kaya Holdings, Inc.  (KAYS)  (CIK 0001530746)",
+  "0000890066": "GLEN BURNIE BANCORP  (GLBZ)  (CIK 0000890066)",
+  "0001898795": "LiveWire Group, Inc.  (LVWR, LVWR-WT)  (CIK 0001898795)",
+  "0001872789": "Embecta Corp.  (EMBC)  (CIK 0001872789)",
+  "0001711142": "UBS Commercial Mortgage Trust 2017-C2  (CIK 0001711142)",
+  "0001707817": "Wells Fargo Commercial Mortgage Trust 2017-C38  (CIK 0001707817)",
+  "0001720748": "CCUBS Commercial Mortgage Trust 2017-C1  (CIK 0001720748)",
+  "0001710261": "BANK 2017-BNK6  (CIK 0001710261)",
+  "0001798562": "TMC the metals Co Inc.  (TMC, TMCWW)  (CIK 0001798562)",
+  "0001410428": "XWELL, Inc.  (XWEL)  (CIK 0001410428)",
+  "0001805521": "FARADAY FUTURE INTELLIGENT ELECTRIC INC.  (FFIE, FFIEW)  (CIK 0001805521)",
+  "0001637969": "Entergy New Orleans Storm Recovery Funding I, L.L.C.  (CIK 0001637969)",
+  "0001435508": "First Savings Financial Group, Inc.  (FSFG)  (CIK 0001435508)",
+  "0001089815": "U.S. NeuroSurgical Holdings, Inc.  (USNU)  (CIK 0001089815)",
+  "0001880480": "Entergy Texas Restoration Funding II, LLC  (CIK 0001880480)",
+  "0001843634": "Ford Credit Auto Owner Trust 2021-A  (CIK 0001843634)",
+  "0001900656": "Ford Credit Auto Owner Trust 2022-A  (CIK 0001900656)",
+  "0000879585": "ATN International, Inc.  (ATNI)  (CIK 0000879585)",
+  "0001977224": "Ford Credit Auto Owner Trust 2023-B  (CIK 0001977224)",
+  "0001813722": "Ford Credit Auto Owner Trust 2020-B  (CIK 0001813722)",
+  "0001830316": "Ford Credit Auto Owner Trust 2020-C  (CIK 0001830316)",
+  "0001951752": "Ford Credit Auto Owner Trust 2022-D  (CIK 0001951752)",
+  "0000021175": "CNA FINANCIAL CORP  (CNA)  (CIK 0000021175)",
+  "0000060086": "LOEWS CORP  (L)  (CIK 0000060086)",
+  "0000888981": "NOCOPI TECHNOLOGIES INC/MD/  (NNUP)  (CIK 0000888981)",
+  "0000097745": "THERMO FISHER SCIENTIFIC INC.  (TMO)  (CIK 0000097745)",
+  "0001823794": "ARKO Corp.  (ARKO, ARKOW)  (CIK 0001823794)",
+  "0001401667": "PUMA BIOTECHNOLOGY, INC.  (PBYI)  (CIK 0001401667)",
+  "0000059558": "LINCOLN NATIONAL CORP  (LNC, LNC-PD)  (CIK 0000059558)"
+ }
+}

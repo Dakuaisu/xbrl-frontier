@@ -1,0 +1,387 @@
+### key
+feas_gpu_rental_serving
+
+### topic
+feas_gpu_rental_serving: rented-GPU serving + load-testing economics for a 1-3B financial-extraction model (prices observed 2026-10-01 unless noted)
+
+### facts
+[
+ {
+  "claim": "RunPod on-demand GPU pod pricing (page states 'Page Updated: September 27, 2026'; observed 2026-10-01), community/secure: L4 $0.44/$0.49 per hr; L40S $0.79/$1.09; A100 PCIe $1.19/$1.59; A100 SXM $1.39/$1.59; H100 PCIe $1.99/$2.89; H100 SXM $2.69/$3.49; RTX 4090 $0.34/$0.74; RTX 3090 $0.22/$0.50. No A10G listed. Per-second billing.",
+  "evidence_url": "https://www.runpod.io/pricing",
+  "confidence": "VERIFIED",
+  "quote": "L4 | $0.44/hr | $0.49/hr ... A100 PCIe | $1.19/hr | $1.59/hr ... H100 SXM | $2.69/hr | $3.49/hr"
+ },
+ {
+  "claim": "RunPod Serverless hourly-equivalent rates (observed 2026-10-01): 24GB L4/A5000/3090/MIG $0.69/hr; 4090 $1.10/hr; 48GB L40/L40S/6000 Ada $1.75/hr; A6000/A40 $1.22/hr; A100 80GB $2.72/hr; H100 $4.79/hr; H200 $5.93/hr. The page did not break out Flex vs Active per-second rates.",
+  "evidence_url": "https://www.runpod.io/pricing",
+  "confidence": "VERIFIED",
+  "quote": "L4, A5000, 3090, MIG 24GB — Great for small-to-medium sized inference workloads. $0.69/hr"
+ },
+ {
+  "claim": "Lambda on-demand (observed 2026-10-01, excl. tax): 1x A100 40GB SXM/PCIe $1.99/GPU-hr; A100 80GB SXM $2.79/GPU-hr (8x); H100 SXM 1x $4.29, 2x $4.19, 4x $4.09, 8x $3.99; H100 PCIe 1x $3.29; A10 24GB $1.29; A6000 $1.09; GH200 $2.29; B200 1x $6.99.",
+  "evidence_url": "https://lambda.ai/pricing",
+  "confidence": "VERIFIED",
+  "quote": "A10 (24GB): \"$1.29\" ... H100 SXM (80GB): \"$4.29\" ... A100 options at \"$1.99\" per GPU/hour for both the 40GB SXM and 40GB PCIe variants in 1x setups"
+ },
+ {
+  "claim": "Modal per-second GPU pricing (observed 2026-10-01): H100 SXM5 $0.001097/s ($3.95/hr); A100 80GB $0.000694/s ($2.50/hr); A100 40GB $0.000583/s ($2.10/hr); L40S $0.000542/s ($1.95/hr); A10 $0.000306/s ($1.10/hr); L4 $0.000222/s ($0.80/hr); T4 $0.000164/s ($0.59/hr); CPU $0.047/core/hr; memory $0.008/GiB/hr; Starter plan $30/month free credits.",
+  "evidence_url": "https://modal.com/pricing",
+  "confidence": "VERIFIED",
+  "quote": "L4: $0.000222/sec ($0.80/hr) ... A10: $0.000306/sec ($1.10/hr) ... A100 80GB: $0.000694/sec ($2.50/hr)"
+ },
+ {
+  "claim": "Modal lists its 24GB Ampere part as 'A10' (not 'A10G'); the GPU docs do not state whether this is the A10G SKU. A10 instances support up to 4 GPUs; H100 requests may be auto-upgraded to H200 at no extra cost unless 'H100!' is specified.",
+  "evidence_url": "https://modal.com/docs/guide/gpu",
+  "confidence": "VERIFIED",
+  "quote": "A10 instances support up to 4 GPUs (up to 96 GB GPU RAM)"
+ },
+ {
+  "claim": "Vast.ai marketplace prices as reported by the GetDeploying aggregator ('Last Updated: October 1, 2026'): RTX 4090 $0.20 spot / $0.32 on-demand; A100 $0.17 spot / $0.40 on-demand; L4 $0.20 spot / $0.32 on-demand; H100 $0.66 spot / $1.73 on-demand; L40S $0.40 / $0.60; RTX 3090 $0.09 / $0.12. Vast's own per-GPU pricing pages rendered 'No current offers' (JS-driven) so these could not be confirmed on vast.ai directly.",
+  "evidence_url": "https://getdeploying.com/vast-ai",
+  "confidence": "VERIFIED",
+  "quote": "RTX 4090: \"$0.20\" spot / \"$0.32\" on-demand ... A100: \"$0.17\" spot / \"$0.40\" on-demand ... L4: \"$0.20\" spot / \"$0.32\" on-demand"
+ },
+ {
+  "claim": "Vast.ai per-GPU pricing pages (RTX-4090, A100-SXM4, L4, H100-SXM) returned 'No current offers—The rent link will appear when matching ... listings are available' when fetched 2026-10-01; live prices require the JS console.",
+  "evidence_url": "https://vast.ai/pricing/gpu/L4",
+  "confidence": "VERIFIED",
+  "quote": "No current offers—The rent link will appear when matching L4 listings are available."
+ },
+ {
+  "claim": "Cross-provider L4 on-demand (GetDeploying, 'Last Updated: October 1, 2026'): median $0.88/GPU-hr across 17 providers; Vast.ai $0.32-0.33; Runpod $0.49; Google Cloud $0.70; AWS $0.80; Hugging Face $0.80.",
+  "evidence_url": "https://getdeploying.com/reference/cloud-gpu/nvidia-l4",
+  "confidence": "VERIFIED",
+  "quote": "Median on-demand price: \"$0.88 /GPU/hr\" across 17 providers"
+ },
+ {
+  "claim": "Cross-provider A100 on-demand (GetDeploying, 2026-10-01): median $1.79/GPU-hr across 39 providers; Vast.ai 1x A100 PCIe 80GB $0.40; Runpod 1x A100 SXM 40GB $1.00; Lambda 1x A100 SXM 40GB $1.99; AWS 8x A100 $2.74/GPU; GCP $3.72/GPU.",
+  "evidence_url": "https://getdeploying.com/reference/cloud-gpu/nvidia-a100",
+  "confidence": "VERIFIED",
+  "quote": "Median on-demand rate: \"$1.79 /GPU/hr\" across 39 providers"
+ },
+ {
+  "claim": "Cross-provider RTX 4090 on-demand (GetDeploying, 2026-10-01): median $0.46/GPU-hr; Vast.ai $0.32; Runpod $0.34 (out of stock); Salad $0.33.",
+  "evidence_url": "https://getdeploying.com/reference/cloud-gpu/nvidia-rtx-4090",
+  "confidence": "VERIFIED",
+  "quote": "Median on-demand price: $0.46/GPU/hr across all providers"
+ },
+ {
+  "claim": "AWS g5.xlarge (1x NVIDIA A10G 24GiB, 4 vCPU, 16GiB) on-demand Linux us-east-1: $1.006/hr (Vantage instance table, observed 2026-10-01).",
+  "evidence_url": "https://instances.vantage.sh/aws/ec2/g5.xlarge",
+  "confidence": "VERIFIED",
+  "quote": "\"$1.006 per hour\" ... \"1\" NVIDIA A10G with \"24\" GiB video memory"
+ },
+ {
+  "claim": "AWS g6.xlarge (1x NVIDIA L4 24GiB, 4 vCPU, 16GiB) on-demand Linux us-east-1: $0.805/hr (Vantage, observed 2026-10-01).",
+  "evidence_url": "https://instances.vantage.sh/aws/ec2/g6.xlarge",
+  "confidence": "VERIFIED",
+  "quote": "On-Demand Linux Hourly Price: \"$0.805\" ... GPU: \"1\" NVIDIA L4"
+ },
+ {
+  "claim": "Hugging Face Inference Endpoints per-hour (observed 2026-10-01): T4 $0.50; L4 $0.80; A10G $1.00; L40S $1.80; A100 $2.50; H100 $4.50; H200 $5.00; B200 $9.25.",
+  "evidence_url": "https://huggingface.co/pricing",
+  "confidence": "VERIFIED",
+  "quote": "NVIDIA L4: 1x: $0.80 ... NVIDIA A10G: 1x: $1.00 ... NVIDIA A100: 1x: $2.50"
+ },
+ {
+  "claim": "DeepInfra dedicated GPU rental (observed 2026-10-01, minute granularity): A100 80GB $0.89/GPU-hr; H100 80GB $2.20; H200 $2.69; B200 $3.69; B300 $4.89.",
+  "evidence_url": "https://deepinfra.com/pricing",
+  "confidence": "VERIFIED",
+  "quote": "A100 (80GB): \"$0.89\" per GPU-hour ... H100 (80GB): \"$2.20\" per GPU-hour"
+ },
+ {
+  "claim": "Fireworks on-demand GPU (observed 2026-10-01): H100 80GB $8.00/hr; H200 141GB $8.00/hr; B200 $13.00/hr; no A100 listed. Together dedicated endpoints: HGX H100 $5.49/hr (promotional), HGX B200 $8.99/hr.",
+  "evidence_url": "https://fireworks.ai/pricing",
+  "confidence": "VERIFIED",
+  "quote": "H100 80 GB | $8.00 ... B200 180 GB | $13.00"
+ },
+ {
+  "claim": "Fireworks serverless size-tier pricing for models not individually listed (observed 2026-10-01): 'Less than 4B parameters' $0.10 per 1M tokens (same for input and output); 4B-16B $0.20; more than 16B $0.90.",
+  "evidence_url": "https://docs.fireworks.ai/serverless/pricing",
+  "confidence": "VERIFIED",
+  "quote": "For any text or vision model not listed individually, pricing is set by parameter count and architecture. ... Less than 4B parameters: \"$0.10\" per 1M tokens"
+ },
+ {
+  "claim": "Fireworks' Llama 3.2 3B Instruct model page says serverless is NOT supported for the model (on-demand deployment only), so a 3B frontier-API comparison point from Fireworks is not available as serverless.",
+  "evidence_url": "https://fireworks.ai/models/fireworks/llama-v3p2-3b-instruct",
+  "confidence": "VERIFIED",
+  "quote": "Serverless is not supported for this model."
+ },
+ {
+  "claim": "Together AI's Llama 3.2 3B Instruct Turbo page states the model is not available on Together's Serverless API ('Launching soon'), so Together currently offers no serverless 3B Llama price (observed 2026-10-01).",
+  "evidence_url": "https://www.together.ai/models/llama-3-2-3b-instruct-turbo",
+  "confidence": "VERIFIED",
+  "quote": "This model is not available on Together's Serverless API."
+ },
+ {
+  "claim": "Together serverless small-model per-1M-token prices (observed 2026-10-01): Llama 3.1 8B Instruct Lite $0.14 in / $0.14 out; Qwen 2.5 7B Instruct Turbo $0.30/$0.30; Qwen3.5 9B $0.17/$0.25; Qwen3.8 Flash $0.09/$0.28; 'Together AI Tev1 4B Experimental' $0.042 input / free output. The pricing page no longer shows a size-tier table (e.g., 'up to 4B').",
+  "evidence_url": "https://www.together.ai/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Llama 3.1 8B Instruct Lite - Input: $0.14 | Output: $0.14 ... Qwen3.5 9B - Input: $0.17 | Output: $0.25"
+ },
+ {
+  "claim": "Together serverless models catalog lists only Qwen3.5 9B ($0.17 in / $0.25 out per 1M) and 'Together AI Tev1 4B Experimental' ($0.042 input) under 10B; no Llama 3.2 3B, Qwen2.5 small or Gemma small on serverless (observed 2026-10-01).",
+  "evidence_url": "https://docs.together.ai/docs/serverless-models",
+  "confidence": "VERIFIED",
+  "quote": "Qwen3.5 9B (Qwen/Qwen3.5-9B) - Input pricing: \"$0.17 per 1M tokens\" - Output pricing: \"$0.25 per 1M tokens\""
+ },
+ {
+  "claim": "DeepInfra serverless small-model prices per 1M tokens (observed 2026-10-01): Gemma 3 4B $0.05 in / $0.10 out; Meta-Llama-3.1 8B Instruct Turbo $0.02 / $0.04; Qwen 3.5 9B $0.10 / $0.15; Mistral Nemo $0.019 / $0.03. Llama 3.2 1B/3B not listed on the pricing page.",
+  "evidence_url": "https://deepinfra.com/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Gemma 3 4B: \"$0.05\" input / \"$0.10\" output per 1M tokens"
+ },
+ {
+  "claim": "Fine-tuning prices (observed 2026-10-01): Fireworks LoRA SFT up to 16B $0.50 per 1M training tokens (full-param SFT $1.00; LoRA DPO $1.00); Together SFT on Llama 3.1 8B $0.34 per 1M tokens with $4.00 minimum.",
+  "evidence_url": "https://fireworks.ai/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Up to 16B | $0.50 | $1.00 | $1.00 | $2.00"
+ },
+ {
+  "claim": "Groq's pricing page could not be parsed for per-token prices of small models (two fetches returned only marketing content); Groq small-model prices are therefore not reported here.",
+  "evidence_url": "https://groq.com/pricing/",
+  "confidence": "UNVERIFIED",
+  "quote": ""
+ },
+ {
+  "claim": "vLLM serves LoRA adapters via --enable-lora and --lora-modules {name}={path}; adapters can be loaded/unloaded at runtime via /v1/load_lora_adapter and /v1/unload_lora_adapter when VLLM_ALLOW_RUNTIME_LORA_UPDATING=True; max_lora_rank should be set to the max rank actually used because larger values waste memory and hurt performance.",
+  "evidence_url": "https://docs.vllm.ai/en/latest/features/lora.html",
+  "confidence": "VERIFIED",
+  "quote": "using a value much larger than needed wastes memory and can cause performance issues."
+ },
+ {
+  "claim": "vLLM compatibility matrix (docs/features/README.md on main): LoRA is compatible with chunked prefill, automatic prefix caching, speculative decoding, CUDA graphs, pooling, logprobs, prompt logprobs, async output, best-of, beam search and prompt-embeds; not with encoder-decoder or multi-step; multimodal partially ('LoRA is only applicable to the language backbone of multimodal models'). LoRA is marked supported on Volta/Turing/Ampere/Ada/Hopper/CPU/AMD/Intel. The matrix has no quantization row.",
+  "evidence_url": "https://github.com/vllm-project/vllm/blob/main/docs/features/README.md",
+  "confidence": "VERIFIED",
+  "quote": "LoRA is only applicable to the language backbone of multimodal models."
+ },
+ {
+  "claim": "vLLM added QLoRA-style LoRA-on-bitsandbytes-4-bit base support in PR #4776 '[Feature][Kernel] Support bitsandbytes quantization and QLoRA', merged June 1, 2024 (found via GitHub search API).",
+  "evidence_url": "https://github.com/vllm-project/vllm/pull/4776",
+  "confidence": "VERIFIED",
+  "quote": "[Feature][Kernel] Support bitsandbytes quantization and QLoRA"
+ },
+ {
+  "claim": "vLLM bitsandbytes: in-flight 4-bit quantization via --quantization bitsandbytes or pre-quantized HF checkpoints (quantization_config auto-detected); as of the current docs it requires installing a separate plugin ('uv pip install vllm-bnb-plugin'); no calibration data needed.",
+  "evidence_url": "https://docs.vllm.ai/en/latest/features/quantization/bnb.html",
+  "confidence": "VERIFIED",
+  "quote": "BitsAndBytes eliminates the need for calibrating the quantized model with input data"
+ },
+ {
+  "claim": "vLLM quantization hardware table: AWQ supported on Turing/Ampere/Ada/Hopper (not Volta); GPTQ on all; Marlin on Turing*/Ampere/Ada/Hopper (*Turing lacks Marlin MXFP4); INT8 W8A8 on Turing+; FP8 W8A8 ONLY on Ada and Hopper (not Ampere); bitsandbytes and GGUF on all. 'Ampere to SM 8.0/8.6, Ada to SM 8.9' — i.e., A10G/A100 are Ampere, L4/L40S are Ada.",
+  "evidence_url": "https://docs.vllm.ai/en/latest/features/quantization/",
+  "confidence": "VERIFIED",
+  "quote": "Volta refers to SM 7.0, Turing to SM 7.5, Ampere to SM 8.0/8.6, Ada to SM 8.9, and Hopper to SM 9.0."
+ },
+ {
+  "claim": "vLLM FP8: native W8A8 FP8 compute requires compute capability >= 8.9 (Ada/Hopper/Blackwell); on Turing/Ampere (A10G, A100) FP8 checkpoints fall back to weight-only W8A16 Marlin; FP8 gives ~2x memory reduction and up to 1.6x throughput.",
+  "evidence_url": "https://docs.vllm.ai/en/latest/features/quantization/llm_compressor/fp8/",
+  "confidence": "VERIFIED",
+  "quote": "FP8 computation is supported on NVIDIA GPUs with compute capability >= 8.9 (Ada Lovelace, Hopper, Blackwell). ... GPUs without native FP8 support (e.g. Turing/Ampere) land on weight-only (W8A16) Marlin."
+ },
+ {
+  "claim": "NVIDIA compute capabilities: L4/L40/L40S = 8.9 (Ada), A10 = 8.6 (Ampere), A100 = 8.0, H100 = 9.0 — so L4 has native FP8 tensor cores while A10G/A100 do not.",
+  "evidence_url": "https://developer.nvidia.com/cuda-gpus",
+  "confidence": "VERIFIED",
+  "quote": "NVIDIA L4, L40, L40S: \"8.9\" ... NVIDIA A10: \"8.6\" ... NVIDIA A100: \"8.0\""
+ },
+ {
+  "claim": "vLLM AWQ docs show serving with --quantization auto_awq / quantization=\"awq\"; the AWQ page itself contains no hardware note (hardware coverage is in the quantization support table).",
+  "evidence_url": "https://docs.vllm.ai/en/latest/features/quantization/auto_awq.html",
+  "confidence": "VERIFIED",
+  "quote": "python examples/deployment/llm_engine_example.py --model TheBloke/Llama-2-7b-Chat-AWQ --quantization auto_awq"
+ },
+ {
+  "claim": "vLLM structured outputs: backends include xgrammar, guidance, outlines and lm-format-enforcer; default backend is 'auto'; request options are choice/regex/json/grammar/structural_tag; the legacy guided_json/guided_regex/guided_choice/guided_grammar parameters were deprecated in v0.12.0 in favor of structured_outputs.",
+  "evidence_url": "https://docs.vllm.ai/en/latest/features/structured_outputs.html",
+  "confidence": "VERIFIED",
+  "quote": "The default backend is `auto`, which will try to choose an appropriate backend based on the details of the request."
+ },
+ {
+  "claim": "XGrammar (Apache-2.0) claims near-zero overhead for JSON generation and is the default structured-generation backend in vLLM, SGLang, TensorRT-LLM and MLC-LLM.",
+  "evidence_url": "https://github.com/mlc-ai/xgrammar",
+  "confidence": "VERIFIED",
+  "quote": "achieved near-zero overhead in JSON generation, making it one of the fastest structured generation engines available."
+ },
+ {
+  "claim": "Outlines (Apache-2.0) provides JSON-schema/regex/CFG constrained generation and integrates with vLLM and Ollama servers plus transformers and llama.cpp.",
+  "evidence_url": "https://github.com/dottxt-ai/outlines",
+  "confidence": "VERIFIED",
+  "quote": "Outlines guarantees structured outputs during generation — directly from any LLM."
+ },
+ {
+  "claim": "SGLang LoRA serving: --enable-lora, --lora-paths, --max-loras-per-batch (default 8), --lora-backend triton or csgmv (default) with '20% to 80% latency improvements'; dynamic /load_lora_adapter and /unload_lora_adapter; pinned adapters limited to max-loras-per-batch - 1. Docs do not explicitly cover LoRA on quantized bases.",
+  "evidence_url": "https://docs.sglang.io/advanced_features/lora.html",
+  "confidence": "VERIFIED",
+  "quote": "SGLang limits maximal number of pinned adapters to `max-loras-per-batch - 1`"
+ },
+ {
+  "claim": "SGLang quantization on NVIDIA GPUs: FP8, AWQ, GPTQ (marlin variants), bitsandbytes, modelopt FP8/FP4, w8a8_int8, w8a8_fp8, auto-round; docs recommend offline quantization over online.",
+  "evidence_url": "https://docs.sglang.io/advanced_features/quantization.html",
+  "confidence": "VERIFIED",
+  "quote": "For better performance, usability and convenience, offline quantization is recommended over online quantization."
+ },
+ {
+  "claim": "SGLang structured outputs: XGrammar is the default backend (JSON schema, regex, EBNF); Outlines and Llguidance are alternatives; only one of json_schema/regex/ebnf per request.",
+  "evidence_url": "https://docs.sglang.io/advanced_features/structured_outputs.html",
+  "confidence": "VERIFIED",
+  "quote": "If no backend is specified, XGrammar will be used as the default."
+ },
+ {
+  "claim": "Merging a LoRA adapter into the base model (PEFT merge_and_unload) removes the inference latency of separately applying adapter weights, letting the merged model be served as a standalone (and then quantized) checkpoint.",
+  "evidence_url": "https://huggingface.co/docs/peft/main/en/developer_guides/lora",
+  "confidence": "VERIFIED",
+  "quote": "To eliminate latency, use the merge_and_unload() function to merge the adapter weights with the base model."
+ },
+ {
+  "claim": "Published vLLM throughput for Qwen2.5-3B-Instruct (FP16) on a single RTX 4090 (DatabaseMart, 'Last Updated 08/25/2026'; 100-token input / 600-token output, 300 requests): offline 10.31 req/s, 6,183.51 output tok/s, 7,214.10 total tok/s; online 10.59 req/s, 6,980.31 total tok/s. DeepSeek-R1-Distill-Qwen-1.5B: 13.85 req/s, 8,310.77 output tok/s.",
+  "evidence_url": "https://www.databasemart.com/blog/vllm-gpu-benchmark-rtx4090",
+  "confidence": "VERIFIED",
+  "quote": "Qwen2.5-3B-Instruct: Requests/sec: 10.31; Output tokens/sec: 6,183.51; Total throughput: \"7214.10\" tokens/sec"
+ },
+ {
+  "claim": "Published vLLM throughput for Qwen2.5-3B-Instruct (FP16) on a 24GB RTX A5000 (Ampere, same generation/VRAM class as A10G) at 50 concurrent requests, 100-in/600-out (DatabaseMart, 08/25/2026): 4.11 req/s, 2,303.50 output tok/s, 2,714.88 total tok/s, median TTFT 522.38 ms. DeepSeek-R1-Distill-Qwen-1.5B: 6.62 req/s, 3,274.32 output tok/s, median TTFT 300.35 ms. Note: A5000 is a proxy; no direct A10G figure was found.",
+  "evidence_url": "https://www.databasemart.com/blog/vllm-gpu-benchmark-a5000",
+  "confidence": "VERIFIED",
+  "quote": "Request throughput: \"4.11\" req/s; Output generation: \"2303.50\" tokens/s; First-token latency: \"522.38\" ms median TTFT"
+ },
+ {
+  "claim": "Published vLLM throughput for Gemma-3-4B-IT (FP16) on A100 40GB at 50 concurrent requests, 100-in/600-out (DatabaseMart, 08/25/2026): 3,976.92 total tok/s, 3,385.72 output tok/s, 5.91 req/s, median TTFT 234.86 ms, P99 TTFT 338.76 ms. The A100-80GB and H100 posts from the same series test only 7B+ models.",
+  "evidence_url": "https://www.databasemart.com/blog/vllm-gpu-benchmark-a100-40gb",
+  "confidence": "VERIFIED",
+  "quote": "Throughput: \"3,976.92\" tokens/sec total; Output throughput: \"3,385.72\" tokens/sec; Request rate: \"5.91\" requests/sec; Median TTFT: \"234.86\" milliseconds"
+ },
+ {
+  "claim": "vLLM PR #10880 'Benchmark serving structured output' (Dec 2024) reports, for Llama 3.2 3B Instruct with structured output: 12.6 req/s, 3025.13 output tok/s, mean TTFT 50.32 ms (GPU not stated in the API summary).",
+  "evidence_url": "https://github.com/vllm-project/vllm/pull/10880",
+  "confidence": "VERIFIED",
+  "quote": "Request throughput (req/s): 12.6 ... Output token throughput (tok/s): 3025.13 ... Mean TTFT (ms): 50.32"
+ },
+ {
+  "claim": "vLLM issue #38887 (Apr 2026) reports Llama 3.2 3B at roughly 100+ tok/s single-stream on an RTX 4090 (vs ~9 tok/s for Gemma 4 E4B due to a bug).",
+  "evidence_url": "https://github.com/vllm-project/vllm/issues/38887",
+  "confidence": "VERIFIED",
+  "quote": "Llama 3.2 3B: \"~100+ tok/s\" on same hardware"
+ },
+ {
+  "claim": "Only L4-specific small-model numbers found in vLLM's tracker: issue #16258 (Apr 2025) reports starcoder2-3b on L4 at 'generation throughput: 504.8 tokens/s' (vanilla); PR #57441 (Sep 2026) reports Qwen2.5-VL-3B-Instruct at 21.2 tok/s single-request in eager mode on L4 (Transformers backend, not optimized). No published text-only 3B L4 serving benchmark with TTFT/TPOT percentiles was found.",
+  "evidence_url": "https://github.com/vllm-project/vllm/issues/16258",
+  "confidence": "VERIFIED",
+  "quote": "generation throughput: 504.8 tokens/s"
+ },
+ {
+  "claim": "BentoML backend benchmark (June 5, 2024): Llama 3 8B on 1x A100 80GB at 100 concurrent users — vLLM 2300-2500 tok/s generation, LMDeploy up to 4000 tok/s; vLLM had best-in-class TTFT. Useful as an 8B anchor, not a 3B number.",
+  "evidence_url": "https://www.bentoml.com/blog/benchmarking-llm-inference-backends",
+  "confidence": "VERIFIED",
+  "quote": "vLLM ... 2300-2500 tokens/sec; LMDeploy ... up to 4000 tokens per second"
+ },
+ {
+  "claim": "arXiv 2609.17863 'The Inference Engineering Pareto Atlas' (submitted Sep 15, 2026) measures 54 vLLM 0.12 configurations of Qwen2.5-7B-Instruct on L4, A100, H100 and reports a cost/quality/latency Pareto frontier with $/M tokens (best $0.106/M on A100 with FP8 weights+batching+sparse) using RunPod July 2026 prices L4 $0.39/hr, A100 80GB PCIe $1.39/hr, H100 PCIe $2.89/hr; FP8 weights give 0.61-0.65x per-token latency, AWQ-4bit 0.34-0.53x but misses a 95% quality floor on GSM8K; 'no L4 configuration meets the tight-latency budget at all'; no 1-4B models tested. This is prior art for a cost/latency/quality frontier methodology on rented GPUs, though not for financial extraction or small models.",
+  "evidence_url": "https://arxiv.org/abs/2609.17863",
+  "confidence": "VERIFIED",
+  "quote": "we measure 54 configurations of Qwen2.5-7B-Instruct running on vLLM 0.12 across L4, A100, and H100 GPUs and use these anchors to calibrate a simulator"
+ },
+ {
+  "claim": "arXiv 2606.02982 DriftSched (June 2026) serves Qwen1.5-1.8B-Chat FP16 with vLLM on NVIDIA L4 for multi-tenant scheduling research; it reports latency percentiles (e.g., SJF reduces median E2E latency ~42% and P99 ~16% vs FIFO) but no absolute tok/s or $ cost.",
+  "evidence_url": "https://arxiv.org/abs/2606.02982",
+  "confidence": "VERIFIED",
+  "quote": "a QoS-aware scheduling framework for multi-tenant LLM inference serving on NVIDIA L4 GPUs"
+ },
+ {
+  "claim": "arXiv full-text searches run 2026-10-01 for 'XBRL' AND ('latency' OR 'inference cost' OR 'throughput') returned 0 results, and 'FinTagging' returned only 2505.20650 (the benchmark paper) whose abstract mentions no latency, throughput, serving cost or distilled models — consistent with the project's novelty claim.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:%22XBRL%22+AND+(all:%22latency%22+OR+all:%22inference+cost%22+OR+all:%22throughput%22)&max_results=30",
+  "confidence": "VERIFIED",
+  "quote": "Total Results Found: 0"
+ },
+ {
+  "claim": "FinTagging (arXiv 2505.20650v5, first published May 27, 2025) benchmarks LLMs on XBRL tagging decomposed into numeric extraction and concept linking against the full US-GAAP taxonomy; the arXiv entry has no mention of latency, throughput or serving cost.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:%22FinTagging%22&max_results=30",
+  "confidence": "VERIFIED",
+  "quote": "FinTagging: Benchmarking LLMs for Extracting and Structuring Financial Information"
+ },
+ {
+  "claim": "arXiv 2510.03847 (Oct 2025) 'Small Language Models for Agentic Systems' surveys 1-12B SLMs, defines 'cost per successful task' and claims SLMs can match LLMs on tool use 'at 10x-100x lower token cost', but gives no GPU-specific $/token or latency measurements.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:%22small+language+models%22+AND+all:%22vLLM%22+AND+all:%22cost%22+AND+all:%22latency%22&max_results=40",
+  "confidence": "VERIFIED",
+  "quote": "match or surpass LLMs on tool use...at 10x-100x lower token cost"
+ },
+ {
+  "claim": "arXiv 2608.03579 (Aug 2026) 'Pin Once, Swap Light' (SALT) studies multi-tenant ultra-LoRA serving on Llama-3.2-3B with vLLM and reports 'up to 51% throughput improvement' (relative only, no absolute tok/s or GPU cost).",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:%22Llama+3.2+3B%22+AND+all:%22vLLM%22&max_results=40",
+  "confidence": "VERIFIED",
+  "quote": "up to 51% throughput improvement"
+ },
+ {
+  "claim": "arXiv 2409.15790 'Small Language Models: Survey, Measurements, and Insights' (Sep 2024, v3 Feb 2025) benchmarks inference latency and memory of 70 open SLMs (100M-5B) but for on-device runtime costs, not cloud GPUs like L4/A10G/A100.",
+  "evidence_url": "https://arxiv.org/abs/2409.15790",
+  "confidence": "VERIFIED",
+  "quote": "To gain further insight into their on-device runtime costs, we benchmark their inference latency and memory footprints."
+ },
+ {
+  "claim": "GKE Inference Quickstart publishes cost-per-token benchmarks generated with the kubernetes-sigs inference-perf tool by saturating accelerators; its example row: openai/gpt-oss-20b on 1x H100 (a3-highgpu-1g) with vLLM — $0.009 per M input tokens, $0.035 per M output tokens, 13,335 output tok/s, NTPOT 67 ms, TTFT 297 ms.",
+  "evidence_url": "https://docs.cloud.google.com/kubernetes-engine/docs/how-to/machine-learning/inference-quickstart",
+  "confidence": "VERIFIED",
+  "quote": "Normalized Time per Output Token (NTPOT) and Time to First Token (TTFT) in milliseconds, and throughput in output tokens per second, by saturating accelerators."
+ },
+ {
+  "claim": "`vllm bench serve` (the CLI successor to benchmarks/benchmark_serving.py) reports TTFT, TPOT, ITL and E2EL with mean/median/percentiles, request throughput and output/total token throughput, and a --goodput option defining SLOs (e.g., ttft/tpot/e2el thresholds); --percentile-metrics defaults to ttft,tpot,itl and --metric-percentiles defaults to 99; --request-rate (default inf = burst), --max-concurrency and --burstiness (gamma-distributed arrivals) control load.",
+  "evidence_url": "https://docs.vllm.ai/en/latest/cli/bench/serve.html",
+  "confidence": "VERIFIED",
+  "quote": "--request-rate: \"Number of requests per second. If this is inf, then all the requests are sent at time 0\""
+ },
+ {
+  "claim": "vLLM Benchmark CLI docs show the serving result block (Request throughput (req/s), Output token throughput (tok/s), Total token throughput, Mean/Median/P99 TTFT, TPOT, ITL) and recommend GuideLLM rather than `vllm bench serve` for benchmarking production servers; the old benchmarks/ directory README says it 'used to contain' the scripts.",
+  "evidence_url": "https://docs.vllm.ai/en/latest/benchmarking/cli/",
+  "confidence": "VERIFIED",
+  "quote": "Request throughput (req/s):              1.73 / Output token throughput (tok/s):         382.89 / ... P99 TTFT (ms):                           79.49"
+ },
+ {
+  "claim": "GuideLLM (vllm-project) load profiles: synchronous, concurrent, throughput, constant, poisson, sweep; records full distributions of TTFT, ITL and end-to-end request latency plus throughput; exports json/csv/html; targets OpenAI-compatible servers and a vLLM Python API backend.",
+  "evidence_url": "https://github.com/vllm-project/guidellm",
+  "confidence": "VERIFIED",
+  "quote": "synchronous, concurrent, throughput, constant, poisson, or sweep"
+ },
+ {
+  "claim": "SGLang bench_serving supports sglang/vllm/lmdeploy/trt backends, --request-rate and --max-concurrency, and reports request throughput (req/s), input token throughput, TTFT, ITL (mean/median/std/p95/p99/max), TPOT and E2E latency (mean/median/std/p99).",
+  "evidence_url": "https://docs.sglang.io/developer_guide/bench_serving.html",
+  "confidence": "VERIFIED",
+  "quote": "Inter-Token Latency (ITL, ms): mean/median/std/p95/p99/max between tokens"
+ },
+ {
+  "claim": "kubernetes-sigs inference-perf (Apache-2.0): constant-rate, Poisson and concurrent-user load, multi-stage sweeps to find saturation, reports TTFT, TPOT, ITL, Normalized TPOT, input/output/total tok/s and goodput against SLOs; verified against vLLM, SGLang and TGI.",
+  "evidence_url": "https://github.com/kubernetes-sigs/inference-perf",
+  "confidence": "VERIFIED",
+  "quote": "measure rate of requests meeting your SLO constraints"
+ },
+ {
+  "claim": "k6 reports http_req_duration, http_req_failed, http_reqs, iterations etc.; summaryTrendStats defaults to avg,min,med,max,p(90),p(95) and accepts arbitrary percentiles such as p(99) and p(99.99); thresholds (e.g., 'p(95)<200') define pass/fail. k6 has no built-in TTFT/TPOT token metrics for streaming LLM responses.",
+  "evidence_url": "https://grafana.com/docs/k6/latest/using-k6/k6-options/reference/",
+  "confidence": "VERIFIED",
+  "quote": "Possible values include `avg` (average), `med` (median), `min`, `max`, `count`, as well as arbitrary percentile values (e.g. `p(95)`, `p(99)`, `p(99.99)`, etc.)."
+ },
+ {
+  "claim": "Locust (Python user classes; greenlet-based) reports per-endpoint request count, failures, median/avg/min/max response time, requests/s, failures/s and response-time percentiles PERCENTILES_TO_REPORT = [0.50, 0.66, 0.75, 0.80, 0.90, 0.95, 0.98, 0.99, 0.999, 0.9999, 1.0]; no native token-level LLM metrics.",
+  "evidence_url": "https://raw.githubusercontent.com/locustio/locust/master/locust/stats.py",
+  "confidence": "VERIFIED",
+  "quote": "PERCENTILES_TO_REPORT: [0.50, 0.66, 0.75, 0.80, 0.90, 0.95, 0.98, 0.99, 0.999, 0.9999, 1.0]"
+ },
+ {
+  "claim": "NVIDIA NIM benchmarking guide defines TTFT, end-to-end latency (TTFT + generation time), ITL/TPOT = (e2e_latency - TTFT)/(output_tokens - 1), TPS (total output tokens / wall time) and RPS; it does not define goodput.",
+  "evidence_url": "https://docs.nvidia.com/nim/benchmarking/llm/latest/metrics.html",
+  "confidence": "VERIFIED",
+  "quote": "(e2e_latency − TTFT) / (Total_output_tokens − 1)"
+ },
+ {
+  "claim": "Modal's vLLM example uses google/gemma-4-26B-A4B-it on a single H200 and notes torch.compile/CUDA-graph warm-up 'typically tens of seconds to a few minutes, reduced to about ten seconds when loaded from the cache' — relevant to cold-start cost on per-second-billed serverless GPUs.",
+  "evidence_url": "https://modal.com/docs/examples/vllm_inference",
+  "confidence": "VERIFIED",
+  "quote": "This latency is typically tens of seconds to a few minutes, reduced to about ten seconds when loaded from the cache."
+ }
+]
+
+### unknowns
+1) Vast.ai prices could only be confirmed via the GetDeploying aggregator (dated 2026-10-01); vast.ai's own per-GPU pages are JS-rendered and showed 'No current offers'. 2) RunPod serverless Flex vs Active per-second rates were not shown on the pricing page as fetched; only per-hour tier prices. 3) Modal lists 'A10' and its docs never say 'A10G'. 4) No published, reproducible serving benchmark (TTFT/TPOT percentiles, req/s) was found for a text-only 1-3B model on an NVIDIA L4 or A10G specifically; nearest verified anchors are Qwen2.5-3B on RTX A5000 (24GB Ampere) and RTX 4090, Gemma-3-4B on A100-40GB (DatabaseMart, Aug 2026), starcoder2-3b on L4 (504.8 tok/s, vLLM issue), and the Qwen2.5-7B L4/A100/H100 Pareto Atlas paper. 5) Semantic Scholar API returned HTTP 429 on all three attempts; arXiv API searches were used instead. 6) Groq's pricing page did not expose per-token prices to the fetcher. 7) Together's pricing page no longer shows a parameter-size tier table and neither Together nor Fireworks offer Llama 3.2 3B serverless; the only verified sub-4B serverless rates are Fireworks' generic '<4B = $0.10/M tokens' tier and DeepInfra's Gemma 3 4B ($0.05/$0.10). 8) vLLM's compatibility matrix on the docs site 404'd at every URL tried; the GitHub docs/features/README.md copy was used and it contains no quantization row, so LoRA-on-AWQ/GPTQ/FP8 compatibility is only inferred from the 2024 QLoRA PR and not from a current matrix. 9) WebSearch budget was exhausted before this task began, so discovery relied solely on direct fetches of known URLs and arXiv/GitHub APIs; relevant blog posts with L4/A10G 3B numbers may exist but were not discoverable here.
+
+### notes
+Saved to /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/feas_gpu_rental_serving.json. Observed-date convention: all prices were fetched on 2026-10-01 unless the page itself carries a date (RunPod 'Page Updated: September 27, 2026'; GetDeploying 'Last Updated: October 1, 2026'; DatabaseMart 'Last Updated 08/25/2026'; Pareto Atlas uses RunPod July 2026 prices). Cheapest verified single-GPU options for a 1-3B model: Vast.ai L4/4090 ~$0.32/hr on-demand (aggregator), RunPod L4 $0.44-0.49/hr, Modal L4 $0.80/hr per-second billed with $30/mo free credits. Serverless API floor for sub-4B models: Fireworks $0.10/M tokens (generic tier), DeepInfra Gemma 3 4B $0.05 in / $0.10 out. Key hardware constraint: native FP8 W8A8 requires SM>=8.9 (L4/L40S/H100) — on A10G/A100 vLLM silently falls back to W8A16 Marlin; AWQ/GPTQ/Marlin/INT8/bitsandbytes are all supported on both Ampere and Ada. Novelty check: arXiv has zero papers combining XBRL with latency/throughput/inference-cost terms, and the FinTagging entry mentions none; but a general cost/quality/latency Pareto-frontier study on rented L4/A100/H100 with vLLM (arXiv 2609.17863, Sep 2026, Qwen2.5-7B) exists and should be cited as methodological prior art.

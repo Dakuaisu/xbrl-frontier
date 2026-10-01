@@ -1,0 +1,81 @@
+### key
+fnxl
+
+### query_name
+fnxl
+
+### found
+True
+
+### title
+Financial Numeric Extreme Labelling: A Dataset and Benchmarking for XBRL Tagging (arXiv/PDF title; the ACL Anthology page lists it as "Financial Numeric Extreme Labelling: A dataset and benchmarking")
+
+### authors
+Soumya Sharma*, Subhendu Khatuya* (co-first), Manjunath Hegde, Afreen Shaikh, Koustuv Dasgupta, Pawan Goyal, Niloy Ganguly (IIT Kharagpur; Goldman Sachs Data Science & ML) [VERIFIED from ACL PDF]
+
+### venue_year
+Findings of ACL 2023, pages 3550-3561 (Toronto, July 2023). arXiv v1 6 Jun 2023, comments field "Accepted to ACL'23 Findings Paper". [VERIFIED]
+
+### identifiers
+arXiv:2306.03723 (https://arxiv.org/abs/2306.03723); DOI 10.18653/v1/2023.findings-acl.219; ACL Anthology 2023.findings-acl.219 (https://aclanthology.org/2023.findings-acl.219/); bibkey sharma-etal-2023-financial; GitHub https://github.com/soummyaah/FNXL; HF https://huggingface.co/datasets/soummyaah-space/FNXL. Citations: OpenAlex cited_by_count=8 for the ACL record (likely an undercount; Semantic Scholar returned HTTP 429 on three attempts). [VERIFIED]
+
+### task_summary
+Task: assign a US-GAAP XBRL tag to each numeral span in a sentence from SEC 10-K text, from an extreme label set of 2,794 tags. Input = sentence (text only; the paper states "we focus only on annotated textual data and discard annotated tables"), output = per-numeral tag, either as BIO sequence labelling or as per-numeral extreme classification. Two benchmark formulations: (a) FiNER-style BERT sequence labelling; (b) pipeline = BERT binary tagger (is this numeral taggable?) + AttentionXML extreme classifier over inputs where other numerals are masked with [MASK]/[NUM]/[SHAPE]. It does NOT cover period, unit, or table cells; it is a concept-labelling benchmark on narrative text only. [VERIFIED from PDF body]
+
+### data
+Source: "publicly available annual 10-K reports from 2019-2021 for 2,339 companies"; 160K annotated sentences found, filtered to >=50 chars, numeric-only annotations, US-GAAP labels only, some manual cleaning. Company-disjoint splits (~78:9:13), Table 1: Train 62,782 sentences / 798 companies / 111,493 data points / 2,692 labels; Dev 6,823 / 756 / 13,191 / 1,273; Test 9,483 / 794 / 18,238 / 1,374; Total 79,088 / 840 / 142,922 / 2,794 (as printed). Avg sentence 37.83 tokens (sd 20.37, max 590). Dev/test contain 40 and 69 labels unseen in train (76 and 119 numerals). Heavy tail: top-150 labels (>200 pts each) = 58.79% of data points; 1,856 labels with <20 pts = 8.34%. 100 labels overlap with FiNER-139. [VERIFIED] License: the paper has no license statement (ACL Responsible-NLP checklist B2 "license or terms for use" = "No response"); the arXiv paper itself is CC BY 4.0. The HF card data/fnxl/README.md says "License: Research-only use" and lists "Direct commercial use without explicit permission" as out-of-scope; the HF repo has no YAML license metadata and the GitHub README has no license. [VERIFIED] Availability: GitHub repo (2 stars, 5 commits) holds only train_sample.csv/dev_sample.csv/test_sample.csv/labelCount.csv and links to HF; one open, unanswered issue "Rest of the Data" (7 Mar 2024, empty body). HF dataset soummyaah-space/FNXL (1.15 GB): data/fnxl/finer/{train.csv 121MB, dev.csv 13.4MB, test.csv 18.5MB, labels.json 394kB, mask/, num/, shape/, top30/}; data/fnxl/xml/{trainXmcDf.csv 130MB, devXmcDf.csv 15.7MB, testXmcDf.csv 21.7MB, masked_sentence/, num_sentence/, shape_sentence/, unmasked_sentence/}; data/binary_tagger/{train.csv, dev.csv, test.csv, labels.json 29B}. The HF viewer auto-parses it as 1.34M/158K/219K text rows (line-level, not the 62,782/6,823/9,483 sentence counts). FLAN-FinXC's repo redistributes FNXL via Google Drive. FinLoRA/FinBen list FNXL's license as "Public". [VERIFIED]
+
+### models_and_results
+FNXL paper (Table 3, test set; Macro-F1 / Micro-F1): FiNER BERT-base no-masking 47.13 / 75.84; FiNER BERT-base [NUM] 46.16 / 75.58; FiNER BERT-base [SHAPE] 40.62 / 72.35; FiNER SEC-base no-masking 46.20 / 75.84; FiNER SEC-num [NUM] 42.74 / 74.45; FiNER SEC-shape [SHAPE] 42.93 / 74.23; AttentionXML pipeline [MASK] 46.58 / 74.14; [NUM] 46.49 / 73.8; [SHAPE] 47.54 / 74.74. Hits@k for AttentionXML pipeline [SHAPE]: Hits@1 76.76, @3 87.49, @5 89.84, @10 92.15. Top-100-frequent-label bucket: FiNER BERT-base 83.79 Macro-F1 vs AttentionXML [SHAPE] 82.62; 1000-least-frequent bucket: FiNER avg 39.17 vs AttentionXML avg 42.25. Zero-shot labels: "both FiNER and the AttentionXML pipeline are not able to perform for zero-shot scenarios". All models are BERT-base scale (~110M; FLAN-FinXC lists FiNER 109M, AttentionXML 112M). [VERIFIED] Follow-on SOTA on FNXL: FLAN-FinXC (NAACL 2024, arXiv 2405.06671) FLAN-T5-Large 780M + LoRA (0.59M trainable): 66.23% Macro-F1, 89.98% Hits@1 [VERIFIED via arXiv HTML]; XBRLTagRec (arXiv 2603.25263, Mar 2026) FLAN-T5-Large LoRA + Sentence-T5-XXL retrieval + gpt-3.5-turbo-1106 re-ranking: Hits@1 0.8618 vs 0.8354, Macro-F1 0.5050 vs 0.4616 [VERIFIED]. LLM-benchmark variants of FNXL (FinBen 318-item subset; FinLoRA 247-item subset; accuracy/F1): FinBen reports all sub-8B open models (LLaMA2-7B-chat, InternLM-7B, Falcon-7B, etc.) at 0.00 [VERIFIED]; FinLoRA Table 4 FNXL acc/F1: Llama 3.1 8B base 3.64/0.045, Llama 3.1 70B base 20.14/0.210, DeepSeek-V3 27.33/0.288, GPT-4o 42.41/0.398, Gemini 2.0 FL base 37.75/0.356, Llama 3.1 8B LoRA 8bit-r8 23.57/0.250, QLoRA 4bit-r4 23.05/0.253, DoRA 33.50/0.311, rsLoRA 35.68/0.348, Gemini 2.0 FL fine-tuned 47.98/0.438 [VERIFIED].
+
+### reports_training_cost
+partial: hardware and wall-clock only, no $. Exact quote (Appendix A.3): "We use a single Tesla P100-PCIE (16GB) GPU. AttentionXML model is trained in approximately 8 hours whereas FiNER takes approximately 10-12 hours to train." ACL checklist C1 (parameters / compute budget) = "No response". [VERIFIED from both arXiv and ACL PDFs]
+
+### reports_serving_cost
+no. The full text (arXiv and ACL PDFs) contains no inference/API cost figure; "price"/"dollar"/"$" appear only inside an example sentence ("$350.0 million") and a reference title ("stock price prediction"). [VERIFIED by keyword grep of the extracted body text]
+
+### reports_latency_or_throughput
+no. Grep of the full body for "latency", "throughput", "inference time", "seconds" returns zero hits; the only efficiency-related sentence is the training-time quote above. Tables report only Macro/Micro P/R/F1, Hits@k and frequency-bucket analyses. [VERIFIED]
+
+### small_models_evaluated
+In the FNXL paper: BERT-base (~110M) and SEC-BERT-base / SEC-num / SEC-shape (~110M) as FiNER sequence labellers; a BERT-based binary tagger plus AttentionXML (BiLSTM + label-tree attention, ~112M) as the XC pipeline. No LLMs, no frontier APIs. Follow-ons on FNXL: FLAN-T5-Large 780M (+LoRA/prefix), T5-Base 220M, T5-Large 780M, GalaXC 41M, Label-Semantics 219M (FLAN-FinXC); Llama 3.1 8B (+LoRA/QLoRA/DoRA/rsLoRA) in FinLoRA; 7B-class open models in FinBen (all 0.00 on FNXL); Qwen2 7B / Llama 3.1 8B in Open FinLLM Leaderboard. No published result for a 1-3B model on FNXL was found.
+
+### relevance_to_idea
+FNXL is correctly characterized by the project: it is a text-only, concept-tag-only (no period/unit/table) XBRL benchmark whose paper reports accuracy (Macro/Micro-F1, Hits@k) and training wall-clock on a P100, but NO inference latency, throughput, or serving $. The narrow claim "FNXL reports accuracy but not serving cost or latency" is VERIFIED. The broader claim "nobody has benchmarked small or distilled models on FinTagging/FNXL/FiNER with cost or latency" must be softened because of FinLoRA (Wang et al., arXiv 2505.19819, 2025; https://github.com/Open-Finance-Lab/FinLoRA): it evaluates Llama 3.1 8B (8-bit LoRA, 4-bit QLoRA, DoRA, rsLoRA) against GPT-4o/DeepSeek-V3/Gemini on FNXL and FiNER-139 subsets, reports fine-tuning cost in USD (Table 5: "LoRA 14.9h 4 x A5000 $15.50; QLoRA 14.1h 4 x A5000 $14.66; DoRA 15.9h 4 x A5000 $16.54; rsLoRA 14.5h 4 x A5000 $15.11; Gemini 2.0 FL 8.8h - $162.02; GPT-4o-mini - - $312.00", at "$0.26 per GPU hour"), and plots per-task inference latency (Figure 3: "Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks", y-axis "Inference Time (seconds)", tasks include FiNER and FNXL), stating "Gemini API generally exhibits lower inference latency and is less sensitive to increasing prompt lengths than local Llama 3.1 8B Instruct inference". Gaps FinLoRA leaves that the project can still own: (1) no model below 8B; (2) no per-fact/per-document serving $ or throughput (only seconds-per-query bars plus training cost); (3) no vLLM or quantized-serving variants (4-bit appears only as QLoRA training); (4) FNXL is evaluated on a 247-item LLM subset, not the 18,238-numeral test set; (5) nothing on FinTagging. Also relevant: FLAN-FinXC (NAACL 2024) reports "training time: 56 minutes/epoch, inference time: 2 minutes/sample" on "Tesla V100 32GB GPUs" for FLAN-T5-Large+LoRA, i.e. a crude latency number for a 780M model on FNXL, but no cost/throughput; XBRLTagRec (Mar 2026) mentions "computational and API costs" only qualitatively; FinBen reports only an aggregate "$51,000" / "600 hours" on 16 A100s for the whole benchmark; the FiNER-139 paper reports only "4 nvidia v100 gpus"; FinTagging reports no cost/latency at all. Recommendation: cite FNXL as the canonical extreme-label text benchmark and reuse its company-disjoint split and Macro-F1/Hits@k protocol; cite FLAN-FinXC and XBRLTagRec as current FNXL SOTA; position explicitly against FinLoRA (e.g., "first sub-8B, per-1k-facts $, vLLM-served accuracy-cost-latency frontier on FinTagging, with FNXL/FiNER as secondary"). Reuse caveat: the HF card says "Research-only use" and "Direct commercial use without explicit permission", and the release is undocumented (one open "Rest of the Data" issue), so verify the CSV contents match Table 1 before depending on it; the FinBen/FinLoRA 318/247-item FNXL subsets are not comparable to the full test set.
+
+### confidence
+high for the FNXL paper itself: abstract, venue, splits, label count, source years, model results, the single compute sentence, and the absence of latency/cost terms were all VERIFIED by fetching the arXiv abstract page, the ACL Anthology page, and extracting the full text of both the arXiv PDF and the ACL PDF (keyword grep of the body). GitHub/HF release contents, the HF README license text, and the open issue were VERIFIED by direct fetch (raw README via curl). Follow-on claims: FinLoRA Table 4/Table 5/Figure 3 text VERIFIED from the extracted arXiv PDF; FLAN-FinXC inference/training time VERIFIED from its extracted PDF; XBRLTagRec, NORA, FinTagging, FinBen, Open FinLLM Leaderboard, PIXIU VERIFIED via WebFetch of their arXiv HTML/GitHub pages (model-level numbers there are as summarized by the fetch tool, not re-checked line by line). SNIPPET-ONLY: nothing load-bearing. UNVERIFIED/unknown: Semantic Scholar citation count (API rate-limited; OpenAlex's 8 is the only fetched figure); exact row counts inside the HF CSVs vs Table 1; the FLAN-FinXC "2 minutes/sample" figure is quoted as printed but is implausible as a literal per-sample latency and may be a typo in the source.
+
+### sources
+[
+ "https://arxiv.org/abs/2306.03723",
+ "https://arxiv.org/pdf/2306.03723",
+ "https://aclanthology.org/2023.findings-acl.219/",
+ "https://aclanthology.org/2023.findings-acl.219.pdf",
+ "https://export.arxiv.org/api/query?search_query=all:%22Financial%20Numeric%20Extreme%20Labelling%22&max_results=20",
+ "https://github.com/soummyaah/FNXL",
+ "https://github.com/soummyaah/FNXL/issues/1",
+ "https://huggingface.co/datasets/soummyaah-space/FNXL",
+ "https://huggingface.co/datasets/soummyaah-space/FNXL/raw/main/data/fnxl/README.md",
+ "https://huggingface.co/datasets/soummyaah-space/FNXL/tree/main/data/fnxl/finer",
+ "https://huggingface.co/datasets/soummyaah-space/FNXL/tree/main/data/fnxl/xml",
+ "https://huggingface.co/datasets/soummyaah-space/FNXL/tree/main/data/binary_tagger",
+ "https://api.openalex.org/works?filter=title.search:Financial%20Numeric%20Extreme%20Labelling&select=id,title,publication_year,cited_by_count,doi,primary_location",
+ "https://arxiv.org/abs/2405.06671",
+ "https://arxiv.org/pdf/2405.06671",
+ "https://github.com/subhendukhatuya/FLAN-FinXC",
+ "https://www.ijcai.org/proceedings/2024/0962.pdf",
+ "https://arxiv.org/pdf/2505.19819",
+ "https://arxiv.org/html/2505.19819",
+ "https://finlora-docs.readthedocs.io/en/latest/tasks/xbrl_reporting_tasks.html",
+ "https://arxiv.org/abs/2412.11378",
+ "https://arxiv.org/abs/2603.25263",
+ "https://arxiv.org/html/2603.25263",
+ "https://arxiv.org/abs/2605.24910",
+ "https://arxiv.org/html/2605.24910",
+ "https://arxiv.org/html/2505.20650v1",
+ "https://arxiv.org/html/2402.12659",
+ "https://arxiv.org/html/2501.10963v2",
+ "https://github.com/The-FinAI/PIXIU",
+ "https://arxiv.org/pdf/2203.06482"
+]

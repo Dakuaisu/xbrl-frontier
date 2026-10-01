@@ -1,0 +1,79 @@
+### key
+flan_finxc
+
+### query_name
+flan_finxc
+
+### found
+True
+
+### title
+Parameter-Efficient Instruction Tuning of Large Language Models For Extreme Financial Numeral Labelling
+
+### authors
+Subhendu Khatuya, Rajdeep Mukherjee, Akash Ghosh, Manjunath Hegde, Koustuv Dasgupta, Niloy Ganguly, Saptarshi Ghosh, Pawan Goyal (IIT Kharagpur; Goldman Sachs Language Modeling)
+
+### venue_year
+NAACL 2024 (Proceedings of the 2024 Conference of the NAACL: HLT, Volume 1: Long Papers), pages 7391-7403, Mexico City, June 16-21 2024. arXiv v1 2024-05-03, v2 2024-05-15. Also summarized in two single-author PhD-consortium papers: IJCAI-24 Doctoral Consortium ("Parameter Efficient Instruction Tuning of LLMs for Financial Applications", pp. 8494-8495) and KDD 2024 PhD Consortium ("Exploring LLMs for Financial Numeric Labelling and Summarization", paper_24). [all VERIFIED]
+
+### identifiers
+arXiv:2405.06671 (v2); ACL Anthology 2024.naacl-long.410; DOI 10.18653/v1/2024.naacl-long.410; Semantic Scholar paperId c888a884da592fee903e68b2c383cd2da5010ad1 (citationCount 6, influentialCitationCount 1 as of 2026-10-01); code https://github.com/subhendukhatuya/FLAN-FinXC (3 stars, 1 fork, no LICENSE file, created 2024-03-29, last push 2025-07-19); arXiv license CC BY 4.0. [all VERIFIED]
+
+### task_summary
+Extreme financial numeral labelling (XFNL): given a sentence from a 10-K and a target numeral, assign the US-GAAP XBRL tag (concept name only; NOT value/period/unit extraction). Text only, sentence level, no tables (the Limitations section explicitly says tables/paragraph context are not used). Generative reformulation: FLAN-T5 is instruction-tuned to generate the XBRL tag *documentation* text for the numeral; an unsupervised Tag Matcher (Sentence-T5-XXL embeddings + cosine similarity) maps the generated text to the closest official tag documentation. Variants: T5-Base (220M) and T5-Large (780M) fine-tuned; FLAN-T5-Large (780M) full instruction tuning, with Prefix Tuning (0.13% params), with LoRA (rank 2, alpha 32, target q,v; 0.59M trainable = 0.08%). Baselines: FiNER (bert-base / sec-base), Label Semantics, GalaXC, AttentionXML pipeline, ChatGPT gpt-3.5-turbo 5-shot on 500 samples. [VERIFIED from ACL PDF text and lora_xbrl_tuning.py]
+
+### data
+Used (not released) datasets: FNXL (Sharma et al., Findings of ACL 2023): 10-K documents for 2,339 companies; 79,088 sentences, 142,922 annotated numerals, 2,794 distinct tags, heavy tail; test set contains 67 tags absent from train/val. FiNER (Loukas et al. 2022): 139 most frequent tags (>=1000 occurrences). The FLAN-FinXC repo publishes no new dataset; README links Google Drive copies of FNXL and FiNER (no license stated). Upstream FNXL: GitHub soummyaah/FNXL (no license field) -> HF soummyaah-space/FNXL (train 1.34M / val 158k / test 219k rows, no license in cardData, 37 downloads/month). FiNER-139 on HF nlpaueb/finer-139: CC-BY-SA-4.0, train 900,384 / val 112,494 / test 108,378 sentences, EDGAR 2016-2020. No FLAN-FinXC model weights on Hugging Face (HF model search for "FinXC" returns empty). [all VERIFIED]
+
+### models_and_results
+Table 2 (verbatim, FNXL M-P/M-R/M-F1/Hits@1 | FiNER M-P/M-R/M-F1/Hits@1): FiNER (bert-base) 49.17/49.71/47.13/75.34 | 72.60/81.10/76.61/81.50; AttentionXML Pipeline 50.69/48.51/47.54/76.76 | 82.15/82.30/82.22/83.25; ChatGPT (500 samples) 11.13/7.68/9.08/19.6 | 20.12/15.67/17.61/22.35; T5-Base 59.94/49.48/54.21/79.21 | 86.92/84.35/85.61/83.45; T5-Large 61.87/58.46/60.11/83.26 | 88.12/85.10/86.58/84.12; FLAN-T5-Large 66.21/65.34/65.77/86.21 | 92.10/96.35/94.17/85.89; FLAN-T5-Large with Prefix-Tuning 65.10/64.21/64.65/85.69 | 90.18/94.35/92.21/85.12; FLAN-T5-Large with LoRA 65.14/67.36/66.23/89.98 | 91.84/97.85/94.74/86.03. Zero-shot Macro-F1 58.89 on the 67 unseen FNXL tags. Ablations (FNXL): S-BERT-L12 matcher 63.11/88.13; w/o instruction prompt 56.46/76.55; w/o tag metadata 53.12/73.14. Table 7 trainable params: FiNER 109M, Label Semantics 219M, GalaXC 41M, AttentionXML 112M, T5-Base 220M, T5-Large 739M, Flan-T5-Large 780M, Flan-T5-Large w/ LoRA 0.59M. Follow-up XBRLTagRec (arXiv 2603.25263, Mar 2026) reports FLAN-FinXC at Hits@1 0.8354 / M-F1 0.4616 on an FNXL subset vs its own 0.8618 / 0.5050. [all VERIFIED]
+
+### reports_training_cost
+partial: wall-clock training time only, no $ figure. Verbatim (Sec. 7): "For all our model variants (experiments performed on Tesla V100 32GB GPUs) ... FLAN-T5-Large models were instruction-tuned for 10 epochs with a learning rate (lr) of 1e-4 (training time: 1hr 22 minutes/epoch, inference time: 2 minutes/sample); with an lr of 1e-2 with Prefix Tuning (training time: 29 minutes/epoch, inference time: 2 minutes/sample); and with an lr of 5e-4 with LoRA (training time: 56 minutes/epoch, inference time: 2 minutes/sample)." Table 8 "Comparison of training time per epoch": FINER 12 hours, Label Semantics 9 hours, GalaXC 1.2 hours, AttentionXML 4 hours, Flan-T5-Large w/ LoRA 56 minutes. [VERIFIED]
+
+### reports_serving_cost
+no. The words "latency", "throughput", "price", "dollar" do not occur anywhere in the 13-page ACL PDF; "cost" occurs 4 times only as "neither a cost-effective nor a scalable solution" (manual tagging), "training larger models is costly", and PEFT "greatly reducing the computation cost and training times". Every "$" in the paper is inside example 10-K sentences. No per-query $ cost, no API cost, no GPU-hour pricing. Same holds for the IJCAI-24 and KDD-24 consortium summaries. [VERIFIED by grep of extracted PDF text]
+
+### reports_latency_or_throughput
+partial: a single unexplained figure "inference time: 2 minutes/sample" repeated verbatim for all three FLAN-T5-Large variants (Sec. 7), with no batch size, no definition of what a "sample" is, no tokens/s, no throughput; it is not analyzed, plotted, or compared against baselines (Table 8 compares training time only). The released lora_xbrl_tuning.py evaluates with teacher-forced argmax over logits (model(**batch) then torch.argmax(outputs.logits)) rather than generate(), so the provenance of that inference figure is unclear. No latency for the Sentence-T5-XXL tag matcher. [VERIFIED]
+
+### small_models_evaluated
+T5-Base (220M), T5-Large (780M), FLAN-T5-Large (780M; full FT, Prefix Tuning, LoRA r=2) -- all sub-1B encoder-decoders. Tag matcher uses frozen Sentence-T5-XXL. No decoder-only 1-3B models, no quantized variants, no vLLM-style serving. Discrepancy: the released script sets model_name_or_path = "google/flan-t5-xl" and output dir "lora-flan-t5-xl", but its embedded print shows "all params: 738651136" (= FLAN-T5-Large) and the paper reports only Large; treat XL as unreported. [VERIFIED]
+
+### relevance_to_idea
+Strongly supports the narrow claim about this paper: FLAN-FinXC reports accuracy (Macro-F1/Hits@1), training time per epoch, and one opaque "2 minutes/sample" line, but no serving cost, no $/query, no throughput, no quantization, no accuracy-vs-cost frontier, and no latency comparison against API models (its only API baseline, gpt-3.5-turbo 5-shot, is accuracy-only). CITE it as the prior SOTA sub-1B generative approach on FNXL and FiNER (FLAN-T5-Large+LoRA 66.23 vs AttentionXML 47.54 Macro-F1). REUSE its "generate the tag documentation, then embed-match" trick (a cheap way for a small model to handle 2,794-17,388 labels) and its FNXL/FiNER splits. AVOID quoting its "2 min/sample" as a latency baseline without re-measuring. CAVEATS to the broader novelty claim found while verifying: (1) FinLoRA (Wang et al., arXiv 2505.19819, 26 May 2025; abstract: "report computational cost in terms of time and GPU memory during fine-tuning and inference stages") evaluates LoRA/QLoRA/DoRA/rsLoRA on Llama 3.1 8B on FiNER-139 and FNXL and reports fine-tuning dollars ("56.4 to 63.6 GPU hours. At an estimated rate of $0.26 per GPU hour, this translates to a cost of roughly $14.66 to $16.54" vs Gemini 2.0 FL $162.02, GPT-4o-mini $312.00) plus Figure 3 "Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks" in seconds including FiNER and FNXL -- but 8B not 1-3B, no per-query serving $, no throughput, no quantized serving, not FinTagging. (2) FinTagging (arXiv 2505.20650) zero-shot-evaluates Qwen3-0.6B/1.7B and Llama-3.2-3B but states only aggregate "Total cost is approximately 500 GPU-hours and $1,500 in API usage"; no per-model latency/cost. (3) XBRLTagRec (arXiv 2603.25263) and Noise-Robust FNE tagging (arXiv 2605.24910), the two 2026 citers, have zero hits for latency/throughput/$. Defensible claim: no prior work fine-tunes 1-3B models for XBRL tagging and reports a quantized/vLLM serving-cost-and-latency frontier against frontier APIs on FinTagging; the phrase "nobody ... on FNXL/FiNER with cost or latency" must be narrowed because FinLoRA already reports training $ and inference seconds on FNXL/FiNER for an 8B model. [all VERIFIED]
+
+### confidence
+high. VERIFIED (fetched and read): arXiv abs page (title, authors, dates, CC BY 4.0, comments), ACL Anthology page (pages, DOI), full ACL PDF text extracted locally (every quoted number/sentence grepped from it), GitHub API + raw README/Data.md/lora_xbrl_tuning.py/tag_matcher_t5_xxl.py/requirements.txt, HF API for nlpaueb/finer-139 and soummyaah-space/FNXL, HF model search "FinXC" (empty), Semantic Scholar record (6 citations) and citations list, IJCAI-24 DC PDF, KDD-24 PhD consortium PDF, FinLoRA PDF + abs, FinTagging PDF, XBRLTagRec PDF + abs, 2605.24910 abs. SNIPPET-ONLY: none load-bearing. UNVERIFIED: license terms of the Google Drive data copies; what "2 minutes/sample" actually measured. Result JSON saved to /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/flan_finxc.json
+
+### sources
+[
+ "https://arxiv.org/abs/2405.06671",
+ "https://aclanthology.org/2024.naacl-long.410/",
+ "https://aclanthology.org/2024.naacl-long.410.pdf",
+ "https://arxiv.org/pdf/2405.06671v2",
+ "https://arxiv.org/html/2405.06671v2",
+ "https://github.com/subhendukhatuya/FLAN-FinXC",
+ "https://raw.githubusercontent.com/subhendukhatuya/FLAN-FinXC/main/README.md",
+ "https://raw.githubusercontent.com/subhendukhatuya/FLAN-FinXC/main/lora_xbrl_tuning.py",
+ "https://raw.githubusercontent.com/subhendukhatuya/FLAN-FinXC/main/tag_matcher_t5_xxl.py",
+ "https://api.github.com/repos/subhendukhatuya/FLAN-FinXC",
+ "https://api.semanticscholar.org/graph/v1/paper/arXiv:2405.06671?fields=title,citationCount,influentialCitationCount,venue,year",
+ "https://api.semanticscholar.org/graph/v1/paper/arXiv:2405.06671/citations?fields=title,year,venue,externalIds&limit=50",
+ "https://www.ijcai.org/proceedings/2024/0962.pdf",
+ "https://kdd2024.kdd.org/wp-content/uploads/2024/07/paper_24.pdf",
+ "https://github.com/soummyaah/FNXL",
+ "https://huggingface.co/datasets/soummyaah-space/FNXL",
+ "https://huggingface.co/api/datasets/soummyaah-space/FNXL",
+ "https://huggingface.co/datasets/nlpaueb/finer-139",
+ "https://huggingface.co/api/datasets/nlpaueb/finer-139",
+ "https://huggingface.co/api/models?search=FinXC",
+ "https://aclanthology.org/2023.findings-acl.219/",
+ "https://arxiv.org/abs/2603.25263",
+ "https://arxiv.org/pdf/2603.25263",
+ "https://arxiv.org/abs/2605.24910",
+ "https://arxiv.org/abs/2505.19819",
+ "https://arxiv.org/pdf/2505.19819",
+ "https://arxiv.org/pdf/2505.20650",
+ "https://export.arxiv.org/api/query?search_query=all:%22FLAN-FinXC%22&max_results=20"
+]

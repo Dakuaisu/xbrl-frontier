@@ -1,0 +1,241 @@
+### key
+feas_api_pricing
+
+### topic
+API list prices, model IDs, batch/caching discounts, hosted fine-tuning availability, and version-pinning conventions for OpenAI, Anthropic, and Google as of 2026-10-01 (comparison baselines for a FinTagging accuracy/cost/latency frontier). JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/feas_api_pricing.json
+
+### facts
+[
+ {
+  "claim": "OpenAI gpt-6-astra (flagship): $10.00 input / $1.00 cached / $50.00 output per 1M tokens; batch $5 / $0.50 / $25; dateless ID only (no dated snapshot); 1.05M context; knowledge cutoff Apr 30, 2026; fine-tuning not supported; released Sep 3, 2026. Observed 2026-10-01.",
+  "evidence_url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+  "confidence": "VERIFIED",
+  "quote": "Released GPT-6 Astra, our most capable model, built for the hardest end-to-end work"
+ },
+ {
+  "claim": "OpenAI gpt-6.1-sol: $2.00 / $0.10 cached / $10.00 per 1M; cache write $2.50; batch $1.00 / $0.05 / $5.00; dateless ID; released Sep 29, 2026. gpt-6-sol: $2.00 / $0.20 / $10.00, released Sep 22, 2026. Observed 2026-10-01.",
+  "evidence_url": "https://developers.openai.com/api/docs/changelog",
+  "confidence": "VERIFIED",
+  "quote": "Released GPT-6.1 Sol (gpt-6.1-sol) for complex coding and professional work at a lower cost than GPT-6 Astra."
+ },
+ {
+  "claim": "OpenAI gpt-6-luna (cheapest current OpenAI model): $0.10 input / $0.01 cached / $0.125 cache write / $0.50 output per 1M; batch $0.05 / $0.005 / $0.25; Flex same as batch; Fast 2x; 1,050,000 context; 128K max output; knowledge cutoff May 18, 2026; fine-tuning NOT supported; batch supported; snapshot list shows only dateless 'gpt-6-luna'. Observed 2026-10-01.",
+  "evidence_url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+  "confidence": "VERIFIED",
+  "quote": "Input | $0.10 | Cached input | $0.01 | Cache writes | $0.125 | Output | $0.50"
+ },
+ {
+  "claim": "OpenAI GPT-5.6 family: gpt-5.6-sol $4.00 / $0.40 / $20.00 (promo 'at least through November 21, 2026'); gpt-5.6-terra $2.00 / $0.20 / $12.00; gpt-5.6-luna $0.20 / $0.02 / $1.20 per 1M; batch 50%; luna/terra are dateless IDs, 1.05M context, cutoff Feb 16, 2026, no fine-tuning. Observed 2026-10-01.",
+  "evidence_url": "https://developers.openai.com/api/docs/pricing",
+  "confidence": "VERIFIED",
+  "quote": "GPT-5.6 Sol's promotional pricing is available at least through November 21, 2026."
+ },
+ {
+  "claim": "OpenAI gpt-5.5: $5.00 / $0.50 / $30.00 per 1M; dated snapshot gpt-5.5-2026-04-23; 1.05M context; cutoff Dec 01, 2025; no fine-tuning. Observed 2026-10-01.",
+  "evidence_url": "https://developers.openai.com/api/docs/models/gpt-5.5",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "OpenAI GPT-5.4 family: gpt-5.4 $2.50 / $0.25 / $15.00; gpt-5.4-mini $0.75 / $0.075 / $4.50 (snapshot gpt-5.4-mini-2026-03-17); gpt-5.4-nano $0.20 / $0.02 / $1.25 (snapshot gpt-5.4-nano-2026-03-17); 400K context; cutoff Aug 31, 2025; no fine-tuning; batch supported. Observed 2026-10-01.",
+  "evidence_url": "https://developers.openai.com/api/docs/models/gpt-5.4-mini",
+  "confidence": "VERIFIED",
+  "quote": "gpt-5.4-mini | gpt-5.4-mini-2026-03-17"
+ },
+ {
+  "claim": "OpenAI GPT-5 (original): gpt-5 $1.25 / $0.125 / $10.00 (gpt-5-2025-08-07); gpt-5-mini $0.25 / $0.025 / $2.00 (gpt-5-mini-2025-08-07, model page now marks it 'Deprecated'); gpt-5-nano $0.05 / $0.005 / $0.40 (gpt-5-nano-2025-08-07); 400K context; batch gpt-5-mini $0.125/$1.00, gpt-5-nano $0.025/$0.20; fine-tuning not supported on mini/nano. Observed 2026-10-01.",
+  "evidence_url": "https://developers.openai.com/api/docs/models/gpt-5-mini",
+  "confidence": "VERIFIED",
+  "quote": "gpt-5-mini | gpt-5-mini-2025-08-07 | gpt-5-mini-2025-08-07 | Deprecated"
+ },
+ {
+  "claim": "DEPRECATION RISK: gpt-5-2025-08-07, gpt-5-mini-2025-08-07 and gpt-5-nano-2025-08-07 are removed from the API on December 11, 2026 (announced June 11, 2026); replacements gpt-5.6-sol / gpt-5.6-terra / gpt-5.6-luna.",
+  "evidence_url": "https://developers.openai.com/api/docs/deprecations",
+  "confidence": "VERIFIED",
+  "quote": "On June 11, 2026, we notified developers using older GPT-5 and o3 model snapshots of their deprecation and removal from the API on December 11, 2026."
+ },
+ {
+  "claim": "OpenAI GPT-4.1 family: gpt-4.1 $2.00 / $0.50 / $8.00 (gpt-4.1-2025-04-14); gpt-4.1-mini $0.40 / $0.10 / $1.60 (gpt-4.1-mini-2025-04-14, 1,047,576 context, cutoff Jun 01, 2024); gpt-4.1-nano $0.10 / $0.025 / $0.40 (gpt-4.1-nano-2025-04-14); batch $1/$4, $0.20/$0.80, $0.05/$0.20; all three model pages list fine-tuning 'Supported'. Observed 2026-10-01.",
+  "evidence_url": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+  "confidence": "VERIFIED",
+  "quote": "Input | $0.40 | Cached input | $0.10 | Output | $1.60"
+ },
+ {
+  "claim": "DEPRECATION RISK: gpt-4.1-nano (gpt-4.1-nano-2025-04-14) and ft-gpt-4.1-nano-2025-04-14 are shut down October 23, 2026 (announced April 22, 2026); gpt-4.1 and gpt-4.1-mini are not on that list.",
+  "evidence_url": "https://developers.openai.com/api/docs/deprecations",
+  "confidence": "VERIFIED",
+  "quote": "October 23, 2026 | gpt-4.1-nano | gpt-4.1-nano-2025-04-14 | gpt-5.6-luna ... October 23, 2026 | ft-gpt-4.1-nano-2025-04-14 | gpt-5.6-luna"
+ },
+ {
+  "claim": "OpenAI Batch API: 50% discount vs synchronous, 24-hour completion window, up to 50,000 requests / 200 MB per batch, separate rate-limit pool. Observed 2026-10-01.",
+  "evidence_url": "https://developers.openai.com/api/docs/guides/batch",
+  "confidence": "VERIFIED",
+  "quote": "50% cost discount compared to synchronous APIs ... Each batch completes within 24 hours (and often more quickly)"
+ },
+ {
+  "claim": "OpenAI prompt caching: cached-input discount 'up to 95%'; for GPT-5.6 and later, cache writes 1.25x uncached input, reads 0.1x (0.05x on GPT-6.1 Sol), minimum cacheable prefix 1,024 tokens, explicit breakpoints supported; earlier models implicit-only with model-dependent cached rate (GPT-4.1 cached = 25% of input, GPT-5 = 10%). Observed 2026-10-01.",
+  "evidence_url": "https://developers.openai.com/api/docs/guides/prompt-caching",
+  "confidence": "VERIFIED",
+  "quote": "For GPT-5.6 and later, cache writes cost 1.25× the standard, uncached input-token rate. Subsequent reads cost 0.1× that rate on most of these models and 0.05× on GPT-6.1 Sol."
+ },
+ {
+  "claim": "OpenAI pricing page also lists Flex (~50% of standard), Fast (2x standard), Ultrafast (gpt-6-astra only, $60/$300), a higher long-context tier (>272K input), and a 10% uplift for regional/data-residency endpoints on models released on or after March 5, 2026. No on-page date; observed 2026-10-01.",
+  "evidence_url": "https://developers.openai.com/api/docs/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Regional processing (data residency) endpoints are charged a 10% uplift for models released on or after March 5, 2026."
+ },
+ {
+  "claim": "OpenAI hosted fine-tuning is being WOUND DOWN: closed to new users since May 7, 2026; since July 2, 2026 closed to orgs with no FT inference in the past 60 days; on Jan 6, 2027 active customers lose job creation; fine-tuned models remain servable until their base model is deprecated. A solo engineer starting now almost certainly cannot use it.",
+  "evidence_url": "https://developers.openai.com/api/docs/deprecations",
+  "confidence": "VERIFIED",
+  "quote": "OpenAI is winding down the fine-tuning platform. The platform is no longer accessible to new users ... Jan 6, 2027 | Active existing customers will no longer be able to create new fine-tuning jobs on this date."
+ },
+ {
+  "claim": "OpenAI fine-tuning prices (existing FT users only): gpt-4.1-mini-2025-04-14 training $5.00/1M tokens, FT inference $0.80 / $0.20 cached / $3.20 (batch $0.40 / $0.10 / $1.60); gpt-4.1-nano-2025-04-14 training $1.50/1M, inference $0.20 / $0.05 / $0.80; gpt-4.1-2025-04-14 training $25/1M, inference $3.00 / $0.75 / $12.00; o4-mini RFT $100/hour. SFT base models in the guide: gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14. Caveat: raw HTML of the pricing page rendered only the o4-mini row (tabbed table); gpt-4.1 rows come from the WebFetch render of the same page.",
+  "evidence_url": "https://developers.openai.com/api/docs/pricing",
+  "confidence": "VERIFIED",
+  "quote": "gpt-4.1-mini-2025-04-14: Training $5.00 | Input $0.80 | Cached $0.20 | Output $3.20"
+ },
+ {
+  "claim": "OpenAI version-pinning convention: model pages list 'snapshots and aliases'; models through GPT-5.5 have dated snapshots (gpt-5-mini-2025-08-07, gpt-5.4-mini-2026-03-17, gpt-5.5-2026-04-23, gpt-4.1-mini-2025-04-14); GPT-5.6 and GPT-6 models list only dateless IDs (gpt-5.6-luna, gpt-6-luna, gpt-6-astra, gpt-6.1-sol), so no dated pin exists for them.",
+  "evidence_url": "https://developers.openai.com/api/docs/models/gpt-5-mini",
+  "confidence": "VERIFIED",
+  "quote": "Snapshots let you lock in a specific version of the model so that performance and behavior remain consistent. Below is a list of all available snapshots and aliases for GPT-5 Mini. | gpt-5-mini | gpt-5-mini-2025-08-07"
+ },
+ {
+  "claim": "Anthropic Claude Fable 5.1 (claude-fable-5-1; current top model): $10 / $50 per MTok; 5m cache write $12.50; 1h write $20; cache read $0.25 (0.025x); batch $5 / $25; 1M context; 128K output; launched Sep 1, 2026; retirement not sooner than Sep 1, 2027. No on-page date; observed 2026-10-01.",
+  "evidence_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Claude Fable 5.1 | $10 / MTok | $12.50 / MTok | $20 / MTok | $0.25 / MTok | $50 / MTok"
+ },
+ {
+  "claim": "Anthropic Claude Opus 5.5 (claude-opus-5-5): $4 / $20 per MTok; 5m write $5; 1h write $8; cache read $0.20 (0.05x); batch $2 / $10; 1M context; adaptive thinking cannot be disabled; launched Sep 22, 2026. Claude Opus 5 (claude-opus-5) and Opus 4.8/4.7/4.6/4.5: $5 / $25, batch $2.50 / $12.50. Observed 2026-10-01.",
+  "evidence_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Claude Opus 5.5 | $4 / MTok | $5 / MTok | $8 / MTok | $0.20 / MTok | $20 / MTok"
+ },
+ {
+  "claim": "Anthropic Claude Sonnet 5.5 (claude-sonnet-5-5): $2 / $10 per MTok; 5m write $2.50; 1h write $4; cache read $0.20; batch $1 / $5; 1M context; launched Sep 28, 2026. Claude Sonnet 5 (claude-sonnet-5) also $2 / $10 (introductory price made permanent Aug 10, 2026). Claude Sonnet 4.6 (claude-sonnet-4-6) $3 / $15, batch $1.50 / $7.50. Observed 2026-10-01.",
+  "evidence_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "confidence": "VERIFIED",
+  "quote": "The $2/$10 per million input/output token pricing for Claude Sonnet 5, announced at launch as introductory pricing through August 31, 2026, is now the standard price."
+ },
+ {
+  "claim": "Anthropic Claude Haiku 4.5 (cheapest current Claude; API ID claude-haiku-4-5-20251001, alias claude-haiku-4-5, Bedrock anthropic.claude-haiku-4-5, Vertex claude-haiku-4-5@20251001): $1 / $5 per MTok; 5m cache write $1.25; 1h write $2; cache read $0.10; batch $0.50 / $2.50; 200K context; 64K max output; min cacheable prompt 4,096 tokens; retirement 'Not sooner than October 15, 2026' and no newer Haiku exists as of 2026-10-01.",
+  "evidence_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Claude Haiku 4.5 | $1 / MTok | $1.25 / MTok | $2 / MTok | $0.10 / MTok | $5 / MTok ... claude-haiku-4-5-20251001 | Active | N/A | Not sooner than October 15, 2026"
+ },
+ {
+  "claim": "Anthropic Claude Sonnet 4.5 (claude-sonnet-4-5-20250929, $3 / $15) was deprecated September 30, 2026 with retirement November 30, 2026; Opus 4.1, Opus 4, Sonnet 4, Haiku 3.5 and Haiku 3 are already retired on the Claude API.",
+  "evidence_url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+  "confidence": "VERIFIED",
+  "quote": "On September 30, 2026, Anthropic notified developers using Claude Sonnet 4.5 of its upcoming retirement on the Claude API. | November 30, 2026 | claude-sonnet-4-5-20250929 | claude-sonnet-5-5"
+ },
+ {
+  "claim": "Anthropic Message Batches API: 50% discount on input and output; most batches finish in under 1 hour; batch and prompt-caching discounts stack. Observed 2026-10-01.",
+  "evidence_url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+  "confidence": "VERIFIED",
+  "quote": "with most batches finishing in less than 1 hour while reducing costs by 50% and increasing throughput"
+ },
+ {
+  "claim": "Anthropic prompt caching: 5-minute cache write 1.25x base input; 1-hour write 2x; cache read 0.1x (0.025x Fable 5.1 / Mythos 5.1; 0.05x Opus 5.5). Minimum cacheable prompt 512 tokens (Fable 5.1, Opus 5.5, Opus 5, Sonnet 5.5, Fable 5), 1,024 (Opus 4.8, Sonnet 5, Sonnet 4.6, Sonnet 4.5), 4,096 (Haiku 4.5). Observed 2026-10-01.",
+  "evidence_url": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+  "confidence": "VERIFIED",
+  "quote": "5-minute cache write | 1.25x base input price ... 1-hour cache write | 2x base input price ... Cache read (hit) | 0.1x base input price (0.025x on Claude Fable 5.1 and Claude Mythos 5.1; 0.05x on Claude Opus 5.5)"
+ },
+ {
+  "claim": "Anthropic version-pinning: every Claude model ID is a pinned snapshot. Pre-4.6 models carry a date (claude-haiku-4-5-20251001, claude-sonnet-4-5-20250929) with aliases (claude-haiku-4-5) resolving to the newest dated snapshot; from 4.6 on, the dateless ID (claude-sonnet-5-5, claude-opus-5-5, claude-fable-5-1) IS the pinned snapshot and weights never change under an existing ID. Anthropic gives at least 60 days' notice before retiring a public model.",
+  "evidence_url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+  "confidence": "VERIFIED",
+  "quote": "For the 4.6 generation and later, the dateless ID is the canonical model ID for that release. It maps to a single, fixed model snapshot. Anthropic does not update the weights or configuration of an existing model ID."
+ },
+ {
+  "claim": "Anthropic tokenizer caveat: Claude 4.7 and later (Opus 5/5.5, Sonnet 5/5.5, Fable 5/5.1) produce ~30% more tokens for the same text than Sonnet 4.6 / Haiku 4.5 and earlier, so per-token prices are not directly comparable across generations; US-only inference (inference_geo 'us') is a 1.1x multiplier on 4.6+ models.",
+  "evidence_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "confidence": "VERIFIED",
+  "quote": "This tokenizer produces approximately 30% more tokens for the same text. The exact increase depends on the content and workload shape. Claude Sonnet 4.6 and earlier models use the previous tokenizer."
+ },
+ {
+  "claim": "Anthropic offers NO first-party fine-tuning on the Claude API (no fine-tuning product or price on the pricing, models, or deprecations pages). The only hosted Claude fine-tuning is Amazon Bedrock's, limited to Claude 3 Haiku (anthropic.claude-3-haiku-20240307-v1:0:200k, us-west-2 only), a model retired on the Claude API April 20, 2026 (Bedrock GA Nov 1, 2024). Bedrock Claude customization prices are JS-rendered and could not be read.",
+  "evidence_url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-model-fine-tuning.html",
+  "confidence": "VERIFIED",
+  "quote": "| Anthropic | Claude 3 Haiku | anthropic.claude-3-haiku-20240307-v1:0:200k | us-west-2 |"
+ },
+ {
+  "claim": "Google Gemini 3.8 Flash (gemini-3.8-flash; flagship Flash, GA Sep 2, 2026): $0.75 input / $3.75 output (incl. thinking) per 1M through December 31, 2026, then $1.50 / $7.50 from January 1, 2027; batch $0.375 / $1.875 (then $0.75 / $3.75); caching $0.075 (then $0.15) plus $0.50/1M tokens/hour storage (then $1.00). Gemini 3.7 Flash and 3.6 Flash carry identical introductory pricing. Page 'Last updated 2026-10-01 UTC'.",
+  "evidence_url": "https://ai.google.dev/gemini-api/docs/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Input price | Free of charge | $0.75 through December 31, 2026. | $1.50 starting January 1, 2027. | Output price (including thinking tokens) | Free of charge | $3.75 through December 31, 2026. | $7.50 starting January 1, 2027."
+ },
+ {
+  "claim": "Google Gemini 3.5 Flash (gemini-3.5-flash): $1.50 / $9.00 per 1M, batch $0.75 / $4.50, caching $0.15. Gemini 3.5 Flash-Lite (gemini-3.5-flash-lite, GA Jul 21, 2026): $0.30 / $2.50, batch $0.15 / $1.25, caching $0.03. Gemini 3.1 Flash-Lite (gemini-3.1-flash-lite): $0.25 / $1.50, batch $0.125 / $0.75, caching $0.025. Gemini 3 Flash Preview (gemini-3-flash-preview, 'legacy'): $0.50 / $3.00. Observed 2026-10-01.",
+  "evidence_url": "https://ai.google.dev/gemini-api/docs/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Gemini 3.5 Flash-Lite | gemini-3.5-flash-lite ... Input price | Free of charge | $0.30 (text / image / video / audio) | Output price (including thinking tokens) | Free of charge | $2.50"
+ },
+ {
+  "claim": "Google Gemini 3.1 Pro Preview (gemini-3.1-pro-preview; the only current Pro-tier model, still 'preview'; gemini-3-pro-preview is shut down): $2.00 / $12.00 for prompts <=200k tokens, $4.00 / $18.00 for >200k; batch $1.00 / $6.00 and $2.00 / $9.00; caching $0.20 / $0.40 plus $4.50/1M tokens/hour storage. Observed 2026-10-01.",
+  "evidence_url": "https://ai.google.dev/gemini-api/docs/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Gemini 3.1 Pro Preview | gemini-3.1-pro-preview ... $2.00, prompts [<= 200k] | $4.00, prompts > 200k tokens | Output price (including thinking tokens) | Not available | $12.00, prompts [<= 200k] | $18.00, prompts > 200k"
+ },
+ {
+  "claim": "Google Gemini 2.5 (legacy): gemini-2.5-pro $1.25 / $10.00 (<=200k), $2.50 / $15.00 (>200k), batch $0.625 / $5.00; gemini-2.5-flash $0.30 / $2.50, batch $0.15 / $1.25, caching $0.03; gemini-2.5-flash-lite $0.10 / $0.40, batch $0.05 / $0.20, caching $0.01. Vertex AI lists the same $0.30 / $2.50 for 2.5 Flash. Observed 2026-10-01.",
+  "evidence_url": "https://ai.google.dev/gemini-api/docs/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Gemini 2.5 Flash-Lite | gemini-2.5-flash-lite ... $0.10 (text / image / video) | $0.30 (audio) | Output price (including thinking tokens) | Free of charge | $0.40"
+ },
+ {
+  "claim": "ACCESS RISK: since September 18, 2026 Google limits Gemini 2.5 models to users who have actively used them before; new projects are told to use 3.5 Flash-Lite or 3.8 Flash. A new account may be unable to call gemini-2.5-flash-lite / 2.5 Flash / 2.5 Pro.",
+  "evidence_url": "https://ai.google.dev/gemini-api/docs/models",
+  "confidence": "VERIFIED",
+  "quote": "To ensure reliable performance for everyone, we are limiting access to the 2.5 models to users who have actively used them in the past. These models are not deprecated and will continue to be served until further notice through the API. For any new projects, use our latest models: 3.5 Flash-Lite or 3.8 Flash."
+ },
+ {
+  "claim": "Google Gemini Batch API: 50% of standard cost, 24-hour target turnaround (paid tier). Observed 2026-10-01.",
+  "evidence_url": "https://ai.google.dev/gemini-api/docs/batch-mode",
+  "confidence": "VERIFIED",
+  "quote": "The Gemini Batch API is designed to process large volumes of requests asynchronously at 50% of the standard cost. ... The target turnaround time is 24 hours, but in majority of cases, it is much quicker."
+ },
+ {
+  "claim": "Google context caching: implicit caching is on by default for Gemini 2.5+ and savings are passed automatically; the per-model caching price on the pricing page is 10% of input for every text model checked (2.5 Flash $0.03 vs $0.30; 3.5 Flash-Lite $0.03 vs $0.30; 3.8 Flash $0.075 vs $0.75) plus hourly storage for explicit caches; minimum 4,096 tokens for 3.x models, 2,048 for 2.5 Flash/Pro. The caching doc states no percentage; 90% is derived from the pricing table. Caching page 'Last updated 2026-09-02 UTC'.",
+  "evidence_url": "https://ai.google.dev/gemini-api/docs/caching",
+  "confidence": "VERIFIED",
+  "quote": "We automatically pass on cost savings if your request hits caches. There is nothing you need to do in order to enable this. ... Gemini 3.8 Flash | 4,096 ... Gemini 2.5 Flash | 2,048"
+ },
+ {
+  "claim": "Google version-pinning (Gemini API): strings are 'stable' (gemini-3.6-flash; usually don't change), 'preview' (dated, e.g., gemini-2.5-flash-preview-09-2025; deprecated with >=2 weeks notice), 'latest' (gemini-flash-latest; hot-swapped on every release with 2-week notice for breaking changes), or 'experimental'. Current text models expose no dated stable IDs, so the stable string is the pin; preview models like gemini-3.1-pro-preview can be retired on 2 weeks' notice.",
+  "evidence_url": "https://ai.google.dev/gemini-api/docs/models",
+  "confidence": "VERIFIED",
+  "quote": "Stable | Points to a specific stable model. Stable models usually don't change. Most production apps should use a specific stable model. ... Preview models ... will be deprecated with at least 2 weeks notice. ... This alias will get hot-swapped with every new release of a specific model variation."
+ },
+ {
+  "claim": "Fine-tuning is NOT available in the Gemini Developer API / AI Studio (ended with the May 2025 deprecation of Gemini 1.5 Flash-001); Google points to Vertex AI / Gemini Enterprise Agent Platform.",
+  "evidence_url": "https://ai.google.dev/gemini-api/docs/model-tuning",
+  "confidence": "VERIFIED",
+  "quote": "With the deprecation of Gemini 1.5 Flash-001 in May 2025, we no longer have a model available which supports fine-tuning in the Gemini API or AI Studio"
+ },
+ {
+  "claim": "Vertex AI supervised fine-tuning IS available for Gemini 3.5 Flash, 3.1 Flash-Lite, 2.5 Pro, 2.5 Flash-Lite and 2.5 Flash (not 3.8/3.7/3.6 Flash or 3.1 Pro). Training price per 1,000 training tokens x epochs: 3.5 Flash $0.01 (= $10/1M; SFT and RL), 3.1 Flash Lite $0.003 (= $3/1M), 2.5 Pro $0.025 (= $25/1M), 2.5 Flash $0.005 (= $5/1M; SFT and preference tuning), 2.5 Flash Lite $0.0015 (= $1.50/1M). Jobs run in us-central1 / europe-west4; tuned 3.5 Flash serves only on 'us'/'eu' multi-region endpoints; Google recommends thinking budget 0 / MINIMAL for tuned tasks. Gemma 3 1B / 4B SFT on Vertex: $0.47 / $1.14 per 1M tokens. SFT doc 'Last updated 2026-10-01 UTC'; pricing page undated.",
+  "evidence_url": "https://cloud.google.com/vertex-ai/generative-ai/pricing",
+  "confidence": "VERIFIED",
+  "quote": "Gemini 3.5 Flash | Supervised fine-tuning | Reinforcement Learning fine-tuning | $0.01 / 1,000 count | Gemini 3.1 Flash Lite | Supervised fine-tuning | $0.003 / 1,000 count | Gemini 2.5 Pro | Supervised fine-tuning | $0.025 / 1,000 count | Gemini 2.5 Flash | Supervised fine-tuning | Preference tuning | $0.005 / 1,000 count | Gemini 2.5 Flash Lite | Supervised fine-tuning | Preference tuning | $0.0015 / 1,000 count"
+ },
+ {
+  "claim": "Tuned-model inference price on Vertex differs by generation: the Gemini 3 section says tuned endpoints cost 1.5x the base model (tuned 3.5 Flash ~ $2.25 / $13.50; tuned 3.1 Flash-Lite ~ $0.375 / $2.25), while the Gemini 2.5 (and 2.0/1.5) sections say tuned endpoints have the same price as the base model (tuned 2.5 Flash $0.30 / $2.50; tuned 2.5 Flash-Lite $0.10 / $0.40). Non-global Vertex endpoints for Gemini 3+ cost 10% more from July 1, 2026.",
+  "evidence_url": "https://cloud.google.com/vertex-ai/generative-ai/pricing",
+  "confidence": "VERIFIED",
+  "quote": "* Tuned model endpoint will be 1.5 times of the base model. [Gemini 3 section] ... * Tuned model endpoint has the same prediction price as the base model. [Gemini 2.5 section]"
+ },
+ {
+  "claim": "Cross-provider summary of cheapest list prices (standard, input/output per 1M, 2026-10-01): OpenAI gpt-6-luna $0.10/$0.50, gpt-5-nano $0.05/$0.40 (dies Dec 11, 2026); Google gemini-2.5-flash-lite $0.10/$0.40 (access-restricted), gemini-3.1-flash-lite $0.25/$1.50; Anthropic claude-haiku-4-5-20251001 $1/$5. Mid-tier: gpt-5.6-terra $2/$12, claude-sonnet-5-5 $2/$10, gemini-3.8-flash $0.75/$3.75 (promo). Frontier: gpt-6-astra $10/$50, claude-fable-5-1 $10/$50, claude-opus-5-5 $4/$20, gemini-3.1-pro-preview $2/$12. All three providers give 50% off via batch and ~90% off cache reads.",
+  "evidence_url": "https://developers.openai.com/api/docs/pricing",
+  "confidence": "VERIFIED"
+ }
+]
+
+### unknowns
+1) Amazon Bedrock prices for Claude 3 Haiku customization (train per 1K tokens, monthly storage, provisioned-throughput hourly) are JS-rendered and could not be read. 2) The OpenAI pricing page has no on-page date and its 'All models' and fine-tuning tables are tabbed: the gpt-4.1-family fine-tuning rows came from the WebFetch render only (base-model prices were cross-checked against individual model pages; FT prices were not). 3) The Vertex AI pricing page has no 'Last updated' date. 4) Whether this engineer's accounts qualify for OpenAI fine-tuning (closed to new users since May 7, 2026) or for Gemini 2.5 access (restricted since Sep 18, 2026) cannot be determined from public pages. 5) No dated snapshot exists for GPT-5.6/GPT-6 or for Gemini stable IDs, so exact pinning there must rely on run dates plus provider changelogs. 6) Gemini 3.8 Flash promo pricing ends Dec 31, 2026 and gpt-5.6-sol promo is guaranteed only through Nov 21, 2026, so measured costs may not hold at publication. 7) WebSearch budget was already exhausted (200/200) when this agent started, so discovery relied entirely on direct fetches of official provider pages; no Semantic Scholar / arXiv queries were run (not relevant to a pricing label).
+
+### notes
+Feasibility implications: (a) a hosted fine-tuned small-model baseline is realistically available only via Vertex AI (Gemini 2.5 Flash-Lite at $1.50/1M training tokens with base-price inference, or Gemini 3.1 Flash-Lite at $3/1M training with 1.5x inference) because OpenAI fine-tuning is closed to new users and Anthropic has none (Bedrock Claude 3 Haiku only); (b) several natural baselines have hard dates inside a typical project window: gpt-5-mini/nano shut down 2026-12-11, gpt-4.1-nano 2026-10-23, claude-sonnet-4-5 2026-11-30, claude-haiku-4-5 eligible for deprecation from 2026-10-15, and Gemini 2.5 models are access-restricted; (c) recommended pins: gpt-5.4-mini-2026-03-17, gpt-5.5-2026-04-23, gpt-6-luna (dateless), claude-haiku-4-5-20251001, claude-sonnet-5-5, claude-opus-5-5, gemini-3.8-flash, gemini-3.5-flash-lite, gemini-3.1-pro-preview; (d) all three providers bill thinking/reasoning tokens as output, and Anthropic's post-4.7 tokenizer inflates counts ~30%, so cost comparisons must be reported in dollars per document, not per token. Full JSON with secondary URLs saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/feas_api_pricing.json; raw downloaded page text is in the same directory (gemini_pricing.txt, openai_pricing.txt, openai_deprecations.txt, vertex_pricing.txt, vertex_sft.txt, oai_caching.txt, gemini_models.txt, gemini_caching.txt, bedrock_pricing.txt).

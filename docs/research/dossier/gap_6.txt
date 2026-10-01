@@ -1,0 +1,120 @@
+### key
+gap_6
+
+### question
+Is the public FNXL release (HF soummyaah-space/FNXL: train.csv 121 MB, dev 13 MB, test 18.5 MB) the FULL dataset matching Table 1 (62,782/6,823/9,483 sentences), or the 'partial' subset that XBRLTagRec says is the only public version? The fnxl agent treats HF as full; XBRLTagRec and FLAN-FinXC say only a partial subset (Google Drive) is public; the HF viewer shows line-based row counts.
+
+### topic
+gap_6: Is the public HF FNXL release the full dataset (Table 1: 62,782/6,823/9,483 sentences) or the 'partial' subset XBRLTagRec describes? Also license implications.
+
+### facts
+[
+ {
+  "claim": "FNXL paper Table 1 (arXiv 2306.03723): Train 62,782 sentences / 798 companies / 111,493 data points / 2,692 labels; Dev 6,823 / 756 / 13,191 / 1,273; Test 9,483 / 794 / 18,238 / 1,374; Total 79,088 / 840 / 142,922 / 2,794. A 'data point' is one numeral tagged with a US-GAAP metric.",
+  "evidence_url": "https://arxiv.org/pdf/2306.03723",
+  "confidence": "VERIFIED",
+  "quote": "# sentences # companies # data points # labels | Train 62,782 798 111,493 2,692 | Dev 6,823 756 13,191 1,273 | Test 9,483 794 18,238 1,374 | Total 79,088 840 142,922 2,794 | Table 1: Train-test-dev division of datapoints. A datapoint is a numeral tagged with US-GAAP metrics, multiple datapoints may occur in a single sentence."
+ },
+ {
+  "claim": "The HF release IS the full dataset at sentence level: data/fnxl/finer/{train,dev,test}.csv (120,834,474 / 13,389,088 / 18,538,730 bytes) parsed with Python's csv module contain exactly 62,782 / 6,823 / 9,483 rows, every row a unique sentence, with 798 / 756 / 794 unique companies, all docType 10-K, years 2019-2021. These match Table 1's sentence and company columns cell-for-cell. (Raw `wc -l` gives 63,126 / 6,884 / 9,522 because 39/5/4 sentences contain embedded newlines, which is why line-based counts look off.)",
+  "evidence_url": "https://huggingface.co/datasets/soummyaah-space/FNXL/resolve/main/data/fnxl/finer/test.csv",
+  "confidence": "VERIFIED",
+  "quote": "train {rows: 62782, unique_sentences: 62782, unique_companies: 798, unique_fileName: 1387}; dev {rows: 6823, unique_sentences: 6823, unique_companies: 756}; test {rows: 9483, unique_sentences: 9483, unique_companies: 794} (csv-module counts of the downloaded files)"
+ },
+ {
+  "claim": "The HF release is also the full dataset at numeral level: data/fnxl/xml/{train,dev,test}XmcDf.csv contain exactly 111,493 / 13,191 / 18,238 rows (one numeral per row), with 2,692 / 1,273 / 1,374 unique labels and 798 / 756 / 794 unique companies, i.e. an exact cell-for-cell match to Table 1's data-point and label columns. This is the paper's 'second format' for Extreme Classification.",
+  "evidence_url": "https://huggingface.co/datasets/soummyaah-space/FNXL/resolve/main/data/fnxl/xml/testXmcDf.csv",
+  "confidence": "VERIFIED",
+  "quote": "trainXmcDf {rows: 111493, unique_labels: 2692, unique_companies: 798}; devXmcDf {rows: 13191, unique_labels: 1273, unique_companies: 756}; testXmcDf {rows: 18238, unique_labels: 1374, unique_companies: 794}. Paper Appendix A.1: 'We release two formats of the FNXL dataset ... The second format contains a sentence and one of its corresponding numerical and its label ... we treat one numerical in a sentence as a single data point.'"
+ },
+ {
+  "claim": "The HF dataset-viewer row counts (train 1,337,916 / validation 158,292 / test 218,856; total 1,715,064) are an artifact of HF's automatic parquet conversion, not dataset rows: the converted config has a single string column named `text`, and its first rows are bare label strings (e.g. 'us-gaap:LossContingencyDamagesAwardedValue'), i.e. the converter ingested the repo's line-based .txt/.json files. These numbers should not be used to judge completeness.",
+  "evidence_url": "https://datasets-server.huggingface.co/first-rows?dataset=soummyaah-space/FNXL&config=default&split=train",
+  "confidence": "VERIFIED",
+  "quote": "features: [{'name': 'text', 'type': {'dtype': 'string'}}]; first rows: {'text': 'us-gaap:LossContingencyDamagesAwardedValue'}, {'text': 'us-gaap:ContractWithCustomerLiabilityCurrent'} ... ; size endpoint: train 1337916, validation 158292, test 218856"
+ },
+ {
+  "claim": "Timeline: the HF repo soummyaah-space/FNXL was created 2023-06-13 and the full data files were committed the same day ('Added data files', 'Added all XML, finer format files. Also added binary tagger'); the dataset card README was only created 2025-08-09. Whether the repo was publicly visible/discoverable before 2025 cannot be determined from the API.",
+  "evidence_url": "https://huggingface.co/api/datasets/soummyaah-space/FNXL/commits/main",
+  "confidence": "VERIFIED",
+  "quote": "2025-08-09 Create README.md | 2023-06-13 Resolved conflicts | 2023-06-13 Added all XML, finer format files. Also added binary tagger | 2023-06-13 Added data files | 2023-06-13 initial commit (createdAt 2023-06-13T12:44:40Z)"
+ },
+ {
+  "claim": "The GitHub repo soummyaah/FNXL (the 'Github Link' footnote in the paper) only ever hosted ~1,000-row samples (train_sample.csv 1,001 lines, dev_sample.csv 989, test_sample.csv 996; commit 'Added 1000 samples for all' on 2023-03-25) plus labelCount.csv (2,799 label rows). Its README was changed on 2025-12-04 to a single line pointing to the HF dataset. The repo has no LICENSE file (GitHub API license: null). This explains why 2024-2026 papers believed the full set was unpublished.",
+  "evidence_url": "https://github.com/soummyaah/FNXL",
+  "confidence": "VERIFIED",
+  "quote": "README.md (raw, after 2025-12-04 commit 'Update README.md'): '# FNXL  Dataset available here: [hugginface](https://huggingface.co/datasets/soummyaah-space/FNXL)'. Commits: 2023-03-25 'Added 1000 samples for all'; 2023-03-24 'Added more data samples'; 2023-03-17 'Files added'."
+ },
+ {
+  "claim": "GitHub issue #1 'Rest of the data' was opened 2024-03-07 by user jocapello with an empty body; it has 0 comments and is still open (as of 2026-10-01). The maintainers never answered there; the de-facto answer is the Dec-2025 README edit pointing to HF.",
+  "evidence_url": "https://github.com/soummyaah/FNXL/issues/1",
+  "confidence": "VERIFIED",
+  "quote": "GitHub API: number 1, title 'Rest of the data', state open, created_at 2024-03-07T21:36:57Z, user jocapello, comments 0, body None"
+ },
+ {
+  "claim": "The FLAN-FinXC GitHub README links a Google Drive folder titled 'FNXL' (id 1ZpZbE4Rf5wgPO9d5prjqiQusk3y1Nmht) containing data-20240404T132603Z-001.zip (25.7 MB). Its members 'FNXL data/train.csv', 'dev.csv', 'test.csv' are 120,834,474 / 13,389,088 / 18,538,730 bytes, byte-for-byte the same sizes as the HF finer CSVs, with the same columns and 62,782 / 6,823 / 9,483 rows; it also holds labels.json (394,247 B, identical size to HF), allLabelCount.csv (2,793 label rows) and test.xlsx. So the FLAN-FinXC authors' own release is the full three-split dataset, not a subset.",
+  "evidence_url": "https://github.com/subhendukhatuya/FLAN-FinXC",
+  "confidence": "VERIFIED",
+  "quote": "README: 'Download FNXL data from here [https://drive.google.com/drive/folders/1ZpZbE4Rf5wgPO9d5prjqiQusk3y1Nmht?usp=sharing]'. Zip listing: FNXL data/labels.json 394247; FNXL data/allLabelCount.csv 186732; FNXL data/test.xlsx 3022787; FNXL data/dev.csv 13389088; FNXL data/train.csv 120834474; FNXL data/test.csv 18538730; parsed rows train 62782 / dev 6823 / test 9483"
+ },
+ {
+  "claim": "The Drive folder XBRLTagRec actually uses (id 1a022npRv7zVOtGxUxAbgocYrarA4PzuW, titled 'FLAN-FinXC-Data', one file Data.zip 35.2 MB dated 29 Mar 2024) contains only consolidated_xbrl_train.csv (128,238 rows) and consolidated_xbrl_test.csv (19,008 rows) in FLAN-FinXC's instruction format; there is NO dev/validation file. Row accounting: train = 111,493 rows with a real GT_Tag + 16,745 rows tagged 'Others'; test = 18,238 real + 770 'Others'. The 111,493 and 18,238 figures equal Table 1's train/test data points exactly. All 62,767 distinct tagged train sentences are in the HF train split and the 9,483 distinct tagged test sentences are exactly the HF test split (0 sentences outside HF). Hence the so-called 'partial' dataset is the full FNXL train and test sets (minus dev, plus 'Others' negatives), and any Macro-F1 computed on its 18,238 tagged test numerals is on the same test set as FLAN-FinXC's.",
+  "evidence_url": "https://drive.google.com/drive/folders/1a022npRv7zVOtGxUxAbgocYrarA4PzuW",
+  "confidence": "VERIFIED",
+  "quote": "consolidated_xbrl_test.csv {rows_Others: 770, rows_tagged: 18238, unique_tagged_sentences: 9483, tagged_sentences_in_HF_test: 9483, tagged_sentences_not_in_HF_any: 0, unique_GT_Tag: 1375 (1,374 + 'Others')}; consolidated_xbrl_train.csv {rows_Others: 16745, rows_tagged: 111493, unique_tagged_sentences: 62767, tagged_sentences_in_HF_train: 62767, tagged_sentences_not_in_HF_any: 0, unique_GT_Tag: 2693 (2,692 + 'Others')}"
+ },
+ {
+  "claim": "XBRLTagRec (arXiv 2603.25263, Hu et al., Yunnan University, 2026) explicitly states the full FNXL set is not public and that it uses a 'partial' set from Khatuya et al. This statement is contradicted by the files: the data it links is the full train/test (see above), and the full three-split data has been on HF since June 2023. XBRLTagRec's README cites only the Drive link.",
+  "evidence_url": "https://arxiv.org/pdf/2603.25263",
+  "confidence": "VERIFIED",
+  "quote": "Since the full FNXL dataset [5] is not publicly available, we conduct experiments on the partial FNXL dataset released by Khatuya et al. [8]. This subset is derived from the same original dataset and represents the publicly accessible portion used in our experiments."
+ },
+ {
+  "claim": "The FLAN-FinXC paper (arXiv 2405.06671, NAACL 2024) does NOT say a partial subset is public: the words 'partial' and 'subset' do not occur in the PDF text (0 matches), it reports the full-dataset statistics, and says its data/code are public on GitHub. The premise 'FLAN-FinXC says only a partial subset is public' is therefore unsupported; only XBRLTagRec makes that claim.",
+  "evidence_url": "https://arxiv.org/pdf/2405.06671",
+  "confidence": "VERIFIED",
+  "quote": "FNXL dataset contains a total of 79,088 sentences containing 142,922 annotated numerals, with a tag set of 2,794 distinct tags that follows a heavy tail distribution. Further, the test set contains 67 XBRL tags that are not part of the train or validation sets. ... Our dataset and codes are publicly available at https://github.com/subhendukhatuya/FLAN-FinXC."
+ },
+ {
+  "claim": "FLAN-FinXC's headline FNXL numbers (Table 2): FLAN-T5-Large with LoRA Macro-P 65.14, Macro-R 67.36, Macro-F1 66.23, Hits@1 89.98; FLAN-T5-Large (full instruction tuning) 65.77 / 86.21; T5-Large 60.11 / 83.26. Baseline ChatGPT (gpt-3.5-turbo, 500 samples) Macro-F1 9.08.",
+  "evidence_url": "https://arxiv.org/pdf/2405.06671",
+  "confidence": "VERIFIED",
+  "quote": "FLAN-T5-Large with LORA 65.14 67.36 66.23 89.98 91.84 97.85 94.74 86.03 | Table 2: Performance evaluation based on Macro & Hits@1 metrics for FNXL dataset and FINER dataset."
+ },
+ {
+  "claim": "XBRLTagRec Table I reports FLAN-FinXC (re-run) at Hits@1 0.8354 / M-P 0.4724 / M-R 0.4881 / M-F1 0.4616 and XBRLTagRec (1-8 iters, ChatGPT-3.5 re-ranker) at 0.8618 / 0.5171 / 0.5323 / 0.5050; with GPT-4 as re-ranker (1-2 iters) 0.8730 / 0.4998. Because the test data are the same 18,238 tagged numerals (plus possibly the 770 'Others' rows), the ~20-point Macro-F1 gap between FLAN-FinXC's own 66.23 and XBRLTagRec's reproduction 46.16 is a reproduction/evaluation-protocol difference, not a 'subset vs full' difference. The paper offers no explanation for the gap.",
+  "evidence_url": "https://arxiv.org/pdf/2603.25263",
+  "confidence": "VERIFIED",
+  "quote": "FLAN-FinXC 0.8354 0.4724 0.4881 0.4616 | XBRLTagRec(1-2 iters) 0.8526 0.4936 0.5018 0.4777 | XBRLTagRec(1-8 iters) 0.8618 0.5171 0.5323 0.5050 ... Relative to the strongest baseline, FLAN-FinXC, Hits@1, M-P, M-R, and M-F1 improve by 2.64%, 4.47%, 4.42%, and 4.34%, respectively."
+ },
+ {
+  "claim": "License: the HF sub-card data/fnxl/README.md states 'License: Research-only use' and lists 'Direct commercial use without explicit permission' as out-of-scope; the top-level HF README YAML has no `license:` field (HF API cardData: null; viewer reports 'empty or missing yaml metadata'); the GitHub repo has no license; the paper's Ethics Statement says users may be asked for a research-only self-declaration. The arXiv page shows CC BY 4.0, but that covers the paper, not the data. Redistribution of derived training data is therefore not clearly permitted and should be treated as research-only / ask-the-authors.",
+  "evidence_url": "https://huggingface.co/datasets/soummyaah-space/FNXL/resolve/main/data/fnxl/README.md",
+  "confidence": "VERIFIED",
+  "quote": "- **License:** Research-only use ... The dataset is **not** intended for: ... Direct commercial use without explicit permission. Paper Ethics Statement: 'our dataset and codes are publicly available. Our labels are derived from public/open domain. Still, we may ask users, intending to access our data, to provide a self declaration that the data is to be used solely for research purposes.'"
+ },
+ {
+  "claim": "Minor data-quality caveats in the HF finer format: parsing the `numerals-tags` dicts yields 114,729 / 13,697 / 18,886 numeral entries and 2,695 / 1,285 / 1,389 labels (union 2,799 labels, matching GitHub labelCount.csv's 2,799 rows), slightly above Table 1's 111,493 / 13,191 / 18,238 and 2,692 / 1,273 / 1,374; the xml format matches Table 1 exactly, so use xml/*XmcDf.csv for paper-comparable numeral-level evaluation. Also, the HF top-level README is mis-titled 'Dataset Card for FiNER-139' (copy-paste error) although it describes FNXL.",
+  "evidence_url": "https://huggingface.co/datasets/soummyaah-space/FNXL/resolve/main/README.md",
+  "confidence": "VERIFIED",
+  "quote": "# Dataset Card for FiNER-139  Dataset published in paper \"Financial Numeric Extreme Labelling: A Dataset and Benchmarking for XBRL Tagging\""
+ },
+ {
+  "claim": "Neither FLAN-FinXC nor XBRLTagRec reports serving latency or dollar cost on FNXL: FLAN-FinXC gives only hardware ('Tesla V100 32GB GPUs') and coarse timings ('training time: 56 minutes/epoch, inference time: 2 minutes/sample' for LoRA; the word 'latency' has 0 matches); XBRLTagRec has 0 matches for 'latency' and 'inference time' and mentions 'computational cost' only qualitatively when choosing iteration count/group size. This supports the project's novelty claim for the FNXL line of work.",
+  "evidence_url": "https://arxiv.org/pdf/2405.06671",
+  "confidence": "VERIFIED",
+  "quote": "For all our model variants (experiments performed on Tesla V100 32GB GPUs) ... with an lr of 5e-4 with LoRA (training time: 56 minutes/epoch, inference time: 2 minutes/sample)."
+ },
+ {
+  "claim": "FNXL paper metadata: 'Financial Numeric Extreme Labelling: A Dataset and Benchmarking for XBRL Tagging', Sharma, Khatuya, Hegde, Shaikh, Dasgupta, Goyal, Ganguly; submitted 6 Jun 2023; 'Accepted to ACL'23 Findings Paper'; Semantic Scholar lists 18 citations (as of fetch). FLAN-FinXC: 'Parameter-Efficient Instruction Tuning of Large Language Models For Extreme Financial Numeral Labelling', NAACL 2024 (ACL anthology 2024.naacl-long.410), arXiv 2405.06671. XBRLTagRec: arXiv 2603.25263, published 2026-03-26.",
+  "evidence_url": "https://arxiv.org/abs/2306.03723",
+  "confidence": "VERIFIED",
+  "quote": "Comments: Accepted to ACL'23 Findings Paper (arXiv abs page); S2: ACL 2024.naacl-long.410 for 2405.06671; arXiv API: 2603.25263v1 published 2026-03-26T10:02:32Z"
+ }
+]
+
+### unknowns
+(1) Whether the HF repo was publicly visible between its June-2023 creation and the 2025 README/GitHub-link updates cannot be determined from the HF API (no visibility history); the June-2023 data commits are verified, discoverability is not. (2) Why XBRLTagRec's re-run of FLAN-FinXC scores Macro-F1 0.4616 vs the original 66.23 on what is the same test set is unexplained in the paper; whether they score the 770 'Others' rows is unknown. (3) What the 'Others' rows in the FLAN-FinXC-Data consolidated CSVs represent (negatives / non-US-GAAP numerals) is undocumented. (4) The exact mechanism of the 'self declaration ... solely for research purposes' is not specified anywhere; no LICENSE file exists on HF or GitHub, so derived-data redistribution rights remain legally unclear and should be confirmed with the authors. (5) The WebSearch budget was exhausted before this task started and Semantic Scholar rate-limited two of three queries, so no Google-Scholar-style discovery of further papers using FNXL was possible; all evidence comes from direct fetches of HF, GitHub, Google Drive, arXiv and the datasets-server/S2/arXiv APIs.
+
+### notes
+RESOLUTION: The HF release (soummyaah-space/FNXL) is the FULL dataset. data/fnxl/finer/{train,dev,test}.csv = 62,782 / 6,823 / 9,483 sentence rows and data/fnxl/xml/{train,dev,test}XmcDf.csv = 111,493 / 13,191 / 18,238 numeral rows with 2,692 / 1,273 / 1,374 labels and 798 / 756 / 794 companies, an exact cell-for-cell match to Table 1. The HF viewer's 1.3M/158K/219K 'rows' are a parquet-conversion artifact (single 'text' column of .txt lines). The 'partial' Drive data used by XBRLTagRec (FLAN-FinXC-Data/Data.zip) is in fact the full train (111,493 tagged + 16,745 'Others') and full test (18,238 tagged + 770 'Others') with the dev split omitted; its tagged test sentences are exactly the 9,483 HF test sentences. The second Drive folder linked by FLAN-FinXC's README holds byte-identical copies of the HF CSVs. FLAN-FinXC never claims a partial release; only XBRLTagRec does, and the claim is wrong. CONSEQUENCE FOR THE PROJECT: FNXL can serve as a secondary benchmark with numbers directly comparable to FLAN-FinXC's 66.23 Macro-F1 / 89.98 Hits@1 (full test set, 18,238 numerals) using HF xml/testXmcDf.csv; XBRLTagRec's 0.5050 is on the same test set but under an unexplained evaluation discrepancy, so cite it with that caveat. LICENSE: research-only per the HF sub-card, no formal license file; derived training data should not be redistributed without author permission. Result JSON saved at /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/gap_6.json; downloaded files and count JSONs are under /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/fnxl/ (hf_counts.json, gdrive_vs_hf.json, gdrive_counts.json, pdfs/*.txt).

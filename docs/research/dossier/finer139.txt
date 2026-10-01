@@ -1,0 +1,89 @@
+### key
+finer139
+
+### query_name
+finer139
+
+### found
+True
+
+### title
+FiNER: Financial Numeric Entity Recognition for XBRL Tagging
+
+### authors
+Lefteris Loukas, Manos Fergadiotis, Ilias Chalkidis, Eirini Spyropoulou, Prodromos Malakasiotis, Ion Androutsopoulos, Georgios Paliouras (AUEB NLP Group / NCSR Demokritos / Univ. of Copenhagen)
+
+### venue_year
+ACL 2022 (60th Annual Meeting, Volume 1: Long Papers), pages 4419-4431, Dublin; arXiv v1 2022-03-12, v2 2022-04-19. Semantic Scholar on 2026-10-01: 105 citations, 18 influential [VERIFIED]
+
+### identifiers
+arXiv:2203.06482; DOI 10.18653/v1/2022.acl-long.303; ACL Anthology 2022.acl-long.303; DBLP conf/acl/LoukasFCSMAP22; S2 paperId c11b6653a4af4ab030ff91d3183f090694115b07; Zenodo DOI 10.5281/zenodo.6339605; HF dataset nlpaueb/finer-139; GitHub nlpaueb/finer; HF models nlpaueb/sec-bert-base | sec-bert-num | sec-bert-shape
+
+### task_summary
+Introduces XBRL tagging as a token-level entity-extraction task: given a sentence from the text notes of a 10-K/10-Q, label (mostly numeric) tokens with one of 139 US-GAAP XBRL concept tags (IOB2 => 279 token labels). TEXT ONLY: sentences are regex-extracted from the Financial Statements Item notes, html-stripped and lower-cased; tables are NOT part of the dataset. Output is a per-token concept tag only — no value normalisation, no period, no unit. Key finding: BERT subword fragmentation of numbers hurts; replacing numbers with [NUM] or [SHAPE] pseudo-tokens fixes it; SEC-BERT-SHAPE (pre-trained with the pseudo-tokens) is best. A 'business use case' section evaluates top-k tag recommendation (Hits@10 = 99.4%).
+
+### data
+HF nlpaueb/finer-139 [VERIFIED: card + HF API + raw README + dataset_infos.json]. License: cc-by-sa-4.0 on HF (README front-matter line 9); the Zenodo record 10.5281/zenodo.6339605 for the same finer-139.zip (103.2 MB) instead says 'Creative Commons Attribution 4.0 International' [VERIFIED] — note the SA discrepancy. Splits: train 900,384 / validation 112,494 / test 108,378 sentences (total 1,121,256); dataset_infos.json: 279 ner_tags (O + B-/I- over exactly 139 entity types), download_size 103,199,131 B, dataset_size 864,119,850 B; HF last modified 2022-10-23. Paper Table 2: avg tokens/sentence 44.7±33.9 / 45.4±35.9 / 46.5±38.9; avg tags/sentence 1.8 / 1.7 / 1.7. Source (paper Sec. 3, quoted): 'finer-139 was compiled from approx. 10k annual and quarterly English reports (filings) of publicly traded companies downloaded from sec's edgar system. The downloaded reports span a 5-year period, from 2016 to 2020. They are annotated with xbrl tags by professional auditors'; 'We used regular expressions to extract the text notes from the Financial Statements Item of each filing'. Labels: 'we selected the 139 (out of 6,008) most frequent xbrl tags with at least 1,000 appearances in finer-139' (us-gaap 2020 taxonomy). 1.8M raw sentences (~90% untagged); heuristics removed ~40% (discarding only 1% of tagged ones); chronological 80/10/10 split. Code: github.com/nlpaueb/finer, MIT license, TensorFlow 2.8 / transformers 4.18 [VERIFIED].
+
+### models_and_results
+All models are BERT-base scale or smaller (Table 7 params: BiLSTM 0.8M-21M; every BERT variant 110M). Test entity-level micro-F1 (avg of 3 seeds): spaCy 48.6; BiLSTM(words) 77.3; BiLSTM(subwords) 71.3; BERT 75.1; BERT+CRF 78.0; BERT+[NUM] 78.3; BERT+[SHAPE] 79.4; FIN-BERT 74.0; FIN-BERT+[NUM] 78.8; FIN-BERT+[SHAPE] 80.1; SEC-BERT 75.7; SEC-BERT-NUM 80.4; SEC-BERT-SHAPE 82.1 (macro-F1 80.1; dev micro-F1 85.3). SEC-BERT was pre-trained from scratch on EDGAR-CORPUS (model card: '260,773 10-K filings from 1993-2019'; 'a single Google Cloud TPU v3-8'; '1 million training steps with batches of 256 sequences of length 512') [VERIFIED]. Derived community checkpoints on HF (none report latency): shidey/secbert-finer139 (test F1 0.8181, P 0.8018, R 0.8352); nbroad/finer-139-xtremedistil-l12-h384 (33.3M params, F1 0.6334, MIT); muhtasham/bert-tiny-finetuned-finer-139-full-intel-cpu (4.41M params, no model card/metrics); baluyotraf/distilbert-base-uncased-on-mini-finer (4 labels only, F1 0.969).
+
+### small_models_evaluated
+In the paper: only encoder/RNN models — BiLSTM (0.8M-21M params), BERT-base, FIN-BERT, SEC-BERT (all 110M). No decoder LLMs, no 1-3B models. Follow-ups on FiNER-139: FinLoRA (arXiv 2505.19819) uses Llama 3.1 8B (+LoRA / QLoRA 4-bit) and 70B on a 10.0k-train / 7.4k-test subset — nothing at 1-3B. FLAN-FinXC (2405.06671, NAACL 2024) uses FLAN-T5-Base 220M / Large 780M with LoRA. FinTagging (2505.20650) evaluates Qwen2.5-Instruct 0.5B-14B and LLaMA-3.2-3B zero-shot plus fine-tuned BERT-large/FinBERT/SECBERT, but on its own benchmark, not FiNER-139. Community HF checkpoints exist at 4.4M (bert-tiny) and 33M (XtremeDistil) but report no latency.
+
+### reports_serving_cost
+no. Local grep of the full ACL PDF text (8,185 words via pypdf) for '$', 'dollar', 'price', 'throughput', 'latenc', 'inference time', 'hours', 'seconds' returned zero numeric efficiency results. 'cost' appears only as: 'Manually tagging the reports is tedious and costly' (abstract); 'tedious and costly task not considered so far'; and 'which achieves the best overall results with the special tokens, without costly crf layers' (conclusion). No training time, no inference time, no GPU-hours, no $ anywhere in the paper. The GitHub README likewise contains no hardware/time numbers [VERIFIED].
+
+### reports_latency_or_throughput
+no (qualitative only). The only efficiency statements in the paper are: 'A drawback of crfs is that they significantly slow down the models both during training and inference, especially when using large label sets (Goldman and Goldberger, 2020), as in our case.' and, about subword self-attention pooling, 'the latter will increase the training and inference times.' Hardware is stated once, in Appendix A: 'Training was performed mainly on a dgx station with 4 nvidia v100 gpus and an Intel Xeon cpu e5-2698 v4 @ 2.20ghz.' Table 7 gives parameter counts only. No wall-clock time, tokens/s, or sentences/s anywhere [VERIFIED by local grep of the PDF text].
+
+### reports_training_cost
+no $ or GPU-hour figure. Only hardware (DGX, 4x V100) and hyper-parameters (BERT: 10 epochs, early stopping patience 2, LR grid 1e-5..5e-5; BiLSTM: 30 epochs, patience 4; Bayesian optimisation 15 trials). External data point: the FNXL paper (arXiv 2306.03723, Appendix A.3) reports that re-implementing the FiNER BERT tagger 'takes approximately 10-12 hours to train' on 'a single Tesla P100-PCIE (16GB) GPU' [VERIFIED by local grep]. SEC-BERT model card: pretraining on one free TRC TPU v3-8, 1M steps [VERIFIED].
+
+### relevance_to_idea
+For FiNER-139 itself the novelty claim HOLDS: the paper reports accuracy only (micro/macro-F1, Hits@k) with no latency, throughput, serving or training cost. BUT the strong form ('nobody has benchmarked small or distilled models on FiNER-139/FNXL/FiNER with cost or latency') is PARTLY FALSIFIED by follow-ups the project must cite: (1) FinLoRA (arXiv 2505.19819, May 2025) fine-tunes Llama-3.1-8B with LoRA/QLoRA(4-bit) on a FiNER-139 subset (10.0k train / 7.4k test) and reports accuracy/F1 (base 8B 21.28/0.232; 70B 61.82/0.606; DeepSeek-V3 68.92/0.699; GPT-4o 72.29/0.725; LoRA-8bit-r8 74.10/0.759; QLoRA-4bit-r4 74.32/0.760), a fine-tuning $ cost ('Using four NVIDIA A5000 GPUs ... approximately 56.4 to 63.6 GPU hours ... At an estimated rate of $0.26 per GPU hour, this translates to a cost of roughly $14.66 to $16.54') and an inference-time figure ('Figure 3 illustrates the inference time of fine-tuned models on various datasets. Gemini API generally exhibits lower inference latency ... than local Llama 3.1 8B Instruct inference'). So cost + latency on FiNER-139 with an 8B model already exists — though not at 1-3B, not vLLM/quantized serving throughput, not $ per 1k facts, and only on a 7.4k subset. (2) FinTagging (2505.20650, v5 May 2026) already evaluates Qwen2.5-Instruct 0.5B-14B and LLaMA-3.2-3B zero-shot plus fine-tuned BERT-large/FinBERT/SECBERT, with no cost/latency sentences at all. (3) FLAN-FinXC (2405.06671) reports V100 '56 minutes/epoch' and '2 minutes/sample' inference for 220M-780M FLAN-T5 but no $. (4) A Mar-2026 multi-agent SEC-filing benchmark (2603.22651) reports $/doc ($0.148-$0.430) and p50/p95 latency, but on a private 10k-filing corpus with frontier/70B models only. Recommended narrowed claim: 'no fine-tuned 1-3B (or quantized) model has been evaluated on FinTagging (full 17,388-concept taxonomy, text + tables) with served cost per fact and p50/p95 latency / throughput against frontier APIs on the same test set.' Reuse: the [SHAPE]/[NUM] number-pseudo-token trick and SEC-BERT-SHAPE (82.1 micro-F1) as an encoder baseline; FiNER-139 train split as cheap auxiliary/distillation data (CC-BY-SA-4.0 — share-alike implications for released derivatives; the Zenodo copy says CC-BY-4.0). Avoid: describing FiNER-139 as containing tables (note-text sentences only), as covering value/period/unit (it tags concept names only), or comparing LLM numbers from the 7.4k FinLoRA subset with the 108k full test set.
+
+### confidence
+high. VERIFIED (page fetched, or PDF downloaded and grepped locally): arXiv abstract page; ACL Anthology page; full ACL PDF text (pypdf, 13 pages); HF dataset card + HF API + raw README license line + dataset_infos.json; GitHub README + LICENSE (MIT); Zenodo record; SEC-BERT model card; Semantic Scholar metadata + full 105-paper citation list; arXiv API listing; FNXL ACL PDF (local grep); HF model cards (shidey, nbroad, muhtasham, baluyotraf); arXiv abstract pages for 2405.06671, 2505.19819, 2505.20650, 2306.03723, 2603.25263, 2603.22651, 2210.13086, 2410.12857, 2502.15411, 2512.13980, 2605.24910, 2605.05532. VERIFIED-fetch but summarizer-extracted (numbers read by WebFetch's model from arXiv HTML rather than by me from raw text): FinLoRA Table 4/5 numbers and cost/latency quotes; FinTagging model list and 'no cost/latency' finding; FLAN-FinXC V100 / epoch-time / per-sample inference figures; FinBen $51k compute figure. SNIPPET-ONLY: PIIBench's 'XtremeDistil FiNER' F1 0.0413 (its HTML fetch returned 404). NOT FOUND: any paper reporting serving $ or latency for a 1-3B model on FiNER-139 / FNXL / FinTagging; any FiNER-139 result for IBM Granite.
+
+### sources
+[
+ "https://arxiv.org/abs/2203.06482",
+ "https://aclanthology.org/2022.acl-long.303/",
+ "https://aclanthology.org/2022.acl-long.303.pdf",
+ "https://huggingface.co/datasets/nlpaueb/finer-139",
+ "https://huggingface.co/datasets/nlpaueb/finer-139/raw/main/README.md",
+ "https://huggingface.co/datasets/nlpaueb/finer-139/raw/main/dataset_infos.json",
+ "https://huggingface.co/api/datasets/nlpaueb/finer-139",
+ "https://github.com/nlpaueb/finer",
+ "https://raw.githubusercontent.com/nlpaueb/finer/main/LICENSE",
+ "https://zenodo.org/records/6339605",
+ "https://huggingface.co/nlpaueb/sec-bert-base",
+ "https://api.semanticscholar.org/graph/v1/paper/arXiv:2203.06482?fields=title,year,venue,externalIds,citationCount,influentialCitationCount",
+ "https://api.semanticscholar.org/graph/v1/paper/ArXiv:2203.06482/citations?fields=title,year,venue,externalIds,abstract&limit=200",
+ "https://export.arxiv.org/api/query?search_query=all:%22FiNER-139%22&max_results=50",
+ "https://huggingface.co/shidey/secbert-finer139",
+ "https://huggingface.co/nbroad/finer-139-xtremedistil-l12-h384",
+ "https://huggingface.co/muhtasham/bert-tiny-finetuned-finer-139-full-intel-cpu",
+ "https://huggingface.co/baluyotraf/distilbert-base-uncased-on-mini-finer",
+ "https://arxiv.org/abs/2306.03723",
+ "https://aclanthology.org/2023.findings-acl.219.pdf",
+ "https://arxiv.org/abs/2405.06671",
+ "https://arxiv.org/html/2405.06671",
+ "https://arxiv.org/abs/2505.19819",
+ "https://arxiv.org/html/2505.19819",
+ "https://finlora-docs.readthedocs.io/en/latest/tasks/xbrl_reporting_tasks.html",
+ "https://arxiv.org/abs/2505.20650",
+ "https://arxiv.org/html/2505.20650v1",
+ "https://arxiv.org/abs/2603.25263",
+ "https://arxiv.org/html/2603.25263",
+ "https://arxiv.org/abs/2603.22651",
+ "https://arxiv.org/html/2603.22651",
+ "https://arxiv.org/abs/2210.13086",
+ "https://arxiv.org/abs/2410.12857",
+ "https://arxiv.org/abs/2502.15411",
+ "https://arxiv.org/abs/2512.13980",
+ "https://arxiv.org/abs/2605.24910",
+ "https://arxiv.org/abs/2605.05532",
+ "https://arxiv.org/html/2402.12659"
+]

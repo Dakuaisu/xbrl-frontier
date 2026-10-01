@@ -1,0 +1,210 @@
+### key
+gap_8
+
+### question
+Has anything appeared since June 2026 that fine-tunes or distills a small model on FinTagging, beyond what the sweeps saw? Semantic Scholar was rate-limited all session (citation lists partially stale: 4 vs 15 citers), Google Scholar was never queried, and HF datasets lm2445/FinTagging_1000* (Jul 2026, SFT-formatted, 800/200 split) signal that someone is preparing exactly this experiment (I verified lm2445 has published no FinTagging models yet).
+
+### topic
+gap_8: Has anything since June 2026 fine-tuned or distilled a small model on FinTagging (or FNXL/FiNER) with cost/latency? RESOLVED: No. The lm2445 FinTagging_1000* datasets are explained (lm2445 = Linhai Ma, The Fin AI; data feeds the zero-shot 32B 'Factorized Hypothesis Search' paper, arXiv 2608.06614, Aug 2026, which does no fine-tuning and names the scale/cost trade-off as future work). One ResearchGate preprint with a matching title (Jul 2026) could not be read.
+
+### facts
+[
+ {
+  "claim": "lm2445 is Linhai Ma (The Fin AI): FHS lists 'Linhai Ma (The Fin AI, USA)' as first author, and lm2445's HF models link arxiv 2603.05776 (PVminerLLM), whose author list includes Linhai Ma.",
+  "evidence_url": "https://arxiv.org/html/2608.06614v1",
+  "confidence": "VERIFIED",
+  "quote": "Linhai Ma (The Fin AI, USA), Ethan F. Wei (Yale University, USA), Xueqing Peng (The Fin AI, USA), Yan Wang (The Fin AI, USA), Lingfei Qian (The Fin AI, USA)"
+ },
+ {
+  "claim": "FHS (arXiv 2608.06614, 6 Aug 2026) evaluates on the FinTagging test split of 2,509 facts; lm2445/FinTagging1000_Grounding has exactly 2,509 rows and describes itself as 'the second tagging step' derived from FinTagging_800_200_HF.",
+  "evidence_url": "https://arxiv.org/pdf/2608.06614v1",
+  "confidence": "VERIFIED",
+  "quote": "The test split has 191 source contexts, 110 containing tables and 81 pure narrative passages, yielding 2509 target facts over 388 distinct gold concepts"
+ },
+ {
+  "claim": "FHS does NOT fine-tune, LoRA-train, or distill any model; all LLM operations are zero-shot Qwen3-32B with BM25 retrieval (0 hits for 'fine-tun', 'LoRA', 'distill' in the full extracted PDF text).",
+  "evidence_url": "https://arxiv.org/pdf/2608.06614v1",
+  "confidence": "VERIFIED",
+  "quote": "To control for model capacity, all LLM-based operations across all methods use Qwen3-32B, including grounding, hypothesis generation, refinement, candidate-level verification"
+ },
+ {
+  "claim": "FHS reports computational cost only as LLM calls and retrievals per fact plus wall-clock hours, measured on the CodiEsp clinical split (not the financial set) on a single NVIDIA B200; no dollar cost, no per-query latency, no small models.",
+  "evidence_url": "https://arxiv.org/pdf/2608.06614v1",
+  "confidence": "VERIFIED",
+  "quote": "Table 19: Average inference cost per fact and wall-clock time on the CodiEsp test split. ... FHS (full) 2 4.0 4.0 5.31 ± 1.71"
+ },
+ {
+  "claim": "FHS explicitly leaves the model-scale vs cost trade-off as open future work.",
+  "evidence_url": "https://arxiv.org/pdf/2608.06614v1",
+  "confidence": "VERIFIED",
+  "quote": "Future work should evaluate different model families and scales to characterize the robustness–cost trade-off."
+ },
+ {
+  "claim": "FHS financial-tagging headline numbers (Qwen3-32B zero-shot pipeline): Recall@1 0.185, MRR 0.257, final accuracy 0.255.",
+  "evidence_url": "https://arxiv.org/pdf/2608.06614v1",
+  "confidence": "VERIFIED",
+  "quote": "Its Recall@1 is 0.185 ... It also improves MRR from 0.238 to 0.257 and final accuracy from the best baseline value of 0.234 to 0.255."
+ },
+ {
+  "claim": "lm2445 has published NO FinTagging/XBRL models as of 2026-10-01; latest uploads (2026-09-22) are PVminerLLM2_70B and PVminerLLM2_1.5B (medical, Qwen2.5-1.5B / Llama-3.3-70B bases).",
+  "evidence_url": "https://huggingface.co/api/models?author=lm2445&sort=lastModified&direction=-1&limit=100",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "lm2445 now hosts 5 FinTagging datasets (FinTagging_1000, FinTagging1000_ER, _table, _text, _Grounding) last modified 2026-07-08 to 2026-07-22, MIT license; cards link no paper, model, or GitHub.",
+  "evidence_url": "https://huggingface.co/api/datasets?search=FinTagging&limit=100",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "HF model search 'fintagging' returns an empty list.",
+  "evidence_url": "https://huggingface.co/api/models?search=fintagging&sort=lastModified&direction=-1&limit=100",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Most recent HF 'xbrl' models date from Apr 2026 (Ben16001/XBRL-LoRA300k-PlanB: Qwen3-4B-Instruct-2507 LoRA adapter, auto-generated card, eval loss 0.0307, no dataset/latency/cost info); nothing modified after 2026-06-01.",
+  "evidence_url": "https://huggingface.co/api/models?search=xbrl&sort=lastModified&direction=-1&limit=100",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Companion GitHub repo Ben19001/XBRL-LoRA-Extraction (pushed 2026-04-16) targets 'XBRL financial entity recognition and classification' with Qwen3-4B and mentions vLLM for adapter inference, but names no dataset and reports no evaluation, latency, or cost.",
+  "evidence_url": "https://raw.githubusercontent.com/Ben19001/XBRL-LoRA-Extraction/main/README.md",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "TheFinAI org has released no new HF models since 2026-05-03 and none are tagging/XBRL/FinNI/FinCL related.",
+  "evidence_url": "https://huggingface.co/api/models?author=TheFinAI&sort=lastModified&direction=-1&limit=40",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Semantic Scholar lists 15 citers of FinTagging (offset=15 returns an empty array; the '17' header count is stale). Post-June-2026 citers are EnterpriseBench (2609.37658), FHS (2608.06614), FinBalance (2606.15949); none fine-tunes a small model on FinTagging.",
+  "evidence_url": "https://api.semanticscholar.org/graph/v1/paper/5d05ef163ef270b9eabe80e9633e281f05097080/citations?fields=title,year,externalIds,abstract,venue&limit=100",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "EnterpriseBench (2609.37658, 29 Sep 2026) is an enterprise agent benchmark with no XBRL tagging or FinTagging fine-tuning.",
+  "evidence_url": "https://arxiv.org/abs/2609.37658",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "OpenAlex: the FinTagging SSRN record W7165048106 has 3 citers (Conv-FinRe SIGIR 2026; a stock-prediction survey; an accounting-education paper), none relevant; the arXiv record W4415036142 has 1 citer (FAITH, ICAIF 2025).",
+  "evidence_url": "https://api.openalex.org/works?filter=cites:W7165048106&select=id,title,publication_year,publication_date,primary_location,doi&per-page=50",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "arXiv all:XBRL listing (20 results total) has 5 entries after 2026-06-01: Reclassified to Conform (2609.38754), DARC (2608.11772), VeriFin (2608.10213), MacroLens (2606.24950), AuditFlow (2606.03031). None fine-tunes a small model for XBRL tagging.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:XBRL&max_results=60&sortBy=submittedDate&sortOrder=descending",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "VeriFin (2608.10213, 10 Aug 2026) is a neurosymbolic Z3 verifier over XBRL facts, evaluated on a new 600-question XBRLFiling set and FinanceBench; no fine-tuning, no FinTagging, no latency/cost.",
+  "evidence_url": "https://arxiv.org/abs/2608.10213",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Reclassified to Conform (2609.38754, 30 Sep 2026) is integer-optimization multi-year statement reconstruction; no ML fine-tuning, no FinTagging.",
+  "evidence_url": "https://arxiv.org/abs/2609.38754",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "arXiv query all:XBRL AND (latency OR 'inference cost' OR throughput OR vLLM OR quantized OR quantization) returns 0 results.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:XBRL+AND+%28all:latency+OR+all:%22inference+cost%22+OR+all:throughput+OR+all:vLLM+OR+all:quantized+OR+all:quantization%29&max_results=50&sortBy=submittedDate&sortOrder=descending",
+  "confidence": "VERIFIED",
+  "quote": "<opensearch:totalResults>0</opensearch:totalResults>"
+ },
+ {
+  "claim": "arXiv query all:'US-GAAP' AND (fine-tun OR LoRA OR distill) returns 0 results.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:%22US-GAAP%22+AND+(all:%22fine-tun%22+OR+all:LoRA+OR+all:distill)&max_results=50&sortBy=submittedDate&sortOrder=descending",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "arXiv query for FNXL / FiNER-139 / FLAN-FinXC returns 6 results; the newest is XBRLTagRec (Mar 2026); nothing after 2026-06-01.",
+  "evidence_url": "https://export.arxiv.org/api/query?search_query=all:FNXL+OR+all:%22FiNER-139%22+OR+all:%22FLAN-FinXC%22&max_results=60&sortBy=submittedDate&sortOrder=descending",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Closest post-June small-model paper: 'Reliable Financial Named Entity Recognition Under Domain Shift' (2608.19558; v1 20 Aug, v2 26 Aug 2026) LoRA-tunes Qwen2.5-0.5B/1.5B-Instruct and bert-base-cased, but on FIN, FiNER-ORD and TweetNER7 (generic NER), NOT FiNER-139/FNXL/FinTagging; no frontier-API comparison; no latency/throughput metrics; only compute note is a 2-day run on an Apple M1 Pro.",
+  "evidence_url": "https://arxiv.org/html/2608.19558v2",
+  "confidence": "VERIFIED",
+  "quote": "All experiments (∼25k generations with log-probabilities and 5-sample consistency) ran on a single consumer-grade machine (Apple M1 Pro, 16 GB) in roughly two days"
+ },
+ {
+  "claim": "XBRLTagRec (2603.25263, 26 Mar 2026): LoRA fine-tuned FLAN-T5-Large + Sentence-T5-XXL retrieval + ChatGPT-3.5 re-ranking, FNXL only; zero mentions of latency, inference time, throughput, or GPU; acknowledges but does not quantify API cost.",
+  "evidence_url": "https://arxiv.org/html/2603.25263v1",
+  "confidence": "VERIFIED",
+  "quote": "iterative re-ranking with ChatGPT-3.5 increases computational and API costs"
+ },
+ {
+  "claim": "NORA (2605.24910, 24 May 2026) tackles noisy inline-XBRL labels and releases a 6.6M-instance multi-attribute benchmark; the abstract names no model sizes, no FiNER/FNXL/FinTagging, and no latency/cost.",
+  "evidence_url": "https://arxiv.org/abs/2605.24910",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "FinLoRA (2505.19819, May 2025, pre-window) is the strongest partial counterexample to 'nobody reports latency': Figure 3 plots average inference time of LoRA-tuned Llama 3.1 8B vs Gemini 2.0 Flash-Lite on tasks including FiNER-139 (F1 0.759) and FNXL (F1 0.250), and gives fine-tuning cost of roughly $14.66-$16.54; but no per-query inference cost in dollars, no 1-3B models, no FinTagging, no quantized serving.",
+  "evidence_url": "https://arxiv.org/html/2505.19819v1",
+  "confidence": "VERIFIED",
+  "quote": "Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks"
+ },
+ {
+  "claim": "UNVERIFIABLE RISK: 'A Schema-Aware Large Language Model for XBRL Tagging and Cross-Statement Consistency Checking' (Zhaoyue Peng, Shuncheng Liu, Xuhao Meng, Zhe Su, Ningjing Sang; ResearchGate preprint DOI 10.13140/rg.2.2.19518.86080; dated 2026-07-07) exists in OpenAlex with no abstract, and ResearchGate returned HTTP 403; model size, dataset, and any cost/latency reporting are unknown.",
+  "evidence_url": "https://api.openalex.org/works/W7167572144",
+  "confidence": "SNIPPET-ONLY"
+ },
+ {
+  "claim": "HyTA-XBRL (Zenodo, 2026-09-10, Xiong Chen & Mingzhu Wang) is a zero-shot hyperbolic-embedding alignment method for XBRL extension elements; no small-model fine-tune, no FinTagging, no latency/cost.",
+  "evidence_url": "https://api.openalex.org/works/W7212187919",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "'The Model Is a Dependency: Testing the Audit Case for Open Weights in Finance' (Zenodo, 2026-07-25, N. Milton) runs nine open-weight Ollama models on a 16GB consumer GPU for numeric extraction from 25 DEF 14A compensation tables scored against XBRL tags; audit/provenance focus, not FinTagging, no cost/latency frontier.",
+  "evidence_url": "https://api.openalex.org/works/W7171094302",
+  "confidence": "VERIFIED",
+  "quote": "Nine open-weight models on 16GB consumer GPU, chosen because four families are most-pulled on Ollama."
+ },
+ {
+  "claim": "HF model shidey/secbert-finer139 (modified 2026-09-18): nlpaueb/sec-bert-base (0.1B) fine-tuned on FiNER-139, test F1 0.8181; no latency/cost, no linked paper.",
+  "evidence_url": "https://huggingface.co/shidey/secbert-finer139",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Post-June HF XBRL datasets (CyberMax-tools/figurewell-sec-xbrl-financials 2026-10-01; DenyTranDFW/edgar_xbrl_companyfacts 09-27; robosystems/sec-xbrl-knowledge-graphs 09-22; bowang0911/sec-xbrl-hard-negatives 08-06 [461k retrieval rows, CC0, no paper]; ct1212/XBRL-FinNQA 07-03 [broken, empty card]; ridcl/xbrl-tables 06-20 [5k table images, empty card]) — none is an SFT set for FinTagging and none links a model.",
+  "evidence_url": "https://huggingface.co/api/datasets?search=xbrl&sort=lastModified&direction=-1&limit=100",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "GitHub repo search for 'FinTagging' (name/readme/description) returns 9 repos; none created or pushed after 2026-06-01 indicates fine-tuning on FinTagging; The-FinAI/FinTagging was last pushed 2025-10-13.",
+  "evidence_url": "https://api.github.com/search/repositories?q=FinTagging+in:readme,name,description&sort=updated&order=desc&per_page=30",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "GitHub 'xbrl lora' search returns only Ben19001/XBRL-LoRA-Extraction (pushed 2026-04-16); 'xbrl finetune' returns 0 repositories.",
+  "evidence_url": "https://api.github.com/search/repositories?q=xbrl+lora&sort=updated&order=desc&per_page=30",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "The-FinAI/FinTagging README evaluates GPT-4o, DeepSeek-V3, Qwen2.5 (14B/1.5B/0.8B), Llama-3 (8B/3B), DeepSeek-R1-Distill-Qwen-32B, gemma-2-27b-it, Fino1-8B and fine-tuned BERT-large/FinBERT/SECBERT; ships BERT training sets; no leaderboard; no latency/cost; no updates dated after 2026-06-01.",
+  "evidence_url": "https://raw.githubusercontent.com/The-FinAI/FinTagging/main/README.md",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Two 2026 financial-NER LoRA papers on 8B models (2601.10043 Llama-3-8B, Jan 2026; 2606.10392 DeepSeek-R1-8B + NEFTune, 9 Jun 2026) use a custom 1,693-sentence corpus, not XBRL/FinTagging, and report only micro-F1 (0.894 / 0.901-0.912).",
+  "evidence_url": "https://arxiv.org/abs/2606.10392",
+  "confidence": "VERIFIED"
+ },
+ {
+  "claim": "Google Scholar could not be queried (CAPTCHA wall).",
+  "evidence_url": "https://scholar.google.com/scholar?q=%22FinTagging%22&as_ylo=2026&scisbd=1",
+  "confidence": "VERIFIED",
+  "quote": "Please show you're not a robot"
+ },
+ {
+  "claim": "Semantic Scholar paper-search endpoint returned HTTP 429 on all five attempts this session; only the citations endpoint succeeded (once).",
+  "evidence_url": "https://api.semanticscholar.org/graph/v1/paper/search?query=FinTagging&fields=title,year,venue,externalIds,citationCount,abstract,publicationDate&limit=50",
+  "confidence": "VERIFIED"
+ }
+]
+
+### unknowns
+(1) The ResearchGate preprint "A Schema-Aware Large Language Model for XBRL Tagging and Cross-Statement Consistency Checking" (Peng et al., dated 2026-07-07, DOI 10.13140/rg.2.2.19518.86080) could not be read: ResearchGate returned 403 and OpenAlex holds no abstract. It is the only post-June item whose title squarely matches the project; its model size, dataset, and whether it reports cost/latency are unknown. A human should open it on ResearchGate. (2) Google Scholar was CAPTCHA-blocked and the Semantic Scholar search endpoint was rate-limited throughout, so discovery relied on the arXiv API, OpenAlex, the Hugging Face API, and the GitHub API; non-arXiv venues were covered only through OpenAlex. (3) The WebSearch budget was already exhausted (200/200) when this task started, so no general web search was possible. (4) The SarielMa/FHS GitHub README could not be read (only 'CodeEps' and 'Financial_Tagging' folders were visible), so whether the repo ships trained checkpoints is unconfirmed, though the paper itself contains no fine-tuning. (5) HF/GitHub searches are substring-based; a repo or model using unrelated naming (e.g., 'concept linking', 'gaap') could be missed, though 'gaap', 'finer', 'fnxl', '10-k' and 'xbrl' searches were all run.
+
+### notes
+Net answer: nothing in Jul-Sep 2026 fine-tunes or distills a 1-3B model on FinTagging, and nothing reports a cost/latency frontier for small models on FinTagging/FNXL/FiNER. The lm2445 datasets are not a scoop-in-progress for this project: they were built by Linhai Ma (The Fin AI) for the Factorized Hypothesis Search paper (arXiv 2608.06614, 6 Aug 2026), a zero-shot Qwen3-32B + BM25 retrieval pipeline; the 2,509-row Grounding set matches the paper's test split exactly, and lm2445 has still uploaded no FinTagging models. The paper's own limitations section says model scale vs cost is open. Two caveats for the novelty wording: FinLoRA (May 2025) already plots average inference time of LoRA-tuned Llama-3.1-8B vs Gemini on FiNER-139/FNXL and gives training cost in dollars; FHS gives LLM-calls-per-fact and wall-clock hours (CodiEsp split only). Neither gives $/query serving cost, quantized variants, or a 1-3B model, and neither touches FinTagging with a fine-tuned small model. Safer phrasing: "no prior work reports a serving-cost/latency frontier for fine-tuned 1-3B models on FinTagging against frontier APIs." Result file: /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/gap_8.json (36 facts). Extracted FHS full text for re-checking: /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/fhs2.txt.

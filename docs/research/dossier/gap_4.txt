@@ -1,0 +1,144 @@
+### key
+gap_4
+
+### question
+What exactly did FinLoRA measure in Figure 3 (hardware, batch size, 8-bit vs 16-bit, transformers vs vLLM, prompt lengths), and are the per-task values available as numbers? I read approximate values from the chart (Llama LoRA: FiNER ~1.6 s, FNXL ~2.3 s, XBRL Analysis ~4.6 s; Gemini: ~0.3/0.3/1.4 s) and found that the public test/inference.py uses transformers + bitsandbytes with no batching and no timing calls (max_new_tokens=60), so the figure's provenance is unclear.
+
+### topic
+gap_4: What FinLoRA (arXiv 2505.19819) Figure 3 actually measured (hardware, batch size, quantization, framework, prompt lengths) and whether per-task inference-time numbers exist
+
+### facts
+[
+ {
+  "claim": "Figure 3 caption: 'Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks'. It sits in Sec. 4.3 'Angle III: Resource Usage and Performance Trade-offs of LoRA methods', PDF page 8, next to Table 5 (fine-tuning cost).",
+  "evidence_url": "https://arxiv.org/html/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "Average inference time of LoRA fine-tuned Llama 3.1 8B and LoRA fine-tuned Gemini 2.0 FL across tasks"
+ },
+ {
+  "claim": "The ENTIRE methodological description of Figure 3 in the paper is two sentences; batch size, inference quantization, serving framework, GPU count for inference and per-task numbers are not stated anywhere in the paper (PDF text: 'vLLM' 0 hits, 'tokens' 0 hits, 'batch size' only in the training-setup sentence and in this paragraph).",
+  "evidence_url": "https://arxiv.org/html/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "Figure 3 illustrates the inference time of fine-tuned models on various datasets. Gemini API generally exhibits lower inference latency and is less sensitive to increasing prompt lengths than local Llama 3.1 8B Instruct inference, even when accounting for network overhead for the API. However, the inference speed of locally deployed Llama models can be significantly enhanced through the use of larger batch sizes."
+ },
+ {
+  "claim": "The only hardware statement in the paper (Sec. 4 'Setup') is four NVIDIA A5000 GPUs for 'our experiments' and APIs for closed-source models; no separate inference hardware is given. Training batch size was 2-8 by prompt length; inference temperature 0.0.",
+  "evidence_url": "https://arxiv.org/pdf/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "Our experiments were conducted on four NVIDIA A5000 GPUs. For closed-source models, we employed various inference and fine-tuning APIs. For each LoRA method, we fine-tuned 9 LoRA adapters based on their respective training sets merged by task categories. We used a learning rate of 1e-4 and a batch size of 2–8 based on prompt length (Refer to Appendix C for details). For inference, we used a temperature of 0.0."
+ },
+ {
+  "claim": "Figure 3 is a vector (matplotlib-style) lollipop/dot chart embedded in the PDF; its marker coordinates can be read exactly. Y-axis 'Inference Time (seconds)' with ticks 1-5 (13.959 pt per second); legend 'Llama LoRA Fine-tuned' (blue) vs 'Gemini Fine-tuned' (purple); 8 x-categories: FiNER, FNXL, Sentiment Analysis, NER, Headline Analysis, FinancialMath, XBRL Analysis, FinanceBench.",
+  "evidence_url": "https://arxiv.org/pdf/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "FiNER FNXL Sentiment Analysis NER Headline Analysis FinancialMath XBRL Analysis FinanceBench 1 2 3 4 5 Inference Time (seconds) Llama LoRA Fine-tuned Gemini Fine-tuned"
+ },
+ {
+  "claim": "Per-task values DERIVED from the PDF vector coordinates (linear fit on the five y-axis tick marks; precision roughly +/-0.02 s). Llama 3.1 8B LoRA (local): FiNER 1.57 s, FNXL 2.24 s, Sentiment 1.52 s, NER 1.58 s, Headline 1.70 s, FinancialMath 3.62 s, XBRL Analysis 4.58 s, FinanceBench 5.44 s. Gemini 2.0 FL fine-tuned (API): FiNER 0.31 s, FNXL 0.33 s, Sentiment 1.09 s, NER 1.09 s, Headline 1.06 s, FinancialMath 2.16 s, XBRL Analysis 1.40 s, FinanceBench 1.10 s. Ratios Llama/Gemini: 5.2x, 6.9x, 1.4x, 1.5x, 1.6x, 1.7x, 3.3x, 4.9x. The user's chart readings (1.6/2.3/4.6 and 0.3/0.3/1.4) are consistent. The authors publish NO numeric table for these anywhere.",
+  "evidence_url": "https://arxiv.org/pdf/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "y-tick marks at y=189.013 (1 s), 175.054 (2 s), 161.095 (3 s), 147.137 (4 s), 133.178 (5 s); blue marker centres y=181.057, 171.669, 181.755, 180.917, 179.242, 152.441, 139.040, 127.036; purple y=198.715, 198.436, 187.757, 187.757, 188.176, 172.821, 183.430, 187.617 (PyMuPDF get_drawings on page 8)"
+ },
+ {
+  "claim": "Timing provenance: the public harness DOES time inference, but in test/test_dataset.py (not inference.py). per_question_time = (time.time() - task_start_time) / sample_size, measured over the whole evaluation loop after the model is loaded, printed as 'Time per question: X s, Batch size: N' and stored as results['time']. This code already existed at commit 6d353b59 (2025-05-09), 17 days before arXiv v1 (2025-05-26), so it is the most plausible source of Figure 3.",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/FinLoRA/main/test/test_dataset.py",
+  "confidence": "VERIFIED",
+  "quote": "per_question_time = (time.time() - task_start_time) / sample_size ... print(f\"\\n✓ {data_name}: Accuracy: {acc * 100:.3f}%, F1: {f1:.3f}, Time per question: {per_question_time:.2f} s, Batch size: {batch_size}\") ... results = {\"task\": data_name, \"acc\": acc, \"f1\": f1, \"time\": per_question_time}"
+ },
+ {
+  "claim": "What that timer includes: tokenization, model.generate, decoding, Python loop/tqdm and (for API sources) sequential HTTP round-trips; it EXCLUDES model/adapter loading (task_start_time is set after inference.load_local_model). 'Per question' means per prompt row (sample_size = number of JSONL rows, or the sample_ratio fraction), not per tagged entity.",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/FinLoRA/main/test/test_dataset.py",
+  "confidence": "VERIFIED",
+  "quote": "model, tokenizer = inference.load_local_model(args)\n\n    task_start_time = time.time()"
+ },
+ {
+  "claim": "FiNER and FNXL test prompts are 'batched': each prompt lists US-GAAP tag options and asks 4 independent tagging questions answered as comma-separated tags; so a FiNER 'per question' time is per 4-entity prompt (files finer_test_batched.jsonl 59.6 MB, fnxl_test_batched.jsonl 7.8 MB).",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/FinLoRA/main/docs/source/tasks/xbrl_reporting_tasks.rst",
+  "confidence": "VERIFIED",
+  "quote": "You are an XBRL expert. Here is a list of US GAAP tags options. Answer the following 4 independent questions by providing only 4 US GAAP tags answers in the order of the questions. Each answer must be separated by a comma (,). Provide nothing else."
+ },
+ {
+  "claim": "Local Llama inference stack: HF transformers AutoModelForCausalLM + BitsAndBytesConfig (load_in_8bit when --quant_bits 8, nf4 4-bit when 4), device_map='auto', torch_dtype=bfloat16, PEFT adapter attached via PeftModel.from_pretrained (not merged), left padding, model.generate(max_new_tokens=..., temperature=0.00001). No vLLM anywhere: GitHub code search for 'vllm' in the repo returns 0 files; environment.yml pins transformers=4.45.2, bitsandbytes==0.44.1, peft==0.13.2, pytorch=2.4.1 (cu121), accelerate==1.0.0 and lists no vllm.",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/FinLoRA/main/test/inference.py",
+  "confidence": "VERIFIED",
+  "quote": "bnb_config = BitsAndBytesConfig(\n        load_in_4bit=args.quant_bits == 4,\n        load_in_8bit=args.quant_bits == 8, ... model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, quantization_config=bnb_config, device_map=\"auto\", torch_dtype=torch.bfloat16,) ... res = model.generate(**tokens, max_new_tokens=max_new_token, eos_token_id=tokenizer.eos_token_id, temperature=0.00001)"
+ },
+ {
+  "claim": "The user's premise 'no batching' is only half right: inference.py tokenizes a LIST of prompts with padding=True, so it batches whatever test.py passes (--batch_size, default 8). But the shipped run scripts use batch size 1: run_test.sh (both the current version and the 2025-05-04 pre-paper version, which pointed at the fine-tuned Gemini FiNER endpoint) uses '--batch_size 1 --quant_bits 8', and run_all_adapters.sh (added 2025-05-10) sets BATCH_SIZE=1. The README example uses --batch_size 8. Which batch size produced Figure 3 is NOT stated; the paper's 'can be significantly enhanced through the use of larger batch sizes' implies a small batch.",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/FinLoRA/main/test/run_all_adapters.sh",
+  "confidence": "VERIFIED",
+  "quote": "BASE_MODEL=\"meta-llama/Llama-3.1-8B-Instruct\"\nBATCH_SIZE=1\nTEMPERATURE=0.0 ... configs=(4bits_r4 8bits_r8 8bits_r8_dora 8bits_r8_rslora)\nquant_bits() { [[ $1 == 4bits* ]] && echo 4 || echo 8; }"
+ },
+ {
+  "claim": "Pre-paper run_test.sh (commit 2e2a8bed, 2025-05-04) targeted the Gemini fine-tuned FiNER endpoint with batch size 1 and quant_bits 8 — the Gemini runs were sequential single requests.",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/FinLoRA/2e2a8bed/test/run_test.sh",
+  "confidence": "VERIFIED",
+  "quote": "python test.py \\\n--dataset xbrl_finer \\\n--batch_size 1 \\\n--quant_bits 8 \\\n--source google \\\n--base_model projects/1023064188719/locations/us-central1/endpoints/7929384289915895808"
+ },
+ {
+  "claim": "The user's 'max_new_tokens=60' is only the default of inference(); the harness overrides it per task via max_new_token_dict: xbrl_finer 100, xbrl_fnxl 100, xbrl_tags_extract 20, xbrl_value_extract 20, xbrl_formula_extract 30, xbrl_formula_calc_extract 30, financebench 50, xbrl_term 50, formula 50, sentiment/headline/ner 10. The same dict was present at commit 6d353b59 (May 9, 2025).",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/FinLoRA/main/test/test_dataset.py",
+  "confidence": "VERIFIED",
+  "quote": "max_new_token_dict = {\n    \"xbrl_tags_extract\": 20,\n    \"xbrl_value_extract\": 20,\n    \"xbrl_formula_extract\": 30,\n    \"xbrl_formula_calc_extract\": 30,\n    \"xbrl_finer\": 100,\n    \"xbrl_fnxl\": 100,"
+ },
+ {
+  "claim": "Prompts are NOT truncated to 512 tokens despite max_length=512: the tokenizer call passes padding=True and no truncation flag, and transformers' backward-compat rule only auto-activates truncation when padding is False. So the full 1.8k (FiNER) / 7.1k (FNXL) / 3.8k (XBRL analysis) prompts hit the model, which is why the paper talks about sensitivity to prompt length.",
+  "evidence_url": "https://raw.githubusercontent.com/huggingface/transformers/v4.45.0/src/transformers/tokenization_utils_base.py",
+  "confidence": "VERIFIED",
+  "quote": "# If you only set max_length, it activates truncation for max_length\n        if max_length is not None and padding is False and truncation is None:"
+ },
+ {
+  "claim": "Gemini side of Figure 3: 'Gemini 2.0 FL' = Gemini 2.0 Flash Lite fine-tuned with Google's proprietary fine-tuning; the harness calls it through google-genai with vertexai=True (project 1023064188719, us-central1), one generate_content call per prompt in a Python loop, max_output_tokens = the same per-task cap, temperature 0.0. Fine-tuned Vertex endpoint IDs for finer, xbrl_extract etc. are listed as comments in run_test.sh.",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/FinLoRA/main/test/inference.py",
+  "confidence": "VERIFIED",
+  "quote": "client = genai.Client(\n            vertexai=True,\n            project=\"1023064188719\",\n            location=\"us-central1\",\n        )\n        answer = []\n        for x in inputs:"
+ },
+ {
+  "claim": "Prompt-length context for the figure (paper Table 2 'Average Prompt Length'; unit not stated in the table, presumably tokens): FiNER-139 7.4k test prompts, 1.8k; FNXL 247 test prompts, 7.1k; XBRL Analysis (tags/values/formula/calc extraction) 3.8k; FinanceBench 983; Financial Math 116; NER 138; NWGI 81; FPB 56; TFNS 52; FiQA 48; Headline 43.",
+  "evidence_url": "https://arxiv.org/pdf/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "FiNER-139 [25] | XBRL Tagging | 10.0k/7.4k | 1.8k | Accuracy, F1 | HF CC BY-SA 4.0 | FNXL [36] | XBRL Tagging | -/247 | 7.1k | Accuracy, F1 | GitHub Public"
+ },
+ {
+  "claim": "Table 5 fine-tuning cost (for the cost side of the contrast): LoRA 14.9h, QLoRA 14.1h, DoRA 15.9h, rsLoRA 14.5h on 4xA5000 at $0.26/GPU-h = $14.66-$16.54; Gemini 2.0 FL 8.8h $162.02; GPT-4o-mini $312.00 (estimated); BloombergGPT 53 days 512xA100 $2.7M. No inference cost is reported.",
+  "evidence_url": "https://arxiv.org/html/2505.19819",
+  "confidence": "VERIFIED",
+  "quote": "Using four NVIDIA A5000 GPUs, the wall-clock time for fine-tuning ranged from 14.1 hours (QLoRA) to 15.9 hours (DoRA), corresponding to a total of approximately 56.4 to 63.6 GPU hours. At an estimated rate of $0.26 per GPU hour, this translates to a cost of roughly $14.66 to $16.54."
+ },
+ {
+  "claim": "GitHub issues: a search for 'inference time OR latency OR Figure 3' in Open-Finance-Lab/FinLoRA returns 0 results; the full issues+PR list (#150-#178) is documentation updates and NeurIPS 'rebuttal' PRs (July-Aug 2025); none mention inference time, latency, batch, vLLM or GPU. No issue was opened by this agent (that is a side-effecting action requiring the user's own go-ahead).",
+  "evidence_url": "https://github.com/Open-Finance-Lab/FinLoRA/issues?q=inference+time+OR+latency+OR+%22Figure+3%22",
+  "confidence": "VERIFIED",
+  "quote": "0 results ... No results matched your search"
+ },
+ {
+  "claim": "The repo's rebuttal/ folder (NeurIPS reviewer replies: 1_Ff4b.md, 2_kedD.md, 3_7NRo.md, 4_LcHA.md and two replies) contains no discussion of inference timing, batch size, serving framework or Figure 3; the only inference-related item is 'Q5 Multiple Adapters at Inference' (adapter selection/MoLE routing).",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/FinLoRA/main/rebuttal/4_LcHA.md",
+  "confidence": "VERIFIED",
+  "quote": "## Q5 Multiple Adapters at Inference\n\nAdapters are currently selected manually according to task type."
+ },
+ {
+  "claim": "Docs (readthedocs) add nothing: benchmark_results/overview.rst repeats the paper's two sentences; benchmark_results/resources.rst covers only fine-tuning cost and fine-tuning GPU memory (4/8/16-bit, batch 4 vs 8) and has no inference latency/vLLM content. Code search for 'Inference Time' and 'Gemini Fine-tuned' hits only overview.rst; the docs' matplotlib SVGs (p1_new.svg, p2.svg, full_results.svg) are performance figures, not the inference-time figure.",
+  "evidence_url": "https://raw.githubusercontent.com/Open-Finance-Lab/FinLoRA/main/docs/source/benchmark_results/overview.rst",
+  "confidence": "VERIFIED",
+  "quote": "We are also motivated to measure and compare the inference speeds of LoRA-fine-tuned models against their larger base model counterparts. The goal is to quantify the potential for reduced latency and increased throughput"
+ },
+ {
+  "claim": "No raw per-task timing numbers are published anywhere in the repo: the tree has no test/results/ directory (the harness would write 'Per question time' files there), code search for 'Time per question' / 'per_question_time' hits only test/test_dataset.py and test/test_few_shot.py, and no plotting script for Figure 3 exists (matplotlib hits are only environment.yml, two SVGs and FinGPT notebooks).",
+  "evidence_url": "https://api.github.com/repos/Open-Finance-Lab/FinLoRA/git/trees/main?recursive=1",
+  "confidence": "VERIFIED",
+  "quote": "test/inference.py, test/run_all_adapters.sh, test/run_all_mistral_adapters.sh, test/run_few_shot_hf.sh, test/run_few_shot_llama8b.sh, test/run_forgetting_test.py, test/run_openai.sh, test/run_test.sh, test/run_together_ai.sh, test/run_xbrl_test.sh, test/test.py, test/test_dataset.py, test/test_few_shot.py, test/test_mixlora_models.py, test/xlora_test.py"
+ },
+ {
+  "claim": "Publication status: arXiv has only v1 (submitted 2025-05-26, no v2 as of 2026-10-01, no journal-ref/comment); OpenAlex W4414587254 lists it as arXiv-only (is_published false, cited_by_count 0). The rebuttal files show a NeurIPS 2025 submission ('Dear NeurIPS Reviewer'); acceptance could not be confirmed (OpenReview API is behind a bot challenge; Semantic Scholar returned HTTP 429 on three attempts).",
+  "evidence_url": "https://api.openalex.org/works?filter=title.search:FinLoRA%20Benchmarking%20LoRA&per-page=3",
+  "confidence": "VERIFIED",
+  "quote": "\"publication_year\": 2025, \"cited_by_count\": 0, \"primary_location\": {\"id\": \"pmh:oai:arXiv.org:2505.19819\" ... \"is_published\": false"
+ }
+]
+
+### unknowns
+Still unresolved and only the authors can answer: (1) the exact batch size used for Figure 3 (scripts say 1, README/default say 8; paper silent); (2) whether the Llama adapter was served in 8-bit bitsandbytes (the harness default and the main 'LoRA 8bit r8' config) or bf16; (3) how many of the four A5000s were visible to device_map='auto' (model may have been sharded across GPUs); (4) whether 'Average' means per-prompt wall-clock averaged over the datasets in a category (e.g., Sentiment = FPB/FiQA/TFNS/NWGI; XBRL Analysis = 4 extraction sets) — the code supports this reading but it is not stated; (5) whether the Gemini numbers were run from the same machine (network overhead is acknowledged but not quantified); (6) the unit of Table 2 'Average Prompt Length' (tokens vs characters); (7) NeurIPS 2025 acceptance status. Not done: opening a GitHub issue to request raw numbers/GPU/batch size (requires the user's own authorization; suggested text: ask for the batch size, quantization, GPU count, transformers vs other engine, and the per-task 'Time per question' values behind Fig. 3). WebSearch budget was exhausted before this task started, so discovery relied on direct fetches of arXiv, GitHub (API + raw + gh CLI), readthedocs, OpenAlex and the transformers source. Result file: /private/tmp/claude-501/-Users-apple-Stuff/8e1d53f2-050d-497c-b1ad-60a0511d5690/scratchpad/research/gap_4.json
+
+### notes
+Bottom line for the project write-up: FinLoRA's Figure 3 is a wall-clock 'seconds per prompt' measurement from its own eval harness (HF transformers + bitsandbytes 8-bit LoRA adapter, un-merged PEFT, per-task max_new_tokens 10-100, no truncation, sequential or small-batch generate on A5000-class GPUs, versus sequential Vertex AI calls to a fine-tuned Gemini 2.0 Flash Lite). It is not a throughput/serving benchmark: no vLLM, no batching study, no tokens/s, no cost-per-query, no p50/p95, no table of numbers, no hardware statement specific to inference. The derived values (Llama local FiNER 1.57 s, FNXL 2.24 s, XBRL Analysis 4.58 s; Gemini 0.31/0.33/1.40 s) can be cited as 'read from Fig. 3 vector data' with the caveat that the authors never publish them. For an honest contrast, the project should (a) report the same per-prompt wall-clock metric at batch size 1 on HF transformers+bnb-8bit as a replication baseline, then (b) show vLLM/quantized serving as separate columns, and (c) note that FiNER/FNXL prompts in FinLoRA bundle 4 tagging questions per prompt and carry a long tag-option list (1.8k/7.1k avg length), which differs from FinTagging's per-document setup, so latency per fact is not directly comparable. Corrections to the user's premise: timing calls exist (in test/test_dataset.py, not inference.py); the local path does batch when batch_size>1; max_new_tokens=60 is only a default overridden per task.

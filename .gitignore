@@ -1,0 +1,7 @@
+.bridge/
+__pycache__/
+.venv/
+.env
+data/
+.DS_Store
+.codegraph
