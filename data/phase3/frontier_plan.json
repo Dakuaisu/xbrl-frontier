@@ -1,7 +1,7 @@
 {
  "price_sheet": "config/prices_2026-10-01.yaml",
  "price_sheet_observed": "2026-10-01",
- "config_hash": "eb718f0008bc00d3cebff24137359a071f4511df5881d61bed1431acb1571415",
+ "config_hash": "40bcd90d0e7f290da9841c26d060fb1f1032fc33bb96c730c4a59751b8a7f50c",
  "rows": [
   {
    "arm": "gpt-6-luna",
