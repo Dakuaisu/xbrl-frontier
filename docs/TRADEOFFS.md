@@ -393,3 +393,60 @@ Alternatives: (a) a second extension. Rejected because it breaks T-012's "extend
 pinned list a second time, and needs a third sizing rule and a re-audit, all to close a 3% gap. (c) defer
 to the Phase 2 pilot. Rejected because a Phase 2 result would decide a Phase 1 corpus question, which is the
 wrong direction.
+
+## T-017 AUTONOMOUS DECISION - owner to review: mlx_lm pin and Mac pilot design (2026-10-02)
+
+1. **Pin**: `pins.software.mlx_lm = "0.32.0"`, the version installed at the moment Phase 2 first needed it
+   (PyPI release 2026-10-01), never edited afterwards. Installed into `.venv/` with its dependencies:
+   mlx 0.32.3, mlx-metal 0.32.3, transformers 5.18.0, numpy 2.5.3, sentencepiece 0.2.2, protobuf 7.36.2,
+   safetensors 0.8.0, jinja2 3.1.6 and their small helpers (full freeze in `requirements.lock`).
+   `transformers` is therefore present locally as an mlx-lm dependency. PyTorch is not installed.
+2. **One format everywhere** (`xbrl_frontier/sft_format.py`). The user turn is the benchmark's verbatim
+   query (template from the pinned dataset). The chat template is applied with `add_generation_prompt=True,
+   enable_thinking=False`, which ends in Qwen3's empty think block. The completion is the answer in the
+   benchmark schema; `json.dumps` with default separators reproduces all 28,787 FinNI gold answers byte for
+   byte. Loss covers completion tokens only. mlx-lm's own `--mask-prompt` masks up to `assistant\n` and would
+   put the empty think block into the loss, so the pilot feeds mlx-lm (tokens, offset) pairs from
+   `sft_format` instead, and the Kaggle trainer uses the same function.
+3. **Pilot data**: the first `training.mac.pilot_instances` of the fixed corpus order whose full sequence fits
+   `training.mac.max_seq_len_tokens`. mlx-lm truncates longer sequences, which would cut answers. Val is the
+   first `training.mac.pilot_val_instances` dev instances that fit.
+4. **Settings** (new keys): `training.global_batch_instances` 16 on every machine. `training.mac.micro_batch`
+   was set to 4 before any run; the first attempt ran out of Metal memory within 10 iterations
+   (`data/phase2/mac_pilot_0.6B_attempt1_oom.log`), so it is 1, with `training.mac.grad_checkpoint` true.
+   This is the mlx attention-backward limitation the PRD cites. LoRA on every layer, all seven projections
+   (`training.lora_target_modules`), `lora_dropout` 0.0, mlx `scale = lora_alpha / lora_rank` (the PEFT
+   equivalence the PRD's converter uses). Optimizer Adam with no weight decay, matching HF's default AdamW
+   with weight_decay 0. Constant LR (`training.curve_lr_schedule`). 4-bit affine base with group size
+   `training.mac.quant_group_size` (64, the `mlx_lm.convert` default), converted from the pinned snapshot.
+5. **Tokens/sec**: headline = processed tokens (whole sequences) per second of train time. That is the unit
+   of `training.planning_tokens_per_sec` and of the "about 1,000 tokens per instance" arithmetic in PRD
+   section 5, and it is the number compared with `min_tokens_per_sec_to_train_0p6b_locally`. mlx-lm's printed
+   tok/s counts loss tokens only and is recorded beside it.
+6. **Format check**: after training, greedy generation on the val instances, scored with the FinNI scorer
+   (F1 and parse-failure rate). It is labelled as a pilot check and never used as a result.
+
+## T-018 AUTONOMOUS DECISION - owner to review: Kaggle training script (2026-10-02)
+
+`training/kaggle_train.py`, driven by `notebooks/phase2_kaggle_train.ipynb`:
+1. Transformers Trainer + PEFT + bitsandbytes NF4 with fp16 compute (`training.kaggle.quant_base`, `dtype`),
+   gradient checkpointing, LoRA as in T-017, constant LR, `training.epochs`, global batch 16 as micro-batch
+   `training.kaggle.micro_batch` (1) x 16 accumulation. Unsloth and TRL are not used: plain Trainer keeps
+   the fixed order and completion-only masks explicit, with fewer pins. `pins.software.unsloth`/`trl`
+   stay empty.
+2. **Fixed order**: a `SequentialSampler` over `data/corpus/train.jsonl` in file order (the T-013 order).
+   The corpus files are checked against their sha256 in `data/corpus_report.json` before training.
+3. **Curve checkpoints** (`--curve`, primary student seed 1): the adapter is saved at the first optimizer-step
+   boundary where epoch 1 has covered each prefix. Prefixes count distinct trained instances
+   (`training/schedule.py`, T-016). The configured point above the corpus size is realised as "full corpus".
+   The actual instances seen (the batch boundary) are recorded per checkpoint.
+4. **Resume**: full trainer state is saved every `training.kaggle.checkpoint_every_minutes` (callback,
+   `save_total_limit` 2). `--resume DIR` copies the previous session's `checkpoints/`, `curve/` and `run.json`
+   and continues from the latest checkpoint. The sequential sampler makes the resumed data order identical.
+5. **Long instances**: those over `training.kaggle.max_seq_len_tokens` are skipped, never truncated (a
+   truncated context could cut off facts its answer lists), and counted in `run.json`. Curve prefixes then
+   count trained instances. The parked 20,575-token eval context concerns scoring, which is not done here.
+6. `run.json` records versions, env, config hash, corpus hashes, per-session processed tokens/sec, the curve
+   checkpoints and the final adapter. The script refuses to run while `pins.software.{transformers, peft,
+   bitsandbytes, accelerate}` are empty. Two new empty fields (`bitsandbytes`, `accelerate`) were added to
+   `pins.software` for this.

@@ -19,7 +19,7 @@ pins:
     - "gpt-5.4-mini-2026-03-17"      # mid-tier accuracy anchor
   arm_swap_if_over_budget: { replace: "gpt-5.4-mini-2026-03-17", with: "gpt-5.4-nano-2026-03-17" }
   seeds:             [ 1, 2 ]                          # primary student only; the 0.6B student runs seed 1
-  software:          { vllm: "0.30.0", mlx_lm: "", transformers: "", peft: "", trl: "", unsloth: "", autoawq: "0.2.9", llmcompressor: "0.14.0", guidellm: "" }   # vllm/autoawq/llmcompressor pinned 2026-10-02 (owner, O-007); others pinned when their phase first installs them
+  software:          { vllm: "0.30.0", mlx_lm: "0.32.0", transformers: "", peft: "", trl: "", unsloth: "", autoawq: "0.2.9", llmcompressor: "0.14.0", guidellm: "", bitsandbytes: "", accelerate: "" }   # vllm/autoawq/llmcompressor pinned 2026-10-02 (owner, O-007); others pinned when their phase first installs them
   price_sheet:       "config/prices_2026-10-01.yaml"
   fintagging_source:                                  # benchmark serializer + taxonomy (added 2026-10-02, TRADEOFFS T-009)
     repo: "The-FinAI/FinTagging"
@@ -115,6 +115,9 @@ training:
   lora_rank:                 16
   lora_alpha:                32
   learning_rate:             1.0e-4
+  lora_dropout:              0.0                              # added 2026-10-02 (TRADEOFFS T-017)
+  lora_target_modules:       [ "q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj" ]   # every linear projection in every layer (T-017)
+  global_batch_instances:    16                               # instances per optimizer step on every machine (T-017)
   kaggle:
     max_seq_len_tokens:      4096
     dtype:                   "fp16"                           # T4 has no bf16
@@ -123,11 +126,16 @@ training:
     weekly_gpu_hours_quota:  30
     gpu_hours_cap_total:     70
     checkpoint_every_minutes: 30                              # resume across sessions
+    micro_batch:             1                                # per-step instances; grad accumulation = global_batch_instances / micro_batch (T-017)
   mac:
     pilot_instances:         3000
     max_seq_len_tokens:      2048
     quant_base:              "4bit"                           # mlx-lm QLoRA
     min_tokens_per_sec_to_train_0p6b_locally: 1500            # measured in the pilot; below this the 0.6B also trains on Kaggle
+    micro_batch:             1                                # T-017; 4 ran out of Metal memory at 2,048 tokens on 16 GB (first pilot attempt)
+    grad_checkpoint:         true                             # T-017; needed for 2,048-token sequences on 16 GB
+    quant_group_size:        64                               # mlx_lm.convert default, recorded (T-017)
+    pilot_val_instances:     200                              # first dev-slice instances that fit, for pilot val loss and a format check (T-017)
   planning_tokens_per_sec:   { t4_qlora_1p7b: 1500, t4_qlora_0p6b: 3000 }   # planning assumptions only; replaced by pilot measurements
 
 serving:

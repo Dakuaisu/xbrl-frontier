@@ -284,3 +284,36 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   (2) the audit counts before and after removal (18,184 of 215,284 flagged; 0 of 40,721 after) and the
   decontamination skew of positives (O-017); (3) the corpus sizes below cap (T-016); (4) the fresh-slice
   instance file pinned by sha256 in `data/fresh_selection_report.json`.
+
+## O-019 Kaggle student training sessions (OWNER-BLOCKED)
+
+- Status: OWNER-BLOCKED (Kaggle is owner-only; it also needs the O-020 pins)
+- Ready: `training/kaggle_train.py` (resumable QLoRA, fixed order, curve checkpoints, T-018),
+  `training/schedule.py` (tested in `tests/test_training_schedule.py`) and
+  `notebooks/phase2_kaggle_train.ipynb`.
+- Runs, in this order: (1) `Qwen/Qwen3-1.7B`, seed 1, `CURVE = True`; (2) `Qwen/Qwen3-1.7B`, seed 2,
+  `CURVE = False`; (3) `Qwen/Qwen3-0.6B`, seed 1, `CURVE = False`, only if the Mac pilot rate is not above
+  `training.mac.min_tokens_per_sec_to_train_0p6b_locally` (see O-021). Cut order: seed 2 is the first cut.
+- Owner steps:
+  1. After the O-020 pins are committed, build the source tarball:
+     `git archive --format=tar.gz -o /tmp/xbrl-frontier-src.tar.gz HEAD`, and upload it as a new version of
+     the Kaggle dataset `xbrl-frontier-src`.
+  2. Upload `data/corpus/train.jsonl` and `data/corpus/dev.jsonl` (sha256 in `data/corpus_report.json`)
+     as a private Kaggle dataset `xbrl-frontier-corpus`. The script refuses mismatching files.
+  3. New notebook from `notebooks/phase2_kaggle_train.ipynb`. Accelerator GPU T4, Internet on. Attach both
+     datasets, set `MODEL`, `SEED`, `CURVE` in the first code cell, and leave `RESUME = None`. Run all.
+  4. When the session ends (finished or at the session limit), save the output as a Kaggle dataset, e.g.
+     `xbrl-frontier-run-1p7b-s1`. To continue, open a new session, attach that dataset as well, set
+     `RESUME` to its path, and run all again. Repeat until `run.json` lists `final_adapter`.
+  5. Keep total use under `training.kaggle.gpu_hours_cap_total`. Each session's train time is in `run.json`.
+- What I need back: the final output directory of each run (`run.json`, `final_adapter/`, `curve/`),
+  unpacked into `data/phase2/kaggle/<run name>/`.
+
+## O-020 Kaggle training stack pins need owner approval (OPEN)
+
+- Status: OPEN (blocks O-019)
+- Proposed versions (current PyPI releases, checked 2026-10-02): transformers 5.18.0 (2026-09-30; also the
+  version mlx-lm installed locally, so tokenization matches the Mac), peft 0.21.2 (2026-10-01),
+  bitsandbytes 0.50.2 (2026-08-27), accelerate 1.15.0 (2026-09-09). Torch is Kaggle's preinstalled build,
+  recorded in each run's `env`. `trl` and `unsloth` are not used (T-018).
+- Next action: on approval, fill `pins.software.{transformers, peft, bitsandbytes, accelerate}` once.
