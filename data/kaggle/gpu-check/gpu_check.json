@@ -1,0 +1,12 @@
+{
+ "time_utc": "2026-10-02T12:23:55Z",
+ "python": "3.12.13",
+ "nvidia_smi": "error: [Errno 2] No such file or directory: 'nvidia-smi'",
+ "torch": "2.10.0+cpu",
+ "cuda_available": false,
+ "cuda": null,
+ "device_count": 0,
+ "internet_huggingface": "error: <urlopen error [Errno -3] Temporary failure in name resolution>",
+ "internet_pypi": "error: <urlopen error [Errno -3] Temporary failure in name resolution>",
+ "internet_sec": "error: <urlopen error [Errno -3] Temporary failure in name resolution>"
+}

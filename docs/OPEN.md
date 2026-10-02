@@ -293,7 +293,10 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Progress (2026-10-02): `scripts/contamination_statement.py` generates `docs/drafts/contamination_statement_draft.md`
   with items (1)-(4) from recorded files. The fresh-slice gaps and the label-noise rate stay blank until measured.
 
-## O-019 Kaggle runs: training runs 1-5, encoder, predictions (zero-shot, full set, dev, fresh), export (OWNER-BLOCKED)
+## O-019 Kaggle runs: training runs 1-5, encoder, predictions (zero-shot, full set, dev, fresh), export (OWNER-BLOCKED via O-025)
+
+- 2026-10-02 (T-033): Kaggle is builder-run now, but blocked by O-025 (no GPU or internet until the account is
+  phone-verified). The step lists below stay valid; the builder runs them with `kaggle kernels push/status/output`.
 
 - Status: OWNER-BLOCKED (Kaggle is owner-only). The training-stack pins are filled (O-020 RESOLVED, T-019);
   only the Kaggle sessions remain. Start with owner step 1, the tarball.
@@ -432,3 +435,22 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
      `wrong_type_facts` (0 when none), plus `notes`. Commit the sheet. PRD section 9 estimates 6 hours for both passes.
   2. At least a week later, fill `pass2_sheet.csv` the same way without looking at pass 1, and commit it.
   3. Tell me when both are committed. I run `scripts/label_audit.py score` and regenerate the contamination statement.
+
+## O-025 Kaggle account runs kernels without GPU or internet (OWNER-BLOCKED)
+
+- Status: OWNER-BLOCKED (all Kaggle work stopped, per the T-033 instruction to stop if Kaggle refuses)
+- Found (2026-10-02 12:22 UTC): the CLI authenticates as `adnanrashid29` and `kaggle quota` shows 30.00 h of weekly
+  GPU (0.00 h used, refresh 2026-10-03T00:00). The check kernel `adnanrashid29/xbrl-frontier-gpu-check`
+  (`kaggle/kernels/gpu-check/`) was pushed with `enable_gpu: true`, `enable_internet: true`,
+  `machine_shape: NvidiaTeslaT4`, and the server stored those settings (`kaggle kernels pull -m`). The run
+  completed **without a GPU** (`nvidia-smi` absent, `torch 2.10.0+cpu`, `cuda_available: false`) and **without
+  internet** (DNS failure for huggingface.co, pypi.org and www.sec.gov). GPU quota used stayed at 0.00 h. This is
+  how Kaggle treats accounts that have not completed phone verification: GPU accelerators and internet access in
+  notebooks both require it, and the request is silently downgraded to CPU with no network.
+- Evidence: `data/kaggle/gpu-check/gpu_check.json` and `data/kaggle/gpu-check/xbrl-frontier-gpu-check.log`.
+- Exact fix (owner): sign in at https://www.kaggle.com as adnanrashid29, open **Settings**
+  (https://www.kaggle.com/settings) and complete **Phone verification** (enter a phone number, then the SMS code).
+  No other change is needed: the token in the environment stays as it is.
+- Next action: after verification, I re-push the same check kernel (`.venv/bin/kaggle kernels push -p
+  kaggle/kernels/gpu-check --accelerator NvidiaTeslaT4`) and confirm a T4 with internet. Then I continue with
+  RUNBOOK B1, B2, C1 and D1-D11, then E5. All Gemini steps (E1-E4) wait for D4 (the pinned frontier sample).

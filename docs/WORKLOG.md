@@ -332,3 +332,11 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   quota for paid tiers only.
 - Verified: `tests/test_frontier_harness.py` (9: guard, refusal before key, 429 parsing, pacer learning, retries never
   scored, daily-quota stop leaves the instance pending, resume).
+
+## 2026-10-02 Kaggle access check (T-033 step 3)
+
+- `kaggle quota`: GPU 30.00 h weekly, 0.00 h used. Pushed `kaggle/kernels/gpu-check` with a T4 and internet requested. The run
+  got no GPU and no internet (O-025, OWNER-BLOCKED: phone verification). GPU-hours used: 0.00 against
+  `training.kaggle.gpu_hours_cap_total`. Kaggle work is stopped as instructed.
+- The full suite passed 88 three times after the README test fix. One earlier run reported 1 failure, before the README test
+  edit had fully applied; it did not recur.

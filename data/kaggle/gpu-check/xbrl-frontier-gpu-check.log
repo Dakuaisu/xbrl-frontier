@@ -1,0 +1,19 @@
+[{"stream_name":"stdout","time":100.862121868,"data":"{\n"}
+,{"stream_name":"stdout","time":100.86217657,"data":" \"time_utc\": \"2026-10-02T12:23:55Z\",\n"}
+,{"stream_name":"stdout","time":100.862184131,"data":" \"python\": \"3.12.13\",\n"}
+,{"stream_name":"stdout","time":100.862198015,"data":" \"nvidia_smi\": \"error: [Errno 2] No such file or directory: 'nvidia-smi'\",\n"}
+,{"stream_name":"stdout","time":100.862202233,"data":" \"torch\": \"2.10.0+cpu\",\n"}
+,{"stream_name":"stdout","time":100.862205403,"data":" \"cuda_available\": false,\n"}
+,{"stream_name":"stdout","time":100.862213506,"data":" \"cuda\": null,\n"}
+,{"stream_name":"stdout","time":100.862216628,"data":" \"device_count\": 0,\n"}
+,{"stream_name":"stdout","time":100.862219931,"data":" \"internet_huggingface\": \"error: \u003curlopen error [Errno -3] Temporary failure in name resolution\u003e\",\n"}
+,{"stream_name":"stdout","time":100.862223714,"data":" \"internet_pypi\": \"error: \u003curlopen error [Errno -3] Temporary failure in name resolution\u003e\",\n"}
+,{"stream_name":"stdout","time":100.862227116,"data":" \"internet_sec\": \"error: \u003curlopen error [Errno -3] Temporary failure in name resolution\u003e\"\n"}
+,{"stream_name":"stdout","time":100.86223032,"data":"}\n"}
+,{"stream_name":"stderr","time":104.126236022,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":104.126274234,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":104.485255421,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":104.485290608,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":105.260329836,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":106.887917952,"data":"[NbConvertApp] Writing 280516 bytes to __results__.html\n"}
+]

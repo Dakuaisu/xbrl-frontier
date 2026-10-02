@@ -37,3 +37,6 @@ data/phase3/*
 !data/phase3/power_check.json
 !data/frontier_sample_ids.txt
 !data/label_audit/
+!data/kaggle/
+data/kaggle/*
+!data/kaggle/gpu-check/
