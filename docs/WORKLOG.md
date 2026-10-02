@@ -164,3 +164,16 @@ Dated implementation notes: what was built, how it was verified, what is next.
   cells, audit counts, size disclosures).
 - Phase 1 complete: parser fork, serializer, assignment re-run, accession selection and extension, serialization,
   format parity, sampled corpus, contamination audit and fresh slice are all built and verified.
+
+## 2026-10-02 Phase 2, unit 1: Mac pilot, Kaggle training tooling
+
+- Pinned `mlx_lm` 0.32.0 (T-017). Built `xbrl_frontier/sft_format.py` (one format, completion-only loss; the
+  answer serializer reproduces all 28,787 FinNI gold answers byte for byte), `scripts/mac_pilot.py`,
+  `training/schedule.py`, `training/kaggle_train.py` and `notebooks/phase2_kaggle_train.ipynb` (T-018).
+- Pilot attempt 1 (micro-batch 4) ran out of Metal memory within 10 iterations. Attempt 2 (micro-batch 1,
+  grad checkpointing) completed: 560.6 processed tokens/s against the 1,500 threshold, so the 0.6B trains on
+  Kaggle (O-021). Val loss 0.879 -> 0.044, parse failures 0/200.
+- Owner-blocked: O-019 (Kaggle training sessions), waiting on O-020 (training-stack pins).
+- Verified: `pytest -q tests` (48 passed, including `tests/test_training_schedule.py`).
+- Next: encoder baseline script (SEC-BERT token classifier on the same corpus) and the curve-checkpoint
+  scoring script, both runnable once Kaggle access is approved.

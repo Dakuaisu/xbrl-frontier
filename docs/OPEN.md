@@ -292,8 +292,8 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   `training/schedule.py` (tested in `tests/test_training_schedule.py`) and
   `notebooks/phase2_kaggle_train.ipynb`.
 - Runs, in this order: (1) `Qwen/Qwen3-1.7B`, seed 1, `CURVE = True`; (2) `Qwen/Qwen3-1.7B`, seed 2,
-  `CURVE = False`; (3) `Qwen/Qwen3-0.6B`, seed 1, `CURVE = False`, only if the Mac pilot rate is not above
-  `training.mac.min_tokens_per_sec_to_train_0p6b_locally` (see O-021). Cut order: seed 2 is the first cut.
+  `CURVE = False`; (3) `Qwen/Qwen3-0.6B`, seed 1, `CURVE = False`. Required: the Mac pilot measured 560.6
+  tokens/s, below `training.mac.min_tokens_per_sec_to_train_0p6b_locally` (O-021). Cut order: seed 2 is the first cut.
 - Owner steps:
   1. After the O-020 pins are committed, build the source tarball:
      `git archive --format=tar.gz -o /tmp/xbrl-frontier-src.tar.gz HEAD`, and upload it as a new version of
@@ -317,3 +317,19 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   bitsandbytes 0.50.2 (2026-08-27), accelerate 1.15.0 (2026-09-09). Torch is Kaggle's preinstalled build,
   recorded in each run's `env`. `trl` and `unsloth` are not used (T-018).
 - Next action: on approval, fill `pins.software.{transformers, peft, bitsandbytes, accelerate}` once.
+
+## O-021 Mac pilot: 0.6B trains at 560.6 processed tokens/s, below the local-training threshold (RESOLVED)
+
+- Status: RESOLVED (2026-10-02). Per PRD section 5 the 0.6B full run goes to Kaggle (O-019 run 3 is
+  required, not conditional) and the MLX-to-PEFT converter is not built.
+- Measured (`data/phase2_mac_pilot_Qwen3-0.6B.json`; M1 Pro 16 GB, mlx 0.32.3 / mlx_lm 0.32.0, 4-bit base,
+  T-017 settings): 3,000 pilot instances (351 of the first 3,351 skipped as over 2,048 tokens), 187
+  optimizer steps, train time 4,196 s, 2,352,306 processed tokens = **560.6 tokens/s** against
+  `training.mac.min_tokens_per_sec_to_train_0p6b_locally`. Loss tokens 200,421 = 47.8 tokens/s (mlx-lm's
+  figure). Peak memory 2.68 GB with gradient checkpointing.
+- Settled by the pilot: the prompt format and completion-only masking run end to end. Val loss went from
+  0.879 to 0.044 and train loss from 4.18 (first report) to 0.021. Format check on the 200 val instances:
+  parse-failure rate 0.000, malformed items 0. Pilot-only F1 0.229 (P 0.823, R 0.133), labelled as a format
+  check and not a result. Low recall after 187 optimizer steps on the shortest 90% of contexts says
+  nothing yet about the full run, which the curve will show. The LR stays at `training.learning_rate`: the
+  pilot ran one setting, and loss fell without instability.
