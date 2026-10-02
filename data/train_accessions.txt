@@ -1,0 +1,210 @@
+# pins.train_accessions: selected once on 2026-10-02 by scripts/select_train_accessions.py (TRADEOFFS T-011); never edited.
+accession	cik	form	filing_date	period	sic	sec_office	filer_size	split	primary_document	company
+0000002969-22-000054	0000002969	10-K	2022-11-22	20220930	2810	industrial applications and services	large_accelerated	train	apd-20220930.htm	Air Products & Chemicals, Inc.
+0000004127-23-000010	0000004127	10-Q	2023-02-07	20221230	3674	manufacturing	large_accelerated	train	swks-20221230.htm	SKYWORKS SOLUTIONS, INC.
+0000022356-22-000051	0000022356	10-Q	2022-11-04	20220930	6022	finance	large_accelerated	train	cbsh-20220930.htm	COMMERCE BANCSHARES INC /MO/
+0000034088-22-000064	0000034088	10-Q	2022-11-02	20220930	2911	energy & transportation	large_accelerated	train	xom-20220930.htm	EXXON MOBIL CORP
+0000038777-22-000198	0000038777	10-K	2022-11-14	20220930	6282	finance	large_accelerated	train	ben-20220930.htm	FRANKLIN RESOURCES INC
+0000059440-21-000018	0000059440	10-K	2021-03-01	20201231	2111	manufacturing	large_accelerated	train	vgr-20201231.htm	VECTOR GROUP LTD
+0000068505-21-000021	0000068505	10-Q	2021-08-05	20210703	3663	manufacturing	large_accelerated	train	msi-20210703.htm	Motorola Solutions, Inc.
+0000070145-23-000010	0000070145	10-Q	2023-02-03	20221231	4924	energy & transportation	large_accelerated	train	nfg-20221231.htm	NATIONAL FUEL GAS CO
+0000073124-21-000071	0000073124	10-K	2021-02-23	20201231	6022	finance	large_accelerated	train	ntrs-20201231.htm	NORTHERN TRUST CORP
+0000080420-22-000032	0000080420	10-Q	2022-08-03	20220630	3613	manufacturing	large_accelerated	train	powl-20220630.htm	POWELL INDUSTRIES INC
+0000084748-22-000025	0000084748	10-Q	2022-04-29	20220331	2821	industrial applications and services	large_accelerated	train	rog-20220331.htm	ROGERS CORP
+0000088941-21-000006	0000088941	10-K	2021-03-24	20210131	3674	manufacturing	large_accelerated	train	smtc-20210131.htm	SEMTECH CORP
+0000091142-22-000028	0000091142	10-K	2022-02-11	20211231	3630	manufacturing	large_accelerated	train	aos-20211231.htm	SMITH A O CORP
+0000102212-22-000009	0000102212	10-K	2022-02-25	20211231	6022	finance	large_accelerated	train	uvsp-20211231.htm	UNIVEST FINANCIAL Corp
+0000104894-21-000077	0000104894	10-Q	2021-08-03	20210630	6798	real estate & construction	large_accelerated	train	wre-20210630.htm	WASHINGTON REAL ESTATE INVESTMENT TRUST
+0000107263-22-000007	0000107263	10-K	2022-02-28	20211231	4922	energy & transportation	large_accelerated	train	wmb-20211231.htm	WILLIAMS COMPANIES, INC.
+0000109380-22-000072	0000109380	10-K	2022-02-25	20211231	6021	finance	large_accelerated	train	zions-20211231.htm	ZIONS BANCORPORATION, NATIONAL ASSOCIATION /UT/
+0000202058-22-000029	0000202058	10-Q	2022-04-29	20220401	3812	manufacturing	large_accelerated	dev	hrs-20220401.htm	L3HARRIS TECHNOLOGIES, INC. /DE/
+0000217346-22-000025	0000217346	10-Q	2022-10-27	20221001	3720	manufacturing	large_accelerated	dev	txt-20221001.htm	TEXTRON INC
+0000310522-22-000394	0000310522	10-Q	2022-07-29	20220630	6111	finance	large_accelerated	train	fnm-20220630.htm	FEDERAL NATIONAL MORTGAGE ASSOCIATION FANNIE MAE
+0000313143-22-000024	0000313143	10-K	2022-05-25	20220402	3841	industrial applications and services	large_accelerated	train	hae-20220402.htm	HAEMONETICS CORP
+0000700923-21-000030	0000700923	10-Q	2021-07-28	20210630	1623	real estate & construction	large_accelerated	train	myrg-20210630.htm	MYR GROUP INC.
+0000701347-21-000019	0000701347	10-Q	2021-04-28	20210331	6022	finance	large_accelerated	train	cpf-20210331.htm	CENTRAL PACIFIC FINANCIAL CORP
+0000711404-22-000053	0000711404	10-K	2022-12-09	20221031	3851	industrial applications and services	large_accelerated	train	coo-20221031.htm	COOPER COMPANIES, INC.
+0000772406-22-000028	0000772406	10-Q	2022-08-02	20220625	3674	manufacturing	large_accelerated	train	crus-20220625.htm	CIRRUS LOGIC, INC.
+0000792987-21-000016	0000792987	10-K	2021-03-01	20201231	3531	technology	large_accelerated	train	aste-20201231.htm	ASTEC INDUSTRIES INC
+0000822416-21-000018	0000822416	10-Q	2021-04-27	20210331	1531	real estate & construction	large_accelerated	train	phm-20210331.htm	PULTEGROUP INC/MI/
+0000827052-21-000051	0000827052	10-Q	2021-07-29	20210630	4911	energy & transportation	large_accelerated	train	eix-20210630x10q.htm	EDISON INTERNATIONAL
+0000857855-22-000006	0000857855	10-K	2022-02-25	20211231	6022	finance	large_accelerated	train	ucbi-20211231.htm	UNITED COMMUNITY BANKS INC
+0000860546-21-000042	0000860546	10-Q	2021-07-30	20210630	6798	real estate & construction	large_accelerated	train	ofc-20210630.htm	CORPORATE OFFICE PROPERTIES TRUST
+0000860748-21-000153	0000860748	10-Q	2021-10-28	20210930	6331	finance	large_accelerated	train	kmpr-20210930.htm	KEMPER Corp
+0000866374-21-000030	0000866374	10-K	2021-05-19	20210331	3672	manufacturing	large_accelerated	train	flex-20210331.htm	FLEX LTD.
+0000874766-21-000099	0000874766	10-Q	2021-10-28	20210930	6331	finance	large_accelerated	train	hig-20210930.htm	HARTFORD FINANCIAL SERVICES GROUP, INC.
+0000883241-21-000022	0000883241	10-K	2021-12-13	20211031	7372	technology	large_accelerated	train	snps-20211031.htm	SYNOPSYS INC
+0000884614-22-000024	0000884614	10-Q	2022-05-05	20220331	4932	energy & transportation	large_accelerated	train	ugi-20220331.htm	UGI CORP /PA/
+0000891014-22-000053	0000891014	10-Q	2022-10-28	20221002	2810	industrial applications and services	large_accelerated	train	form10q.htm	MINERALS TECHNOLOGIES INC
+0000893691-22-000014	0000893691	10-K	2022-02-24	20220102	2430	manufacturing	large_accelerated	train	door-20220102.htm	MASONITE INTERNATIONAL CORP
+0000895421-22-000515	0000895421	10-Q	2022-08-05	20220630	6211	finance	large_accelerated	train	ms-20220630.htm	MORGAN STANLEY
+0000906345-21-000041	0000906345	10-Q	2021-10-29	20210930	6798	real estate & construction	large_accelerated	train	cpt-20210930.htm	CAMDEN PROPERTY TRUST
+0000910521-21-000017	0000910521	10-K	2021-05-28	20210331	3021	manufacturing	large_accelerated	train	deck-20210331.htm	DECKERS OUTDOOR CORP
+0000912093-22-000025	0000912093	10-Q	2022-05-05	20220402	3674	manufacturing	large_accelerated	train	viav-20220402.htm	VIAVI SOLUTIONS INC.
+0000912593-22-000168	0000912593	10-Q	2022-07-26	20220630	6798	real estate & construction	large_accelerated	train	sui-20220630.htm	SUN COMMUNITIES INC
+0000915389-22-000010	0000915389	10-K	2022-02-25	20211231	2821	industrial applications and services	large_accelerated	train	emn-20211231.htm	EASTMAN CHEMICAL CO
+0000915840-21-000055	0000915840	10-K	2021-11-10	20210930	1531	real estate & construction	large_accelerated	train	bzh-20210930.htm	BEAZER HOMES USA INC
+0000916789-22-000025	0000916789	10-K	2022-04-28	20220228	3634	manufacturing	large_accelerated	train	hele-20220228.htm	HELEN OF TROY LTD
+0000918965-22-000018	0000918965	10-K	2022-08-23	20220630	5045	trade & services	large_accelerated	train	scsc-20220630.htm	SCANSOURCE, INC.
+0000927628-22-000106	0000927628	10-K	2022-02-25	20211231	6021	finance	large_accelerated	train	cof-20211231.htm	CAPITAL ONE FINANCIAL CORP
+0000930236-21-000019	0000930236	10-Q	2021-05-07	20210331	6798	real estate & construction	large_accelerated	train	rwt-20210331.htm	REDWOOD TRUST INC
+0000930420-21-000212	0000930420	10-Q	2021-08-04	20210630	7363	trade & services	large_accelerated	train	kfrc-20210630.htm	KFORCE INC
+0000950170-21-001852	0001618732	10-K	2021-09-21	20210731	7372	technology	large_accelerated	train	ntnx-20210731.htm	Nutanix, Inc.
+0000950170-22-000961	0000717605	10-K	2022-02-09	20211231	2821	industrial applications and services	large_accelerated	dev	hxl-20211231.htm	HEXCEL CORP /DE/
+0000950170-22-001634	0000315852	10-K	2022-02-22	20211231	1311	energy & transportation	large_accelerated	train	rrc-20211231.htm	RANGE RESOURCES CORP
+0000950170-22-001641	0001020214	10-K	2022-02-22	20211231	3841	industrial applications and services	accelerated	train	cers-20211231.htm	CERUS CORP
+0000950170-22-002118	0000910073	10-K	2022-02-25	20211231	6036	finance	large_accelerated	train	nycb-20211231.htm	NEW YORK COMMUNITY BANCORP INC
+0000950170-22-008495	0001674416	10-Q	2022-05-09	20220331	2836	life sciences	large_accelerated	train	crsp-20220331.htm	CRISPR Therapeutics AG
+0000950170-22-013417	0000921582	10-Q	2022-07-29	20220630	3861	industrial applications and services	large_accelerated	train	imax-20220630.htm	IMAX CORP
+0000950170-22-014280	0001724521	10-Q	2022-08-03	20220630	2834	life sciences	large_accelerated	train	rcus-20220630.htm	Arcus Biosciences, Inc.
+0000950170-22-021841	0001683606	10-Q	2022-11-03	20220930	7374	technology	large_accelerated	train	cars-20220930.htm	Cars.com Inc.
+0000950170-22-022136	0000056047	10-Q	2022-11-04	20220930	4400	energy & transportation	large_accelerated	train	kex-20220930.htm	KIRBY CORP
+0000950170-22-024502	0001650696	10-Q	2022-11-10	20220930	2000	manufacturing	other	train	lsf-20220930.htm	Laird Superfood, Inc.
+0001013237-21-000142	0001013237	10-K	2021-10-22	20210831	7370	technology	large_accelerated	train	fds-20210831.htm	FACTSET RESEARCH SYSTEMS INC
+0001014473-21-000015	0001014473	10-Q	2021-04-22	20210331	7371	technology	large_accelerated	train	vrsn-20210331.htm	VERISIGN INC/CA
+0001022079-22-000027	0001022079	10-K	2022-02-28	20211231	8071	industrial applications and services	large_accelerated	train	dgx-20211231.htm	QUEST DIAGNOSTICS INC
+0001035443-22-000040	0001035443	10-K	2022-01-31	20211231	6798	real estate & construction	large_accelerated	train	are-20211231.htm	ALEXANDRIA REAL ESTATE EQUITIES, INC.
+0001048268-22-000026	0001048268	10-Q	2022-02-02	20211231	1731	real estate & construction	large_accelerated	train	iesc-20211231.htm	IES Holdings, Inc.
+0001057877-21-000036	0001057877	10-K	2021-02-18	20201231	4911	energy & transportation	large_accelerated	dev	ida-20201231.htm	IDACORP INC
+0001059556-22-000024	0001059556	10-Q	2022-05-02	20220331	7320	trade & services	large_accelerated	train	mco-20220331.htm	MOODYS CORP /DE/
+0001061630-23-000010	0001061630	10-K	2023-02-08	20221231	6798	real estate & construction	large_accelerated	train	bxmt-20221231.htm	BLACKSTONE MORTGAGE TRUST, INC.
+0001065280-21-000363	0001065280	10-Q	2021-10-21	20210930	7841	trade & services	large_accelerated	train	nflx-20210930.htm	NETFLIX INC
+0001066605-22-000008	0001066605	10-K	2022-02-28	20211231	7361	trade & services	accelerated	train	hsii-20211231.htm	HEIDRICK & STRUGGLES INTERNATIONAL INC
+0001085869-22-000036	0001085869	10-K	2022-02-24	20211231	7371	technology	large_accelerated	train	prft-20211231.htm	PERFICIENT INC
+0001090727-21-000042	0001090727	10-Q	2021-11-04	20210930	4210	energy & transportation	large_accelerated	dev	ups-20210930.htm	UNITED PARCEL SERVICE INC
+0001104659-21-063818	0001746109	10-Q	2021-05-10	20210331	6021	finance	large_accelerated	train	bfc-20210331x10q.htm	Bank First Corp
+0001104659-21-105909	0001644963	10-Q	2021-08-16	20210630	2834	life sciences	other	train	atxi-20210630x10q.htm	AVENUE THERAPEUTICS, INC.
+0001104659-22-117567	0001835881	10-Q	2022-11-14	20220930	6770	real estate & construction	other	train	twni-20220930x10q.htm	Tailwind International Acquisition Corp.
+0001123360-22-000007	0001123360	10-K	2022-02-18	20211231	7389	trade & services	large_accelerated	train	gpn-20211231.htm	GLOBAL PAYMENTS INC
+0001124796-21-000087	0001124796	10-Q	2021-05-07	20210331	3674	manufacturing	large_accelerated	train	lasr-20210331.htm	NLIGHT, INC.
+0001138118-21-000012	0001138118	10-K	2021-02-24	20201231	6500	real estate & construction	large_accelerated	train	cbre-20201231.htm	CBRE GROUP, INC.
+0001140361-22-041175	0001635088	10-Q	2022-11-14	20220930	2834	life sciences	large_accelerated	train	brhc10044005_10q.htm	Roivant Sciences Ltd.
+0001145197-21-000016	0001145197	10-Q	2021-05-07	20210331	3841	industrial applications and services	large_accelerated	train	podd-20210331.htm	INSULET CORP
+0001156039-22-000084	0001156039	10-Q	2022-10-19	20220930	6324	finance	large_accelerated	train	elv-20220930.htm	Elevance Health, Inc.
+0001159036-21-000050	0001159036	10-Q	2021-11-02	20210930	2836	life sciences	large_accelerated	train	halo-20210930.htm	HALOZYME THERAPEUTICS, INC.
+0001171486-21-000009	0001171486	10-K	2021-03-15	20201231	1221	energy & transportation	large_accelerated	train	nrp-20201231.htm	NATURAL RESOURCE PARTNERS LP
+0001171843-22-001394	0001430723	10-K	2022-02-25	20211231	6022	finance	large_accelerated	train	sfbs20211231_10k.htm	ServisFirst Bancshares, Inc.
+0001173514-21-000022	0001173514	10-K	2021-02-24	20201231	3537	technology	accelerated	train	hy-20201231.htm	HYSTER-YALE MATERIALS HANDLING, INC.
+0001178913-22-003868	0001419612	10-Q	2022-11-08	20220930	3674	manufacturing	large_accelerated	train	zk2228664.htm	SOLAREDGE TECHNOLOGIES, INC.
+0001193125-21-054675	0000730272	10-K	2021-02-24	20201231	2836	life sciences	large_accelerated	train	d105808d10k.htm	REPLIGEN CORP
+0001193125-22-046707	0000860730	10-K	2022-02-18	20211231	8062	industrial applications and services	large_accelerated	train	d32297d10k.htm	HCA Healthcare, Inc.
+0001193125-22-054433	0001393818	10-K	2022-02-25	20211231	6282	finance	large_accelerated	train	d299999d10k.htm	Blackstone Inc
+0001193125-22-213586	0001578732	10-Q	2022-08-05	20220630	6531	real estate & construction	large_accelerated	train	d357478d10q.htm	Marcus & Millichap, Inc.
+0001234006-22-000015	0001234006	10-Q	2022-11-07	20220930	6519	real estate & construction	large_accelerated	train	good-20220930.htm	GLADSTONE COMMERCIAL CORP
+0001255474-22-000024	0001255474	10-Q	2022-05-04	20220331	1311	unknown	large_accelerated	train	wll-20220331x10q.htm	WHITING PETROLEUM CORP
+0001262823-22-000022	0001262823	10-Q	2022-05-04	20220331	2860	industrial applications and services	large_accelerated	train	wlk-20220331.htm	WESTLAKE CORP
+0001267238-21-000010	0001267238	10-K	2021-02-19	20201231	6399	finance	large_accelerated	train	aiz-20201231.htm	ASSURANT, INC.
+0001288847-22-000049	0001288847	10-Q	2022-04-28	20220331	7374	technology	large_accelerated	train	fivn-20220331.htm	Five9, Inc.
+0001300514-23-000021	0001300514	10-K	2023-02-03	20221231	7011	real estate & construction	large_accelerated	train	lvs-20221231.htm	LAS VEGAS SANDS CORP
+0001319947-22-000036	0001319947	10-Q	2022-08-31	20220730	5661	trade & services	accelerated	train	dsw-20220730.htm	Designer Brands Inc.
+0001331875-22-000075	0001331875	10-Q	2022-11-09	20220930	6361	finance	large_accelerated	train	fnf-20220930.htm	Fidelity National Financial, Inc.
+0001340122-22-000036	0001340122	10-K	2022-03-04	20211231	2911	energy & transportation	large_accelerated	train	clmt-20211231.htm	Calumet Specialty Products Partners, L.P.
+0001357615-21-000122	0001357615	10-Q	2021-07-29	20210630	1600	real estate & construction	large_accelerated	train	kbr-20210630.htm	KBR, INC.
+0001360901-22-000009	0001360901	10-Q	2022-05-06	20220331	6282	finance	large_accelerated	train	evr-20220331.htm	Evercore Inc.
+0001366868-21-000043	0001366868	10-Q	2021-05-06	20210331	4899	technology	large_accelerated	train	gsat-20210331.htm	Globalstar, Inc.
+0001375365-23-000012	0001375365	10-Q	2023-02-03	20221231	3571	technology	large_accelerated	train	smci-20221231.htm	Super Micro Computer, Inc.
+0001383312-22-000037	0001383312	10-K	2022-08-12	20220630	7389	trade & services	large_accelerated	train	br-20220630.htm	BROADRIDGE FINANCIAL SOLUTIONS, INC.
+0001390777-22-000075	0001390777	10-Q	2022-08-05	20220630	6022	finance	large_accelerated	train	bk-20220630.htm	Bank of New York Mellon Corp
+0001393612-22-000007	0001393612	10-K	2022-02-24	20211231	6141	finance	large_accelerated	train	dfs-20211231.htm	Discover Financial Services
+0001406587-22-000128	0001406587	10-K	2022-11-17	20220930	6500	real estate & construction	accelerated	train	for-20220930.htm	Forestar Group Inc.
+0001408710-22-000045	0001408710	10-K	2022-08-16	20220624	3661	manufacturing	large_accelerated	train	fn-20220624.htm	Fabrinet
+0001410578-22-000966	0001831874	10-K	2022-04-18	20211231	6770	real estate & construction	other	train	atvcu-20211231x10k.htm	Tribe Capital Growth Corp I
+0001423774-21-000134	0001423774	10-Q	2021-12-08	20211031	7372	technology	large_accelerated	train	zuo-20211031.htm	ZUORA INC
+0001424929-22-000139	0001424929	10-Q	2022-11-03	20220930	3751	manufacturing	large_accelerated	train	foxf-20220930.htm	FOX FACTORY HOLDING CORP
+0001426945-21-000007	0001426945	10-K	2021-02-26	20201231	4731	unknown	large_accelerated	train	echo-20201231.htm	Echo Global Logistics, Inc.
+0001428439-22-000010	0001428439	10-K	2022-02-18	20211231	4841	technology	large_accelerated	train	roku-20211231.htm	ROKU, INC
+0001437749-21-005899	0000729580	10-K	2021-03-12	20201231	3677	manufacturing	large_accelerated	train	belfb20201231_10k.htm	BEL FUSE INC /NJ
+0001437749-21-024529	0000906553	10-Q	2021-10-28	20210930	7011	real estate & construction	large_accelerated	train	bgc20210930_10q.htm	BOYD GAMING CORP
+0001437749-21-025568	0000799167	10-Q	2021-11-08	20210930	4213	energy & transportation	large_accelerated	train	mrtn20210930_10q.htm	MARTEN TRANSPORT LTD
+0001437749-22-008152	0000855787	10-K	2022-04-04	20211231	1311	energy & transportation	other	train	aphe20211231_10k.htm	ALPHA ENERGY INC
+0001437749-22-014545	0000025895	10-K	2022-06-08	20220403	2211	manufacturing	other	train	crws20220403_10k.htm	CROWN CRAFTS INC
+0001479290-22-000082	0001479290	10-Q	2022-08-09	20220630	2834	life sciences	large_accelerated	train	rvnc-20220630.htm	Revance Therapeutics, Inc.
+0001493152-21-018876	0000075208	10-Q	2021-08-06	20210630	4412	energy & transportation	accelerated	train	form10-q.htm	OVERSEAS SHIPHOLDING GROUP INC
+0001493152-22-012341	0001066764	10-Q	2022-05-06	20220331	8060	energy & transportation	other	train	form10-q.htm	Bitech Technologies Corp
+0001509991-21-000086	0001509991	10-Q	2021-11-08	20210930	1311	energy & transportation	large_accelerated	train	kos-20210930.htm	Kosmos Energy Ltd.
+0001526113-22-000016	0001526113	10-Q	2022-08-04	20220630	6798	real estate & construction	large_accelerated	train	gnl-20220630.htm	Global Net Lease, Inc.
+0001531152-21-000050	0001531152	10-Q	2021-11-24	20211030	5331	trade & services	large_accelerated	dev	bj-20211030.htm	BJ's Wholesale Club Holdings, Inc.
+0001534504-22-000069	0001534504	10-Q	2022-10-27	20220930	2911	energy & transportation	large_accelerated	train	pbf-20220930.htm	PBF Energy Inc.
+0001545654-21-000006	0001545654	10-K	2021-02-26	20201231	6798	real estate & construction	large_accelerated	train	alex-20201231.htm	Alexander & Baldwin, Inc.
+0001551182-22-000004	0001551182	10-K	2022-02-23	20211231	3590	technology	large_accelerated	train	etn-20211231.htm	Eaton Corp plc
+0001553023-21-000012	0001553023	10-K	2021-02-19	20201231	6798	real estate & construction	large_accelerated	train	cone-20201231.htm	CyrusOne Inc.
+0001555280-21-000098	0001555280	10-K	2021-02-16	20201231	2834	life sciences	large_accelerated	train	zts-20201231.htm	Zoetis Inc.
+0001556593-21-000004	0001556593	10-K	2021-02-16	20201231	6798	real estate & construction	large_accelerated	train	nrz-20201231.htm	New Residential Investment Corp.
+0001558370-21-001348	0000823768	10-K	2021-02-22	20201231	4953	energy & transportation	large_accelerated	train	wm-20201231x10k.htm	WASTE MANAGEMENT INC
+0001558370-21-001419	0001086600	10-K	2021-02-23	20201231	1221	energy & transportation	large_accelerated	train	arlp-20201231x10k.htm	ALLIANCE RESOURCE PARTNERS LP
+0001558370-21-001636	0000745308	10-K	2021-02-24	20201231	6552	real estate & construction	large_accelerated	dev	joe-20201231x10k.htm	ST JOE Co
+0001558370-21-002186	0001590560	10-K	2021-03-01	20201231	2834	life sciences	large_accelerated	train	qure-20201231x10k.htm	uniQure N.V.
+0001558370-21-003005	0001527590	10-K	2021-03-15	20201231	6798	real estate & construction	large_accelerated	train	rc-20201231x10k.htm	Ready Capital Corp
+0001558370-21-005274	0000887905	10-Q	2021-04-29	20210331	6798	real estate & construction	large_accelerated	train	ltc-20210331x10q.htm	LTC PROPERTIES INC
+0001558370-21-006313	0001827090	10-Q	2021-05-07	20210331	7372	technology	large_accelerated	dev	cert-20210331x10q.htm	Certara, Inc.
+0001558370-21-006699	0000933974	10-Q	2021-05-10	20210331	3559	technology	large_accelerated	dev	brks-20210331x10q.htm	Brooks Automation, Inc.
+0001558370-21-013631	0001035983	10-Q	2021-10-27	20210930	1731	real estate & construction	large_accelerated	train	fix-20210930x10q.htm	COMFORT SYSTEMS USA INC
+0001558370-21-013911	0001477449	10-Q	2021-11-01	20210930	8011	industrial applications and services	large_accelerated	train	tdoc-20210930x10q.htm	Teladoc Health, Inc.
+0001558370-21-014801	0001113232	10-Q	2021-11-05	20210930	3559	technology	large_accelerated	train	acls-20210930x10q.htm	AXCELIS TECHNOLOGIES INC
+0001558370-22-001278	0001623925	10-K	2022-02-16	20211231	4922	energy & transportation	large_accelerated	train	am-20211231x10k.htm	Antero Midstream Corp
+0001558370-22-001602	0001689796	10-K	2022-02-22	20211231	6798	real estate & construction	large_accelerated	train	jbgs-20211231x10k.htm	JBG SMITH Properties
+0001558370-22-001932	0001730430	10-K	2022-02-24	20211231	2834	life sciences	large_accelerated	train	knsa-20211231x10k.htm	Kiniksa Pharmaceuticals, Ltd.
+0001558370-22-002184	0000894405	10-K	2022-02-25	20211231	4213	energy & transportation	large_accelerated	train	arcb-20211231x10k.htm	ARCBEST CORP /DE/
+0001558370-22-003139	0000046129	10-K	2022-03-09	20211231	3825	industrial applications and services	accelerated	train	amot-20211231x10k.htm	ALLIED MOTION TECHNOLOGIES INC
+0001558370-22-004635	0000928340	10-K	2022-03-29	20211231	4941	energy & transportation	accelerated	train	cwco-20211231x10k.htm	Consolidated Water Co. Ltd.
+0001558370-22-004672	0001455365	10-K	2022-03-30	20211231	2836	life sciences	other	train	cgtx-20211231x10k.htm	COGNITION THERAPEUTICS INC
+0001558370-22-007435	0000314489	10-Q	2022-05-05	20220331	6022	finance	large_accelerated	train	buse-20220331x10q.htm	FIRST BUSEY CORP /NV/
+0001558370-22-011735	0001495932	10-Q	2022-08-03	20220630	6531	real estate & construction	large_accelerated	train	expi-20220630x10q.htm	EXP World Holdings, Inc.
+0001558370-22-011810	0001295810	10-Q	2022-08-03	20220630	7011	real estate & construction	large_accelerated	train	sho-20220630x10q.htm	Sunstone Hotel Investors, Inc.
+0001558370-22-016426	0000813762	10-Q	2022-11-04	20220930	3714	energy & transportation	large_accelerated	train	tmb-20220930x10q.htm	ICAHN ENTERPRISES L.P.
+0001558370-23-001036	0000820313	10-K	2023-02-08	20221231	3678	manufacturing	large_accelerated	train	aph-20221231x10k.htm	AMPHENOL CORP /DE/
+0001562762-21-000036	0001237831	10-K	2021-02-17	20201231	3841	industrial applications and services	large_accelerated	train	gmed-20201231x10k.htm	GLOBUS MEDICAL INC
+0001562762-21-000119	0001295401	10-K	2021-03-15	20201231	6021	finance	large_accelerated	train	tbbk-20201231x10k.htm	Bancorp, Inc.
+0001564590-21-006672	0001466085	10-K	2021-02-18	20201231	6798	real estate & construction	large_accelerated	train	irt-10k_20201231.htm	INDEPENDENCE REALTY TRUST, INC.
+0001564590-21-007609	0001080709	10-K	2021-02-23	20201231	2834	life sciences	large_accelerated	train	arna-10k_20201231.htm	ARENA PHARMACEUTICALS INC
+0001564590-21-008442	0000715957	10-K	2021-02-25	20201231	4911	energy & transportation	large_accelerated	train	d-10k_20201231.htm	DOMINION ENERGY, INC
+0001564590-21-008832	0001575515	10-K	2021-02-25	20210103	5411	trade & services	large_accelerated	train	sfm-10k_20210103.htm	Sprouts Farmers Market, Inc.
+0001564590-21-008896	0001598428	10-K	2021-02-25	20201231	3312	manufacturing	large_accelerated	train	tmst-10k_20201231.htm	TimkenSteel Corp
+0001564590-21-009011	0001652130	10-K	2021-02-26	20201231	2835	life sciences	large_accelerated	train	ntla-10k_20201231.htm	Intellia Therapeutics, Inc.
+0001564590-21-009190	0001385280	10-K	2021-02-26	20201231	7830	trade & services	large_accelerated	train	cnk-10k_20201231.htm	Cinemark Holdings, Inc.
+0001564590-21-009469	0000203596	10-K	2021-02-26	20201231	6021	finance	large_accelerated	train	wsbc-10k_20201231.htm	WESBANCO INC
+0001564590-21-009747	0001142417	10-K	2021-03-01	20201231	4833	technology	large_accelerated	dev	nxst-10k_20201231.htm	NEXSTAR MEDIA GROUP, INC.
+0001564590-21-014601	0001783398	10-K	2021-03-22	20201231	6162	finance	large_accelerated	train	uwmc-10k_20201231.htm	UWM Holdings Corp
+0001564590-21-021157	0000087347	10-Q	2021-04-28	20210331	1389	energy & transportation	large_accelerated	train	slb-10q_20210331.htm	SCHLUMBERGER LIMITED/NV
+0001564590-21-021618	0000101382	10-Q	2021-04-29	20210331	6021	finance	large_accelerated	train	umbf-10q_20210331.htm	UMB FINANCIAL CORP
+0001564590-21-023551	0000104918	10-Q	2021-05-05	20210331	4931	energy & transportation	large_accelerated	train	ava-10q_20210331.htm	AVISTA CORP
+0001564590-21-024240	0001754301	10-Q	2021-05-06	20210331	4833	technology	large_accelerated	train	fox-10q_20210331.htm	Fox Corp
+0001564590-21-024494	0001771917	10-Q	2021-05-06	20210331	2834	life sciences	large_accelerated	train	krtx-10q_20210331.htm	Karuna Therapeutics, Inc.
+0001564590-21-038989	0001792580	10-Q	2021-07-29	20210630	1311	energy & transportation	large_accelerated	train	ovv-10q_20210630.htm	Ovintiv Inc.
+0001564590-21-041942	0001437958	10-Q	2021-08-06	20210630	6022	finance	large_accelerated	train	ck1437958-10q_20210630.htm	COASTAL FINANCIAL CORP
+0001564590-21-055793	0000031235	10-Q	2021-11-09	20210930	3861	industrial applications and services	accelerated	train	kodk-10q_20210930.htm	EASTMAN KODAK CO
+0001564590-21-056205	0001703057	10-Q	2021-11-10	20210930	2834	life sciences	large_accelerated	train	abcl-10q_20210930.htm	AbCellera Biologics Inc.
+0001564590-22-005707	0000106535	10-K	2022-02-18	20211231	6798	real estate & construction	large_accelerated	train	wy-10k_20211231.htm	WEYERHAEUSER CO
+0001564590-22-007221	0001620280	10-K	2022-02-25	20211231	6798	real estate & construction	large_accelerated	train	unit-10k_20211231.htm	Uniti Group Inc.
+0001564590-22-007263	0001068851	10-K	2022-02-28	20211231	6022	finance	large_accelerated	train	pb-10k_20211231.htm	PROSPERITY BANCSHARES INC
+0001564590-22-007930	0001520697	10-K	2022-03-01	20211231	8093	industrial applications and services	large_accelerated	train	achc-10k_20211231.htm	Acadia Healthcare Company, Inc.
+0001564590-22-008100	0001287865	10-K	2022-03-01	20211231	6798	real estate & construction	large_accelerated	train	mpw-10k_20211231.htm	MEDICAL PROPERTIES TRUST INC
+0001564590-22-026690	0001593538	10-Q	2022-07-27	20220630	6211	finance	large_accelerated	train	navi-10q_20220630.htm	NAVIENT CORP
+0001564590-22-031282	0001280263	10-Q	2022-09-08	20220731	3674	manufacturing	large_accelerated	train	amba-10q_20220731.htm	AMBARELLA INC
+0001567683-21-000009	0001567683	10-K	2021-03-01	20201231	4911	energy & transportation	large_accelerated	train	cwen-20201231.htm	Clearway Energy, Inc.
+0001570585-21-000025	0001570585	10-K	2021-02-16	20201231	4841	technology	large_accelerated	train	lbtya-20201231.htm	Liberty Global plc
+0001579877-21-000075	0001579877	10-Q	2021-08-06	20210630	6798	real estate & construction	large_accelerated	train	out-20210630.htm	OUTFRONT Media Inc.
+0001580905-22-000004	0001580905	10-K	2022-02-24	20211231	1520	real estate & construction	large_accelerated	train	ibp-20211231.htm	Installed Building Products, Inc.
+0001590584-21-000094	0001590584	10-Q	2021-07-30	20210630	7000	real estate & construction	accelerated	train	cveo-20210630.htm	Civeo Corp
+0001618563-21-000018	0001618563	10-K	2021-02-26	20201231	6798	real estate & construction	large_accelerated	train	nsa-20201231.htm	National Storage Affiliates Trust
+0001618755-21-000020	0001618755	10-Q	2021-04-30	20210331	5812	trade & services	large_accelerated	train	qsr-20210331.htm	Restaurant Brands International Limited Partnership
+0001628280-21-002219	0001097864	10-K	2021-02-16	20201231	3674	manufacturing	large_accelerated	train	on-20201231.htm	ON SEMICONDUCTOR CORP
+0001628280-21-003197	0000063276	10-K	2021-02-25	20201231	3942	manufacturing	large_accelerated	train	mat-20201231.htm	MATTEL INC /DE/
+0001628280-21-004026	0000874499	10-K	2021-03-05	20201231	1311	energy & transportation	large_accelerated	train	gpor-20201231.htm	GULFPORT ENERGY CORP
+0001628280-21-009779	0001621563	10-Q	2021-05-11	20210403	1400	energy & transportation	large_accelerated	train	sum-20210403.htm	Summit Materials, Inc.
+0001628280-22-003530	0000019745	10-K	2022-02-23	20211231	4923	energy & transportation	large_accelerated	train	cpk-20211231.htm	CHESAPEAKE UTILITIES CORP
+0001628280-22-004522	0001517022	10-K	2022-03-01	20211231	2834	life sciences	large_accelerated	train	akba-20211231.htm	Akebia Therapeutics, Inc.
+0001628280-23-001606	0000920760	10-K	2023-01-26	20221130	1520	real estate & construction	large_accelerated	train	len-20221130.htm	LENNAR CORP /NEW/
+0001634997-21-000024	0001634997	10-K	2021-03-01	20201231	4911	energy & transportation	large_accelerated	train	agr-20201231.htm	Avangrid, Inc.
+0001644406-21-000046	0001644406	10-Q	2021-08-04	20210630	2050	manufacturing	large_accelerated	train	twnk-20210630.htm	Hostess Brands, Inc.
+0001666700-21-000068	0001666700	10-Q	2021-11-03	20210930	2821	industrial applications and services	large_accelerated	train	dd-20210930.htm	DuPont de Nemours, Inc.
+0001692063-21-000056	0001692063	10-K	2021-02-19	20201231	4213	energy & transportation	large_accelerated	train	sndr-20201231.htm	Schneider National, Inc.
+0001692787-22-000016	0001692787	10-Q	2022-11-09	20220930	4922	energy & transportation	large_accelerated	train	apa-20220930.htm	Kinetik Holdings Inc.
+0001728688-23-000019	0001728688	10-Q	2023-02-09	20221231	7389	technology	accelerated	train	iiiv-20221231.htm	i3 Verticals, Inc.
+0001739445-22-000105	0001739445	10-Q	2022-08-04	20220630	3440	manufacturing	large_accelerated	train	aca-20220630.htm	Arcosa, Inc.
+0001742924-21-000026	0001742924	10-Q	2021-05-06	20210331	2800	industrial applications and services	large_accelerated	train	lthm-20210331.htm	Livent Corp.
+0001759655-22-000118	0001759655	10-Q	2022-08-11	20220630	8000	industrial applications and services	large_accelerated	train	prva-20220630.htm	Privia Health Group, Inc.
+0001781755-21-000066	0001781755	10-Q	2021-11-08	20210930	6411	finance	large_accelerated	train	brp-20210930.htm	BRP Group, Inc.
+0001820953-21-000102	0001820953	10-K	2021-09-17	20210630	7389	finance	large_accelerated	train	afrm-20210630.htm	Affirm Holdings, Inc.
+0001856314-22-000008	0001856314	10-K	2022-03-30	20211231	7372	technology	large_accelerated	train	you-20211231.htm	Clear Secure, Inc.
+0001868726-21-000010	0001868726	10-Q	2021-11-10	20210930	2844	industrial applications and services	accelerated	train	olpx-20210930.htm	OLAPLEX HOLDINGS, INC.

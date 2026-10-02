@@ -20,3 +20,6 @@ data/manifest_work/*
 !data/eval_cik_candidates_unconfirmed.txt
 !data/manifest_work/serializer_rebuild.json
 !data/manifest_work/eval_instance_to_filing_phase0_tokenmatch.csv
+!data/train_selection_report.json
+!data/corpus_serialize_report.json
+!data/format_parity_report.json

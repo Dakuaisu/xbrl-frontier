@@ -197,3 +197,42 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   `tests/test_ixbrl_facts.py::test_text_blocks_follow_notebook_rules`.
 - Next action: none. `scripts/serialize_corpus.py` applies T-010 and counts the dropped twins per filing
   and in total. The format-parity script reports the divergence from the benchmark's conventions.
+
+## O-014 The frozen accession list yields 17,094 positives, short of what the training target needs (OPEN)
+
+- Status: OPEN (DECISIONS NEEDED)
+- Found: the 208 filings (sized by the eval set's planning instances-per-filing, T-011 item 3) serialize to
+  321,080 instances. 17,094 are positives (10-K: 11,270 over 104 filings, mean 108.4; 10-Q: 5,824 over
+  104, mean 56.0) and 303,986 are negatives after dropping 4,511 twins. At `training.negatives_fraction`,
+  `target_train_instances` + `dev_slice_instances` need (40,000 + 2,000) x (1 - 0.40) = 25,200 positives.
+  With all 17,094 positives the corpus tops out at about 28,490 instances, so the last
+  `training.curve_points` value cannot be reached. Cause: the planning figure (about 203 instances per
+  filing) counts the eval's sampled negatives, while these filings give about 82 positives per filing
+  (10-Qs about half of 10-Ks).
+- Evidence: `data/corpus_serialize_report.json` (per-filing counts).
+- Next action: owner decision. Options: (a) extend the list by continuing the **same** seeded walk under the
+  same rule and quotas, sized from the measured positives per filing (about 99 more filings), leaving the
+  first 208 unchanged and recording the amendment and both sizes; (b) keep 208 and accept a smaller corpus,
+  which would mean changing `training.target_train_instances` / `curve_points` (a spec change); (c) shift
+  the form share toward 10-K for the extension (about twice the positives per filing; the eval is all 10-K).
+
+## O-015 First format-parity comparison: positives match, negatives diverge (OPEN)
+
+- Status: OPEN (to be handled by negative sampling in the corpus build, not by the serializer)
+- Found (`scripts/format_parity.py` -> `data/format_parity_report.json`; eval = FinNI dedup set, train = the
+  serialized corpus after twin drop):
+  - Positives: table share 0.530 (eval) vs 0.516 (train). Context tokens p10/p50/p90/p99 57/293/1,792/5,684
+    vs 62/273/1,739/4,845. Above `training.kaggle.max_seq_len_tokens`: 2.2% vs 1.6%. Facts per positive
+    median 5 vs 4, mean 14.6 vs 12.3. Datatype mix: monetary 0.892 vs 0.878, percent 0.047 vs 0.037,
+    shares 0.036 vs 0.051, perShare 0.021 vs 0.029, integer 0.004 vs 0.004.
+  - HTML tag vocabulary: identical. Doubled-cell share: 0.147 (eval) vs 0.115 (train, all) / 0.141 (train
+    with FinTagging's negative filters), so the serializer reproduces the artifact.
+  - Negatives: fraction 0.377 (eval) vs 0.947 (train, unsampled). Table share of negatives 0.204 vs 0.034
+    (train negatives passing FinTagging's filters). Negative median tokens 60 vs 50, but p90 1,132 vs 103,
+    because the eval keeps long negative tables. Twin-drop divergence: 4,511 twins not written (T-010).
+- Reading: the serializer and labels are at parity. The divergences are sampling divergences.
+  FinTagging's sampler capped negatives per filing and kept table negatives with at least 50 digits.
+  Ours has not sampled yet.
+- Next action: the corpus-build sampler draws negatives to `training.negatives_fraction`, stratified by
+  context type so the negatives' table share tracks the eval's. The parity script is re-run on the sampled
+  corpus and both reports are kept.

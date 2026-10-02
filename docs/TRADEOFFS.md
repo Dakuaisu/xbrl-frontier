@@ -261,3 +261,34 @@ that text is demonstrably wrong. The same text's facts are tagged, and the empty
 benchmark's conventions stay in the serializer (`ixbrl_facts/fintagging.py`, unchanged). The rule is
 applied only when the corpus is written, the eval set is untouched, and the format-parity script reports
 the divergence.
+
+## T-011 AUTONOMOUS DECISION - owner to review: training accession selection rule and seed (2026-10-02)
+
+Selected once by `scripts/select_train_accessions.py` into `data/train_accessions.txt`
+(`pins.train_accessions`). The script refuses to overwrite it. The rule:
+
+1. **Universe**: EDGAR monthly XBRL RSS (`/Archives/edgar/monthly/xbrlrss-YYYY-MM.xml`), original `10-K` and
+   `10-Q` only (no amendments) whose primary document is inline XBRL, filed in
+   [`training.accession_selection.filing_date_min`, `contamination.train_filing_date_max`]. That window is
+   two years ending at the cutoff, matching the length of the eval window. 46,482 filings.
+2. **Exclusions**: every CIK in the three `contamination.exclude_ciks_from` files (129 + 11 + 15 = 151 CIKs)
+   leaves 45,385 eligible. At most `max_filings_per_cik` (1) filing per CIK, so the dev filings are disjoint
+   from the train filings by construction.
+3. **Size**: `ceil(target_train_instances / ipf)` train + `ceil(dev_slice_instances / ipf)` dev filings =
+   198 + 10, where ipf is the **planning** instances-per-filing `pins.eval_finni.rows_expected /
+   contamination.eval_manifest_required_recovered` (the eval set's figure, as the owner directed), split by
+   `form_share` (50/50; the PRD names both forms and gives no ratio).
+4. **Strata**: SEC industry office (`ownerOrg`) x filer size (`category`, collapsed to large accelerated /
+   accelerated / other), both read from the submissions API for eval and training CIKs alike. Quotas follow
+   the eval manifest's 139-filing distribution, allocated by largest remainder per form. The RSS carries its
+   own office field, but it uses filing-time office names (no "Industrial Applications and Services" in
+   2022). Mixing the two sources would have left an eval cell unfillable, so both sides use the same
+   source. Caveat: `category` and `ownerOrg` are the current values, not values as of the filing date.
+5. **Walk**: one shuffle of the eligible list with `random.Random(training.accession_selection.seed)`.
+   A candidate is accepted when its (form, office, size) cell has room and it serializes under the
+   benchmark's rule: no unknown us-gaap concept (the notebook's KeyError skip) and at least one positive
+   instance. Rejections are counted (1 unknown-concept rejection). Every quota was filled.
+6. **Dev filings**: `random.Random(seed + 1).sample(accepted, n_dev)`.
+Alternatives: SIC divisions as the sector key (not what the eval's SEC-office data offers); a 10-K-only
+corpus (the PRD names both forms); seeding from `pins.seeds` (those are training seeds). Report:
+`data/train_selection_report.json`.

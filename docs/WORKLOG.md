@@ -109,3 +109,20 @@ Dated implementation notes: what was built, how it was verified, what is next.
   `scripts/validate_instance_map.py` on the new map.
 - Next: accession selection for the training corpus (filing date <= `train_filing_date_max`, excluding
   every CIK under `contamination.exclude_ciks_from`, now including the unconfirmed list).
+
+## 2026-10-02 Phase 1, unit 2: training accessions, serialization pass, first parity comparison
+
+- Issue draft updated to the Phase 1 figures, with O-013 (and the taxonomy question) added as
+  observations. O-011 now says the token_fuzzy validation is not comparable across phases. O-013 is
+  RESOLVED by T-010 (drop negative twins in training).
+- Built `scripts/select_train_accessions.py` (T-011), `scripts/serialize_corpus.py` (T-010 applied) and
+  `scripts/format_parity.py`. New config block `training.accession_selection`.
+- Selection (2026-10-02 06:27 UTC, cached and throttled, User-Agent from `xbrl_frontier.edgar.USER_AGENT`):
+  universe 46,482, eligible 45,385, accepted 208 (104 10-K / 104 10-Q; 198 train / 10 dev), 1 rejected
+  (unknown concept), all quotas filled. `data/train_accessions.txt` is frozen. Office and size distribution
+  against the eval manifest: `data/train_selection_report.json`.
+- Serialization: 321,080 instances = 17,094 positives + 303,986 negatives. 4,511 twins dropped (median 17
+  per filing, max 123). Negatives fraction after twin drop 0.9468 (0.9475 if kept), before sampling.
+  Positives fall short of the target (O-014).
+- First parity comparison: O-015.
+- Verified: `pytest -q tests` (41 passed, including `tests/test_corpus_selection.py`).

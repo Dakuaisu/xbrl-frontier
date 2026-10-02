@@ -1,0 +1,242 @@
+{
+ "config_hash": "5b899becee3a2f0cba08ef304cb3112b526e16bec2fb64e439e1a48dd8180b08",
+ "eval": {
+  "set": "FinNI-eval-v2 dedup",
+  "instances": 25969,
+  "positives": 16184,
+  "negatives_fraction": 0.3767954099118179,
+  "table_share": 0.40702375909738536,
+  "table_share_positives": 0.5296589223924864,
+  "context_tokens_quantiles": {
+   "0.1": 33,
+   "0.5": 144,
+   "0.9": 1556,
+   "0.99": 5172
+  },
+  "context_tokens_mean": 586.2632754437984,
+  "share_above_max_seq_len": 0.01640417420770919,
+  "facts_per_positive_quantiles": {
+   "0.1": 1,
+   "0.5": 5,
+   "0.9": 36,
+   "0.99": 121
+  },
+  "facts_per_positive_mean": 14.574826989619377,
+  "datatype_mix": {
+   "integerItemType": 0.0042,
+   "monetaryItemType": 0.8915,
+   "perShareItemType": 0.0211,
+   "percentItemType": 0.0473,
+   "sharesItemType": 0.0359
+  },
+  "html_tags": {
+   "td": 4087288,
+   "tr": 353032,
+   "table": 21140,
+   "th": 560
+  },
+  "doubled_cell_share": 0.14664792822490055
+ },
+ "train_all": {
+  "set": "serialized corpus after twin drop, all negatives",
+  "instances": 321080,
+  "positives": 17094,
+  "negatives_fraction": 0.9467609318549894,
+  "table_share": 0.08190170673975333,
+  "table_share_positives": 0.5163800163800164,
+  "context_tokens_quantiles": {
+   "0.1": 7,
+   "0.5": 48,
+   "0.9": 263,
+   "0.99": 1757
+  },
+  "context_tokens_mean": 156.49351563473277,
+  "share_above_max_seq_len": 0.001962127818612184,
+  "facts_per_positive_quantiles": {
+   "0.1": 1,
+   "0.5": 4,
+   "0.9": 32,
+   "0.99": 91
+  },
+  "facts_per_positive_mean": 12.261729261729261,
+  "datatype_mix": {
+   "integerItemType": 0.0044,
+   "monetaryItemType": 0.8782,
+   "perShareItemType": 0.0287,
+   "percentItemType": 0.0374,
+   "sharesItemType": 0.0513
+  },
+  "html_tags": {
+   "td": 4950086,
+   "tr": 472446,
+   "table": 52594,
+   "th": 848
+  },
+  "doubled_cell_share": 0.11473653675864386
+ },
+ "train_fintagging_negative_filter": {
+  "set": "serialized corpus, negatives restricted to FinTagging's filters",
+  "instances": 131018,
+  "positives": 17094,
+  "negatives_fraction": 0.8695293776427666,
+  "table_share": 0.09723854737516982,
+  "table_share_positives": 0.5163800163800164,
+  "context_tokens_quantiles": {
+   "0.1": 25,
+   "0.5": 56,
+   "0.9": 244,
+   "0.99": 2687
+  },
+  "context_tokens_mean": 176.36920881100306,
+  "share_above_max_seq_len": 0.003060648155215314,
+  "facts_per_positive_quantiles": {
+   "0.1": 1,
+   "0.5": 4,
+   "0.9": 32,
+   "0.99": 91
+  },
+  "facts_per_positive_mean": 12.261729261729261,
+  "datatype_mix": {
+   "integerItemType": 0.0044,
+   "monetaryItemType": 0.8782,
+   "perShareItemType": 0.0287,
+   "percentItemType": 0.0374,
+   "sharesItemType": 0.0513
+  },
+  "html_tags": {
+   "td": 4618790,
+   "tr": 406602,
+   "table": 25480,
+   "th": 812
+  },
+  "doubled_cell_share": 0.14114846688961813
+ },
+ "eval_positives": {
+  "set": "FinNI-eval-v2 dedup, positives",
+  "instances": 16184,
+  "positives": 16184,
+  "negatives_fraction": 0.0,
+  "table_share": 0.5296589223924864,
+  "table_share_positives": 0.5296589223924864,
+  "context_tokens_quantiles": {
+   "0.1": 57,
+   "0.5": 293,
+   "0.9": 1792,
+   "0.99": 5684
+  },
+  "context_tokens_mean": 731.66429807217,
+  "share_above_max_seq_len": 0.02218240237271379,
+  "facts_per_positive_quantiles": {
+   "0.1": 1,
+   "0.5": 5,
+   "0.9": 36,
+   "0.99": 121
+  },
+  "facts_per_positive_mean": 14.574826989619377,
+  "datatype_mix": {
+   "integerItemType": 0.0042,
+   "monetaryItemType": 0.8915,
+   "perShareItemType": 0.0211,
+   "percentItemType": 0.0473,
+   "sharesItemType": 0.0359
+  },
+  "html_tags": {
+   "td": 3369568,
+   "tr": 279536,
+   "table": 17144
+  },
+  "doubled_cell_share": 0.12426165021372666
+ },
+ "train_positives": {
+  "set": "serialized corpus, positives",
+  "instances": 17094,
+  "positives": 17094,
+  "negatives_fraction": 0.0,
+  "table_share": 0.5163800163800164,
+  "table_share_positives": 0.5163800163800164,
+  "context_tokens_quantiles": {
+   "0.1": 62,
+   "0.5": 273,
+   "0.9": 1739,
+   "0.99": 4845
+  },
+  "context_tokens_mean": 656.2212472212473,
+  "share_above_max_seq_len": 0.016146016146016146,
+  "facts_per_positive_quantiles": {
+   "0.1": 1,
+   "0.5": 4,
+   "0.9": 32,
+   "0.99": 91
+  },
+  "facts_per_positive_mean": 12.261729261729261,
+  "datatype_mix": {
+   "integerItemType": 0.0044,
+   "monetaryItemType": 0.8782,
+   "perShareItemType": 0.0287,
+   "percentItemType": 0.0374,
+   "sharesItemType": 0.0513
+  },
+  "html_tags": {
+   "td": 3134708,
+   "tr": 267466,
+   "table": 17654
+  },
+  "doubled_cell_share": 0.114982117274944
+ },
+ "eval_negatives": {
+  "set": "FinNI-eval-v2 dedup, negatives",
+  "instances": 9785,
+  "positives": 0,
+  "negatives_fraction": 1.0,
+  "table_share": 0.20419008686765458,
+  "table_share_positives": 0.0,
+  "context_tokens_quantiles": {
+   "0.1": 25,
+   "0.5": 60,
+   "0.9": 1132,
+   "0.99": 3656
+  },
+  "context_tokens_mean": 345.77577925396014,
+  "share_above_max_seq_len": 0.0068472151251916195,
+  "facts_per_positive_quantiles": {},
+  "facts_per_positive_mean": 0.0,
+  "datatype_mix": {},
+  "html_tags": {
+   "td": 717720,
+   "tr": 73496,
+   "table": 3996,
+   "th": 560
+  },
+  "doubled_cell_share": 0.22807875609950293
+ },
+ "train_negatives_fintagging_filter": {
+  "set": "serialized corpus, negatives passing FinTagging's filters",
+  "instances": 113924,
+  "positives": 0,
+  "negatives_fraction": 1.0,
+  "table_share": 0.03434745970998209,
+  "table_share_positives": 0.0,
+  "context_tokens_quantiles": {
+   "0.1": 24,
+   "0.5": 50,
+   "0.9": 103,
+   "0.99": 1652
+  },
+  "context_tokens_mean": 104.36865805273692,
+  "share_above_max_seq_len": 0.00109722270987676,
+  "facts_per_positive_quantiles": {},
+  "facts_per_positive_mean": 0.0,
+  "datatype_mix": {},
+  "html_tags": {
+   "td": 1484082,
+   "tr": 139136,
+   "table": 7826,
+   "th": 812
+  },
+  "doubled_cell_share": 0.17017473675711187
+ },
+ "twin_drop_divergence": {
+  "twins_dropped_total": 4511,
+  "note": "TRADEOFFS T-010: the eval keeps such twins; the training corpus does not"
+ }
+}

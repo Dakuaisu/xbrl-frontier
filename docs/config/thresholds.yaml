@@ -98,6 +98,12 @@ training:
   curve_lr_schedule:         "constant"                       # so checkpoints are comparable; the final run may decay
   curve_validation_run:      10000                            # one independent run at this size to check the nested-checkpoint curve
   dev_slice_instances:       2000                             # held-out training-corpus slice used to score curve checkpoints cheaply
+  accession_selection:                                        # pins.train_accessions, selected once (added 2026-10-02, TRADEOFFS T-011)
+    filing_date_min:         "2021-02-13"                     # two-year window ending at contamination.train_filing_date_max, mirroring the eval window's length
+    form_share:              { "10-K": 0.5, "10-Q": 0.5 }     # PRD section 4 names both forms; no ratio given
+    max_filings_per_cik:     1
+    strata:                  [ "sec_office", "filer_size" ]   # target = the eval manifest's distribution over these cells
+    seed:                    20261002
   epochs:                    2
   lora_rank:                 16
   lora_alpha:                32

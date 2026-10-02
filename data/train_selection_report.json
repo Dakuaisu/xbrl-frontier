@@ -1,0 +1,170 @@
+{
+ "generated": "2026-10-02T06:27:46+00:00",
+ "config_hash": "5b899becee3a2f0cba08ef304cb3112b526e16bec2fb64e439e1a48dd8180b08",
+ "selection": {
+  "filing_date_min": "2021-02-13",
+  "form_share": {
+   "10-K": 0.5,
+   "10-Q": 0.5
+  },
+  "max_filings_per_cik": 1,
+  "strata": [
+   "sec_office",
+   "filer_size"
+  ],
+  "seed": 20261002
+ },
+ "window": [
+  "2021-02-13",
+  "2023-02-12"
+ ],
+ "planning_instances_per_filing": 202.72535211267606,
+ "planning_basis": "pins.eval_finni.rows_expected / contamination.eval_manifest_required_recovered",
+ "filings_target": {
+  "train": 198,
+  "dev": 10,
+  "by_form": {
+   "10-K": 104,
+   "10-Q": 104
+  }
+ },
+ "excluded_cik_counts": {
+  "data/eval_manifest.csv": 129,
+  "research/edgar_submissions_train10.json": 11,
+  "data/eval_cik_candidates_unconfirmed.txt": 15
+ },
+ "excluded_ciks_total": 151,
+ "universe_filings": 46482,
+ "eligible_after_exclusion": 45385,
+ "accepted": 208,
+ "rejected": {
+  "unknown_us_gaap_concept": 1
+ },
+ "unfilled_quota": {},
+ "eval_distribution": {
+  "sec_office": {
+   "energy & transportation": {
+    "n": 22,
+    "share": 0.1583
+   },
+   "finance": {
+    "n": 21,
+    "share": 0.1511
+   },
+   "industrial applications and services": {
+    "n": 14,
+    "share": 0.1007
+   },
+   "life sciences": {
+    "n": 11,
+    "share": 0.0791
+   },
+   "manufacturing": {
+    "n": 19,
+    "share": 0.1367
+   },
+   "real estate & construction": {
+    "n": 27,
+    "share": 0.1942
+   },
+   "technology": {
+    "n": 15,
+    "share": 0.1079
+   },
+   "trade & services": {
+    "n": 9,
+    "share": 0.0647
+   },
+   "unknown": {
+    "n": 1,
+    "share": 0.0072
+   }
+  },
+  "filer_size": {
+   "accelerated": {
+    "n": 7,
+    "share": 0.0504
+   },
+   "large_accelerated": {
+    "n": 125,
+    "share": 0.8993
+   },
+   "other": {
+    "n": 7,
+    "share": 0.0504
+   }
+  }
+ },
+ "train_distribution": {
+  "sec_office": {
+   "energy & transportation": {
+    "n": 34,
+    "share": 0.1635
+   },
+   "finance": {
+    "n": 32,
+    "share": 0.1538
+   },
+   "industrial applications and services": {
+    "n": 22,
+    "share": 0.1058
+   },
+   "life sciences": {
+    "n": 16,
+    "share": 0.0769
+   },
+   "manufacturing": {
+    "n": 28,
+    "share": 0.1346
+   },
+   "real estate & construction": {
+    "n": 40,
+    "share": 0.1923
+   },
+   "technology": {
+    "n": 22,
+    "share": 0.1058
+   },
+   "trade & services": {
+    "n": 12,
+    "share": 0.0577
+   },
+   "unknown": {
+    "n": 2,
+    "share": 0.0096
+   }
+  },
+  "filer_size": {
+   "accelerated": {
+    "n": 12,
+    "share": 0.0577
+   },
+   "large_accelerated": {
+    "n": 188,
+    "share": 0.9038
+   },
+   "other": {
+    "n": 8,
+    "share": 0.0385
+   }
+  },
+  "form": {
+   "10-K": {
+    "n": 104,
+    "share": 0.5
+   },
+   "10-Q": {
+    "n": 104,
+    "share": 0.5
+   }
+  },
+  "split": {
+   "train": 198,
+   "dev": 10
+  }
+ },
+ "edgar_requests": {
+  "requests": 1284,
+  "cache_hits": 191
+ }
+}
