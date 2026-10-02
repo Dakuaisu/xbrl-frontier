@@ -311,6 +311,16 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   5. Keep total use under `training.kaggle.gpu_hours_cap_total`. Each session's train time is in `run.json`.
 - What I need back: the final output directory of each run (`run.json`, `final_adapter/`, `curve/`),
   unpacked into `data/phase2/kaggle/<run name>/`.
+- **Run 5, curve validation** (`notebooks/phase2_kaggle_train.ipynb`, T-030). Schedule: after run 1, before run 2
+  (the seed-2 run is the first item in the cut order; curve validation is the fourth, so it runs first):
+  1. Same notebook and datasets as run 1. Set `MODEL = 'Qwen/Qwen3-1.7B'`, `SEED = 1`, `CURVE = False`,
+     `VALIDATION = True`, `RESUME = None`. Run all, resuming across sessions as in step 4 above. The output
+     directory is `run-Qwen3-1.7B-s1-validation`.
+  2. Run `notebooks/kaggle_generate_predictions.ipynb` with `SET = 'dev'` and `ADAPTERS` = this run's `final_adapter`
+     and run 1's `curve/prefix_10000`. Later, once the frontier sample is pinned, repeat with `SET = 'finni'` (the
+     sample ids are scored with `--ids`).
+  3. Return the run's `run.json` and the predictions files, unpacked into `data/phase2/kaggle/`. I run
+     `scripts/score_predictions.py` on each, then `scripts/curve_validation.py`.
 - **Run 4, encoder baseline** (`notebooks/phase2_kaggle_encoder.ipynb`, T-020):
   1. Attach `xbrl-frontier-src` and `xbrl-frontier-corpus`. Set `MODE = 'train'`, `RESUME = None`. Run all.
      Save the output as a dataset (e.g. `xbrl-frontier-run-encoder`). If the session ends early, start a new

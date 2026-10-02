@@ -634,7 +634,8 @@ robust to the probe filing's instance mix differing from the sample's.
    outside its own Python loader, so a parser could not be verified offline before spending Kaggle hours.
    `pins.software.guidellm` is also empty. `vllm bench serve` is already pinned, and its JSON fields
    (`request_throughput`, `median/p95_ttft_ms`, `median/p95_e2el_ms`, `completed`) are parsed by the Phase 0 code.
-   GuideLLM can be added once pinned, with a parser written against a real output file (DECISIONS NEEDED).
+   Owner decision 2026-10-02: keep `vllm bench serve`. `pins.software.guidellm` stays empty: GuideLLM was not
+   installed because it is not used.
 2. **Prompts**: the pinned latency ids (`serving.load_test.prompts` -> `data/frontier_latency_ids.txt`), rendered with
    the inference format, sent pre-rendered (`--dataset-name custom --custom-skip-chat-template`), oversampled to
    `serving.requests_per_point`. Per-request output cap `serving.load_test.max_output_tokens` (new key, 4,096);
@@ -695,3 +696,16 @@ robust to the probe filing's instance mix differing from the sample's.
    fresh-slice relaxed rows and unfillable cells, audit counts before and after, size disclosures, and the fresh
    instance hash. The arms' knowledge cutoffs are recorded once in config with sources
    (`contamination.frontier_arm_cutoffs`), so the statement and `fresh_slice_filing_date_min` share one source.
+
+## T-030 AUTONOMOUS DECISION - owner to review: curve validation run (2026-10-02)
+
+`training/kaggle_train.py --validation` trains an independent run on exactly the first
+`training.curve_validation_run` **trained** instances of the fixed order (the prefix the nested checkpoint covers;
+the first and last ids are recorded), seed 1, with the **full recipe**: `training.epochs` epochs, constant LR, the
+same batch and LoRA. One epoch over the prefix would recompute the nested checkpoint, so it would test nothing.
+The full recipe checks whether a curve point read off one long epoch matches a model trained to completion at
+that size, which is the PRD's "matches a from-scratch run at that size". `scripts/curve_validation.py` compares the
+two on the dev slice and (when scored) the frontier sample with the company-cluster paired bootstrap. It reports
+the gap with its paired interval and raises the curve caveat when |gap| exceeds the half-width of the nested
+checkpoint's own interval. In the cut order it is item 4: planned, not cut, and scheduled after run 1 and before
+run 2 (O-019 run 5).

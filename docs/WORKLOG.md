@@ -281,3 +281,9 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   statement, with unmeasured figures blank.
 - Verified: `tests/test_label_audit.py` (entity type, allocation, weighted error, self-agreement, refusals, blanks in the draft).
   Owner-blocked: O-024.
+
+## 2026-10-02 Curve validation tooling (T-030)
+
+- `training/kaggle_train.py --validation`, notebook `VALIDATION` flag, `scripts/curve_validation.py`. `tests/test_curve_validation.py` passed
+  (identical runs: gap 0, no caveat; degraded nested run: positive gap, caveat). O-019 has run 5. T-027 records the owner decision
+  to keep `vllm bench serve` and leave `pins.software.guidellm` empty.

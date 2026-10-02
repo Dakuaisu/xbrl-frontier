@@ -11,6 +11,9 @@ training.kaggle.checkpoint_every_minutes into OUT/checkpoints; --resume DIR cont
 found there (a previous session's output attached as a Kaggle dataset).
 Instances whose full sequence exceeds training.kaggle.max_seq_len_tokens are skipped, never truncated, and
 counted (T-018).
+--validation (PRD section 5, T-030): an independent run on exactly the first training.curve_validation_run TRAINED
+instances of the fixed order (the same prefix the nested checkpoint covers), with the full recipe (seed, epochs,
+LR, batch); compared with the nested checkpoint by scripts/curve_validation.py.
 """
 import argparse
 import hashlib
@@ -47,6 +50,8 @@ def main() -> None:
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--resume", type=Path, help="previous session's OUT directory")
     ap.add_argument("--curve", action="store_true", help="save curve checkpoints (primary student, seed 1)")
+    ap.add_argument("--validation", action="store_true",
+                    help="independent curve-validation run on the first training.curve_validation_run trained instances")
     args = ap.parse_args()
 
     from serving.common import env_record, model_pin, pinned_snapshot, require_pins
@@ -83,6 +88,13 @@ def main() -> None:
             skipped += 1
             continue
         data.append({"input_ids": ids, "offset": off, "id": x["id"]})
+    if args.validation:
+        if args.curve:
+            raise SystemExit("--validation and --curve are exclusive")
+        k = config.get("training.curve_validation_run")
+        if len(data) < k:
+            raise SystemExit(f"only {len(data)} trained instances, fewer than training.curve_validation_run={k}")
+        data = data[:k]
     n = len(data)
 
     def collate(batch):
@@ -168,6 +180,8 @@ def main() -> None:
                 "versions": versions, "env": env_record("kaggle_t4"), "config_hash": config.config_hash(),
                 "corpus_sha256": hashes, "corpus_size": len(rows), "trained_instances": n,
                 "skipped_over_max_seq_len": skipped, "max_seq_len": max_len,
+                "validation_run": {"first_n_trained_instances": n, "first_id": data[0]["id"], "last_id": data[-1]["id"]}
+                if args.validation else None,
                 "steps_per_epoch": schedule.steps_per_epoch(n), "global_step": trainer.state.global_step,
                 "curve_targets": schedule.curve_targets(n) if args.curve else None,
                 "final_adapter": str(final.relative_to(args.out))})
