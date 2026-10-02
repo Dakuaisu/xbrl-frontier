@@ -95,6 +95,9 @@ MAX_TURN_CHARS = 24_000
 LOOP_CAP = 12
 BACKOFF_START = 60
 BACKOFF_MAX = 1800
+IDLE_REPLY_CHARS = 600
+IDLE_WAIT_START = int(os.environ.get("BRIDGE_IDLE_WAIT", "1800"))
+IDLE_WAIT_MAX = 7200
 
 _VALID_EFFORT = {"low", "medium", "high", "xhigh"}
 _e = os.environ.get("BRIDGE_EFFORT", "xhigh").strip().lower()
@@ -704,6 +707,7 @@ def forever(kickoff: str | None = None) -> None:
     i = 0
     backoff = BACKOFF_START
     pending: str | None = kickoff
+    idle = 0
     last_fp: int | None = None
 
     while not STOP_FILE.exists():
@@ -757,6 +761,7 @@ def forever(kickoff: str | None = None) -> None:
             print(f"STOP file found; unsent supervisor reply saved to {UNSENT_FILE}")
             return
 
+        before = repo_fingerprint()
         try:
             new = run_builder(pending)
         except BuilderTimeout as e:
@@ -772,6 +777,15 @@ def forever(kickoff: str | None = None) -> None:
         pending = None
         backoff = BACKOFF_START
         print(tail(new, 800) + "\n")
+
+        # A builder waiting on something external (owner action, quota reset) replies with
+        # one-liners; without this the loop re-prompts it every few seconds.
+        if repo_fingerprint() == before and len(new) < IDLE_REPLY_CHARS:
+            idle += 1
+            if idle >= 2:
+                wait(min(IDLE_WAIT_START * 2 ** (idle - 2), IDLE_WAIT_MAX), "builder idle, repo unchanged")
+        else:
+            idle = 0
 
     print(f"STOP file found ({STOP_FILE}). Stopped after {i} exchanges.")
 
