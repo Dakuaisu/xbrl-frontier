@@ -450,3 +450,18 @@ wrong direction.
    checkpoints and the final adapter. The script refuses to run while `pins.software.{transformers, peft,
    bitsandbytes, accelerate}` are empty. Two new empty fields (`bitsandbytes`, `accelerate`) were added to
    `pins.software` for this.
+
+## T-019 AUTONOMOUS DECISION - owner to review: Kaggle training-stack pins (2026-10-02)
+
+Decision (owner approval of O-020): `pins.software.transformers = "5.18.0"`, `peft = "0.21.2"`,
+`bitsandbytes = "0.50.2"`, `accelerate = "1.15.0"`, filled once and never edited after. Why these:
+`transformers` 5.18.0 is the version mlx-lm installed locally (T-017), so the Mac pilot and Kaggle training
+tokenize and render the chat template identically. The others are the current PyPI releases, checked
+2026-10-02. `trl` and `unsloth` stay empty because they are unused (T-018). Kaggle's preinstalled `torch` is
+**not** pinned; its version and CUDA build are recorded in every run's `env` and printed by the notebook.
+Enforcement: `notebooks/phase2_kaggle_train.ipynb` installs exactly these versions and asserts both the
+installed distribution versions and the imported module versions equal the pins (a kernel that imported an
+older preinstalled transformers must restart). `training/kaggle_train.py` refuses to start on a mismatch
+or an empty pin (`serving.common.require_pins`), as the serving scripts do.
+Alternatives: let Kaggle's preinstalled transformers/peft stand. Rejected because the tokenizer and chat
+template could differ from the Mac and from scoring.

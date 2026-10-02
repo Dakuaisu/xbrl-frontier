@@ -287,7 +287,8 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 
 ## O-019 Kaggle student training sessions (OWNER-BLOCKED)
 
-- Status: OWNER-BLOCKED (Kaggle is owner-only; it also needs the O-020 pins)
+- Status: OWNER-BLOCKED (Kaggle is owner-only). The training-stack pins are filled (O-020 RESOLVED, T-019);
+  only the Kaggle sessions remain. Start with owner step 1, the tarball.
 - Ready: `training/kaggle_train.py` (resumable QLoRA, fixed order, curve checkpoints, T-018),
   `training/schedule.py` (tested in `tests/test_training_schedule.py`) and
   `notebooks/phase2_kaggle_train.ipynb`.
@@ -295,7 +296,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   `CURVE = False`; (3) `Qwen/Qwen3-0.6B`, seed 1, `CURVE = False`. Required: the Mac pilot measured 560.6
   tokens/s, below `training.mac.min_tokens_per_sec_to_train_0p6b_locally` (O-021). Cut order: seed 2 is the first cut.
 - Owner steps:
-  1. After the O-020 pins are committed, build the source tarball:
+  1. Build the source tarball from the commit that filled the O-020 pins (or any later commit):
      `git archive --format=tar.gz -o /tmp/xbrl-frontier-src.tar.gz HEAD`, and upload it as a new version of
      the Kaggle dataset `xbrl-frontier-src`.
   2. Upload `data/corpus/train.jsonl` and `data/corpus/dev.jsonl` (sha256 in `data/corpus_report.json`)
@@ -309,14 +310,14 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - What I need back: the final output directory of each run (`run.json`, `final_adapter/`, `curve/`),
   unpacked into `data/phase2/kaggle/<run name>/`.
 
-## O-020 Kaggle training stack pins need owner approval (OPEN)
+## O-020 Kaggle training stack pins need owner approval (RESOLVED)
 
-- Status: OPEN (blocks O-019)
+- Status: RESOLVED (2026-10-02): owner-approved and filled (T-019).
 - Proposed versions (current PyPI releases, checked 2026-10-02): transformers 5.18.0 (2026-09-30; also the
   version mlx-lm installed locally, so tokenization matches the Mac), peft 0.21.2 (2026-10-01),
   bitsandbytes 0.50.2 (2026-08-27), accelerate 1.15.0 (2026-09-09). Torch is Kaggle's preinstalled build,
   recorded in each run's `env`. `trl` and `unsloth` are not used (T-018).
-- Next action: on approval, fill `pins.software.{transformers, peft, bitsandbytes, accelerate}` once.
+- Next action: none.
 
 ## O-021 Mac pilot: 0.6B trains at 560.6 processed tokens/s, below the local-training threshold (RESOLVED)
 

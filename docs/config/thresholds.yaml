@@ -19,7 +19,7 @@ pins:
     - "gpt-5.4-mini-2026-03-17"      # mid-tier accuracy anchor
   arm_swap_if_over_budget: { replace: "gpt-5.4-mini-2026-03-17", with: "gpt-5.4-nano-2026-03-17" }
   seeds:             [ 1, 2 ]                          # primary student only; the 0.6B student runs seed 1
-  software:          { vllm: "0.30.0", mlx_lm: "0.32.0", transformers: "", peft: "", trl: "", unsloth: "", autoawq: "0.2.9", llmcompressor: "0.14.0", guidellm: "", bitsandbytes: "", accelerate: "" }   # vllm/autoawq/llmcompressor pinned 2026-10-02 (owner, O-007); others pinned when their phase first installs them
+  software:          { vllm: "0.30.0", mlx_lm: "0.32.0", transformers: "5.18.0", peft: "0.21.2", trl: "", unsloth: "", autoawq: "0.2.9", llmcompressor: "0.14.0", guidellm: "", bitsandbytes: "0.50.2", accelerate: "1.15.0" }   # vllm/autoawq/llmcompressor pinned 2026-10-02 (owner, O-007); transformers/peft/bitsandbytes/accelerate 2026-10-02 (owner, O-020, T-019); others pinned when their phase first installs them
   price_sheet:       "config/prices_2026-10-01.yaml"
   fintagging_source:                                  # benchmark serializer + taxonomy (added 2026-10-02, TRADEOFFS T-009)
     repo: "The-FinAI/FinTagging"

@@ -177,3 +177,33 @@ Dated implementation notes: what was built, how it was verified, what is next.
 - Verified: `pytest -q tests` (48 passed, including `tests/test_training_schedule.py`).
 - Next: encoder baseline script (SEC-BERT token classifier on the same corpus) and the curve-checkpoint
   scoring script, both runnable once Kaggle access is approved.
+
+## 2026-10-02 Pilot log check: one process, one uninterrupted run
+
+During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to go backwards (iteration
+2,170, then 1,960), and I suspected a second pilot process writing the same file. Findings:
+- Processes: launch attempts before 12:54 IST were (a) attempt 1, which ran out of memory and whose log was
+  renamed `mac_pilot_0.6B_attempt1_oom.log` (last write 12:46:59); (b) one `nohup` launch and two foreground
+  launches, each killed when its shell call timed out, before or at the first validation. Each truncated
+  the log on start. PID 8675 started at 12:54:06 and truncated the log again. At 13:46:52, `ps` listed exactly
+  one `scripts.mac_pilot` process, PID 8675.
+- The log after 12:54 has a single writer. It holds one run header, one step-0 validation line, no NUL bytes,
+  and 300 training reports at iterations 10, 20, ..., 3,000, strictly increasing. A second process writing
+  after 8675's truncation would have added its own header and step-0 validation, or left NUL holes from a
+  separate file offset. None are present.
+- `data/phase2_mac_pilot_Qwen3-0.6B.json` was written by PID 8675. Its 300 in-memory reports (from the
+  training callback, independent of the log) are contiguous, and `trained_tokens` increases monotonically.
+  `adapter_config.json` is stamped 12:54:17 (8675's train start) and the final adapter 14:07:16, which is
+  12:54:17 + 4,380 s wall. The JSON and the log's last write are both 14:09:04, after generation. No other
+  process reached the end of a run.
+- One uninterrupted training: train_time 4,196 s + two validations (91.1 s + 89.8 s) = 4,377 s, against
+  wall 4,380 s. The it/s range 0.44-1.11 (median 0.73) has no step change suggesting a second GPU job.
+- The backwards reading was the read side. Several polling calls were dispatched together and ran in the
+  same second (13:56:41-13:56:44), so their outputs did not come back in chronological order. The file
+  itself never went backwards. The pilot does not need a rerun, and 560.6 tokens/s stands.
+
+## 2026-10-02 Phase 2: training-stack pins (T-019)
+
+- Filled `pins.software.{transformers 5.18.0, peft 0.21.2, bitsandbytes 0.50.2, accelerate 1.15.0}`. The
+  Kaggle notebook asserts installed and imported versions against the pins. O-020 RESOLVED; O-019 has only
+  the sessions left (owner).
