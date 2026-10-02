@@ -293,3 +293,9 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - `scripts/gate_summary.py` (every `gates` key; the zero-shot gain slot decided with the company bootstrap and the decision rule).
   `tests/test_gate_summary.py` passed (gain 1.0 -> pass through real scorer files; subset refused where the full set is required;
   unmeasured gates blank). O-019 has the zero-shot base runs (1.7B and 0.6B, full set) and the full-set student predictions.
+
+## 2026-10-02 Owner runbook
+
+- `docs/owner/RUNBOOK.md`: every OWNER-BLOCKED item in dependency order (A anytime, B Kaggle setup, C Phase 0 hardware,
+  D Phase 2 training/scoring, E Phase 3-4, F closing), with what to run, what comes back and where, and the builder
+  script per return. `load_set(fresh)` reads the corpus dataset copy on Kaggle, checked against the pinned sha256.

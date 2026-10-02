@@ -1,5 +1,7 @@
 # Findings register
 
+Owner-run items in dependency order: `docs/owner/RUNBOOK.md` (it points back here).
+
 Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, evidence, next action.
 
 ## O-001 SEC rejected the original declared User-Agent (RESOLVED)
@@ -301,8 +303,9 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   1. Build the source tarball from the commit that filled the O-020 pins (or any later commit):
      `git archive --format=tar.gz -o /tmp/xbrl-frontier-src.tar.gz HEAD`, and upload it as a new version of
      the Kaggle dataset `xbrl-frontier-src`.
-  2. Upload `data/corpus/train.jsonl` and `data/corpus/dev.jsonl` (sha256 in `data/corpus_report.json`)
-     as a private Kaggle dataset `xbrl-frontier-corpus`. The script refuses mismatching files.
+  2. Upload `data/corpus/train.jsonl`, `data/corpus/dev.jsonl` (sha256 in `data/corpus_report.json`) and
+     `data/fresh/instances.jsonl` renamed `fresh_instances.jsonl` (sha256 in `data/fresh_selection_report.json`) as a private
+     Kaggle dataset `xbrl-frontier-corpus`. The scripts refuse mismatching files.
   3. New notebook from `notebooks/phase2_kaggle_train.ipynb`. Accelerator GPU T4, Internet on. Attach both
      datasets, set `MODEL`, `SEED`, `CURVE` in the first code cell, and leave `RESUME = None`. Run all.
   4. When the session ends (finished or at the session limit), save the output as a Kaggle dataset, e.g.

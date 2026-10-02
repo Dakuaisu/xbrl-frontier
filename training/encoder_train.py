@@ -20,12 +20,23 @@ from training import schedule
 from xbrl_frontier import bio, config, sft_format
 
 
+def fresh_instances_path(corpus: Path | None) -> Path:
+    """data/fresh/instances.jsonl, or the copy in the attached corpus dataset (Kaggle), checked against the sha256
+    pinned in data/fresh_selection_report.json."""
+    import hashlib
+    local = config.REPO_ROOT / "data" / "fresh" / "instances.jsonl"
+    path = local if local.exists() else (corpus or Path()) / "fresh_instances.jsonl"
+    want = json.loads((config.REPO_ROOT / "data" / "fresh_selection_report.json").read_text())["instances_file"]["sha256"]
+    if not path.exists() or hashlib.sha256(path.read_bytes()).hexdigest() != want:
+        raise SystemExit(f"fresh instances not found or not matching the pinned sha256 ({path}); refusing")
+    return path
+
+
 def load_set(name: str, corpus: Path | None) -> list[dict]:
     if name == "finni":
         from xbrl_frontier import finni
         return [{"id": r.idx, "text": r.context} for r in finni.load()]
-    path = {"dev": (corpus or Path()) / "dev.jsonl",
-            "fresh": config.REPO_ROOT / "data" / "fresh" / "instances.jsonl"}[name]
+    path = (corpus or Path()) / "dev.jsonl" if name == "dev" else fresh_instances_path(corpus)
     return [{"id": x["id"], "text": x["text"]} for x in map(json.loads, open(path))]
 
 
