@@ -391,3 +391,8 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - Started detached with `nohup`: **PID 90944, 2026-10-02T14:01:31Z**, first wake 2026-10-03T07:00:05Z.
 - Tests: `tests/test_free_tier_daily.py` (3: resume-time parsing, missing status or `resume_after` waits for Pacific midnight, other
   states run now). Verified before commit: full suite with `-rf`, 93 passed.
+
+## 2026-10-02 O-009 retry
+
+- Retried the preprint lookup (Semantic Scholar, OpenAlex, Unpaywall, Crossref, web search): still metadata only. O-009 updated; it stays
+  OWNER-BLOCKED (logged-in browser or the authors). No code changed, so the full suite was not re-run.

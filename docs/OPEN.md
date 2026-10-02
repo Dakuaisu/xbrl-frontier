@@ -105,6 +105,10 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   returns HTTP 403 ("ResearchGate - Temporarily Unavailable"). ResearchGate search also returns 403.
   Crossref has no record. Semantic Scholar does not know the DOI (its title search was rate-limited, 429).
   The arXiv title search returned nothing. An Exa library page has the metadata only.
+- Retry on 2026-10-02 14:05 UTC: the Semantic Scholar title search is still rate-limited (429) and its DOI lookup says "not
+  found"; OpenAlex is unchanged (no abstract, no PDF location, 0 citations); Unpaywall returns 404 for the DOI; the Crossref title
+  query finds no match; a web search finds only the same metadata page (all five authors with h-index 0) and unrelated papers.
+  No full text or abstract is reachable from here.
 - Evidence of scope: none beyond the title. The title suggests concept tagging plus cross-statement
   consistency checks, not a serving cost/latency frontier or a small-model learning curve. That is
   unverified until the text is read.
@@ -112,7 +116,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   an account) or email the authors; save the PDF **outside** the repo.
 - Artefact: the PDF's local path (tell me).
 - Consumer: no script. I write a summary against PRD section 1 into this entry and reposition the README if needed.
-  I also retry Semantic Scholar once its rate limit clears.
+  No further builder retries are useful: every open index has been checked twice.
 
 ## O-010 Eval manifest recovered 129 of 142 registrants: `eval_manifest_required_recovered` NOT MET (OWNER-BLOCKED)
 
