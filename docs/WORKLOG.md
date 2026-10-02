@@ -248,3 +248,6 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - Verified: `tests/test_frontier_harness.py` (6: request shapes, parsing, every guard refusal, a live attempt
   without approval refusing before any key read, dry-run pricing from the sheet).
 - Owner-blocked: O-022 (all live steps), after the Phase 3 sampling tooling and the power check.
+
+- 2026-10-02: guard refuses arms without a verified thinking source and batch-priced steps without probe
+  re-pricing (T-025). Tests in `tests/test_frontier_harness.py` (8 passed).

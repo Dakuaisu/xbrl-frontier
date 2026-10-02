@@ -61,11 +61,11 @@ frontier:                    # all $ figures priced from pins.price_sheet, batch
   sync_latency_instances:    100                              # fixed ids, same for every arm and student
   sync_runs:                 3
   thinking:                  "minimum_the_api_allows"         # set per vendor; recorded in the run log
-  thinking_per_arm:                                           # the minimum each API allows (vendor docs, checked 2026-10-02; TRADEOFFS T-024)
-    gpt-6-luna:              { api: "openai_responses", reasoning_effort: "none" }
-    gemini-3.5-flash-lite:   { api: "gemini_generate_content", thinking_level: "minimal" }
-    gpt-5.4-mini-2026-03-17: { api: "openai_responses", reasoning_effort: "none" }
-    gpt-5.4-nano-2026-03-17: { api: "openai_responses", reasoning_effort: "none" }   # swap candidate
+  thinking_per_arm:                                           # the minimum each API allows; a live call needs a verified source (TRADEOFFS T-024, T-025)
+    gpt-6-luna:              { api: "openai_responses", reasoning_effort: "none", source: "developers.openai.com/api/docs/guides/latest-model, checked 2026-10-02: 'GPT-6 Sol and GPT-6 Luna support none'" }
+    gemini-3.5-flash-lite:   { api: "gemini_generate_content", thinking_level: "minimal", source: "docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash-lite, checked 2026-10-02: '3.5 Flash-Lite defaults to minimal thinking'" }
+    gpt-5.4-mini-2026-03-17: { api: "openai_responses", reasoning_effort: "none", source: "developers.openai.com/api/docs/models/gpt-5.4-mini, checked 2026-10-02: 'Reasoning.effort supports: none (default)'" }
+    gpt-5.4-nano-2026-03-17: { api: "openai_responses", reasoning_effort: "none", source: "" }   # swap candidate; UNVERIFIED (set by analogy), live calls refused until a source is recorded
   usd_reserve_min:           1.00                             # must remain unspent after the plan is priced
   power_check:                                                # run after the primary student's full-set run, before the probe
     sd_source:               "primary student between-filing F1 SD on the deduplicated full set (proxy for the paired SD)"

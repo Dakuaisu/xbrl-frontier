@@ -389,5 +389,9 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   3. Export the key (`OPENAI_API_KEY` or `GEMINI_API_KEY`) in your shell, then rerun step 1 with
      `--live --approval T-NNN`. For batch steps, run the same command with `collect` instead of `run`
      until it reports the results collected.
+  Order constraint (T-025): each arm's `probe` must run before its `batch` (and gpt-6-luna's probe before
+  `fresh_control`). Batch-priced steps are re-priced from the probe's measured tokens, and the guard refuses
+  them otherwise. The swap arm `gpt-5.4-nano-2026-03-17` is refused until its thinking setting has a
+  verified source in `frontier.thinking_per_arm`.
   4. Return nothing: outputs land in `data/phase3/live/<step>_<arm>/` (predictions in the scorer's format,
      usage and latency logs, returned model fields), and every dollar is in `data/phase3/spend_ledger.jsonl`.

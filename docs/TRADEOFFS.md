@@ -580,3 +580,19 @@ skip note if any instance was skipped (T-018). Series are given overall and by t
    estimate must leave `frontier.usd_reserve_min` under `budget.usd_cap_frontier_api`. The guard runs **before**
    the API key is read. Tests strip the key variables, replace key reading and HTTP with failing stubs, and
    exercise every refusal path. The builder makes no live call; every live step is OWNER-BLOCKED (O-022).
+
+## T-025 AUTONOMOUS DECISION - owner to review: guard refuses unverified arms and unmeasured batch pricing (2026-10-02)
+
+1. **Verified thinking setting required.** Every `frontier.thinking_per_arm` entry carries a `source` (URL, check
+   date, quoted text). The guard refuses a live call for an arm whose `source` is empty. `gpt-5.4-nano-2026-03-17`
+   (the swap candidate, `none` by analogy) has an empty source, so the swap cannot run until someone checks its
+   documentation and records the source line.
+2. **Batch-priced steps are priced from the probe.** For `batch` and `fresh_control`, the harness re-prices the
+   proxy estimate with that arm's measured/proxy token ratios on its own probe instances
+   (`reprice_from_probe`: run 0 of `data/phase3/live/probe_<arm>/usage.jsonl`; measured output includes reasoning
+   tokens; batch prices; reasoning margin kept). The guard compares the re-priced figure, not the proxy, with
+   `usd_max` and the ledger. If the arm has no probe usage, the guard refuses. Check order: approval given,
+   approval line matches, estimate at most `usd_max`, verified source, probe re-pricing for batch-priced steps,
+   ledger plus estimate within cap minus reserve. All of it runs before the key is read.
+Alternatives: re-price from the probe's mean tokens per instance. Rejected because the ratio method is
+robust to the probe filing's instance mix differing from the sample's.

@@ -59,6 +59,34 @@ def price(arm: str, step: str, items: list[dict]) -> dict:
             "estimator": "Qwen3 tokenizer proxy for input; gold answer tokens for output; replaced by probe usage"}
 
 
+def reprice_from_probe(arm: str, est: dict, probe_dir: Path | None = None) -> dict | None:
+    """Scale a batch-priced proxy estimate by the arm's measured/proxy token ratios on its own probe instances.
+
+    Returns None when the arm has no probe usage. Ratios use run 0 of the probe; measured output includes
+    reasoning tokens (billed as output)."""
+    from xbrl_frontier.tokens import tokenizer
+    probe_dir = probe_dir or PHASE3 / "live" / f"probe_{arm}"
+    usage = probe_dir / "usage.jsonl"
+    if not usage.exists():
+        return None
+    rows = [r for r in map(json.loads, open(usage)) if r.get("run", 0) == 0 and r.get("input_tokens") is not None]
+    if not rows:
+        return None
+    tok = tokenizer()
+    fin = finni.load()
+    proxy_in = sum(len(tok.encode(sft_format.query(fin[r["id"]].context)).ids) for r in rows)
+    proxy_out = sum(len(tok.encode(fin[r["id"]].answer).ids) for r in rows)
+    r_in = sum(r["input_tokens"] for r in rows) / proxy_in
+    r_out = sum(r["output_tokens"] or 0 for r in rows) / max(proxy_out, 1)
+    p = config.prices()["api_per_million_tokens"][arm]
+    tin, tout = est["est_input_tokens"] * r_in, est["est_output_tokens"] * r_out
+    usd = (tin * p["batch_input"] + tout * p["batch_output"]) / 1e6 * (1 + est["margin"])
+    return {**est, "usd_estimate": usd, "repriced_from_probe": str(usage), "probe_instances": len(rows),
+            "ratio_input_measured_over_proxy": r_in, "ratio_output_measured_over_proxy": r_out,
+            "proxy_usd_estimate": est["usd_estimate"],
+            "estimator": "proxy tokens scaled by this arm's measured/proxy ratios on its probe instances"}
+
+
 def actual_usd(arm: str, sync: bool, input_tokens: int, output_tokens: int) -> float:
     p = config.prices()["api_per_million_tokens"][arm]
     return (input_tokens * (p["input"] if sync else p["batch_input"]) +
@@ -184,7 +212,13 @@ def main() -> None:
     print(json.dumps(est, indent=1))
     if not args.live:
         return
-    g = guard.check(args.step, args.arm, est["usd_estimate"], args.approval)
+    repriced = reprice_from_probe(args.arm, est) if args.step in guard.BATCH_STEPS else None
+    if repriced:
+        est = repriced
+        (out / "estimate.json").write_text(json.dumps(est, indent=1))
+        print("re-priced from probe:", json.dumps({k: est[k] for k in ("usd_estimate", "proxy_usd_estimate",
+              "ratio_input_measured_over_proxy", "ratio_output_measured_over_proxy")}))
+    g = guard.check(args.step, args.arm, est["usd_estimate"], args.approval, repriced_from_probe=bool(repriced))
     key = _api_key(args.arm)
     if args.step in SYNC_STEPS:
         usd = run_sync(args.arm, args.step, items, key, out)

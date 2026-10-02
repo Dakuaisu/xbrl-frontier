@@ -95,3 +95,32 @@ def test_dry_run_prices_from_sheet(tmp_path):
     runs = config.get("frontier.sync_runs")
     assert est["runs"] == runs and est["price_mode"] == "sync" and est["margin"] == 0.0
     assert est["usd_estimate"] == pytest.approx((est["est_input_tokens"] * p["input"] + est["est_output_tokens"] * p["output"]) / 1e6)
+
+
+def test_unverified_arm_and_unrepriced_batch_are_refused(tmp_path):
+    t = _tradeoffs(tmp_path, "PRE-APPROVED SPEND: step=probe arm=gpt-5.4-nano-2026-03-17 usd_max=1\n"
+                             "PRE-APPROVED SPEND: step=batch arm=gemini-3.5-flash-lite usd_max=5")
+    ledger = tmp_path / "ledger.jsonl"
+    with pytest.raises(guard.GuardRefused, match="no verified source"):
+        guard.check("probe", "gpt-5.4-nano-2026-03-17", 0.01, "T-900", t, ledger)
+    with pytest.raises(guard.GuardRefused, match="must be priced from that arm's probe"):
+        guard.check("batch", "gemini-3.5-flash-lite", 1.0, "T-900", t, ledger)
+    assert guard.check("batch", "gemini-3.5-flash-lite", 1.0, "T-900", t, ledger, repriced_from_probe=True)
+
+
+def test_reprice_from_probe_scales_by_measured_ratios(tmp_path):
+    from xbrl_frontier import finni
+    from xbrl_frontier.tokens import tokenizer
+    tok, rows = tokenizer(), finni.load()
+    proxy_in = [len(tok.encode(sft_format.query(rows[i].context)).ids) for i in (0, 1)]
+    proxy_out = [len(tok.encode(rows[i].answer).ids) for i in (0, 1)]
+    probe = tmp_path / "probe"
+    probe.mkdir()
+    (probe / "usage.jsonl").write_text("".join(json.dumps(
+        {"id": i, "run": 0, "input_tokens": 2 * proxy_in[k], "output_tokens": 3 * proxy_out[k]}) + "\n" for k, i in enumerate((0, 1))))
+    est = {"est_input_tokens": 1000, "est_output_tokens": 100, "margin": 0.15, "usd_estimate": 0.0}
+    assert harness.reprice_from_probe("gemini-3.5-flash-lite", est, tmp_path / "none") is None
+    r = harness.reprice_from_probe("gemini-3.5-flash-lite", est, probe)
+    p = config.prices()["api_per_million_tokens"]["gemini-3.5-flash-lite"]
+    assert r["ratio_input_measured_over_proxy"] == pytest.approx(2) and r["ratio_output_measured_over_proxy"] == pytest.approx(3)
+    assert r["usd_estimate"] == pytest.approx((2000 * p["batch_input"] + 300 * p["batch_output"]) / 1e6 * 1.15)
