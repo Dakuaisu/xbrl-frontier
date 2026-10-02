@@ -299,3 +299,8 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - `docs/owner/RUNBOOK.md`: every OWNER-BLOCKED item in dependency order (A anytime, B Kaggle setup, C Phase 0 hardware,
   D Phase 2 training/scoring, E Phase 3-4, F closing), with what to run, what comes back and where, and the builder
   script per return. `load_set(fresh)` reads the corpus dataset copy on Kaggle, checked against the pinned sha256.
+
+## 2026-10-02 README skeleton (T-032)
+
+- `scripts/readme.py` generated `README.md` (blanks for results, gates by key, disclosures from recorded files, pilot F1 absent).
+  `tests/test_readme.py` passed.

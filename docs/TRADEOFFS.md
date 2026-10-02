@@ -727,3 +727,13 @@ bootstrap (T-007, T-028) and `gates.decision_rule`:
   companies and the interval is taken over the differences of the resamples. The control arm's gap and the
   student-minus-control difference are reported in the note (`fresh_slice_control_gap_reported`).
 - **encoder / learning curve / Pareto chart**: presence of their result files.
+
+## T-032 AUTONOMOUS DECISION - owner to review: README skeleton generator (2026-10-02)
+
+`scripts/readme.py` writes the root `README.md`. Every result number is `__` (headline, results, resume bullets per
+PRD section 11). Gates are listed by key, with status, point and interval read from `data/gates/summary.json`
+when it exists ("not measured" otherwise), and threshold values are never printed. The disclosure lines (129/142
+registrants; 95.25% / 95.39% serializer assignment beside the Phase 0 94.29% / 94.43%; 38,788 and 1,933 with the
+O-016 cap note; 18,184 flagged and removed, 0 after removal) and the contamination statement are read from the
+recorded files at generation time. The Mac pilot's format-check F1 is absent (O-021), which a test asserts. The
+README is regenerated after each result: nothing in it is typed by hand.
