@@ -41,3 +41,14 @@ def test_half_dropped(sets, spec, which):
     s = scorer.score(sets[which], oracles.half_dropped(sets[which]))
     assert abs(s.overall["finni_recall"] - spec["gold_half_dropped_recall"]) <= spec["tolerance"]
     assert s.overall["finni_precision"] == 1.0
+
+
+def test_company_and_fiscal_year_slices_from_shipped_map():
+    from xbrl_frontier import eval_sets, finni
+    rows = finni.load()
+    imap = eval_sets.load_instance_map()
+    keys = eval_sets.slice_keys(rows, imap)
+    assert len(keys["company"]) == len(rows) == len(keys["fiscal_year"])
+    assigned = sum(k != "unassigned" for k in keys["company"])
+    assert assigned == len(imap)
+    assert all(len(y) == 4 for y, c in zip(keys["fiscal_year"], keys["company"]) if c != "unassigned")

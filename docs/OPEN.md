@@ -35,9 +35,10 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   tokens; the pinned Qwen3 tokenizer is the natural choice), and approve the `tokenizers` dependency.
   See DECISIONS NEEDED in the turn report.
 
-## O-004 `company` and `fiscal_year` slices wait on the instance map (OPEN)
+## O-004 `company` and `fiscal_year` slices wait on the instance map (RESOLVED)
 
-- Status: OPEN
+- Status: RESOLVED (2026-10-02): `eval_sets.load_instance_map()` joins the shipped map and manifest;
+  tested in `tests/test_oracles.py::test_company_and_fiscal_year_slices_from_shipped_map`.
 - Found: both slice keys come from `pins.eval_instance_map`. `eval_sets.slice_keys` reads them from that
   map and labels unmapped instances `unassigned`.
 - Next action: becomes RESOLVED when the instance map ships (Phase 0, step 4).
@@ -109,3 +110,48 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Next action: the owner opens it in a logged-in browser (ResearchGate often needs an account) or emails
   the authors, saves the PDF outside the repo, and tells me the path. I then summarize it against PRD
   section 1 and reposition if needed. Retry Semantic Scholar once the rate limit clears.
+
+## O-010 Eval manifest recovered 129 of 142 registrants (OPEN)
+
+- Status: OPEN (below `contamination.eval_manifest_required_recovered`)
+- Found: `data/eval_manifest.csv` lists 139 filings from 129 companies. 117 filings come from the 111
+  seed CIKs and 22 from 18 CIKs found by FTS. Filing dates run 2024-02-06 to 2025-02-13 (fiscal years
+  2023 and 2024 only). The `edgar.fts_query_budget` total is spent (1,966 queries across two runs: 33
+  single-CIK resolutions to new CIKs, 304 to known CIKs, 1,629 ambiguous or no hits). 15 FTS-found CIKs
+  are unconfirmed: their in-window 10-Ks hold no (or fewer than
+  `instance_match.min_unique_exact_for_filing`) uniquely exact-matching contexts, so the phrase hit was
+  shared wording (diagnostics in `data/manifest_work/report.json`).
+- Evidence: `data/manifest_work/report.json`, `data/manifest_work/fts_queries.json`.
+- Next action (choose under DECISIONS NEEDED): (a) the owner files the public GitHub issue asking the
+  FinTagging authors for the 142 CIKs/accessions (owner-only); (b) approve a second FTS budget with a
+  different phrase strategy (several phrases per remaining text context; table contexts are mostly
+  unresolvable by phrase); (c) accept 129 and disclose it.
+
+## O-011 Instance assignment rate 94.29% raw / 94.43% dedup, below 0.95 (OPEN)
+
+- Status: OPEN (below `contamination.instance_assignment_min_fraction`)
+- Found: 27,142 of 28,787 rows are assigned. Unassigned: 1,201 `none`, 372 `ambiguous_cross_company`
+  (text shared verbatim by filings of different companies, for example parent and subsidiary), and
+  72 `too_short`. Per PRD section 4 these form the unassigned stratum, excluded from the frontier sample,
+  and the rate is disclosed. Run 1 (before the doubled-segment normalization, T-003 item 6) gave
+  90.10% raw / 91.30% dedup.
+- Validation (`scripts/validate_instance_map.py`, all assigned positive instances): the share of gold fact
+  values found in the assigned filing is 1.000 for exact (12,225) and exact-tie (370), 0.959 for fuzzy
+  (1,062; 23 below half) and 1.000 for fuzzy-tie (12).
+- Next action: the rate rises only if O-010 recovers the missing companies (their contexts are among the
+  `none` rows) or if the Phase 1 serializer fork matches tables better. Thresholds are not changed.
+
+## O-012 FinNI draws on more than one 10-K per company (OPEN, affects bootstrap unit and cost shape)
+
+- Status: OPEN
+- Found: 10 of 129 companies contribute two fiscal years (FY2023 and FY2024), for 139 filings in total.
+  Evidence: year-specific sentences that occur only in one year's filing (T-003 item 2), plus
+  `unique_exact_contexts` of at least `instance_match.min_unique_exact_for_filing` for both filings of
+  each such company in `data/eval_manifest.csv`. 1,183 rows tie between two filings of the same
+  company and go to that company's dominant filing (`*_tie_within_company`).
+- Consequences: (1) "Bootstrap over filings" is ambiguous where a company has two filings and some
+  rows tie between them. (2) The PRD's instances-per-filing (rows / 142) is a planning figure. The
+  Phase 3 probe measures real per-filing tokens anyway.
+- Next action: owner decision on the resampling unit (DECISIONS NEEDED). Recommendation: resample
+  **companies (CIK)**, which is the conservative cluster: same-company filings are correlated and the tie
+  attribution is arbitrary.

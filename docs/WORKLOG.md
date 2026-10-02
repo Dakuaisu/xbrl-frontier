@@ -56,3 +56,21 @@ Dated implementation notes: what was built, how it was verified, what is next.
 ## 2026-10-02 Phase 0, unit 6: Schema-Aware XBRL preprint
 
 - Tried DOI resolution, ResearchGate, Crossref, OpenAlex, Semantic Scholar, arXiv and Exa. Only metadata is reachable; logged as O-009.
+
+## 2026-10-02 Phase 0, unit 4: eval manifest and instance-to-filing map
+
+- Built `xbrl_frontier/edgar.py` (declared User-Agent, `edgar.max_requests_per_second` throttle,
+  URL-keyed disk cache under `data/edgar/`, retry on 429/5xx, hard stop on 403),
+  `xbrl_frontier/instance_match.py` (token normalization with doubled-segment collapse, shingle index,
+  exact/fuzzy assignment, unique-exact filing presence), `scripts/build_eval_manifest.py` (seed ->
+  submissions -> download -> match -> FTS discovery loop -> outputs) and
+  `scripts/validate_instance_map.py`. Decisions are in T-003.
+- Run 1 (2026-10-02 04:37-05:11 UTC, 1,962 FTS queries, 1,864 SEC requests): 129 companies, 139
+  filings, assignment 90.10% raw / 91.30% dedup.
+- Run 2 (doubled-segment normalization, `--prior` run 1, 4 new queries): 129 companies, 139 filings,
+  assignment 94.29% raw / 94.43% dedup. These are the shipped files: `data/eval_manifest.csv` and
+  `data/eval_instance_to_filing.csv`.
+- Verified: `pytest -q tests` (29 passed, including manifest-tool tests and the shipped-map slice test).
+  Full-set validation is in O-011.
+- Findings: O-010 (129/142), O-011 (rate below threshold), O-012 (multi-filing companies).
+  O-004 is resolved.

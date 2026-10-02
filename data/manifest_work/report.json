@@ -1,0 +1,377 @@
+{
+ "generated": "2026-10-02T05:16:41+00:00",
+ "config_hash": "ae8a01a5aa8560149c97827189a0d262c87c12c2b6f5379e4037d80bc7fef9a5",
+ "finni_revision": "e3e0aba23b5c3df17a71c8c013030182d013a538",
+ "filing_window": [
+  "2023-02-13",
+  "2025-02-13"
+ ],
+ "manifest_filings": 139,
+ "manifest_companies": 129,
+ "filings_per_company": {
+  "1": 119,
+  "2": 10
+ },
+ "required": 142,
+ "ciks_known": 144,
+ "ciks_unconfirmed": [
+  "0000036966",
+  "0000100517",
+  "0000354647",
+  "0000908255",
+  "0001037676",
+  "0001037868",
+  "0001368622",
+  "0001411168",
+  "0001422183",
+  "0001526520",
+  "0001544400",
+  "0001602065",
+  "0001790982",
+  "0001868941",
+  "0001967680"
+ ],
+ "candidate_filings_scanned": 349,
+ "fts_queries_this_run": 4,
+ "fts_queries_prior_runs": 1962,
+ "fts_query_budget_total": 2000,
+ "fts_new_ciks": 33,
+ "assignment_rate_raw": 0.9428561503456422,
+ "assignment_rate_dedup": 0.9442797181254573,
+ "instance_assignment_min_fraction": 0.95,
+ "methods_raw": {
+  "exact": 24071,
+  "fuzzy": 1888,
+  "none": 1201,
+  "ambiguous_cross_company": 372,
+  "exact_tie_within_company": 1154,
+  "fuzzy_tie_within_company": 29,
+  "too_short": 72
+ },
+ "edgar_requests": {
+  "requests": 4,
+  "cache_hits": 495
+ },
+ "unconfirmed_diagnostics": {
+  "0000036966": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0000036966-24-000015",
+     "file_date": "2024-02-23",
+     "period": "2023-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2969
+    },
+    {
+     "accession": "0000036966-23-000016",
+     "file_date": "2023-03-01",
+     "period": "2022-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2246
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0000100517": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0000100517-24-000027",
+     "file_date": "2024-02-29",
+     "period": "2023-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2748
+    },
+    {
+     "accession": "0000100517-23-000048",
+     "file_date": "2023-02-16",
+     "period": "2022-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2040
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0000354647": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0000950170-24-022216",
+     "file_date": "2024-02-28",
+     "period": "2023-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 3086
+    },
+    {
+     "accession": "0000950170-23-005167",
+     "file_date": "2023-02-28",
+     "period": "2022-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2210
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0000908255": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0000908255-25-000007",
+     "file_date": "2025-02-06",
+     "period": "2024-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 4586
+    },
+    {
+     "accession": "0000908255-24-000007",
+     "file_date": "2024-02-08",
+     "period": "2023-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 3432
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0001037676": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0001558370-24-001229",
+     "file_date": "2024-02-15",
+     "period": "2023-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2893
+    },
+    {
+     "accession": "0001558370-23-001458",
+     "file_date": "2023-02-16",
+     "period": "2022-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2190
+    }
+   ],
+   "fts_queries_resolving_here": 3
+  },
+  "0001037868": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0001037868-24-000009",
+     "file_date": "2024-02-22",
+     "period": "2023-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2620
+    },
+    {
+     "accession": "0001037868-23-000012",
+     "file_date": "2023-02-21",
+     "period": "2022-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 1975
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0001368622": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0001558370-24-009515",
+     "file_date": "2024-06-27",
+     "period": "2024-04-30",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2018
+    },
+    {
+     "accession": "0001558370-23-011469",
+     "file_date": "2023-06-28",
+     "period": "2023-04-30",
+     "unique_exact": 0,
+     "rows_best_or_tied": 1929
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0001411168": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0001376474-25-000204",
+     "file_date": "2025-02-13",
+     "period": "2024-12-31",
+     "unique_exact": 1,
+     "rows_best_or_tied": 815
+    },
+    {
+     "accession": "0001376474-24-000042",
+     "file_date": "2024-01-18",
+     "period": "2023-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 841
+    },
+    {
+     "accession": "0001376474-23-000157",
+     "file_date": "2023-03-09",
+     "period": "2022-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 822
+    }
+   ],
+   "fts_queries_resolving_here": 3
+  },
+  "0001422183": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0001628280-24-006912",
+     "file_date": "2024-02-26",
+     "period": "2023-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2702
+    },
+    {
+     "accession": "0001628280-23-005258",
+     "file_date": "2023-02-27",
+     "period": "2022-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 1937
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0001526520": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0000950170-24-016553",
+     "file_date": "2024-02-16",
+     "period": "2023-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 3270
+    },
+    {
+     "accession": "0000950170-23-003200",
+     "file_date": "2023-02-17",
+     "period": "2022-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2429
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0001544400": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0001477932-25-000927",
+     "file_date": "2025-02-13",
+     "period": "2024-10-31",
+     "unique_exact": 2,
+     "rows_best_or_tied": 724
+    },
+    {
+     "accession": "0001477932-24-000456",
+     "file_date": "2024-01-30",
+     "period": "2023-10-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 723
+    },
+    {
+     "accession": "0001477932-23-000995",
+     "file_date": "2023-02-14",
+     "period": "2022-10-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 730
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0001602065": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0001602065-24-000010",
+     "file_date": "2024-02-22",
+     "period": "2023-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2703
+    },
+    {
+     "accession": "0001602065-23-000007",
+     "file_date": "2023-02-23",
+     "period": "2022-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 1707
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0001790982": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0001790982-23-000006",
+     "file_date": "2023-02-21",
+     "period": "2022-12-31",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2322
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0001868941": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0001868941-24-000070",
+     "file_date": "2024-11-29",
+     "period": "2024-09-30",
+     "unique_exact": 0,
+     "rows_best_or_tied": 2001
+    },
+    {
+     "accession": "0001868941-23-000085",
+     "file_date": "2023-11-29",
+     "period": "2023-09-30",
+     "unique_exact": 0,
+     "rows_best_or_tied": 1914
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  },
+  "0001967680": {
+   "source": "fts",
+   "name": "",
+   "candidates": [
+    {
+     "accession": "0001967680-24-000033",
+     "file_date": "2024-02-28",
+     "period": "2023-12-31",
+     "unique_exact": 1,
+     "rows_best_or_tied": 2806
+    }
+   ],
+   "fts_queries_resolving_here": 1
+  }
+ },
+ "fts_resolution": {
+  "ambiguous_or_none": 1629,
+  "known": 304,
+  "new": 33
+ }
+}

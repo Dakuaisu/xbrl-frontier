@@ -12,3 +12,8 @@ data/*
 !data/train_accessions.txt
 !data/fresh_accessions.txt
 !data/contamination_audit/
+!data/manifest_work/
+data/manifest_work/*
+!data/manifest_work/report.json
+!data/manifest_work/fts_queries.json
+!data/manifest_work/validation.json

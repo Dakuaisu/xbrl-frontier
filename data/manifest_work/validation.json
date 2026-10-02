@@ -1,0 +1,22 @@
+{
+ "exact": {
+  "instances": 12225,
+  "mean_share_gold_values_in_filing": 1.0,
+  "instances_below_half": 0
+ },
+ "exact_tie_within_company": {
+  "instances": 370,
+  "mean_share_gold_values_in_filing": 1.0,
+  "instances_below_half": 0
+ },
+ "fuzzy": {
+  "instances": 1062,
+  "mean_share_gold_values_in_filing": 0.9591722044335328,
+  "instances_below_half": 23
+ },
+ "fuzzy_tie_within_company": {
+  "instances": 12,
+  "mean_share_gold_values_in_filing": 1.0,
+  "instances_below_half": 0
+ }
+}

@@ -49,6 +49,22 @@ def slice_keys(instances, instance_map: dict | None = None, token_counts: dict |
     return keys
 
 
+def load_instance_map() -> dict[int, dict]:
+    """pins.eval_instance_map joined with pins.eval_manifest: instance id -> cik, accession, fiscal_year.
+
+    Unassigned instances are absent, so slice_keys labels them "unassigned".
+    """
+    import csv
+    manifest = {r["accession"]: r for r in csv.DictReader(open(config.docs_path(config.get("pins.eval_manifest"))))}
+    out = {}
+    for r in csv.DictReader(open(config.docs_path(config.get("pins.eval_instance_map")))):
+        if r["accession"]:
+            out[int(r["instance_id"])] = {"cik": r["cik"], "accession": r["accession"],
+                                          "fiscal_year": manifest[r["accession"]]["fiscal_year"],
+                                          "method": r["method"]}
+    return out
+
+
 def _bucket(n: int, edges: list[int]) -> str:
     lo = 0
     for e in edges:
