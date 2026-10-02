@@ -396,3 +396,10 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 
 - Retried the preprint lookup (Semantic Scholar, OpenAlex, Unpaywall, Crossref, web search): still metadata only. O-009 updated; it stays
   OWNER-BLOCKED (logged-in browser or the authors). No code changed, so the full suite was not re-run.
+
+## 2026-10-02 Price and deprecation re-observation (PRD section 10)
+
+- Re-observed `gemini-3.5-flash-lite` at 14:10 UTC: paid standard $0.30/$2.50 and batch $0.15/$1.25 per 1M tokens (unchanged from the
+  sheet), free tier free of charge, released 2026-07-21 with no shutdown date. Recorded as `reobservations` in the price sheet
+  (no value edited). The pricing page lists a free-tier Batch row, at odds with the rate-limits page: O-028, guard unchanged.
+- Verified before commit: full suite with `-rf`, 93 passed (price sheet changed).

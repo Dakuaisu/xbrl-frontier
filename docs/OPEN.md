@@ -504,3 +504,17 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   `gates.decision_rule` and the power check, never by the day count (T-036).
 - Next action: E4 resumes daily after 07:00 UTC with the same command until complete. The schedule for E1-E3 is
   set once D4 pins the sample (O-025 first). The README states that free-tier collection spanned these dates.
+
+## O-028 Gemini docs disagree on Batch API availability on the free tier (OPEN)
+
+- Status: OPEN (no behaviour change; the guard keeps refusing batch)
+- Found (2026-10-02 14:10 UTC): the pricing page (last updated 2026-10-01) lists a **Batch** row for `gemini-3.5-flash-lite`
+  with the free tier "Free of charge", while the rate-limits page gives Batch enqueued-token quotas for Tiers 1-3 only (T-034
+  item 2). Whether a free-tier project can submit batch jobs, and whether doing so can trigger billing, is therefore
+  ambiguous.
+- Decision until resolved: keep `frontier.free_tier.batch_api: false`, so the guard refuses the Batch API and collection stays
+  synchronous (T-033 says to stop any path that could bill). The only cost is calendar time (O-027). The measurements do not
+  change: accuracy-run dollars are priced at the sheet's batch rates either way.
+- Evidence: price sheet `reobservations[0]`; `/ai.google.dev/gemini-api/docs/pricing` and `/rate-limits` text as fetched.
+- Next action: none from the builder. If the owner wants batch on the free tier explored, that is an owner decision (it touches
+  the $0-billed rule).
