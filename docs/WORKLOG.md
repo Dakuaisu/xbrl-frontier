@@ -50,3 +50,5 @@ Dated implementation notes: what was built, how it was verified, what is next.
   selection. `.venv/bin/python -m scripts.phase0_cost` runs on the price sheet alone and reproduces the
   PRD section 7 break-even and gate-pass figures from config keys.
 - Owner-blocked: O-005 (Kaggle), O-006 (RTX 3050), both waiting on O-007 (software pins).
+
+- 2026-10-02: observed the AWS g4dn.xlarge T4 rate at pin time (O-008 RESOLVED). `scripts/phase0_cost.py` now uses all three `market_rate_keys` sources.

@@ -82,10 +82,13 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   are left to vllm/llmcompressor's resolver, and the installed versions are recorded in every run's `env`.
 - Next action: on approval, fill `pins.software.{vllm,llmcompressor,autoawq}` once and log them in TRADEOFFS.
 
-## O-008 AWS g4dn.xlarge T4 price is blank in the sheet (OPEN)
+## O-008 AWS g4dn.xlarge T4 price is blank in the sheet (RESOLVED)
 
-- Status: OPEN
-- Found: `gpu_per_hour.aws.g4dn_xlarge_T4` is null and must be filled only from a dated observation with
-  a source URL. Until then `scripts/phase0_cost.py` drops it and lists it as dropped.
-- Next action: attempt an observation from AWS's public pricing data during Phase 0. If none is
-  possible, it stays dropped.
+- Status: RESOLVED (2026-10-02)
+- Found: `gpu_per_hour.aws.g4dn_xlarge_T4` was null and could only be filled from a dated observation
+  with a source URL.
+- Resolution: observed on 2026-10-02T04:45:03Z from AWS's public on-demand price file for us-east-1 Linux
+  (the file the AWS EC2 pricing page loads; publication date 2026-09-25). The value, record, rate code,
+  URL and file hash are in the price sheet under `gpu_per_hour.aws_g4dn_xlarge_T4_observation`. The
+  sheet's top-level `observed` date stays 2026-10-01, and this source carries its own date. All three T4
+  sources now appear in `scripts/phase0_cost.py`.
