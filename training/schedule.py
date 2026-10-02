@@ -48,3 +48,9 @@ def curve_hits(prev_step: int, step: int, corpus_size: int) -> list[dict]:
 
 def due_for_resume_checkpoint(now_s: float, last_save_s: float) -> bool:
     return now_s - last_save_s >= config.get("training.kaggle.checkpoint_every_minutes") * 60
+
+
+def session_time_up(now_s: float, session_start_s: float) -> bool:
+    """True once the session should checkpoint and exit so Kaggle keeps its output (T-038)."""
+    k = config.get("training.kaggle")
+    return now_s - session_start_s >= k["session_hours_max"] * 3600 - k["session_stop_margin_minutes"] * 60

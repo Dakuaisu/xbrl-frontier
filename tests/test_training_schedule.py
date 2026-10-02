@@ -25,3 +25,11 @@ def test_resume_checkpoint_timer():
     m = config.get("training.kaggle.checkpoint_every_minutes")
     assert not schedule.due_for_resume_checkpoint(m * 60 - 1, 0)
     assert schedule.due_for_resume_checkpoint(m * 60, 0)
+
+
+def test_session_stop_leaves_margin_before_limit():
+    k = config.get("training.kaggle")
+    stop = k["session_hours_max"] * 3600 - k["session_stop_margin_minutes"] * 60
+    assert 0 < stop < k["session_hours_max"] * 3600
+    assert not schedule.session_time_up(stop - 1, 0)
+    assert schedule.session_time_up(stop, 0)

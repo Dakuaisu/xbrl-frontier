@@ -856,3 +856,12 @@ synchronous costs only calendar days, which O-027 already budgets.
 Rejected: probing free-tier Batch with one request. A single mis-tiered request would break the $0-billed rule, and the
 ledger records only notional prices from returned usage, so it could not prove that nothing was billed.
 No code change.
+
+## T-038 AUTONOMOUS DECISION - owner to review: training stops itself before the Kaggle session limit (2026-10-02)
+
+Kaggle kills a session at `training.kaggle.session_hours_max` and keeps no output from a killed session, so the 30-minute resume
+checkpoints would be lost with it. `training/kaggle_train.py` now saves a checkpoint and stops cleanly once
+`training.kaggle.session_stop_margin_minutes` remain; `run.json` records `complete` and writes `final_adapter` only when
+every step has run. The next session resumes with `RESUME` pointing at this session's output (`--kernel-source`).
+Rejected: relying on the timer alone. A killed session discards its checkpoints, so up to a full session of GPU-hours would be lost.
+Cost: up to the margin of GPU time per session goes unused.

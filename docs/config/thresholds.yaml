@@ -150,6 +150,7 @@ training:
     weekly_gpu_hours_quota:  30
     gpu_hours_cap_total:     70
     checkpoint_every_minutes: 30                              # resume across sessions
+    session_stop_margin_minutes: 45                           # stop, checkpoint and exit this long before session_hours_max (T-038)
     micro_batch:             1                                # per-step instances; grad accumulation = global_batch_instances / micro_batch (T-017)
   mac:
     pilot_instances:         3000

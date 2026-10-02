@@ -431,3 +431,9 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - The full `kaggle kernels output` download hung with no network activity on the weights tarball; `kaggle_run fetch --pattern` now passes
   `--file-pattern` so weights can be skipped.
 - Verified before commit: full suite with `-rf`, 93 passed.
+
+## 2026-10-02 D1 pushed; training stops before the session limit (T-038)
+
+- D1 zero-shot kernels `xbrl-frontier-zeroshot-1p7b` and `-0p6b` pushed on source 951adbf (kernel-side code unchanged since; GPU quota 1.2 h used before).
+- `training/kaggle_train.py` checkpoints and stops `training.kaggle.session_stop_margin_minutes` before `session_hours_max`; `final_adapter` only when complete (T-038).
+- Verified before commit: full suite with `-rf`, 94 passed (new schedule test).

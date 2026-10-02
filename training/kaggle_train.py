@@ -53,6 +53,7 @@ def main() -> None:
     ap.add_argument("--validation", action="store_true",
                     help="independent curve-validation run on the first training.curve_validation_run trained instances")
     args = ap.parse_args()
+    session_start = time.time()
 
     from serving.common import env_record, model_pin, pinned_snapshot, require_pins
     versions = require_pins("transformers", "peft", "bitsandbytes", "accelerate")
@@ -162,6 +163,10 @@ def main() -> None:
             if schedule.due_for_resume_checkpoint(time.time(), self.last):
                 control.should_save = True
                 self.last = time.time()
+            if schedule.session_time_up(time.time(), session_start):
+                control.should_save = True
+                control.should_training_stop = True
+                session["stopped_for_session_limit"] = True
 
         def on_train_end(self, a, state, control, **kw):
             session["train_seconds"] = time.time() - self.t0
@@ -171,8 +176,10 @@ def main() -> None:
     resume_from = latest_checkpoint(ck_dir)
     session["resumed_from"] = resume_from.name if resume_from else None
     trainer.train(resume_from_checkpoint=str(resume_from) if resume_from else None)
+    complete = trainer.state.global_step >= trainer.state.max_steps
     final = args.out / "final_adapter"
-    trainer.model.save_pretrained(final)
+    if complete:
+        trainer.model.save_pretrained(final)
     session["finished_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     session["processed_tokens_per_sec"] = (session["processed_tokens"] / session["train_seconds"]
                                            if session["train_seconds"] else None)
@@ -184,7 +191,7 @@ def main() -> None:
                 if args.validation else None,
                 "steps_per_epoch": schedule.steps_per_epoch(n), "global_step": trainer.state.global_step,
                 "curve_targets": schedule.curve_targets(n) if args.curve else None,
-                "final_adapter": str(final.relative_to(args.out))})
+                "complete": complete, "final_adapter": str(final.relative_to(args.out)) if complete else None})
     run["sessions"].append(session)
     run_path.write_text(json.dumps(run, indent=1))
     print(json.dumps({k2: v for k2, v in run.items() if k2 != "env"}, indent=1))
