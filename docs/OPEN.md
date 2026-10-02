@@ -149,7 +149,12 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   within the same company (year ties).
 - Validation of the Phase 1 map (`scripts/validate_instance_map.py`, positive instances): gold values found
   in the assigned filing are 1.000 for serializer_exact (13,185), serializer ties (306) and token_exact (32),
-  and 0.819 for token_fuzzy (239; 23 below half).
+  and 0.819 for token_fuzzy (239; 23 below half). **This is not a regression of the matcher.** In
+  Phase 0 the fuzzy method scored 0.959 over 1,062 instances, most of them easy table contexts that
+  failed exact token matching only because of doubled cells. The serializer now takes all of those as
+  exact strings, so the fuzzy fallback sees only the hard residue the serializer cannot reproduce. The
+  two figures cover different populations and are not comparable. The Phase 0 matcher and thresholds are
+  unchanged.
 - History (Phase 0):
 - Found: 27,142 of 28,787 rows are assigned. Unassigned: 1,201 `none`, 372 `ambiguous_cross_company`
   (text shared verbatim by filings of different companies, for example parent and subsidiary), and
@@ -177,9 +182,10 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Next action: `between_filing_f1_sd` and `frontier.power_check` are computed per company, and that is
   stated next to each number. Sampling mechanics are decided in Phase 3.
 
-## O-013 The benchmark serializer emits the same text with different labels; FinNI inherits it (OPEN)
+## O-013 The benchmark serializer emits the same text with different labels; FinNI inherits it (RESOLVED)
 
-- Status: OPEN (affects Phase 1 training-set construction)
+- Status: RESOLVED (2026-10-02): owner decision, recorded in TRADEOFFS T-010. In training, drop the negative twin.
+  The eval set is untouched.
 - Found: in FinTagging's `extract_text`, a `div` whose only content is a `p` yields the same text twice.
   The `div` comes out as a **negative**, because its facts are not direct children, and the `p` as a
   **positive**. Negatives never enter the seen-text set, so both survive. On the 25,770 serializer-exact
@@ -189,7 +195,5 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   1.000. So the port is faithful, and the gold itself carries this ambiguity.
 - Evidence: `data/manifest_work/serializer_rebuild.json` (`label_parity_on_serializer_exact`),
   `tests/test_ixbrl_facts.py::test_text_blocks_follow_notebook_rules`.
-- Next action: Phase 1 training construction must decide whether to keep the same text as both a positive
-  and a negative (faithful to the benchmark's conventions) or drop the negative twin (cleaner supervision).
-  That is a DECISIONS NEEDED item when accession selection and sampling are built. The eval set is
-  untouched either way.
+- Next action: none. `scripts/serialize_corpus.py` applies T-010 and counts the dropped twins per filing
+  and in total. The format-parity script reports the divergence from the benchmark's conventions.

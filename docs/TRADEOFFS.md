@@ -249,3 +249,15 @@ registrants. Excluding them is the conservative side of contamination control.
    rows fall back to the unchanged Phase 0 token matcher over the same 139 filings. `instance_match.*` is
    untouched. The Phase 0 map is kept as `data/manifest_work/eval_instance_to_filing_phase0_tokenmatch.csv`,
    and both rates are recorded.
+
+## T-010 AUTONOMOUS DECISION - owner to review: drop the negative twin in training (2026-10-02)
+
+Decision (owner, O-013): within one filing, when the serializer emits a text that also appears with a
+non-empty label set, the empty-labelled copy is **not** written to the training corpus. Dropped twins are
+counted per filing and in total, and the corpus negatives fraction is computed after dropping.
+Alternative: keep both copies, faithful to the benchmark's conventions. Why rejected: the negative label on
+that text is demonstrably wrong. The same text's facts are tagged, and the empty label is an artifact of the
+`div` wrapper, not an absence of facts. Training on a known-false label is noise, not fidelity. The
+benchmark's conventions stay in the serializer (`ixbrl_facts/fintagging.py`, unchanged). The rule is
+applied only when the corpus is written, the eval set is untouched, and the format-parity script reports
+the divergence.
