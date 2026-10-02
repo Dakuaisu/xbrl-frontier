@@ -73,7 +73,7 @@ def push(name: str, notebook: Path, param_cell: str | None, datasets: list[str],
             args += ["-t", str(timeout)]
         out = sh(*args)
     git = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, cwd=config.REPO_ROOT).stdout.strip()
-    log({"action": "push", "name": name, "kernel": meta["id"], "notebook": str(notebook.relative_to(config.REPO_ROOT)),
+    log({"action": "push", "name": name, "kernel": meta["id"], "notebook": str(notebook.resolve().relative_to(config.REPO_ROOT)),
          "param_cell": param_cell, "datasets": datasets, "kernel_sources": kernels, "git_head": git,
          "gpu_used_hours_before": before, "out": out.strip()[-300:]})
     print(out.strip())
@@ -94,13 +94,13 @@ def wait(name: str, minutes: float) -> str:
     return s
 
 
-def fetch(name: str, to: Path) -> None:
+def fetch(name: str, to: Path, pattern: str | None = None) -> None:
     to.mkdir(parents=True, exist_ok=True)
-    out = sh("kernels", "output", f"{OWNER}/xbrl-frontier-{name}", "-p", str(to))
+    out = sh("kernels", "output", f"{OWNER}/xbrl-frontier-{name}", "-p", str(to), *(["--file-pattern", pattern] if pattern else []))
     pushes = [json.loads(l) for l in open(RUNS) if json.loads(l).get("action") == "push" and json.loads(l)["name"] == name]
     after = gpu_used_hours()
     before = pushes[-1]["gpu_used_hours_before"] if pushes else None
-    row = {"action": "fetch", "name": name, "status": status(name), "to": str(to.relative_to(config.REPO_ROOT)),
+    row = {"action": "fetch", "name": name, "status": status(name), "to": str(to.resolve().relative_to(config.REPO_ROOT)),
            "gpu_used_hours_after": after, "gpu_hours_this_run": None if before is None else round(after - before, 2),
            "files": sorted(str(p.relative_to(to)) for p in to.rglob("*") if p.is_file())[:50]}
     log(row)
@@ -121,6 +121,7 @@ def main() -> None:
     ap.add_argument("--timeout", type=int)
     ap.add_argument("--minutes", type=float, default=110)
     ap.add_argument("--to", type=Path)
+    ap.add_argument("--pattern", help="regex passed to --file-pattern; skip multi-GB weights, which hang the CLI download")
     a = ap.parse_args()
     if a.action == "dataset":
         dataset(a.slug, a.dir, a.message)
@@ -131,7 +132,7 @@ def main() -> None:
     elif a.action == "status":
         print(status(a.name))
     else:
-        fetch(a.name, a.to)
+        fetch(a.name, a.to, a.pattern)
 
 
 if __name__ == "__main__":

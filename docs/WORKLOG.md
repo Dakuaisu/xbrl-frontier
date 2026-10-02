@@ -416,3 +416,18 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - `scripts/kaggle_run.py` (dataset create/version, notebook kernel push with T4 + internet, wait, fetch, GPU-hour accounting from `kaggle quota`
   before/after into `data/kaggle/runs.jsonl`). Notebooks now find the source tarball, an extracted tree and the corpus anywhere under `/kaggle/input`.
 - Verified before commit: full suite with `-rf`, 93 passed.
+
+## 2026-10-02 C1: Phase 0 T4 benchmark and serving smoke test on Kaggle
+
+- Kernel `xbrl-frontier-phase0-t4` (source tarball of 951adbf) COMPLETE: 1.17 GPU-hours (quota 0.03 -> 1.2 used of the weekly 30;
+  `data/kaggle/runs.jsonl`). Tesla T4, vLLM 0.30.0, torch 2.13.0, TRITON_ATTN backend, CUDA graphs on, bf16 cast to fp16.
+- Benchmark: both models 3 concurrency points, 0 errors (`data/phase0/phase0_kaggle_t4/`). `scripts/phase0_cost.py` regenerated
+  `data/phase0/break_even.{json,md}`: goodput at the SLO is 0 filings/hour for both models (p95 above the SLO at every point measured);
+  the max-throughput comparison is in the file. Read values from the file, not from here.
+- Smoke test (`data/phase0/serving_variants.json`): kept fp16 and int8-w8a8 for 0.6B and 1.7B; removed both awq-int4 variants per
+  `serving.smoke_test.failure_action`. Cause: `python -m venv` on the Kaggle image fails at ensurepip, so the autoawq venv and checkpoint
+  were never built. Not an AWQ result. The phase0 and phase2 export notebooks now build that venv with virtualenv; AWQ stays removed until a
+  rerun passes.
+- The full `kaggle kernels output` download hung with no network activity on the weights tarball; `kaggle_run fetch --pattern` now passes
+  `--file-pattern` so weights can be skipped.
+- Verified before commit: full suite with `-rf`, 93 passed.

@@ -45,3 +45,10 @@ data/kaggle/*
 !data/phase3/live/
 data/phase3/live/*/requests.json
 !data/kaggle/runs.jsonl
+!data/phase0/
+data/phase0/*
+!data/phase0/break_even.json
+!data/phase0/break_even.md
+!data/phase0/serving_variants.json
+!data/phase0/phase0_kaggle_t4/
+!data/phase0/smoke_kaggle_t4/

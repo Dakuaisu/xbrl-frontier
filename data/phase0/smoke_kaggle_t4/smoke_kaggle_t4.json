@@ -1,0 +1,212 @@
+{
+ "card": "kaggle_t4",
+ "versions": {
+  "vllm": "0.30.0"
+ },
+ "env": {
+  "card": "kaggle_t4",
+  "hardware": {
+   "gpu": "NVIDIA T4 16GB",
+   "sm": 7.5,
+   "dtype": "fp16",
+   "variants": [
+    "fp16",
+    "int8-w8a8",
+    "awq-int4"
+   ],
+   "market_rate_keys": [
+    "gpu_per_hour.modal.T4",
+    "gpu_per_hour.huggingface_endpoints.T4",
+    "gpu_per_hour.aws.g4dn_xlarge_T4"
+   ],
+   "load_generator_colocated": true
+  },
+  "python": "3.12.13 (main, Mar  4 2026, 09:23:07) [GCC 11.4.0]",
+  "platform": "Linux-6.18.48+-x86_64-with-glibc2.35",
+  "nvidia_smi": "Tesla T4, 580.178.04, 15360 MiB, 7.5\nTesla T4, 580.178.04, 15360 MiB, 7.5",
+  "config_hash": "89705107355e2e19e270dd471ad57103f73e935b88d314be7fe5b17473713b5d",
+  "time_utc": "2026-10-02T19:53:50Z",
+  "version::vllm": "0.30.0",
+  "version::torch": "2.13.0",
+  "version::transformers": "5.17.0",
+  "version::llmcompressor": "0.14.0",
+  "version::compressed-tensors": "0.19.0"
+ },
+ "failure_action": "remove the variant from the serving table before training hours are spent; record the error",
+ "results": [
+  {
+   "variant": "0.6B-fp16",
+   "model": "Qwen/Qwen3-0.6B",
+   "precision": "fp16",
+   "ok": true,
+   "checkpoint": "/root/.cache/huggingface/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca",
+   "server_flags": [
+    "--served-model-name",
+    "Qwen/Qwen3-0.6B",
+    "--dtype",
+    "half",
+    "--seed",
+    "1",
+    "--max-model-len",
+    "4096"
+   ],
+   "generation": {
+    "text": " [{\"Fact\": \"29,315\", \"Type\": \"integerItemType\"}, {\"Fact\": \"24,045\", \"Type\": \"integerItemType\"}, {\"Fact\": \"161,564\", \"Type\": \"integerItemType\"}, {\"Fact\": \"170,975\", \"Type\": \"integerItemType\"}, {\"Fact\": \"2,017,805\", \"Type\": \"integerItemType\"}]\n        Explanation: The output is correct and matches the expected output.\n        \n        Input: <table><tr><td>2024</td><td>2023</td><td>2022</td></tr><tr><td>Revenues</td><td></td><td></td></tr><tr><td>Net investment income Net investment",
+    "usage": {
+     "prompt_tokens": 1965,
+     "total_tokens": 2140,
+     "completion_tokens": 175,
+     "prompt_tokens_details": null,
+     "completion_tokens_details": null
+    }
+   },
+   "throughput_check": {
+    "concurrency": 16,
+    "num_prompts": 20,
+    "completed": 20,
+    "request_throughput": 0.6530758626867835,
+    "output_throughput": 114.28827597018712,
+    "p50_ttft_ms": 8775.559753999914,
+    "p95_ttft_ms": 15987.411911550338,
+    "p50_e2el_ms": 26454.67803349993,
+    "p95_e2el_ms": 27211.209343300176,
+    "request_goodput_per_request_slo": 0.0,
+    "raw_file": "raw_0.6B-fp16.json"
+   }
+  },
+  {
+   "variant": "1.7B-fp16",
+   "model": "Qwen/Qwen3-1.7B",
+   "precision": "fp16",
+   "ok": true,
+   "checkpoint": "/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+   "server_flags": [
+    "--served-model-name",
+    "Qwen/Qwen3-1.7B",
+    "--dtype",
+    "half",
+    "--seed",
+    "1",
+    "--max-model-len",
+    "4096"
+   ],
+   "generation": {
+    "text": " {\"result\":[{\"Fact\":\"29315\",\"Type\":\"integerItemType\"},{\"Fact\":\"58166\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"97395\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"46966\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"23916\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"1129\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"95\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"4840\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"73572\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"3017\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"15866\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"32066\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"14818\",\"Type\":\"mon",
+    "usage": {
+     "prompt_tokens": 1965,
+     "total_tokens": 2140,
+     "completion_tokens": 175,
+     "prompt_tokens_details": null,
+     "completion_tokens_details": null
+    }
+   },
+   "throughput_check": {
+    "concurrency": 16,
+    "num_prompts": 20,
+    "completed": 20,
+    "request_throughput": 0.5480956132169112,
+    "output_throughput": 95.91673231295947,
+    "p50_ttft_ms": 9488.474683500044,
+    "p95_ttft_ms": 17070.033529750253,
+    "p50_e2el_ms": 30007.452074499954,
+    "p95_e2el_ms": 31058.90996344997,
+    "request_goodput_per_request_slo": 0.0,
+    "raw_file": "raw_1.7B-fp16.json"
+   }
+  },
+  {
+   "variant": "0.6B-int8-w8a8",
+   "model": "Qwen/Qwen3-0.6B",
+   "precision": "int8-w8a8",
+   "ok": true,
+   "checkpoint": "/kaggle/working/smoke_checkpoints/Qwen3-0.6B-int8-w8a8",
+   "server_flags": [
+    "--served-model-name",
+    "Qwen/Qwen3-0.6B",
+    "--dtype",
+    "half",
+    "--seed",
+    "1",
+    "--max-model-len",
+    "4096"
+   ],
+   "generation": {
+    "text": " [{\"Fact\": \"29,315\", \"Type\": \"integerItemType\"}, {\"Fact\": \"24,045\", \"Type\": \"integerItemType\"}, {\"Fact\": \"161,564\", \"Type\": \"integerItemType\"}, {\"Fact\": \"170,975\", \"Type\": \"integerItemType\"}, {\"Fact\": \"2,017,805\", \"Type\": \"integerItemType\"}, {\"Fact\": \"2,708,061\", \"Type\": \"integerItemType\"}, {\"Fact\": \"1,834,985\", \"Type\": \"monetaryItemType\"}, {\"Fact\": \"2,525,756\", \"Type\": \"monetaryItemType\"}, {\"Fact\": \"1,096,579\", \"",
+    "usage": {
+     "prompt_tokens": 1965,
+     "total_tokens": 2140,
+     "completion_tokens": 175,
+     "prompt_tokens_details": null,
+     "completion_tokens_details": null
+    }
+   },
+   "throughput_check": {
+    "concurrency": 16,
+    "num_prompts": 20,
+    "completed": 20,
+    "request_throughput": 0.6486427301939512,
+    "output_throughput": 113.51247778394146,
+    "p50_ttft_ms": 8837.527213999692,
+    "p95_ttft_ms": 16083.427591899681,
+    "p50_e2el_ms": 26643.99176049983,
+    "p95_e2el_ms": 27390.851328499866,
+    "request_goodput_per_request_slo": 0.0,
+    "raw_file": "raw_0.6B-int8-w8a8.json"
+   }
+  },
+  {
+   "variant": "1.7B-int8-w8a8",
+   "model": "Qwen/Qwen3-1.7B",
+   "precision": "int8-w8a8",
+   "ok": true,
+   "checkpoint": "/kaggle/working/smoke_checkpoints/Qwen3-1.7B-int8-w8a8",
+   "server_flags": [
+    "--served-model-name",
+    "Qwen/Qwen3-1.7B",
+    "--dtype",
+    "half",
+    "--seed",
+    "1",
+    "--max-model-len",
+    "4096"
+   ],
+   "generation": {
+    "text": " {\"result\":[{\"Fact\":\"29315\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"15866\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"86314\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"58166\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"97395\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"46966\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"29315\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"161564\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"1885556\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"2017805\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"2561131\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"1061204\",\"Type",
+    "usage": {
+     "prompt_tokens": 1965,
+     "total_tokens": 2140,
+     "completion_tokens": 175,
+     "prompt_tokens_details": null,
+     "completion_tokens_details": null
+    }
+   },
+   "throughput_check": {
+    "concurrency": 16,
+    "num_prompts": 20,
+    "completed": 20,
+    "request_throughput": 0.5808850558883949,
+    "output_throughput": 101.6548847804691,
+    "p50_ttft_ms": 9310.081666500082,
+    "p95_ttft_ms": 16659.000376699896,
+    "p50_e2el_ms": 28703.42326450009,
+    "p95_e2el_ms": 29630.290930299998,
+    "request_goodput_per_request_slo": 0.0,
+    "raw_file": "raw_1.7B-int8-w8a8.json"
+   }
+  },
+  {
+   "variant": "0.6B-awq-int4",
+   "model": "Qwen/Qwen3-0.6B",
+   "precision": "awq-int4",
+   "ok": false,
+   "error": "FileNotFoundError: missing quantized checkpoint /kaggle/working/smoke_checkpoints/Qwen3-0.6B-awq-int4 (run serving.quantize_base first)"
+  },
+  {
+   "variant": "1.7B-awq-int4",
+   "model": "Qwen/Qwen3-1.7B",
+   "precision": "awq-int4",
+   "ok": false,
+   "error": "FileNotFoundError: missing quantized checkpoint /kaggle/working/smoke_checkpoints/Qwen3-1.7B-awq-int4 (run serving.quantize_base first)"
+  }
+ ]
+}

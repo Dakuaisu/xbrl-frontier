@@ -1,0 +1,109 @@
+{
+ "model": "Qwen/Qwen3-1.7B",
+ "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+ "versions": {
+  "vllm": "0.30.0"
+ },
+ "server_flags": [
+  "--served-model-name",
+  "Qwen/Qwen3-1.7B",
+  "--dtype",
+  "half",
+  "--max-model-len",
+  "4096",
+  "--seed",
+  "1"
+ ],
+ "env": {
+  "card": "kaggle_t4",
+  "hardware": {
+   "gpu": "NVIDIA T4 16GB",
+   "sm": 7.5,
+   "dtype": "fp16",
+   "variants": [
+    "fp16",
+    "int8-w8a8",
+    "awq-int4"
+   ],
+   "market_rate_keys": [
+    "gpu_per_hour.modal.T4",
+    "gpu_per_hour.huggingface_endpoints.T4",
+    "gpu_per_hour.aws.g4dn_xlarge_T4"
+   ],
+   "load_generator_colocated": true
+  },
+  "python": "3.12.13 (main, Mar  4 2026, 09:23:07) [GCC 11.4.0]",
+  "platform": "Linux-6.18.48+-x86_64-with-glibc2.35",
+  "nvidia_smi": "Tesla T4, 580.178.04, 15360 MiB, 7.5\nTesla T4, 580.178.04, 15360 MiB, 7.5",
+  "config_hash": "89705107355e2e19e270dd471ad57103f73e935b88d314be7fe5b17473713b5d",
+  "time_utc": "2026-10-02T19:11:16Z",
+  "version::vllm": "0.30.0",
+  "version::torch": "2.13.0",
+  "version::transformers": "5.18.0",
+  "version::compressed-tensors": "0.17.0"
+ },
+ "spec": {
+  "models": [
+   "Qwen/Qwen3-0.6B",
+   "Qwen/Qwen3-1.7B"
+  ],
+  "input_tokens": 1100,
+  "output_tokens": 175,
+  "concurrency_levels": [
+   1,
+   4,
+   16
+  ],
+  "requests_per_point": 200,
+  "report": [
+   "max_throughput_filings_per_hour",
+   "goodput_filings_per_hour_at_slo",
+   "break_even_goodput_per_arm_per_regime",
+   "gate_pass_goodput_per_arm_per_regime"
+  ],
+  "break_even": "t4_rate / (arm $/filing at the regime price * regime utilization)",
+  "gate_pass_goodput": "gates.cost_ratio_vs_comparator_min * break_even"
+ },
+ "points": [
+  {
+   "concurrency": 1,
+   "num_prompts": 200,
+   "completed": 200,
+   "request_throughput": 0.25806590831768733,
+   "output_throughput": 45.16153395559528,
+   "p50_ttft_ms": 355.20421750015885,
+   "p95_ttft_ms": 358.46351120012514,
+   "p50_e2el_ms": 3901.099563000116,
+   "p95_e2el_ms": 3919.1270411003416,
+   "request_goodput_per_request_slo": 0.0,
+   "raw_file": "raw_Qwen3-1.7B_c1.json"
+  },
+  {
+   "concurrency": 4,
+   "num_prompts": 200,
+   "completed": 200,
+   "request_throughput": 0.5894987684787244,
+   "output_throughput": 103.16228448377677,
+   "p50_ttft_ms": 1019.2895965003572,
+   "p95_ttft_ms": 1059.4775380998726,
+   "p50_e2el_ms": 6718.702105500142,
+   "p95_e2el_ms": 6885.829240200019,
+   "request_goodput_per_request_slo": 0.0,
+   "raw_file": "raw_Qwen3-1.7B_c4.json"
+  },
+  {
+   "concurrency": 16,
+   "num_prompts": 200,
+   "completed": 200,
+   "request_throughput": 0.8629916173073672,
+   "output_throughput": 151.02353302878925,
+   "p50_ttft_ms": 1597.185061500113,
+   "p95_ttft_ms": 4908.826829949842,
+   "p50_e2el_ms": 17713.80879599997,
+   "p95_e2el_ms": 26697.514959000153,
+   "request_goodput_per_request_slo": 0.0,
+   "raw_file": "raw_Qwen3-1.7B_c16.json"
+  }
+ ],
+ "errors": []
+}
