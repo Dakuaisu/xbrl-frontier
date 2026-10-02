@@ -4,15 +4,15 @@
 schema_version: "2026-10-01.v2.2-frozen"   # v2: $10 cap, no rented GPUs, FinNI only, 0.6B/1.7B students, T4 + RTX 3050 serving; v2.1: cost gate, sampling, decision rule, fresh control, smoke test
 
 pins:
-  eval_finni:        { repo: "TheFinAI/FinNI-eval-v2", split: "test", rows_expected: 28787, hf_revision: "" }
+  eval_finni:        { repo: "TheFinAI/FinNI-eval-v2", split: "test", rows_expected: 28787, hf_revision: "e3e0aba23b5c3df17a71c8c013030182d013a538" }
   eval_manifest:     "data/eval_manifest.csv"          # CIK, accession, filing date for all 142 FinTagging eval filings
   eval_instance_map: "data/eval_instance_to_filing.csv" # every eval instance id -> accession (needed for bootstrap over filings)
   train_accessions:  "data/train_accessions.txt"       # pinned accession list; never a date window relative to today
   fresh_accessions:  "data/fresh_accessions.txt"       # post-cutoff slice, pinned the same way
   students:
-    - { id: "Qwen/Qwen3-0.6B", hf_revision: "" }
-    - { id: "Qwen/Qwen3-1.7B", hf_revision: "" }       # primary
-  encoder_baseline:  { id: "nlpaueb/sec-bert-base", hf_revision: "" }
+    - { id: "Qwen/Qwen3-0.6B", hf_revision: "c1899de289a04d12100db370d81485cdf75e47ca" }
+    - { id: "Qwen/Qwen3-1.7B", hf_revision: "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e" }       # primary
+  encoder_baseline:  { id: "nlpaueb/sec-bert-base", hf_revision: "d511591f5e74052afdab08f1f14c4ff2a1e55749" }
   frontier_arms:     # zero-shot only; dateless Anthropic/Google ids are pinned snapshots per vendor docs; OpenAI dated snapshot used
     - "gpt-6-luna"                   # cheapest arm
     - "gemini-3.5-flash-lite"        # second vendor, cheap
