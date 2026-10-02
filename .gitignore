@@ -44,3 +44,4 @@ data/kaggle/*
 !data/phase3/spend_ledger.jsonl
 !data/phase3/live/
 data/phase3/live/*/requests.json
+!data/kaggle/runs.jsonl

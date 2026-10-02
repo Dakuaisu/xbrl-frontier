@@ -410,3 +410,9 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 
 - 16:43Z: no GPU, no internet (committed in ba45428; from now on negative re-checks are logged here only, at most once a day).
 - 18:41Z: T4 x2 with internet after phone verification. O-025 RESOLVED; Kaggle work resumes.
+
+## 2026-10-02 Kaggle resumed: helper and mount-agnostic notebooks
+
+- `scripts/kaggle_run.py` (dataset create/version, notebook kernel push with T4 + internet, wait, fetch, GPU-hour accounting from `kaggle quota`
+  before/after into `data/kaggle/runs.jsonl`). Notebooks now find the source tarball, an extracted tree and the corpus anywhere under `/kaggle/input`.
+- Verified before commit: full suite with `-rf`, 93 passed.
