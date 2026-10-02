@@ -1,6 +1,6 @@
 #!/bin/sh
-# Runs the FinNI scorer tests, including the eval.oracles calibration, whenever scorer code or config is staged.
-if git diff --cached --name-only | grep -qE '^(xbrl_frontier/(scorer|oracles|eval_sets|finni|config)\.py|tests/test_(oracles|scorer_unit)\.py|docs/config/thresholds\.yaml)$'; then
-  ./.venv/bin/python -m pytest -q tests/test_scorer_unit.py tests/test_oracles.py || {
+# Runs the FinNI scorer tests, including the eval.oracles calibration, whenever scoring code or config is staged.
+if git diff --cached --name-only | grep -qE '^(xbrl_frontier/(scorer|oracles|eval_sets|finni|config|bio|sft_format)\.py|scripts/score_predictions\.py|tests/test_(oracles|scorer_unit|score_predictions|bio)\.py|docs/config/thresholds\.yaml)$'; then
+  ./.venv/bin/python -m pytest -q tests/test_scorer_unit.py tests/test_oracles.py tests/test_score_predictions.py tests/test_bio.py || {
     echo "pre-commit: scorer/oracle tests failed; commit blocked" >&2; exit 1; }
 fi
