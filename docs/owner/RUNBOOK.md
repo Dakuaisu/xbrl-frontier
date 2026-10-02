@@ -2,6 +2,12 @@
 
 `docs/OPEN.md` is the source of truth for each item (status, evidence, full step text). This runbook orders the items
 and says, for each one, what to run, what comes back, where it goes, and which builder script runs on the return.
+**Update 2026-10-02 (owner decision T-033):** sections B, C1, D and E5 are now run by the builder with the
+`kaggle` CLI, and E1-E4 are run by the builder for `gemini-3.5-flash-lite` only (free tier, `--approval T-033`,
+synchronous, $0 billed; the other arms are not run). Both are blocked first on **O-025: phone-verify the Kaggle
+account** (https://www.kaggle.com/settings). Still owner-only: that verification, A1-A4 (preprint, GitHub issue after
+the owner approves the text, both label-audit passes) and the RTX 3050 rows (C2, E6).
+
 Paths are relative to the repo root. "Builder" means I run it locally once the files are in place. It spends nothing.
 
 ## A. Anytime (no dependencies)
