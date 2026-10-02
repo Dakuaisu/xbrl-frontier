@@ -834,3 +834,14 @@ as a finding. Billed spend stays $0, and any path that would need billing stops 
 collection date range is recorded here when it finishes.
 Also in this commit: RUNBOOK E1-E4 rewritten for T-033. T-008, T-012, T-016, T-002 (confirmation), the T-021 addendum
 and O-002 relabelled "supervisor decision (owner to review)". The T-024 paid-approval mechanism is marked superseded by T-034.
+
+## T-036 AUTONOMOUS DECISION - owner to review: collect the free tier at 500 a day until done (2026-10-02)
+
+Supervisor decision (owner to review), O-027 option (a): collect E4, and later E1-E3, at the free tier's 500 requests per
+day until each step's `status.json` is `complete` with an empty pending list, about 18 days for the one-arm plan.
+Rejected: (b) trimming E3, the latency sample. Its size (`frontier.sync_latency_instances` x `frontier.sync_runs`) is a
+measurement design choice, not a schedule variable, and nothing waits on the frontier steps while Kaggle is blocked
+(O-025). The days-per-filing figure in O-027 is scheduling information only: after D4, N is set by the power check and
+`gates.decision_rule`, never by the day count.
+Also: `scripts/smoke_summary.py` (new) consumes the T4 and 3050 smoke outputs under `serving.smoke_test.failure_action`, and
+every OWNER-BLOCKED entry in OPEN.md now names the action, the artefact path and the consuming script, matching the RUNBOOK.

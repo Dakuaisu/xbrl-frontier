@@ -363,3 +363,11 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   latency 1.35 s, 388,771 input / 98,437 output tokens, notional $0.1814 at batch rates, $0 billed. 2,934 pending, listed in
   `status.json` (O-027). `scripts/frontier_plan.py` now reports `free_tier_days_needed` (18). Collected files are committed
   (`requests.json` excluded as reproducible).
+
+## 2026-10-02 Owner-facing records audit (T-036)
+
+- OWNER-BLOCKED entries checked against the RUNBOOK and completed: O-005 and O-023 (T4) are builder-run behind O-025; O-006 and O-023
+  (3050) name the artefact JSON paths; O-010 adds the approve-text-first step (T-033 item 6) and its consumers; O-009 and O-024
+  name their artefacts and consumers; O-025 names its follow-up. New `scripts/smoke_summary.py` (failure_action ->
+  `data/phase0/serving_variants.json`) with `tests/test_smoke_summary.py`. O-027 now states that the day count never sets N; O-026
+  notes that the full-suite-before-commit rule is manual (the hook runs the scorer subset only).

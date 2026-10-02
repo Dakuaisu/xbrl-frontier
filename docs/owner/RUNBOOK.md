@@ -15,7 +15,7 @@ Paths are relative to the repo root. "Builder" means I run it locally once the f
 | # | Item | You run | Comes back / where | Builder runs on return |
 |---|---|---|---|---|
 | A1 | O-009 preprint | Open DOI 10.13140/RG.2.2.19518.86080 in a logged-in browser (or email the authors); save the PDF **outside** the repo | Tell me the PDF path | Summary against PRD section 1; repositioning if needed |
-| A2 | O-010 (a) GitHub issue | Post `docs/owner/fintagging_issue_draft.md` at github.com/The-FinAI/FinTagging/issues (add the repo link where marked) | The issue URL; any reply with the 142 filings | On a reply: manifest rebuild (`scripts/build_eval_manifest.py` from their list), `scripts/rebuild_eval_contexts.py`, report old and new numbers |
+| A2 | O-010 (a) GitHub issue | Approve or edit `docs/owner/fintagging_issue_draft.md` first (T-033 item 6), then post it at github.com/The-FinAI/FinTagging/issues (add the repo link where marked) | The issue URL; any reply with the 142 filings | On a reply: manifest rebuild (`scripts/build_eval_manifest.py` from their list), `scripts/rebuild_eval_contexts.py`, report old and new numbers |
 | A3 | O-024 label audit, pass 1 | Fill `data/label_audit/pass1_sheet.csv` (verdict, missing/spurious/wrong-type counts, notes) against each `filing_url`; commit | The committed sheet | (after A4) `scripts/label_audit.py score` |
 | A4 | O-024 label audit, pass 2 | At least one week after A3: fill `data/label_audit/pass2_sheet.csv` blind; commit | The committed sheet | `scripts/label_audit.py score`, then `scripts/contamination_statement.py` and `scripts/readme.py` |
 
@@ -30,8 +30,8 @@ Paths are relative to the repo root. "Builder" means I run it locally once the f
 
 | # | Item | You run | Comes back / where | Builder runs on return |
 |---|---|---|---|---|
-| C1 | O-005 T4 benchmark + smoke quantization + T4 smoke test | `notebooks/phase0_kaggle_t4.ipynb` (GPU T4, Internet on, attach `xbrl-frontier-src`) | `phase0_kaggle_t4.tar.gz`, `smoke_kaggle_t4.tar.gz`, `smoke_checkpoints.tar.gz` -> `data/phase0/` | `scripts/phase0_cost.py --results data/phase0/phase0_kaggle_t4`; `serving.smoke_test.failure_action` applied to failed variants |
-| C2 | O-006 RTX 3050 smoke test (needs C1's `smoke_checkpoints`) | WSL2: `serving/run_rtx3050_smoke.sh /path/to/smoke_checkpoints` | `data/phase0/rtx3050_wsl2.tar.gz` | failure_action applied; serving table updated |
+| C1 | O-005 T4 benchmark + smoke quantization + T4 smoke test | `notebooks/phase0_kaggle_t4.ipynb` (GPU T4, Internet on, attach `xbrl-frontier-src`) | `phase0_kaggle_t4.tar.gz`, `smoke_kaggle_t4.tar.gz`, `smoke_checkpoints.tar.gz` -> `data/phase0/` | `scripts/phase0_cost.py --results data/phase0/phase0_kaggle_t4`; `scripts/smoke_summary.py` (failure_action -> `data/phase0/serving_variants.json`) |
+| C2 | O-006 RTX 3050 smoke test (needs C1's `smoke_checkpoints`) | WSL2: `serving/run_rtx3050_smoke.sh /path/to/smoke_checkpoints` | `data/phase0/rtx3050_wsl2/smoke_rtx3050_wsl2.json` (+ `.tar.gz`) | `scripts/smoke_summary.py` |
 
 ## D. Phase 2 training and scoring (need B1, B2; O-019)
 

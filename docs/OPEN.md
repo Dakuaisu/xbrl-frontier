@@ -46,38 +46,33 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Found: both slice keys come from `pins.eval_instance_map`. `eval_sets.slice_keys` reads them from that
   map and labels unmapped instances `unassigned`.
 
-## O-005 Kaggle T4 Phase 0 runs: throughput benchmark, smoke quantization, T4 smoke test (OWNER-BLOCKED)
+## O-005 Kaggle T4 Phase 0 runs: throughput benchmark, smoke quantization, T4 smoke test (OWNER-BLOCKED via O-025)
 
-- Status: OWNER-BLOCKED (Kaggle is owner-only; the software pins are filled, O-007 RESOLVED)
-- Ready: `notebooks/phase0_kaggle_t4.ipynb` (thin driver), `serving/phase0_benchmark.py`,
-  `serving/quantize_base.py`, `serving/smoke_test.py`, `serving/common.py`. Local analysis is in
-  `scripts/phase0_cost.py`. All are covered by `tests/test_cost_and_serving.py`, which needs no GPU.
-- Owner steps:
-  1. Source tarball, built by the builder from the commit that filled the pins (see WORKLOG for the
-     commit and sha256): `/tmp/xbrl-frontier-src.tar.gz`, made with
-     `git archive --format=tar.gz -o /tmp/xbrl-frontier-src.tar.gz HEAD`. Rebuild it the same way if
-     `/tmp` was cleared.
-  2. On Kaggle, create a private dataset `xbrl-frontier-src` and upload that file.
-  3. New notebook: import `notebooks/phase0_kaggle_t4.ipynb`. Settings: Accelerator GPU T4, Internet on.
-     Add the dataset `xbrl-frontier-src`. Run all. Budget is about 1 GPU-hour (PRD section 9).
-  4. Download `phase0_kaggle_t4.tar.gz`, `smoke_kaggle_t4.tar.gz` and `smoke_checkpoints.tar.gz` from
-     the notebook output.
-- What I need back: the three tarballs, unpacked into `data/phase0/` on the Mac
-  (`data/phase0/phase0_kaggle_t4/`, `data/phase0/smoke_kaggle_t4/`, `data/phase0/smoke_checkpoints/`).
-  I then run `.venv/bin/python -m scripts.phase0_cost --results data/phase0/phase0_kaggle_t4` and apply
-  `serving.smoke_test.failure_action` to any failed variant.
+- Status: OWNER-BLOCKED via O-025. Under T-033 the builder runs this with the `kaggle` CLI; the only owner action
+  is the phone verification in O-025. Pins are filled (O-007).
+- Ready: `notebooks/phase0_kaggle_t4.ipynb`, `serving/phase0_benchmark.py`, `serving/quantize_base.py`,
+  `serving/smoke_test.py`, `serving/common.py` (tested in `tests/test_cost_and_serving.py`, no GPU needed).
+- Builder steps (RUNBOOK B1, C1): `git archive --format=tar.gz -o /tmp/xbrl-frontier-src.tar.gz HEAD`, then
+  `kaggle datasets create`/`version` for `xbrl-frontier-src`, then push the notebook as a kernel with
+  `--accelerator NvidiaTeslaT4` and internet on, then `kaggle kernels status` and `kaggle kernels output`.
+- Artefacts: `data/phase0/phase0_kaggle_t4/benchmark_*.json`, `data/phase0/smoke_kaggle_t4/smoke_kaggle_t4.json`,
+  `data/phase0/smoke_checkpoints/` (also needed by O-006).
+- Consumers: `scripts/phase0_cost.py --results data/phase0/phase0_kaggle_t4` (break-even and gate-pass goodput);
+  `scripts/smoke_summary.py` (`serving.smoke_test.failure_action`: writes `data/phase0/serving_variants.json` with the
+  failed variants removed and their errors recorded).
 
 ## O-006 RTX 3050 (WSL2) smoke test (OWNER-BLOCKED)
 
-- Status: OWNER-BLOCKED (the laptop is unreachable from here; needs O-005's `smoke_checkpoints`)
+- Status: OWNER-BLOCKED (the laptop is owner-only; it needs O-005's `smoke_checkpoints`, so O-025 first).
 - Ready: `serving/run_rtx3050_smoke.sh`, which runs `serving.smoke_test --card rtx3050_wsl2` with
   `serving.hardware.rtx3050_wsl2.vllm_flags`.
-- Owner steps (in WSL2, NVIDIA driver with WSL CUDA support installed):
-  1. Copy the repo (same commit as the Kaggle run) and the unpacked `smoke_checkpoints/` to the laptop.
-  2. From the repo root: `serving/run_rtx3050_smoke.sh /path/to/smoke_checkpoints`
-  3. Return `data/phase0/rtx3050_wsl2.tar.gz` (the script prints its path).
-- What I need back: that tarball. A variant that fails stays recorded with its error and is removed
-  from the serving table per `serving.smoke_test.failure_action` (PRD risk: the 1.7B may not fit).
+- Owner action (WSL2 with the NVIDIA WSL CUDA driver; RUNBOOK C2): copy the repo at the commit I name and the
+  unpacked `smoke_checkpoints/` to the laptop, then from the repo root run
+  `serving/run_rtx3050_smoke.sh /path/to/smoke_checkpoints`.
+- Artefact: `data/phase0/rtx3050_wsl2/smoke_rtx3050_wsl2.json` (and `data/phase0/rtx3050_wsl2.tar.gz`, printed by the script);
+  copy it back into the same path on the Mac.
+- Consumer: `scripts/smoke_summary.py` (applies `serving.smoke_test.failure_action`; PRD risk: the 1.7B may not fit, in
+  which case the 3050 row is 0.6B only and says so).
 
 ## O-007 Kaggle/WSL2 software pins need approval (RESOLVED)
 
@@ -113,9 +108,11 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Evidence of scope: none beyond the title. The title suggests concept tagging plus cross-statement
   consistency checks, not a serving cost/latency frontier or a small-model learning curve. That is
   unverified until the text is read.
-- Next action: the owner opens it in a logged-in browser (ResearchGate often needs an account) or emails
-  the authors, saves the PDF outside the repo, and tells me the path. I then summarize it against PRD
-  section 1 and reposition if needed. Retry Semantic Scholar once the rate limit clears.
+- Owner action (RUNBOOK A1): open DOI 10.13140/RG.2.2.19518.86080 in a logged-in browser (ResearchGate often needs
+  an account) or email the authors; save the PDF **outside** the repo.
+- Artefact: the PDF's local path (tell me).
+- Consumer: no script. I write a summary against PRD section 1 into this entry and reposition the README if needed.
+  I also retry Semantic Scholar once its rate limit clears.
 
 ## O-010 Eval manifest recovered 129 of 142 registrants: `eval_manifest_required_recovered` NOT MET (OWNER-BLOCKED)
 
@@ -132,8 +129,13 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Evidence: `data/manifest_work/report.json`, `data/manifest_work/fts_queries.json`.
 - The 15 unconfirmed CIKs are listed in `data/eval_cik_candidates_unconfirmed.txt` and excluded from
   training through `contamination.exclude_ciks_from` (T-008).
-- Owner steps for (a): post the issue text in `docs/owner/fintagging_issue_draft.md` on
-  `https://github.com/The-FinAI/FinTagging/issues` (add the repository link where marked).
+- Owner action for (a) (RUNBOOK A2): first approve or edit the text in `docs/owner/fintagging_issue_draft.md`
+  (T-033 item 6: posting comes after the owner approves the text), then post it at
+  `https://github.com/The-FinAI/FinTagging/issues`, adding the repository link where marked.
+- Artefact: the issue URL (tell me; I record it here). If the authors reply with filings, save their list as
+  `data/manifest_work/authors_filing_list.*` (any format they send).
+- Consumers: `scripts/build_eval_manifest.py` (manifest from their list), `scripts/rebuild_eval_contexts.py`
+  (assignment), `scripts/validate_instance_map.py`; both the old and the new numbers are reported.
 - What I need back: the issue URL. If the authors reply with the filing list, I rebuild the manifest from
   it, re-run assignment, and report both the old and new numbers. The README and resume bullet say
   "129 of 142" until then.
@@ -408,21 +410,20 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Plan: about 8,600 requests (`data/phase3/frontier_plan.json`), paced by the learned free-tier limits; the
   previous paid-arm plan is superseded.
 
-## O-023 Phase 4 load tests on the T4 and the RTX 3050 (OWNER-BLOCKED)
+## O-023 Phase 4 load tests on the T4 and the RTX 3050 (T4: OWNER-BLOCKED via O-025; 3050: OWNER-BLOCKED)
 
-- Status: OWNER-BLOCKED (Kaggle and the laptop are owner-only). Prerequisites: exported variants that passed
-  `gates.quantized_*` (O-019 export steps) and the pinned latency ids (`data/frontier_latency_ids.txt`, T-026).
+- Status: the T4 part is builder-run under T-033 and blocked on O-025. The 3050 part is owner-only. Prerequisites:
+  exported variants that passed `gates.quantized_*` (O-019 export) and the pinned latency ids
+  (`data/frontier_latency_ids.txt`, T-026).
 - Ready: `serving/load_test.py`, `notebooks/phase4_kaggle_load.ipynb`, `serving/run_rtx3050_load.sh` (T-027).
-- Owner steps (T4):
-  1. Build the tarball from a commit that contains `data/frontier_latency_ids.txt` and upload it as
-     `xbrl-frontier-src`.
-  2. Open `notebooks/phase4_kaggle_load.ipynb` (GPU T4, Internet on), attach the source and export datasets, set
-     `MODEL` and `VARIANTS` to the variants that passed the gates, and run all. Budget is about 6 GPU-hours in total
-     (PRD section 9).
-  3. Return `/kaggle/working/load-kaggle_t4-<model>.tar.gz`, unpacked into `data/phase4/kaggle_t4/`.
-- Owner steps (RTX 3050, WSL2): copy the repo (same commit) and the export directories, then run
-  `serving/run_rtx3050_load.sh <export of 0.6B> <export of 1.7B>`, and return `data/phase4/rtx3050_wsl2/`.
-  Rows from this card carry `serving.hardware.rtx3050_wsl2.cost_label` and no dollars.
+- Builder (T4, RUNBOOK E5): push `notebooks/phase4_kaggle_load.ipynb` as a kernel (source from a commit that contains the
+  latency ids; export datasets attached). About 6 GPU-hours in total (PRD section 9).
+  Artefacts: `data/phase4/kaggle_t4/load_kaggle_t4_<model>_<variant>.json`.
+- Owner action (3050, RUNBOOK E6): copy the repo (same commit) and the export directories to the laptop, then run
+  `serving/run_rtx3050_load.sh <export of 0.6B> <export of 1.7B>`.
+  Artefacts: `data/phase4/rtx3050_wsl2/load_rtx3050_wsl2_<model>_<variant>.json`; copy them back into the same path.
+- Consumers: `scripts/cost_model.py` (T4 only), `scripts/charts.py latency` (both cards; 3050 rows carry
+  `serving.hardware.rtx3050_wsl2.cost_label` and no dollars), `scripts/charts.py pareto`.
 
 ## O-024 Label audit, two hand passes (OWNER-BLOCKED)
 
@@ -434,7 +435,10 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
      iXBRL tags. Fill `verdict (correct|incorrect)` and the counts of `missing_facts`, `spurious_facts` and
      `wrong_type_facts` (0 when none), plus `notes`. Commit the sheet. PRD section 9 estimates 6 hours for both passes.
   2. At least a week later, fill `pass2_sheet.csv` the same way without looking at pass 1, and commit it.
-  3. Tell me when both are committed. I run `scripts/label_audit.py score` and regenerate the contamination statement.
+  3. Tell me when both are committed.
+- Artefacts: the filled `data/label_audit/pass1_sheet.csv` and `pass2_sheet.csv` (committed).
+- Consumers: `scripts/label_audit.py score` (refuses blank verdicts; writes `data/label_audit/audit_result.json` with the
+  weighted error rate and self-agreement), then `scripts/contamination_statement.py` and `scripts/readme.py`.
 
 ## O-025 Kaggle account runs kernels without GPU or internet (OWNER-BLOCKED)
 
@@ -451,6 +455,8 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Exact fix (owner): sign in at https://www.kaggle.com as adnanrashid29, open **Settings**
   (https://www.kaggle.com/settings) and complete **Phone verification** (enter a phone number, then the SMS code).
   No other change is needed: the token in the environment stays as it is.
+- Artefact: none (tell me it is done). Consumer: the builder re-pushes `kaggle/kernels/gpu-check` and records the
+  result in `data/kaggle/gpu-check/` (RUNBOOK B, C, D, E5 follow).
 - Next action: after verification, I re-push the same check kernel (`.venv/bin/kaggle kernels push -p
   kaggle/kernels/gpu-check --accelerator NvidiaTeslaT4`) and confirm a T4 with internet. Then I continue with
   RUNBOOK B1, B2, C1 and D1-D11, then E5. All Gemini steps (E1-E4) wait for D4 (the pinned frontier sample).
@@ -459,7 +465,9 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 
 - Status: RESOLVED (2026-10-02): the closing criterion was met. Runs 6-15 after the two hazard fixes passed 88/88
   (with `-rf`, three of them concurrent with E4). The failing test's name stays unknown (output not captured).
-  If any failure recurs, it is reopened with the name and text.
+  If any failure recurs, it is reopened with the name and text. Enforcement note: the pre-commit hook still runs only
+  the scorer subset (`tests/test_scorer_unit.py`, `test_oracles.py`, `test_score_predictions.py`, `test_bio.py`).
+  Running the full suite with `-rf` before every commit is a manual discipline, not enforced by the hook.
 - Found: on 2026-10-02 at about 12:10 UTC, during the T-033 step-2 work, one full-suite run (right after editing
   `tests/test_readme.py`) reported `1 failed, 87 passed`. Its output went through `tail -1`, so the test name and
   failure text were not captured. That is my error, and those details cannot be recovered. Since then 8 full-suite
@@ -488,5 +496,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   `data/phase3/frontier_plan.json`). E4 has 2,934 pending, which is 6 more days. If the power check raises N (one arm:
   N up to the largest N leaving the notional reserve), the accuracy run grows by about 203 requests per extra filing
   (about 0.4 days each).
+- The days-per-filing figure is scheduling information only. When the power check runs after D4, N is set by
+  `gates.decision_rule` and the power check, never by the day count (T-036).
 - Next action: E4 resumes daily after 07:00 UTC with the same command until complete. The schedule for E1-E3 is
   set once D4 pins the sample (O-025 first). The README states that free-tier collection spanned these dates.
