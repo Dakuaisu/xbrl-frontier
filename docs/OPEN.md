@@ -455,9 +455,11 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   kaggle/kernels/gpu-check --accelerator NvidiaTeslaT4`) and confirm a T4 with internet. Then I continue with
   RUNBOOK B1, B2, C1 and D1-D11, then E5. All Gemini steps (E1-E4) wait for D4 (the pinned frontier sample).
 
-## O-026 One unreproduced full-suite failure (OPEN)
+## O-026 One unreproduced full-suite failure (RESOLVED: not reproduced)
 
-- Status: OPEN (flaky test, name unknown)
+- Status: RESOLVED (2026-10-02): the closing criterion was met. Runs 6-15 after the two hazard fixes passed 88/88
+  (with `-rf`, three of them concurrent with E4). The failing test's name stays unknown (output not captured).
+  If any failure recurs, it is reopened with the name and text.
 - Found: on 2026-10-02 at about 12:10 UTC, during the T-033 step-2 work, one full-suite run (right after editing
   `tests/test_readme.py`) reported `1 failed, 87 passed`. Its output went through `tail -1`, so the test name and
   failure text were not captured. That is my error, and those details cannot be recovered. Since then 8 full-suite

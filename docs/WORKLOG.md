@@ -353,3 +353,5 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - E4: dry run (3,434 instances, est. 3.14M input tokens, $1.14 notional at batch rates, $0 billed), then live from
   2026-10-02T12:34:34Z, detached. `usage.jsonl` records the model field, timestamp, request latency and throttle
   wait per call. Status at commit: 81 calls, 0 retries, model field `gemini-3.5-flash-lite`, no 429 yet (pace 10 RPM).
+
+- 2026-10-02: O-026 closed. Full-suite runs 6-15 (after the fixes) all passed 88/88, logged with `-rf` in `/tmp/flaky/run6..15.log`.
