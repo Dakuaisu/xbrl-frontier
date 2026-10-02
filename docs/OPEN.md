@@ -400,3 +400,19 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   verified source in `frontier.thinking_per_arm`.
   4. Return nothing: outputs land in `data/phase3/live/<step>_<arm>/` (predictions in the scorer's format,
      usage and latency logs, returned model fields), and every dollar is in `data/phase3/spend_ledger.jsonl`.
+
+## O-023 Phase 4 load tests on the T4 and the RTX 3050 (OWNER-BLOCKED)
+
+- Status: OWNER-BLOCKED (Kaggle and the laptop are owner-only). Prerequisites: exported variants that passed
+  `gates.quantized_*` (O-019 export steps) and the pinned latency ids (`data/frontier_latency_ids.txt`, T-026).
+- Ready: `serving/load_test.py`, `notebooks/phase4_kaggle_load.ipynb`, `serving/run_rtx3050_load.sh` (T-027).
+- Owner steps (T4):
+  1. Build the tarball from a commit that contains `data/frontier_latency_ids.txt` and upload it as
+     `xbrl-frontier-src`.
+  2. Open `notebooks/phase4_kaggle_load.ipynb` (GPU T4, Internet on), attach the source and export datasets, set
+     `MODEL` and `VARIANTS` to the variants that passed the gates, and run all. Budget is about 6 GPU-hours in total
+     (PRD section 9).
+  3. Return `/kaggle/working/load-kaggle_t4-<model>.tar.gz`, unpacked into `data/phase4/kaggle_t4/`.
+- Owner steps (RTX 3050, WSL2): copy the repo (same commit) and the export directories, then run
+  `serving/run_rtx3050_load.sh <export of 0.6B> <export of 1.7B>`, and return `data/phase4/rtx3050_wsl2/`.
+  Rows from this card carry `serving.hardware.rtx3050_wsl2.cost_label` and no dollars.

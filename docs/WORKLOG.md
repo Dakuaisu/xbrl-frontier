@@ -259,3 +259,9 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - Verified: `tests/test_frontier_sampling.py` (6: refusals without a real scorer output or power check, company-level
   SD, half-width expression, companies kept whole, cell targets, sector redraw counted and capped, seeded
   latency ids). The no-output check on real tables is described in T-026. Nothing pinned yet.
+
+## 2026-10-02 Phase 4 tooling: load tests
+
+- Built `serving/load_test.py` (with `serving.common.bench_custom`), `notebooks/phase4_kaggle_load.ipynb` and `serving/run_rtx3050_load.sh`
+  (T-027). New key `serving.load_test`. Verified: `tests/test_load_test.py` (refuses until latency ids are pinned;
+  one rendered prompt per id with the output cap). Owner-blocked: O-023.

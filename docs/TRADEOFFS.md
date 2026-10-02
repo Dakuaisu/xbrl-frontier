@@ -626,3 +626,23 @@ robust to the probe filing's instance mix differing from the sample's.
 5. Outputs are written only from a real power check and never overwritten. The tests use synthetic filings
    and assert every refusal. A no-output check on the real tables found 139 filings and 129 companies, all 9
    cells populated (7-22 filings each), and a trial draw of 23 filings / 22 companies with 0 redraws.
+
+## T-027 AUTONOMOUS DECISION - owner to review: Phase 4 load tests on `vllm bench serve` (2026-10-02)
+
+1. **Tool**: `vllm bench serve`, not GuideLLM, for the sweeps. PRD section 6 allows either. GuideLLM's current
+   CLI (`guidellm run --profile kind=...`, v0.7+ syntax) writes a JSON report whose field names are not documented
+   outside its own Python loader, so a parser could not be verified offline before spending Kaggle hours.
+   `pins.software.guidellm` is also empty. `vllm bench serve` is already pinned, and its JSON fields
+   (`request_throughput`, `median/p95_ttft_ms`, `median/p95_e2el_ms`, `completed`) are parsed by the Phase 0 code.
+   GuideLLM can be added once pinned, with a parser written against a real output file (DECISIONS NEEDED).
+2. **Prompts**: the pinned latency ids (`serving.load_test.prompts` -> `data/frontier_latency_ids.txt`), rendered with
+   the inference format, sent pre-rendered (`--dataset-name custom --custom-skip-chat-template`), oversampled to
+   `serving.requests_per_point`. Per-request output cap `serving.load_test.max_output_tokens` (new key, 4,096);
+   generation stops at EOS first, so latencies reflect real answer lengths.
+3. **Points**: warm-up of `serving.warmup_requests` (discarded). Closed loop at each `serving.concurrency_levels.<card>`
+   (concurrency 1 = the single-request row) and Poisson arrivals at each `serving.request_rate_sweep_rps` (the
+   batched rows), `--goodput` at `serving.slo` recorded beside the p95-based goodput of T-004.
+4. **Server**: the card's flags (`serving.smoke_test.server_flags`). On the 3050 the configured `vllm_flags`
+   (including `max_model_len`) are used as written, and prompts that do not fit fail and are counted as
+   incomplete points. On the T4, `max_model_len` = the longest pinned prompt + the output cap, so every pinned
+   prompt fits. Every run records flags, env (GPU, driver, versions) and checkpoint sha256s.

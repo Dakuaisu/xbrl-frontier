@@ -128,5 +128,36 @@ def bench(model: str, tokenizer: str, input_len: int, output_len: int, num_promp
             "request_goodput_per_request_slo": raw.get("request_goodput"), "raw_file": out_json.name}
 
 
+def bench_custom(model: str, tokenizer: str, dataset_jsonl: Path, num_prompts: int, out_json: Path, log_path: Path,
+                 concurrency: int | None = None, request_rate: float | None = None) -> dict:
+    """One `vllm bench serve` point over pre-rendered prompts (custom dataset, natural EOS, per-prompt output cap).
+
+    concurrency set + rate None: closed loop at that concurrency (request rate inf). rate set: Poisson arrivals at
+    that rate with no concurrency cap."""
+    slo = config.get("serving.slo")
+    cmd = ["vllm", "bench", "serve", "--backend", "vllm", "--model", model, "--tokenizer", tokenizer,
+           "--port", str(PORT), "--dataset-name", "custom", "--dataset-path", str(dataset_jsonl),
+           "--custom-skip-chat-template", "--num-prompts", str(num_prompts),
+           "--request-rate", "inf" if request_rate is None else str(request_rate),
+           "--percentile-metrics", "ttft,tpot,itl,e2el", "--metric-percentiles", "50,95",
+           "--goodput", f"ttft:{slo['ttft_p95_ms']}", f"e2el:{slo['e2e_p95_ms']}",
+           "--save-result", "--result-dir", str(out_json.parent), "--result-filename", out_json.name]
+    if concurrency is not None:
+        cmd += ["--max-concurrency", str(concurrency)]
+    with open(log_path, "a") as log:
+        log.write(" ".join(cmd) + "\n")
+        log.flush()
+        rc = subprocess.run(cmd, stdout=log, stderr=subprocess.STDOUT).returncode
+    if rc != 0 or not out_json.exists():
+        raise RuntimeError(f"vllm bench serve failed (rc={rc}); see {log_path}")
+    raw = json.loads(out_json.read_text())
+    return {"concurrency": concurrency, "request_rate": request_rate, "num_prompts": num_prompts,
+            "completed": raw["completed"], "request_throughput": raw["request_throughput"],
+            "output_throughput": raw.get("output_throughput"),
+            "p50_ttft_ms": raw["median_ttft_ms"], "p95_ttft_ms": raw["p95_ttft_ms"],
+            "p50_e2el_ms": raw["median_e2el_ms"], "p95_e2el_ms": raw["p95_e2el_ms"],
+            "request_goodput_per_request_slo": raw.get("request_goodput"), "raw_file": out_json.name}
+
+
 def archive(out_dir: Path) -> Path:
     return Path(shutil.make_archive(str(out_dir), "gztar", root_dir=out_dir.parent, base_dir=out_dir.name))

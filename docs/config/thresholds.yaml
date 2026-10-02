@@ -180,6 +180,7 @@ serving:
     ttft_p95_ms:             500
     e2e_p95_ms:              2000
   utilization_scenarios:     [ 0.10, 0.50, 0.90 ]
+  load_test:                 { tool: "vllm bench serve", max_output_tokens: 4096, prompts: "data/frontier_latency_ids.txt" }   # Phase 4 (added 2026-10-02, TRADEOFFS T-027): per-request output cap (generation stops at EOS first); prompts = the pinned latency ids
   frontier_latency_vantage:  "mac_home_network"               # network included and stated
   phase0_throughput_benchmark:                               # before any training; base models, vLLM fp16, FinNI token shape
     models:                  [ "Qwen/Qwen3-0.6B", "Qwen/Qwen3-1.7B" ]
