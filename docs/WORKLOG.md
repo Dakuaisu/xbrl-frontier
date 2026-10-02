@@ -380,3 +380,14 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   so a pause, stop or completion is time-stamped when it happens. The day-1 file still shows its run-start stamp (12:34:32Z) for an
   event at 13:25:31Z; the day-2 resume rewrites it. New test `test_paused_status_timestamp_is_refreshed_at_the_pause`.
 - Verified before commit: full suite with `-rf`, 90 passed.
+
+## 2026-10-02 E4 collection mechanism: daily wrapper
+
+- `scripts/free_tier_daily.py` (operational, no TRADEOFFS entry) loops. It sleeps until `status.json`'s `resume_after` (or the next
+  Pacific midnight + 5 s), runs exactly `frontier.harness run --step fresh_control --arm gemini-3.5-flash-lite --live --approval
+  T-033`, and appends all output to `data/phase3/live/fresh_control_gemini-3.5-flash-lite/daily.log`. It exits 0 when the status is
+  `complete` with an empty pending list, and 4 on `stopped_call_failed`, which is a finding, not retried. It uses the same guard and
+  the key from the environment.
+- Started detached with `nohup`: **PID 90944, 2026-10-02T14:01:31Z**, first wake 2026-10-03T07:00:05Z.
+- Tests: `tests/test_free_tier_daily.py` (3: resume-time parsing, missing status or `resume_after` waits for Pacific midnight, other
+  states run now). Verified before commit: full suite with `-rf`, 93 passed.
