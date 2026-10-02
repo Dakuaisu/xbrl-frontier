@@ -371,3 +371,5 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   name their artefacts and consumers; O-025 names its follow-up. New `scripts/smoke_summary.py` (failure_action ->
   `data/phase0/serving_variants.json`) with `tests/test_smoke_summary.py`. O-027 now states that the day count never sets N; O-026
   notes that the full-suite-before-commit rule is manual (the hook runs the scorer subset only).
+- Verified before commit a0436a0: full suite with `-rf`, **89 passed** (up from 88: the new `tests/test_smoke_summary.py`).
+- Verified before this log fix: full suite with `-rf`, 89 passed.
