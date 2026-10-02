@@ -31,3 +31,7 @@ data/manifest_work/*
 !data/phase3/
 data/phase3/*
 !data/phase3/frontier_plan.json
+!data/frontier_sample.json
+!data/frontier_sample_accessions.txt
+!data/frontier_latency_ids.txt
+!data/phase3/power_check.json

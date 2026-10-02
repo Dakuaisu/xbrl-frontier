@@ -251,3 +251,11 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 
 - 2026-10-02: guard refuses arms without a verified thinking source and batch-priced steps without probe
   re-pricing (T-025). Tests in `tests/test_frontier_harness.py` (8 passed).
+
+## 2026-10-02 Phase 3 tooling: power check and frontier-sample draw
+
+- Built `frontier/sampling.py`, `scripts/power_check.py` and `scripts/draw_frontier_sample.py`. `scripts/frontier_plan.py` now exposes
+  `plan(arms, n)` / `largest_n` (T-026). New keys `frontier.sampling`, `latency_sampling`, `probe_selection`.
+- Verified: `tests/test_frontier_sampling.py` (6: refusals without a real scorer output or power check, company-level
+  SD, half-width expression, companies kept whole, cell targets, sector redraw counted and capped, seeded
+  latency ids). The no-output check on real tables is described in T-026. Nothing pinned yet.

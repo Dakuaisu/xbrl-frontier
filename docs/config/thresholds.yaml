@@ -67,6 +67,9 @@ frontier:                    # all $ figures priced from pins.price_sheet, batch
     gpt-5.4-mini-2026-03-17: { api: "openai_responses", reasoning_effort: "none", source: "developers.openai.com/api/docs/models/gpt-5.4-mini, checked 2026-10-02: 'Reasoning.effort supports: none (default)'" }
     gpt-5.4-nano-2026-03-17: { api: "openai_responses", reasoning_effort: "none", source: "" }   # swap candidate; UNVERIFIED (set by analogy), live calls refused until a source is recorded
   usd_reserve_min:           1.00                             # must remain unspent after the plan is priced
+  sampling:                  { seed: 20261007, max_redraws: 100, sector_key: "sec_office" }   # frontier sample draw (added 2026-10-02, TRADEOFFS T-026); sector = SEC office as in T-011
+  latency_sampling:          { seed: 20261008, rule: "uniform without replacement over the deduplicated assigned instances of the frontier sample filings" }   # T-026
+  probe_selection:           { seed: 20261009, rule: "one filing per arm, uniform over non-sample manifest filings in the middle instances-per-filing tercile" }   # T-026
   power_check:                                                # run after the primary student's full-set run, before the probe
     sd_source:               "primary student between-filing F1 SD on the deduplicated full set (proxy for the paired SD)"
     expected_half_width:     "1.96 * sd / sqrt(sample_filings)"

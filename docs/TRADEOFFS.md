@@ -596,3 +596,33 @@ skip note if any instance was skipped (T-018). Series are given overall and by t
    ledger plus estimate within cap minus reserve. All of it runs before the key is read.
 Alternatives: re-price from the probe's mean tokens per instance. Rejected because the ratio method is
 robust to the probe filing's instance mix differing from the sample's.
+
+## T-026 AUTONOMOUS DECISION - owner to review: power check and frontier-sample draw (2026-10-02)
+
+1. **Power check** (`scripts/power_check.py`, `frontier/sampling.py`): input is the primary student's full-set
+   scorer output only (the T-022 `kind` check plus set `finni` plus dedup per-instance counts). No placeholder or
+   planning SD exists. SD unit per T-007: pooled F1 per company (CIK) over dedup assigned instances, sample SD
+   across companies, labelled "company (CIK)". The half-width evaluates the configured expression
+   `frontier.power_check.expected_half_width` verbatim. N for all arms is `min(frontier.sample_filings,
+   largest N whose priced plan leaves frontier.usd_reserve_min)`: the v2.1 "reduce the sample to keep the
+   reserve" rule, applied through the priced plan (`scripts/frontier_plan.py::plan/largest_n`). At today's
+   prices it does not bind: all arms fit up to N = 24 > 23. If the half-width exceeds `gates.headline_margin_f1`,
+   `if_exceeded` is applied as written: drop `pins.frontier_arms[2]`, N = the largest N for the remaining arms
+   (73 at today's planning prices), and the headline becomes "fraction of the best remaining arm".
+2. **Sampler** (`scripts/draw_frontier_sample.py`): filings = the 139 manifest filings with assigned instances
+   (the unassigned stratum is excluded). Table share and size come from the instance map, with terciles over
+   filings (edge k = sorted[floor(k*n/3)], as in T-001a). Cell targets are floor/ceil of N/9, with extra
+   slots to cells in seeded order (2-3 per cell at N = 23). **The sampling unit is the company**: a company sits
+   in the cell of its largest filing and all its filings move together. A two-filing company is skipped while
+   a single-filing company still fits the cell. Filings and companies drawn, and any cell shortfall, are
+   recorded. Sector = SEC office (as in T-011). A draw is redrawn when a sector whose proportional share of the
+   sample is at least one filing is empty. Redraws are counted and capped by `frontier.sampling.max_redraws`.
+   Seed `frontier.sampling.seed`.
+3. **Latency ids**: `frontier.sync_latency_instances` ids, `random.Random(frontier.latency_sampling.seed).sample`
+   over the sorted dedup assigned instance ids of the sample filings (`frontier.latency_sampling.rule`), pinned
+   to `data/frontier_latency_ids.txt`, identical for every arm and student.
+4. **Probe filings**: one per arm, uniform over non-sample filings in the middle instances-per-filing tercile
+   (`frontier.probe_selection`), so the probe neither duplicates sample filings nor sits at a size extreme.
+5. Outputs are written only from a real power check and never overwritten. The tests use synthetic filings
+   and assert every refusal. A no-output check on the real tables found 139 filings and 129 companies, all 9
+   cells populated (7-22 filings each), and a trial draw of 23 filings / 22 companies with 0 redraws.

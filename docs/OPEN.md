@@ -366,7 +366,12 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Status: OWNER-BLOCKED (paid API calls are owner-only; the builder never calls an API). Prerequisites in PRD
   order: the primary student's full-set run, then the power check (`frontier.power_check`, company-level SD,
   T-007), then the sample filings and the latency instance ids pinned (Phase 3 sampling tooling, not yet built),
-  then the probe, re-sizing from measured tokens, and the batches.
+  then the probe, re-sizing from measured tokens, and the batches. The power check and the sample draw are built (T-026):
+  after the primary student's full-set predictions exist (O-019), run `scripts/score_predictions.py --set finni`,
+  then `scripts/power_check.py --score <that file>`, then `scripts/draw_frontier_sample.py`. These spend nothing
+  and the builder can run them as soon as the predictions arrive. The probe uses the filing pinned per arm in
+  `data/frontier_sample.json`, batch uses `--accessions data/frontier_sample_accessions.txt`, and latency uses
+  `--ids data/frontier_latency_ids.txt`.
 - Ready: `frontier/harness.py` (`run` / `collect`), `frontier/requests.py`, `frontier/guard.py`,
   `scripts/frontier_plan.py`. Tests in `tests/test_frontier_harness.py` read no keys and make no calls.
 - Priced plan (`data/phase3/frontier_plan.json`; prices `config/prices_2026-10-01.yaml`, observed 2026-10-01;
