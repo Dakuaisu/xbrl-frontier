@@ -465,3 +465,50 @@ older preinstalled transformers must restart). `training/kaggle_train.py` refuse
 or an empty pin (`serving.common.require_pins`), as the serving scripts do.
 Alternatives: let Kaggle's preinstalled transformers/peft stand. Rejected because the tokenizer and chat
 template could differ from the Mac and from scoring.
+
+## T-020 AUTONOMOUS DECISION - owner to review: SEC-BERT encoder baseline (2026-10-02)
+
+1. **Where it runs**: Kaggle, as PRD section 5 assigns ("Kaggle: ... the encoder"), as run 4 in O-019.
+   torch is therefore **not** installed locally. Everything that does not need torch (word splitting, BIO
+   alignment, chunking, decoding) lives in `xbrl_frontier/bio.py` and `training/encoder_train.py::encode_chunks`
+   and is tested on the Mac with the pinned SEC-BERT fast tokenizer (`tests/test_bio.py`).
+2. **Label space** = the benchmark's own BIO space: FinTagging `BERT/data/label2id.json` at
+   `pins.fintagging_source.commit` (34,777 labels: B-/I- over the 17,388 us-gaap 2024 concepts, plus `O`),
+   sha256-pinned in `training.encoder.label_space`. Facts with 2023-only concepts are outside that space
+   and stay `O` (610 of 289,088 corpus facts). Alternative: a 5-type BIO space. Rejected because the PRD says
+   "the benchmark's BIO label space". Predicted concept spans become FinNI pairs through the taxonomy type,
+   so the encoder is scored by the same FinNI scorer as everything else.
+3. **Words and alignment**: FinTagging's `.bio` construction code is not in the repo (the notebook only
+   splits data). Their files show punctuation-split words with each value as one word ("51", "3.1", "two").
+   Ours: HTML tags removed, numbers kept whole with thousands separators ("58,166"), alphabetic words, and
+   single other symbols. Facts are matched in document order to the first free word sequence equal to the
+   comma-stripped value. 99.64% of the corpus's 289,088 facts align, 441 values are not found, and 610 are
+   outside the label space. All three are counted in `run.json`.
+4. **Chunking, not truncation**: the PRD says the benchmark's BERT baselines chunked long contexts, while
+   their `train_ner_model.py` truncates. The PRD governs. Consecutive non-overlapping word windows fit
+   `training.encoder.window_subtokens` (512, the model's position limit). A single word longer than a window
+   is cut and counted. First-subtoken labelling follows their `tokenize_and_align_labels`.
+5. **Training**: same corpus, same fixed order (sequential sampler over chunks in corpus order), same
+   instance set as the students (instances skipped by the students' `max_seq_len_tokens` rule are skipped
+   here too). `training.encoder` epochs 3 (PRD section 5), learning rate 5e-5 and micro-batch 4 (their
+   script's defaults), fp16, timed resume checkpoints.
+
+## T-021 AUTONOMOUS DECISION - owner to review: student prediction and scoring pipeline (2026-10-02)
+
+1. **Generation** (`serving/generate_predictions.py`, Kaggle, vLLM `pins.software.vllm`): base model at its pin,
+   LoRA adapters as `LoRARequest`s, the training prompt (`sft_format.prompt_text`, `enable_thinking=False`),
+   greedy (`eval.generation.temperature` 0.0), `eval.generation.max_model_len` 32,768 (Qwen3's native context).
+   That covers the parked 20,575-token FinNI context; students fine-tuned at 4,096 tokens being scored on
+   longer contexts is part of what the context-length slice measures. Prompts that still do not fit are
+   written `not_generated`. They are scored as empty predictions and counted in `not_generated_rate`, never
+   truncated. The output budget is the remaining context, so a cut-off answer shows up as
+   `finish_reason=length` and is usually a parse failure, which counts.
+2. **Scoring** (`scripts/score_predictions.py`, Mac): any predictions file on `finni`, `dev` or `fresh`. Raw and
+   dedup (`eval.dedup_policy` applied to each set), overall and per slice (context type, entity type,
+   company, fiscal year, context-token bucket), with `parse_failure_rate`, `malformed_items` and
+   `not_generated_rate` beside F1. Per-instance tp/fp/fn are kept for the company-level bootstrap (T-007).
+   It refuses if any instance lacks a prediction. A parse failure is an empty prediction. There are no
+   retries, no repairs and no judge. Calibrated through real files: gold copy gives F1 1.0 and empty gives
+   0, raw and dedup, on dev and on the full FinNI set (`tests/test_score_predictions.py`).
+3. **Curve checkpoints**: scored on the dev slice now. The frontier sample is added once Phase 3 pins its ids.
+   The pilot's F1 (O-021) is a format check and is never charted or tabled.

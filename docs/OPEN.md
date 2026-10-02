@@ -309,6 +309,21 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   5. Keep total use under `training.kaggle.gpu_hours_cap_total`. Each session's train time is in `run.json`.
 - What I need back: the final output directory of each run (`run.json`, `final_adapter/`, `curve/`),
   unpacked into `data/phase2/kaggle/<run name>/`.
+- **Run 4, encoder baseline** (`notebooks/phase2_kaggle_encoder.ipynb`, T-020):
+  1. Attach `xbrl-frontier-src` and `xbrl-frontier-corpus`. Set `MODE = 'train'`, `RESUME = None`. Run all.
+     Save the output as a dataset (e.g. `xbrl-frontier-run-encoder`). If the session ends early, start a new
+     one with that dataset attached and `RESUME` set to its path. The PRD estimates about 3 T4-hours.
+  2. When `run.json` lists `final_model`, start a session with `MODE = 'predict'`, `MODEL_DIR` set to that
+     `final_model/` path and `SET = 'finni'`. Repeat with `SET = 'dev'` and `SET = 'fresh'`.
+  3. Return `run.json` and the three `encoder_predictions_<set>.jsonl` files (+ `.meta.json`), unpacked into
+     `data/phase2/kaggle/encoder/`. I score them locally with `scripts/score_predictions.py`.
+- **Prediction runs for scoring** (`notebooks/kaggle_generate_predictions.ipynb`, T-021), after run 1:
+  1. Attach `xbrl-frontier-src`, `xbrl-frontier-corpus` and the run-1 output dataset. Set
+     `MODEL = 'Qwen/Qwen3-1.7B'`, `SET = 'dev'` and `ADAPTERS` to the run's `curve/prefix_*` directories plus
+     `final_adapter`. Run all.
+  2. Return the `predictions_<name>_dev.jsonl` files and `predictions_dev.meta.json`, unpacked into
+     `data/phase2/kaggle/predictions/`. Full-set (`SET = 'finni'`), zero-shot (`BASE = True`) and
+     frontier-sample runs follow with their own step lists when those phases arrive.
 
 ## O-020 Kaggle training stack pins need owner approval (RESOLVED)
 

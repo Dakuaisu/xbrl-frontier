@@ -36,6 +36,7 @@ eval:
   bootstrap_resamples:          1000
   ci_level:                     0.95
   paired_bootstrap:             true                         # student-minus-frontier difference resampled per filing on the shared sample
+  generation:                   { max_model_len: 32768, temperature: 0.0 }   # student scoring with vLLM (added 2026-10-02, TRADEOFFS T-021); prompts beyond max_model_len are scored empty and counted
   slices:                       [ "context_type", "entity_type", "company", "fiscal_year", "context_token_bucket", "train_size_point" ]
   context_token_bucket_edges:   [ 76, 410 ]              # terciles of context tokens over the 25969 dedup instances; Qwen/Qwen3-1.7B@70d244cc86cc tokenizer (identical in both students); edge k = sorted[floor(k*n/3)]; scripts/derive_token_bucket_edges.py
   oracles:
@@ -136,6 +137,12 @@ training:
     grad_checkpoint:         true                             # T-017; needed for 2,048-token sequences on 16 GB
     quant_group_size:        64                               # mlx_lm.convert default, recorded (T-017)
     pilot_val_instances:     200                              # first dev-slice instances that fit, for pilot val loss and a format check (T-017)
+  encoder:                                                    # SEC-BERT token-classification baseline (added 2026-10-02, TRADEOFFS T-020)
+    label_space:             { url: "https://raw.githubusercontent.com/The-FinAI/FinTagging/653650cbbab525227d20228c94a65600c1209c01/BERT/data/label2id.json", sha256: "06ad30b706fbfd51fff47bf5ecad276ae5b51f085ace791e814e137b14166a35" }   # the benchmark's BIO label space (34,777 labels)
+    window_subtokens:        512                              # model max_position_embeddings; contexts are chunked, never truncated
+    epochs:                  3                                # PRD section 5 ("three epochs")
+    learning_rate:           5.0e-5                           # FinTagging BERT/train_ner_model.py default
+    micro_batch:             4                                # FinTagging BERT/train_ner_model.py default
   planning_tokens_per_sec:   { t4_qlora_1p7b: 1500, t4_qlora_0p6b: 3000 }   # planning assumptions only; replaced by pilot measurements
 
 serving:

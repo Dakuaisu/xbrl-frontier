@@ -207,3 +207,18 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - Filled `pins.software.{transformers 5.18.0, peft 0.21.2, bitsandbytes 0.50.2, accelerate 1.15.0}`. The
   Kaggle notebook asserts installed and imported versions against the pins. O-020 RESOLVED; O-019 has only
   the sessions left (owner).
+
+## 2026-10-02 Phase 2, unit 2: encoder baseline and checkpoint scoring tooling
+
+- Built `xbrl_frontier/bio.py` (words, BIO alignment over the benchmark's 34,777-label space, decoding to FinNI
+  pairs, chunking), `training/encoder_train.py` (Kaggle train/predict, T-020), `serving/generate_predictions.py`
+  (vLLM greedy predictions for base and adapters, T-021), `scripts/score_predictions.py` (raw and dedup, per
+  slice, parse-failure and not-generated rates) and two notebooks (`phase2_kaggle_encoder.ipynb`,
+  `kaggle_generate_predictions.ipynb`). New keys: `training.encoder.*`, `eval.generation`.
+- Corpus alignment check: 288,037 of 289,088 facts aligned (99.64%), 441 not found, 610 outside the label
+  space.
+- Verified: `tests/test_bio.py` (6, including chunking with the real SEC-BERT tokenizer) and
+  `tests/test_score_predictions.py` (3: gold-copy/empty oracles through files on dev and the full FinNI set,
+  parse failures, not-generated rows, refusal on missing predictions). No local torch install: the encoder
+  trains on Kaggle per PRD section 5.
+- Owner-blocked: O-019 run 4 (encoder) and the prediction runs, each with its own step list.
