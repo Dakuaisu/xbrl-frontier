@@ -102,6 +102,10 @@ back), and move on to the next unblocked task. Never simulate, stub or model-gen
 - You run Kaggle yourself with the `kaggle` CLI. `KAGGLE_API_TOKEN` is in your environment. Never
   print it, never write it to a file, never read `.env`. Stay inside the `training.kaggle` quota
   and cap keys, and record the GPU-hours used by each run.
+- Kaggle's T4 accelerator gives you two T4s. Every throughput benchmark, smoke test, load test and
+  latency run must use exactly one GPU (`CUDA_VISIBLE_DEVICES=0`, tensor parallel 1), because
+  costs are priced at one T4's market rate. Record the visible device count in every result file.
+  Training may use both only if the run records it. GPU-hours are counted per Kaggle's quota meter.
 - Billed spend is $0. The only frontier key is the free-tier `GEMINI_API_KEY`, so
   `gemini-3.5-flash-lite` is the only arm that runs. Never call another provider, use a paid tier,
   or enable billing. Report dollar figures from measured tokens priced against the dated sheet.
