@@ -23,3 +23,16 @@ Dated implementation notes: what was built, how it was verified, what is next.
   261,457 gold pairs; 3,625 instances repeat a (Fact, Type) pair; 41 distinct non-numeric gold
   values (word numbers, dashes, `nil`, `0\xa0million`); 12,758 table contexts; 25,765 unique contexts
   and 25,969 unique (context, answer) rows; `context_index` is a 0..N-1 row id.
+
+## 2026-10-02 Phase 0, unit 3: FinNI scorer, oracles, dedup, slices
+
+- Built `xbrl_frontier/scorer.py` (normalization, parser, global pooled P/R/F1, per-instance mean,
+  parse-failure rate, malformed-item count, slice and entity_type breakdowns),
+  `xbrl_frontier/oracles.py` (the four `eval.oracles` predictors) and `xbrl_frontier/eval_sets.py`
+  (`eval.dedup_policy`; slice keys for context_type, company, fiscal_year, context_token_bucket).
+  `train_size_point` is a run attribute and `entity_type` is computed per pair. Decisions are in T-002.
+- Verified: `.venv/bin/python -m pytest -q tests` gives 17 passed. Oracles on the pinned set
+  (raw 28,787 / dedup 25,969 instances): gold copy F1 1.000000; empty F1 0.000000; types swapped
+  F1 0.000000; half dropped R 0.500002 with P 1.000000. All are within `eval.oracles.tolerance`.
+- Enforcement: `.githooks/pre-commit` (installed into `.git/hooks/`) and `.github/workflows/oracles.yml`.
+- Open: O-003 (token-bucket edges), O-004 (company/fiscal-year need the instance map).

@@ -15,3 +15,29 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   return 200.
 - Next action: none. The EDGAR client reads the User-Agent from one constant and enforces the
   fair-access throttle in code.
+
+## O-002 Scorer details are not specified upstream (OPEN)
+
+- Status: OPEN
+- Found: no public FinNI scorer exists. Set vs multiset, normalization, aggregation details and
+  parse handling are unspecified in FinTagging.
+- Evidence: evidence_brief section 3. Our choices are in TRADEOFFS T-002.
+- Next action: the owner reviews T-002. If the FinTagging authors publish or share their scorer,
+  re-score with it as a cross-check and report any difference (do not swap metrics silently).
+
+## O-003 `context_token_bucket` slice has no bucket edges in config (OPEN)
+
+- Status: OPEN
+- Found: `eval.slices` lists `context_token_bucket`, but `thresholds.yaml` defines no bucket edges or
+  tokenizer, and the config is frozen. `xbrl_frontier/eval_sets.py` raises rather than invent edges.
+- Evidence: `grep context_token docs/config/thresholds.yaml`.
+- Next action: owner decision. Add `eval.context_token_bucket_edges` (plus which tokenizer counts the
+  tokens; the pinned Qwen3 tokenizer is the natural choice), and approve the `tokenizers` dependency.
+  See DECISIONS NEEDED in the turn report.
+
+## O-004 `company` and `fiscal_year` slices wait on the instance map (OPEN)
+
+- Status: OPEN
+- Found: both slice keys come from `pins.eval_instance_map`. `eval_sets.slice_keys` reads them from that
+  map and labels unmapped instances `unassigned`.
+- Next action: becomes RESOLVED when the instance map ships (Phase 0, step 4).
