@@ -1,0 +1,19 @@
+[{"stream_name":"stdout","time":7.044259208,"data":"{\n"}
+,{"stream_name":"stdout","time":7.044295366,"data":" \"time_utc\": \"2026-10-02T18:41:07Z\",\n"}
+,{"stream_name":"stdout","time":7.044301168,"data":" \"python\": \"3.12.13\",\n"}
+,{"stream_name":"stdout","time":7.044304836,"data":" \"nvidia_smi\": \"Tesla T4, 580.178.04, 15360 MiB, 7.5\\nTesla T4, 580.178.04, 15360 MiB, 7.5\",\n"}
+,{"stream_name":"stdout","time":7.044309044,"data":" \"torch\": \"2.10.0+cu128\",\n"}
+,{"stream_name":"stdout","time":7.044312724,"data":" \"cuda_available\": true,\n"}
+,{"stream_name":"stdout","time":7.04431627,"data":" \"cuda\": \"12.8\",\n"}
+,{"stream_name":"stdout","time":7.044319774,"data":" \"device_count\": 2,\n"}
+,{"stream_name":"stdout","time":7.044323306,"data":" \"internet_huggingface\": 200,\n"}
+,{"stream_name":"stdout","time":7.044326843,"data":" \"internet_pypi\": 200,\n"}
+,{"stream_name":"stdout","time":7.0443303,"data":" \"internet_sec\": \"error: HTTP Error 403: Forbidden\"\n"}
+,{"stream_name":"stdout","time":7.044333799,"data":"}\n"}
+,{"stream_name":"stderr","time":11.142237792,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":11.142279125,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":11.383950435,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":11.383975707,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":12.002928997,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":13.18505443,"data":"[NbConvertApp] Writing 280516 bytes to __results__.html\n"}
+]

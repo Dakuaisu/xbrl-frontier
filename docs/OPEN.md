@@ -444,9 +444,12 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Consumers: `scripts/label_audit.py score` (refuses blank verdicts; writes `data/label_audit/audit_result.json` with the
   weighted error rate and self-agreement), then `scripts/contamination_statement.py` and `scripts/readme.py`.
 
-## O-025 Kaggle account runs kernels without GPU or internet (OWNER-BLOCKED)
+## O-025 Kaggle account runs kernels without GPU or internet (RESOLVED)
 
-- Status: OWNER-BLOCKED (all Kaggle work stopped, per the T-033 instruction to stop if Kaggle refuses)
+- Status: RESOLVED (2026-10-02 18:41 UTC): after the owner's phone verification, the check kernel (version 3) got two Tesla T4
+  (driver 580.178.04, 15360 MiB, SM 7.5), `torch 2.10.0+cu128`, CUDA 12.8, and internet (huggingface.co and pypi.org 200; the
+  sec.gov 403 is that page rejecting the check's undeclared User-Agent and is irrelevant, since no Kaggle step calls SEC).
+  Evidence: `data/kaggle/gpu-check/gpu_check_verified.json`. Kaggle work resumes (RUNBOOK B, C, D, E5).
 - Found (2026-10-02 12:22 UTC): the CLI authenticates as `adnanrashid29` and `kaggle quota` shows 30.00 h of weekly
   GPU (0.00 h used, refresh 2026-10-03T00:00). The check kernel `adnanrashid29/xbrl-frontier-gpu-check`
   (`kaggle/kernels/gpu-check/`) was pushed with `enable_gpu: true`, `enable_internet: true`,
