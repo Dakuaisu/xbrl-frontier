@@ -72,6 +72,8 @@ def push(name: str, notebook: Path, param_cell: str | None, datasets: list[str],
         if timeout:
             args += ["-t", str(timeout)]
         out = sh(*args)
+    if "successfully pushed" not in out:
+        raise SystemExit(f"kaggle push rejected (exit 0): {out.strip()[-300:]}")
     git = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, cwd=config.REPO_ROOT).stdout.strip()
     log({"action": "push", "name": name, "kernel": meta["id"], "notebook": str(notebook.resolve().relative_to(config.REPO_ROOT)),
          "param_cell": param_cell, "datasets": datasets, "kernel_sources": kernels, "git_head": git,

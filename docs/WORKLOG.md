@@ -444,3 +444,9 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   vllm's torch (CUDA 13.0). No predictions produced. The vLLM notebooks now `pip uninstall torchaudio` after installing vllm. Logs in
   `data/kaggle/zeroshot-*` (not tracked); rows in `data/kaggle/runs.jsonl`. GPU quota used 1.41 h after (D2 running concurrently).
 - Verified before commit: full suite with `-rf`, 94 passed.
+
+## 2026-10-02 D1 re-push; Kaggle allows 2 batch GPU sessions
+
+- zeroshot-1p7b v2 running (source 9ca5492). zeroshot-0p6b re-push rejected: "Maximum batch GPU session count of 2 reached" (D2 holds the other);
+  the CLI exits 0 on this, so `kaggle_run push` now refuses any output without "successfully pushed". It is pushed when a slot frees.
+- Verified before commit: full suite with `-rf`, 94 passed.
