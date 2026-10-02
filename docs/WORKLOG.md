@@ -340,3 +340,16 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   `training.kaggle.gpu_hours_cap_total`. Kaggle work is stopped as instructed.
 - The full suite passed 88 three times after the README test fix. One earlier run reported 1 failure, before the README test
   edit had fully applied; it did not recur.
+
+## 2026-10-02 Fixes; E4 started (T-035)
+
+- RUNBOOK E1-E4 rewritten for T-033 (Gemini only, `--approval T-033`, synchronous, resume after daily pauses).
+  T-008/T-012/T-016, T-002's confirmation, the T-021 addendum and O-002 relabelled "supervisor decision (owner to review)".
+  A broad grep of TRADEOFFS/OPEN finds no other supervisor call attributed to the owner.
+- `scripts/frontier_plan.py` writes per-step and total free-tier request counts (`free_tier_requests_planned`,
+  `free_tier_requests_total` = 8,598) into `data/phase3/frontier_plan.json`.
+- Flaky test: O-026 (name not captured). Two hazards fixed (test-only phase3 root; sleep bound at call time). Full suite
+  with `-rf`: runs 6-8 after the fixes passed 88/88 (11 consecutive green including the 8 before them).
+- E4: dry run (3,434 instances, est. 3.14M input tokens, $1.14 notional at batch rates, $0 billed), then live from
+  2026-10-02T12:34:34Z, detached. `usage.jsonl` records the model field, timestamp, request latency and throttle
+  wait per call. Status at commit: 81 calls, 0 retries, model field `gemini-3.5-flash-lite`, no 429 yet (pace 10 RPM).

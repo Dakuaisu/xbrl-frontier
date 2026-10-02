@@ -103,13 +103,13 @@ def test_live_without_t033_refuses_before_any_key(tmp_path):
     ids = tmp_path / "ids.txt"
     ids.write_text("0\n")
     env = {k: v for k, v in os.environ.items() if k not in KEYS}
+    env["XBRL_FRONTIER_PHASE3_DIR"] = str(tmp_path / "phase3")
     for arm, approval in (("gpt-6-luna", "T-033"), ("gemini-3.5-flash-lite", "T-024")):
         out = subprocess.run([sys.executable, "-m", "frontier.harness", "run", "--step", "latency", "--arm", arm,
                               "--ids", str(ids), "--live", "--approval", approval],
                              capture_output=True, text=True, cwd=config.REPO_ROOT, env=env)
         assert out.returncode != 0 and "GuardRefused" in out.stderr and "KeyError" not in out.stderr
-    import shutil
-    shutil.rmtree(config.REPO_ROOT / "data" / "phase3" / "live", ignore_errors=True)
+    assert (tmp_path / "phase3" / "live").exists() and not (tmp_path / "phase3" / "live" / "latency_gpt-6-luna" / "usage.jsonl").exists()
 
 
 def test_parse_429_and_pacer_learning(tmp_path):

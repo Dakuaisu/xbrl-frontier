@@ -20,7 +20,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 
 ## O-002 Scorer details are not specified upstream (OPEN)
 
-- Status: OPEN (the scorer choices are confirmed by the owner, T-002; a cross-check waits on the FinTagging
+- Status: OPEN (the scorer choices are confirmed by a supervisor decision, owner to review, T-002; a cross-check waits on the FinTagging
   authors' reply to the O-010 issue)
 - Found: no public FinNI scorer exists. Set vs multiset, normalization, aggregation details and
   parse handling are unspecified in FinTagging.
@@ -454,3 +454,22 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Next action: after verification, I re-push the same check kernel (`.venv/bin/kaggle kernels push -p
   kaggle/kernels/gpu-check --accelerator NvidiaTeslaT4`) and confirm a T4 with internet. Then I continue with
   RUNBOOK B1, B2, C1 and D1-D11, then E5. All Gemini steps (E1-E4) wait for D4 (the pinned frontier sample).
+
+## O-026 One unreproduced full-suite failure (OPEN)
+
+- Status: OPEN (flaky test, name unknown)
+- Found: on 2026-10-02 at about 12:10 UTC, during the T-033 step-2 work, one full-suite run (right after editing
+  `tests/test_readme.py`) reported `1 failed, 87 passed`. Its output went through `tail -1`, so the test name and
+  failure text were not captured. That is my error, and those details cannot be recovered. Since then 8 full-suite
+  runs (3 that day, 5 in a dedicated rerun loop, all with `-rf`) passed 88/88, and 3 more are running with
+  `-rf` while E4 collects in parallel.
+- Hazards found while looking, both fixed in the commit that logs this entry: (1)
+  `tests/test_frontier_harness.py::test_live_without_t033_refuses_before_any_key` deleted all of
+  `data/phase3/live` after its subprocess run, which could also destroy real collected data. The harness output root
+  is now `XBRL_FRONTIER_PHASE3_DIR` when set, and the test writes only into its own temporary directory. (2)
+  `frontier/freetier.call_with_retries` bound `time.sleep` as a default argument at definition time, so the test's
+  monkeypatch never applied and the 503 path slept for real (timing-dependent). Sleep now resolves at call time.
+  Neither is proven to be the failure seen.
+- Next action: every full-suite run now keeps its `-rf` summary in a log. If a failure recurs, its name and text go
+  here and the cause gets fixed. The entry closes after the next 10 consecutive green full runs with no
+  recurrence, recorded in WORKLOG.

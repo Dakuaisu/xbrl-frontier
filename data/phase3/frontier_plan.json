@@ -8,25 +8,29 @@
    "arm": "gemini-3.5-flash-lite",
    "step": "probe",
    "usd": 0.15559170774647887,
-   "basis": "planning shape, sync"
+   "basis": "planning shape, sync",
+   "free_tier_requests": 202
   },
   {
    "arm": "gemini-3.5-flash-lite",
    "step": "batch",
    "usd": 2.057700334947183,
-   "basis": "planning shape, 23 filings, batch x (1+margin)"
+   "basis": "planning shape, 23 filings, batch x (1+margin)",
+   "free_tier_requests": 4662
   },
   {
    "arm": "gemini-3.5-flash-lite",
    "step": "latency",
    "usd": 0.23024999999999998,
-   "basis": "planning shape, sync"
+   "basis": "planning shape, sync",
+   "free_tier_requests": 300
   },
   {
    "arm": "gemini-3.5-flash-lite",
    "step": "fresh_control",
    "usd": 1.1396369474999999,
-   "basis": "actual fresh instances, token proxy, batch x (1+margin)"
+   "basis": "actual fresh instances, token proxy, batch x (1+margin)",
+   "free_tier_requests": 3434
   }
  ],
  "total_usd": 3.5831789901936615,
@@ -40,6 +44,7 @@
   "latency": 300,
   "fresh_control": 3434
  },
+ "free_tier_requests_total": 8598,
  "billed_usd": 0.0,
  "note_t033": "T-033: only frontier.running_arms run, on the free tier; dollars are notional (measured tokens x the dated sheet)",
  "price_sheet": "config/prices_2026-10-01.yaml",

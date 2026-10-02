@@ -78,7 +78,7 @@ leaves the remaining details unspecified (evidence_brief section 3), so they wer
    config or test files are staged. `.github/workflows/oracles.yml` runs the same tests on push, for when a
    remote exists.
 
-Confirmed as written by the owner on 2026-10-02. It stays AUTONOMOUS for owner review.
+Confirmed as written on 2026-10-02 (supervisor decision, owner to review). It stays AUTONOMOUS for owner review.
 
 ## T-003 AUTONOMOUS DECISION - owner to review: eval manifest recovery and instance-to-filing map (2026-10-02)
 
@@ -210,7 +210,7 @@ so attributing those ties to a filing is arbitrary. The company cluster is the c
 
 ## T-008 AUTONOMOUS DECISION - owner to review: unconfirmed FTS CIKs are excluded from training (2026-10-02)
 
-Decision (owner): the 15 CIKs that FTS resolved but that have no present filing (O-010) are written to
+Supervisor decision (owner to review): the 15 CIKs that FTS resolved but that have no present filing (O-010) are written to
 `data/eval_cik_candidates_unconfirmed.txt` (shipped, whitelisted in `.gitignore`), and that file is added to
 `contamination.exclude_ciks_from`. Alternative: exclude only the 129 confirmed registrants. Why: an FTS
 phrase from an evaluation context resolved to each of them, so some may be among the 13 missing
@@ -298,7 +298,7 @@ corpus (the PRD names both forms); seeding from `pins.seeds` (those are training
 
 ## T-012 AUTONOMOUS DECISION - owner to review: extend the training accession list once (2026-10-02)
 
-Decision (owner, O-014 option a): continue the **same** seeded walk under the same rule, quotas and 50/50
+Supervisor decision (owner to review), O-014 option a: continue the **same** seeded walk under the same rule, quotas and 50/50
 `form_share`, appending only. `scripts/select_train_accessions.py --extend` (1) checks the column header,
 the row count and the sha256 of the 208 frozen rows (`training.accession_selection.frozen_rows`) and refuses
 on any mismatch; (2) replays the original walk and refuses unless it reproduces exactly those 208
@@ -384,7 +384,7 @@ remove most filings.
 
 ## T-016 AUTONOMOUS DECISION - owner to review: train on the decontaminated corpus below cap (2026-10-02)
 
-Decision (owner, O-016 option b): train on the corpus as built, with 38,788 train and 1,933 dev
+Supervisor decision (owner to review), O-016 option b: train on the corpus as built, with 38,788 train and 1,933 dev
 instances. `training.target_train_instances`, `dev_slice_instances` and `curve_points` stay as written in
 `thresholds.yaml` and are **not** edited to the realised sizes. The top curve point is "full corpus",
 realised at 38,788 distinct instances. Every chart, table and the README say "38,788 (cap 40,000 not
@@ -515,7 +515,7 @@ template could differ from the Mac and from scoring.
    0, raw and dedup, on dev and on the full FinNI set (`tests/test_score_predictions.py`).
 3. **Curve checkpoints**: scored on the dev slice now. The frontier sample is added once Phase 3 pins its ids.
    The pilot's F1 (O-021) is a format check and is never charted or tabled.
-4. **Addendum (owner note, 2026-10-02): effective `max_model_len`.** A 1.7B in fp16 on a 16 GB T4 may not leave
+4. **Addendum (supervisor note, owner to review, 2026-10-02): effective `max_model_len`.** A 1.7B in fp16 on a 16 GB T4 may not leave
    vLLM enough KV cache for 32,768 tokens. `serving/generate_predictions.py` therefore records every startup
    refusal (`max_model_len_refusals`) and retries at the next halving, never below
    `training.kaggle.max_seq_len_tokens`. The accepted value is recorded as `effective_max_model_len` and
@@ -578,7 +578,8 @@ skip note if any instance was skipped (T-018). Series are given overall and by t
    `scripts/frontier_plan.py` prices every live step, using the planning shape until the probe measures
    real tokens, and the actual fresh instances for the control.
 4. **Spend guard** (`frontier/guard.py`): `--live` requires `--approval T-NNN`, and that TRADEOFFS section must
-   contain `PRE-APPROVED SPEND: step=<step> arm=<arm> usd_max=<dollars>`, written by the owner. The estimate must
+   contain `PRE-APPROVED SPEND: step=<step> arm=<arm> usd_max=<dollars>`, written by the owner (this paid-call mechanism is
+   superseded by T-034 under T-033). The estimate must
    be at most `usd_max`, and the ledger (`data/phase3/spend_ledger.jsonl`, priced from returned usage) plus the
    estimate must leave `frontier.usd_reserve_min` under `budget.usd_cap_frontier_api`. The guard runs **before**
    the API key is read. Tests strip the key variables, replace key reading and HTTP with failing stubs, and
@@ -817,3 +818,19 @@ this entry).
    keep the request time (`latency_s`) separate from the client-side throttle wait, and the README states that
    free-tier latency may include throttling. The plan is about 8,600 free-tier requests: probe 202, accuracy
    4,662, latency 300, fresh control 3,434.
+
+## T-035 AUTONOMOUS DECISION - owner to review: start the fresh-slice control (E4) before D4 (2026-10-02)
+
+Decision (supervisor decision, owner to review): collect E4 (`--step fresh_control --arm gemini-3.5-flash-lite`) now, on
+the free tier under T-033. Why: Phase 2 is blocked solely on O-025. The fresh slice is pinned (3,434 instances,
+sha256 in `data/fresh_selection_report.json`) and depends on neither the frontier sample nor any student output. The
+free-tier daily quota makes this a multi-day collection that would otherwise sit idle. Alternative: wait for D4,
+the original order, which costs calendar days for no information gain.
+Conditions: dry run first, then `--live --approval T-033`. Every call's returned model field and UTC timestamp are
+recorded in `usage.jsonl`. When E2 runs, the model fields are compared, and a difference is a finding in OPEN.md
+reported next to the control gap, not merged silently. An instance that exhausts its retries stays pending and is
+listed in the step's `status.json`. The run is not done until the pending list is empty or the remainder is logged
+as a finding. Billed spend stays $0, and any path that would need billing stops the run and is logged. The
+collection date range is recorded here when it finishes.
+Also in this commit: RUNBOOK E1-E4 rewritten for T-033. T-008, T-012, T-016, T-002 (confirmation), the T-021 addendum
+and O-002 relabelled "supervisor decision (owner to review)". The T-024 paid-approval mechanism is marked superseded by T-034.

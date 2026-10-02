@@ -92,8 +92,9 @@ class Pacer:
         self.path.write_text(json.dumps(self.state, indent=1))
 
 
-def call_with_retries(send, pacer: Pacer, sleep=time.sleep) -> tuple[bytes, float, dict]:
+def call_with_retries(send, pacer: Pacer, sleep=None) -> tuple[bytes, float, dict]:
     """send() performs one HTTP request and returns the body. Returns (body, request seconds, retry log)."""
+    sleep = sleep or time.sleep
     backoff = list(config.get("frontier.free_tier.backoff_seconds"))
     log = {"retries_429": 0, "retries_5xx": 0, "throttle_wait_s": 0.0}
     while True:

@@ -25,7 +25,8 @@ from pathlib import Path
 from frontier import guard, requests as fr
 from xbrl_frontier import config, finni, sft_format
 
-PHASE3 = config.REPO_ROOT / "data" / "phase3"
+# XBRL_FRONTIER_PHASE3_DIR lets tests write outside data/phase3 (never touch real collected data).
+PHASE3 = Path(os.environ.get("XBRL_FRONTIER_PHASE3_DIR") or config.REPO_ROOT / "data" / "phase3")
 SYNC_STEPS = {"probe", "latency"}
 KEY_ENV = {"openai_responses": "OPENAI_API_KEY", "gemini_generate_content": "GEMINI_API_KEY"}
 
@@ -133,7 +134,8 @@ def run_free_tier(arm: str, step: str, items: list[dict], key: str, out: Path, p
                 r = fr.parse(arm, json.loads(raw))
                 usd = actual_usd(arm, priced_sync, r["input_tokens"] or 0, r["output_tokens"] or 0)
                 priced += usd
-                uf.write(json.dumps({"id": x["id"], "run": run, "latency_s": req_s, **log,
+                uf.write(json.dumps({"id": x["id"], "run": run, "at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                     "latency_s": req_s, **log,
                                      **{k: v for k, v in r.items() if k != "text"}, "priced_usd": usd,
                                      "priced_at": "sync" if priced_sync else "batch", "tier": "free"}) + "\n")
                 uf.flush()
@@ -182,6 +184,11 @@ def main() -> None:
         status.update(state="stopped_call_failed", error=str(e))
         code = 4
     usage = [json.loads(l) for l in open(out / "usage.jsonl")] if (out / "usage.jsonl").exists() else []
+    runs = config.get("frontier.sync_runs") if args.step == "latency" else 1
+    got = {(u["id"], u["run"]) for u in usage}
+    status["pending"] = [{"id": x["id"], "run": r} for r in range(runs) for x in items if (x["id"], r) not in got]
+    status["model_fields"] = sorted({u.get("model_returned") or "" for u in usage})
+    status["first_last_call_utc"] = [usage[0].get("at_utc"), usage[-1].get("at_utc")] if usage else None
     status["done"] = len(usage)
     status["expected"] = len(items) * (config.get("frontier.sync_runs") if args.step == "latency" else 1)
     (out / "status.json").write_text(json.dumps(status, indent=1))

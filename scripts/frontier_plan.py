@@ -69,6 +69,9 @@ def main() -> None:
     out["free_tier_requests_planned"] = {
         "probe": int(f["probe_filings"] * shape.instances_per_filing), "batch": int(f["sample_filings"] * shape.instances_per_filing),
         "latency": f["sync_latency_instances"] * f["sync_runs"], "fresh_control": len(instances("fresh_control", None, None, None))}
+    out["free_tier_requests_total"] = sum(out["free_tier_requests_planned"].values())
+    for r in out["rows"]:
+        r["free_tier_requests"] = out["free_tier_requests_planned"][r["step"]]
     out["billed_usd"] = 0.0
     out["note_t033"] = "T-033: only frontier.running_arms run, on the free tier; dollars are notional (measured tokens x the dated sheet)"
     out.update(price_sheet=config.get("pins.price_sheet"), price_sheet_observed=config.prices()["observed"],
