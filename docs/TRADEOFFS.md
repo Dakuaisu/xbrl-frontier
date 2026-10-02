@@ -646,3 +646,30 @@ robust to the probe filing's instance mix differing from the sample's.
    (including `max_model_len`) are used as written, and prompts that do not fit fail and are counted as
    incomplete points. On the T4, `max_model_len` = the longest pinned prompt + the output cap, so every pinned
    prompt fits. Every run records flags, env (GPU, driver, versions) and checkpoint sha256s.
+
+## T-028 AUTONOMOUS DECISION - owner to review: bootstrap, cost model (both regimes) and charts (2026-10-02)
+
+1. **Bootstrap** (`xbrl_frontier/bootstrap.py`): company (CIK) clusters (T-007), resampled with replacement
+   `eval.bootstrap_resamples` times with `eval.bootstrap_seed` (new key). tp/fp/fn are pooled per resample. Every
+   arm is evaluated on the **same** resample (paired), and the percentile interval is taken at `eval.ci_level`.
+   `decide()` implements `gates.decision_rule` word for word: pass needs the point and the whole CI to meet the
+   threshold, fail needs all three to miss it, and anything else (the CI straddles) is inconclusive.
+2. **Shared-sample scoring**: `scripts/score_predictions.py --ids FILE` scores only those instances, refuses ids
+   outside the set, and records `ids_file`/`ids_sha256`. The sampler writes `data/frontier_sample_ids.txt`. The power
+   check refuses subset scores, and the cost model refuses full-set student scores.
+3. **Cost model** (`scripts/cost_model.py`): inputs are real result files only (load-test `kind`, scorer `kind`, harness
+   usage rows). Self-host $/filing = T4 $/h / filings per hour / utilization, offline from max throughput and online
+   from p95-SLO goodput, for every T4 source and every utilization scenario. Filings per hour use the **measured**
+   instances per sample filing, not the planning shape. Frontier $/filing comes from measured usage per instance
+   x instances per filing, at batch prices offline and sync prices online. Comparator per
+   `gates.cost_comparator_rule`, with arms ranked by cost in the gated regime; the arm F1s are paired-bootstrap
+   point estimates against the student's CI. The gate uses the headline rate key, `gates.cost_gate_regime` and
+   that regime's utilization; the other regime is "reported, not gated". The cost ratio itself is not a bootstrap
+   statistic, so its outcome is a plain comparison, while the comparator choice carries the uncertainty. 3050
+   rows never get dollars. Idle cost is excluded and stated next to the formula.
+4. **Charts** (`scripts/charts.py`): Vega-Lite JSON specs (no plotting dependency) for the Pareto chart (each
+   regime), the learning curve (overall, table and text) and latency, built only from the cost-model, curve-table and
+   load-test outputs (refusing anything else). Points without a measured value are omitted and listed under
+   `missing`.
+5. Tests use synthetic inputs and clean up every output they write, so no synthetic file is left where real
+   results go.

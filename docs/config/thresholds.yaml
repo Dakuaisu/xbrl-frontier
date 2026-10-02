@@ -36,6 +36,7 @@ eval:
   bootstrap_resamples:          1000
   ci_level:                     0.95
   paired_bootstrap:             true                         # student-minus-frontier difference resampled per filing on the shared sample
+  bootstrap_seed:               20261010                     # company-cluster resampling (T-007; added 2026-10-02, TRADEOFFS T-028)
   generation:                   { max_model_len: 32768, temperature: 0.0 }   # student scoring with vLLM (added 2026-10-02, TRADEOFFS T-021); prompts beyond max_model_len are scored empty and counted
   slices:                       [ "context_type", "entity_type", "company", "fiscal_year", "context_token_bucket", "train_size_point" ]
   context_token_bucket_edges:   [ 76, 410 ]              # terciles of context tokens over the 25969 dedup instances; Qwen/Qwen3-1.7B@70d244cc86cc tokenizer (identical in both students); edge k = sorted[floor(k*n/3)]; scripts/derive_token_bucket_edges.py

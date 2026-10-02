@@ -24,6 +24,8 @@ def main() -> None:
     ap.add_argument("--score", type=Path, required=True, help="primary student's full-set scorer output (set finni)")
     args = ap.parse_args()
     rep = load_score(args.score, "finni")
+    if rep.get("ids_file"):
+        raise SystemExit(f"{args.score} scores a subset ({rep['ids_file']}); the power check needs the full set; refusing")
     per = rep["dedup"].get("per_instance")
     if not per:
         raise SystemExit(f"{args.score} has no dedup per-instance counts; refusing")

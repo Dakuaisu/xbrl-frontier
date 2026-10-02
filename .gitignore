@@ -35,3 +35,4 @@ data/phase3/*
 !data/frontier_sample_accessions.txt
 !data/frontier_latency_ids.txt
 !data/phase3/power_check.json
+!data/frontier_sample_ids.txt

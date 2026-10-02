@@ -17,6 +17,8 @@ from serving.common import Server, archive, bench_custom, env_record, pinned_sna
 from serving.smoke_test import server_flags
 from xbrl_frontier import config, finni, sft_format
 
+KIND = "xbrl_frontier.load_test/v1"
+
 
 def prompts_file(tok, out: Path) -> tuple[Path, int, int]:
     ids_path = config.docs_path(config.get("serving.load_test.prompts"))
@@ -54,7 +56,7 @@ def main() -> None:
         flags[i + 1] = str(longest + config.get("serving.load_test.max_output_tokens"))
     tag = f"{args.card}_{args.model.split('/')[-1]}_{args.variant}"
     log = args.out / f"server_{tag}.log"
-    rec = {"card": args.card, "model": args.model, "variant": args.variant, "checkpoint": path, "versions": versions,
+    rec = {"kind": KIND, "card": args.card, "model": args.model, "variant": args.variant, "checkpoint": path, "versions": versions,
            "checkpoint_hashes": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(Path(path).glob("*.safetensors"))},
            "server_flags": flags, "prompts": n_prompts, "longest_prompt_tokens": longest,
            "env": env_record(args.card), "config_hash": config.config_hash(), "points": [], "errors": []}

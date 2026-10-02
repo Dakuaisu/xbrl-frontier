@@ -78,8 +78,17 @@ def main() -> None:
     ap.add_argument("--set", choices=["finni", "dev", "fresh"], required=True)
     ap.add_argument("--corpus", type=Path)
     ap.add_argument("--tag", required=True)
+    ap.add_argument("--ids", type=Path, help="score only these instance ids (e.g. the shared frontier sample)")
     args = ap.parse_args()
     items, imap = gold_set(args.set, args.corpus)
+    ids_sha = None
+    if args.ids:
+        import hashlib
+        want = {json.loads(l) for l in open(args.ids) if l.strip()}
+        items = [it for it in items if it.id in want]
+        if len(items) != len(want):
+            raise SystemExit(f"{len(want) - len(items)} ids in {args.ids} are not in set {args.set}; refusing")
+        ids_sha = hashlib.sha256(args.ids.read_bytes()).hexdigest()
     raw_preds = {}
     for p in map(json.loads, open(args.pred)):
         raw_preds[p["id"]] = to_parsed(p)
@@ -91,6 +100,7 @@ def main() -> None:
     import hashlib
     rep = {"kind": KIND, "set": args.set, "predictions": str(args.pred),
            "predictions_sha256": hashlib.sha256(args.pred.read_bytes()).hexdigest(), "config_hash": config.config_hash(),
+           "ids_file": str(args.ids) if args.ids else None, "ids_sha256": ids_sha,
            "instances_raw": len(items), "instances_dedup": len(keep),
            "raw": score_items(items, raw_preds, imap, counts),
            "dedup": score_items([it for it in items if it.idx in keep], raw_preds, imap, counts)}

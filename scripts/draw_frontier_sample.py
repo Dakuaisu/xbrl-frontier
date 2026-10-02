@@ -3,7 +3,8 @@
 Requires data/phase3/power_check.json (written only from a real scorer output) for N and the arms; refuses
 without it and refuses to overwrite a pinned sample. Filings are the eval manifest's filings with assigned
 instances; table share and size come from the instance map; sector is the SEC office (submissions cache, as in
-T-011). Writes data/frontier_sample.json, data/frontier_sample_accessions.txt, data/frontier_latency_ids.txt.
+T-011). Writes data/frontier_sample.json, data/frontier_sample_accessions.txt, data/frontier_latency_ids.txt and
+data/frontier_sample_ids.txt (every assigned instance of the sample filings: the shared-sample ids for scoring).
 """
 import csv
 import json
@@ -16,6 +17,7 @@ from xbrl_frontier import config, edgar, eval_sets, finni
 
 DATA = config.REPO_ROOT / "data"
 SAMPLE, ACCS, LAT = DATA / "frontier_sample.json", DATA / "frontier_sample_accessions.txt", DATA / "frontier_latency_ids.txt"
+IDS = DATA / "frontier_sample_ids.txt"
 
 
 def manifest_filings() -> tuple[dict, dict]:
@@ -37,7 +39,7 @@ def manifest_filings() -> tuple[dict, dict]:
 def main() -> None:
     if not POWER.exists() or json.loads(POWER.read_text()).get("kind") != KIND:
         raise SystemExit("no power check from a real scorer output (data/phase3/power_check.json); refusing")
-    if SAMPLE.exists() or ACCS.exists() or LAT.exists():
+    if SAMPLE.exists() or ACCS.exists() or LAT.exists() or IDS.exists():
         raise SystemExit("the frontier sample is pinned once; refusing to overwrite")
     pc = json.loads(POWER.read_text())
     s = config.get("frontier.sampling")
@@ -55,6 +57,7 @@ def main() -> None:
     SAMPLE.write_text(json.dumps(out, indent=1))
     ACCS.write_text("".join(a + "\n" for a in d["accessions"]))
     LAT.write_text("".join(f"{i}\n" for i in lat))
+    IDS.write_text("".join(f"{i}\n" for i in sorted(i for i, m in imap.items() if m["accession"] in in_sample)))
     print(json.dumps({k: v for k, v in out.items() if k not in ("cells",)}, indent=1))
 
 

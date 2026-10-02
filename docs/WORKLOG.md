@@ -265,3 +265,11 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - Built `serving/load_test.py` (with `serving.common.bench_custom`), `notebooks/phase4_kaggle_load.ipynb` and `serving/run_rtx3050_load.sh`
   (T-027). New key `serving.load_test`. Verified: `tests/test_load_test.py` (refuses until latency ids are pinned;
   one rendered prompt per id with the output cap). Owner-blocked: O-023.
+
+## 2026-10-02 Phase 4 tooling: bootstrap, cost model, charts
+
+- Built `xbrl_frontier/bootstrap.py`, `scripts/cost_model.py` and `scripts/charts.py`. `score_predictions.py` gained `--ids`; the sampler
+  writes `data/frontier_sample_ids.txt`; load-test outputs carry a `kind` marker (T-028). New key `eval.bootstrap_seed`.
+- Verified: `tests/test_phase4_analysis.py` (decision rule, seeded company-level paired bootstrap, cost model end to end on a
+  synthetic three-company sample with the comparator rule, refusals, chart refusals). An earlier run of the test left
+  synthetic cost/chart files under `data/phase4` and `data/charts`; they were deleted and the test now cleans up.
