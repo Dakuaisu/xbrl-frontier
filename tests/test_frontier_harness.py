@@ -170,3 +170,29 @@ def test_retries_never_score_failures_and_daily_quota_leaves_pending(tmp_path, m
     res = harness.run_free_tier("gemini-3.5-flash-lite", "probe", items, "k", tmp_path, pacer)
     assert res["new_calls"] == 1 and [json.loads(l)["id"] for l in open(tmp_path / "predictions.jsonl")] == [0, 1, 2]
 
+
+
+def test_paused_status_timestamp_is_refreshed_at_the_pause(tmp_path, monkeypatch):
+    import time as _time
+    from frontier import freetier
+    monkeypatch.setattr(harness, "PHASE3", tmp_path)
+    monkeypatch.setattr(harness, "instances", lambda *a: [{"id": 0, "context": "Revenue was 5.", "answer": "{}"}])
+    monkeypatch.setattr(harness, "price", lambda arm, step, items: {"usd_estimate": 0.0})
+    monkeypatch.setattr(harness.guard, "check", lambda *a, **k: {"approval": "T-033", "billed_usd": 0.0})
+    monkeypatch.setattr(harness.guard, "record", lambda *a, **k: None)
+    monkeypatch.setattr(harness, "_api_key", lambda arm: "k")
+    stamps = iter([_time.struct_time((2026, 10, 2, 12, 34, 32, 4, 275, 0)), _time.struct_time((2026, 10, 2, 13, 25, 31, 4, 275, 0))])
+    monkeypatch.setattr(harness.time, "gmtime", lambda *a: next(stamps))
+
+    def pause(*a, **k):
+        raise freetier.DailyQuotaExhausted("2026-10-03T00:00:05-07:00", {"per_day": True, "quota_value": 500})
+    monkeypatch.setattr(harness, "run_free_tier", pause)
+    monkeypatch.setattr(sys, "argv", ["harness", "run", "--step", "fresh_control", "--arm", "gemini-3.5-flash-lite",
+                                      "--live", "--approval", "T-033"])
+    with pytest.raises(SystemExit) as e:
+        harness.main()
+    assert e.value.code == 3
+    st = json.loads((tmp_path / "live" / "fresh_control_gemini-3.5-flash-lite" / "status.json").read_text())
+    assert st["state"] == "paused_daily_quota" and st["resume_after"] == "2026-10-03T00:00:05-07:00"
+    assert st["started_utc"] == "2026-10-02T12:34:32Z" and st["updated_utc"] == "2026-10-02T13:25:31Z"
+    assert st["pending"] == [{"id": 0, "run": 0}]

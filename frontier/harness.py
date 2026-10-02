@@ -172,7 +172,7 @@ def main() -> None:
     g = guard.check(args.step, args.arm, args.approval, mode="sync")
     key = _api_key(args.arm)
     from frontier.freetier import CallFailed, DailyQuotaExhausted
-    status = {"step": args.step, "arm": args.arm, "guard": g, "updated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    status = {"step": args.step, "arm": args.arm, "guard": g, "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     code = 0
     try:
         res = run_free_tier(args.arm, args.step, items, key, out)
@@ -191,6 +191,7 @@ def main() -> None:
     status["first_last_call_utc"] = [usage[0].get("at_utc"), usage[-1].get("at_utc")] if usage else None
     status["done"] = len(usage)
     status["expected"] = len(items) * (config.get("frontier.sync_runs") if args.step == "latency" else 1)
+    status["updated_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     (out / "status.json").write_text(json.dumps(status, indent=1))
     guard.record(args.step, args.arm, sum(u["priced_usd"] for u in usage), {"source": str(out), "kind": "free_tier_sync",
                  "state": status["state"], "calls": len(usage)})

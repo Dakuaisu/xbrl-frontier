@@ -373,3 +373,10 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   notes that the full-suite-before-commit rule is manual (the hook runs the scorer subset only).
 - Verified before commit a0436a0: full suite with `-rf`, **89 passed** (up from 88: the new `tests/test_smoke_summary.py`).
 - Verified before this log fix: full suite with `-rf`, 89 passed.
+
+## 2026-10-02 status.json timestamps
+
+- `frontier/harness.py`: `status.json` now records `started_utc` at launch and refreshes `updated_utc` immediately before it is written,
+  so a pause, stop or completion is time-stamped when it happens. The day-1 file still shows its run-start stamp (12:34:32Z) for an
+  event at 13:25:31Z; the day-2 resume rewrites it. New test `test_paused_status_timestamp_is_refreshed_at_the_pause`.
+- Verified before commit: full suite with `-rf`, 90 passed.
