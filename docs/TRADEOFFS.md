@@ -529,3 +529,27 @@ checkpoint without a score file gets no row and is listed under `missing`. Rows 
 `instances_seen` and `global_step`. The full-corpus point is labelled
 "38,788 (cap 40,000 not reached after decontamination, O-016)" (built from the run's own numbers), with a
 skip note if any instance was skipped (T-018). Series are given overall and by table vs text, raw and dedup.
+
+## T-023 AUTONOMOUS DECISION - owner to review: quantization export and flip rate (2026-10-02)
+
+1. **Export** (`serving/export_quantized.py`, `notebooks/phase2_kaggle_export.ipynb`, Kaggle): the merge stage loads
+   the base at its pin in fp16, applies the trained LoRA with PEFT, `merge_and_unload`, and saves
+   `merged-fp16`, which is also the fp16 serving variant. INT8 W8A8 and AWQ-INT4 are produced from the merged
+   checkpoint with exactly the tools, schemes and pins of `serving.smoke_test.smoke_quantization` (llm-compressor
+   W8A8 data-free; AutoAWQ GEMM w4 g128 zero-point, in its own venv). The INT8/AWQ code is now one shared
+   implementation (`serving/quantize_base.py::int8_from_dir`, `awq_from_dir`) used by both the smoke test
+   and the export.
+2. **AWQ calibration on training contexts** (as T-004 promised): `random.Random(seed).sample` of
+   `serving.export_quantization.awq_calibration.samples` (128) instances from `data/corpus/train.jsonl`,
+   seed 20261006, each rendered in the training format (prompt + answer, `sft_format.full_text`), at
+   `max_seq_len` 512 per AutoAWQ calibration block. The sample's instance ids, the source file's sha256 and
+   the sha256 of the joined texts are recorded in `export.json`. 128 / 512 are AutoAWQ's own defaults, so only
+   the data source changes from the smoke test. Alternative: calibrate on eval contexts. Rejected because it
+   leaks the eval set into a checkpoint.
+3. **Flip rate** (`scripts/flip_rate.py`): two prediction files on the same set. Per-fact flip rate = pooled
+   `sum |A xor B| / sum |A union B|`, where a parse failure or not_generated row is the empty set, as in scoring.
+   Also reported: instance flip rate, correct-to-wrong and wrong-to-correct counts against gold, F1 for
+   both and the F1 drop, raw and dedup, overall and by table/text, with `gates.quantized_flip_rate_max` and
+   `gates.quantized_f1_drop_max` beside them. Alternative denominators: fp16 facts only (|A|). Rejected
+   because a variant that only adds facts would then read as more stable. Point values only; bootstrap
+   decisions belong to the scoring phase (`gates.decision_rule`).

@@ -229,3 +229,12 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   records the effective `max_model_len` and refusals (T-021 addendum).
 - Verified: `tests/test_curve_table.py` (non-scorer file refused; rows only for scored prefixes; exact O-016
   label; recorded instances_seen; missing listed) and `tests/test_score_predictions.py` (still calibrated).
+
+## 2026-10-02 Phase 2, unit 4: quantization export and flip rate
+
+- Built `serving/export_quantized.py` (merge, int8, awq stages; AWQ calibrated on a fixed seeded training sample) and
+  `notebooks/phase2_kaggle_export.ipynb`. The INT8/AWQ code is shared with the smoke test
+  (`serving/quantize_base.py`). Built `scripts/flip_rate.py`. The prediction runner gained `--checkpoint NAME=DIR` for
+  exported checkpoints. T-023; O-019 has the export step list.
+- Verified: `tests/test_export_and_flips.py` (calibration sample fixed and rendered in the training format;
+  flip rate 0 for identical files, exact counts for one parse failure).

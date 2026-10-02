@@ -192,6 +192,8 @@ serving:
       int8_w8a8:             { tool: "llmcompressor", scheme: "W8A8", calibration: "none (dynamic per-token activations)" }
       awq_int4:              { tool: "autoawq", w_bit: 4, q_group_size: 128, zero_point: true, version: "GEMM",
                                calib_data: "pileval", calib_samples: 128, calib_max_seq_len: 512 }   # AutoAWQ defaults; Phase 2 re-calibrates on training contexts
+  export_quantization:                                       # Phase 2 export of trained students (added 2026-10-02, TRADEOFFS T-023); schemes and tools as smoke_quantization
+    awq_calibration:         { source: "data/corpus/train.jsonl", samples: 128, seed: 20261006, max_seq_len: 512 }   # fixed seeded sample of training instances rendered as prompt + answer
 
 
 gates:                       # the minimum defensible version ships only if every gate passes

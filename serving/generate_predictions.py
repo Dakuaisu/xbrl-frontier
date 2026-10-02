@@ -21,6 +21,7 @@ def main() -> None:
     ap.add_argument("--model", required=True, choices=[s["id"] for s in config.get("pins.students")])
     ap.add_argument("--adapter", action="append", default=[], help="NAME=DIR, repeatable")
     ap.add_argument("--base", action="store_true", help="also predict with the base model (zero-shot)")
+    ap.add_argument("--checkpoint", help="NAME=DIR: an exported checkpoint (merged fp16, INT8, AWQ) served directly")
     ap.add_argument("--set", choices=["finni", "dev", "fresh"], required=True)
     ap.add_argument("--corpus", type=Path)
     ap.add_argument("--out", type=Path, required=True)
@@ -33,7 +34,9 @@ def main() -> None:
     from vllm.lora.request import LoRARequest
 
     g = config.get("eval.generation")
-    local = pinned_snapshot(args.model)
+    if args.checkpoint and (args.base or args.adapter):
+        raise SystemExit("--checkpoint is exclusive with --base/--adapter (one served model per run)")
+    local = args.checkpoint.split("=", 1)[1] if args.checkpoint else pinned_snapshot(args.model)
     tok = AutoTokenizer.from_pretrained(local)
     items = load_set(args.set, args.corpus)
     prompts = []
@@ -41,8 +44,10 @@ def main() -> None:
         p = sft_format.prompt_text(tok, x["text"])
         prompts.append((p, len(tok.encode(p, add_special_tokens=False))))
     targets = ([("base", None)] if args.base else []) + [tuple(a.split("=", 1)) for a in args.adapter]
+    if args.checkpoint:
+        targets = [(args.checkpoint.split("=", 1)[0], None)]
     if not targets:
-        raise SystemExit("nothing to predict: pass --base and/or --adapter NAME=DIR")
+        raise SystemExit("nothing to predict: pass --base, --adapter NAME=DIR or --checkpoint NAME=DIR")
     llm, refusals, limit = None, [], g["max_model_len"]
     floor = config.get("training.kaggle.max_seq_len_tokens")
     while llm is None:
@@ -64,7 +69,7 @@ def main() -> None:
               for (p, n), ok in zip(prompts, fits) if ok]
     meta = {"model": args.model, "revision": model_pin(args.model), "set": args.set, "versions": versions,
             "env": env_record("kaggle_t4"), "config_hash": config.config_hash(), "generation": g,
-            "configured_max_model_len": g["max_model_len"], "effective_max_model_len": effective,
+            "served_from": local, "configured_max_model_len": g["max_model_len"], "effective_max_model_len": effective,
             "max_model_len_refusals": refusals,
             "instances": len(items), "not_generated_over_max_model_len": fits.count(False), "targets": {}}
     for k, (name, path) in enumerate(targets):

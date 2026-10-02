@@ -324,6 +324,16 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   2. Return the `predictions_<name>_dev.jsonl` files and `predictions_dev.meta.json`, unpacked into
      `data/phase2/kaggle/predictions/`. Full-set (`SET = 'finni'`), zero-shot (`BASE = True`) and
      frontier-sample runs follow with their own step lists when those phases arrive.
+- **Export runs** (`notebooks/phase2_kaggle_export.ipynb`, T-023), after a training run finishes (1.7B seed 1 first;
+  INT8 is the second item in the cut order):
+  1. Attach `xbrl-frontier-src`, `xbrl-frontier-corpus` and the run's output dataset. Set `MODEL` and `ADAPTER`
+     (the run's `final_adapter/`). Run all: merge, then int8, then awq.
+  2. Save the output as a dataset (e.g. `xbrl-frontier-export-1p7b-s1`) holding `merged-fp16/`, `int8-w8a8/`,
+     `awq-int4/` and `export.json`.
+  3. Run `notebooks/kaggle_generate_predictions.ipynb` with `SET = 'finni'` and `CHECKPOINT = '<name>=<dir>'` for each exported variant (fp16 merged,
+     INT8, AWQ) and return the predictions files to `data/phase2/kaggle/predictions/`. Then
+     `scripts/score_predictions.py` and `scripts/flip_rate.py` (fp16 vs each quantized variant) decide inclusion
+     under `gates.quantized_f1_drop_max` and `gates.quantized_flip_rate_max` before any load test.
 
 ## O-020 Kaggle training stack pins need owner approval (RESOLVED)
 
@@ -349,3 +359,4 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   check and not a result. Low recall after 187 optimizer steps on the shortest 90% of contexts says
   nothing yet about the full run, which the curve will show. The LR stays at `training.learning_rate`: the
   pilot ran one setting, and loss fell without instability.
+
