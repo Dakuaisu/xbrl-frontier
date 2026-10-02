@@ -708,6 +708,7 @@ def forever(kickoff: str | None = None) -> None:
     backoff = BACKOFF_START
     pending: str | None = kickoff
     idle = 0
+    fresh_next = False
     last_fp: int | None = None
 
     while not STOP_FILE.exists():
@@ -716,15 +717,18 @@ def forever(kickoff: str | None = None) -> None:
         if pending is None:
             print(f"--- exchange {i + 1} [{time.strftime('%H:%M:%S')}] ---")
             phase_cp = checkpoint(turn) or ""
-            fresh = "phase" in phase_cp or "exit criterion" in phase_cp
+            fresh = fresh_next or "phase" in phase_cp or "exit criterion" in phase_cp
             if fresh:
                 log(f"\n=== phase boundary ({phase_cp!r}): fresh supervisor session ===")
             try:
                 raw = draft(turn, autonomous=True, fresh=fresh)
             except BridgeError as e:
+                # A timeout usually means the session's context has grown too large to answer in time.
+                fresh_next = "timed out" in str(e)
                 wait(backoff, f"supervisor: {e}")
                 backoff = min(backoff * 2, BACKOFF_MAX)
                 continue
+            fresh_next = False
             i += 1
             verdict, reply = split_reply(raw)
             print(verdict or "(no verdict)")
