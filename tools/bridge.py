@@ -41,6 +41,19 @@ from urllib.parse import urlparse
 # Anchored to this file, not the cwd, so a run from another folder can't target another project.
 REPO = Path(os.environ.get("XBRL_FRONTIER_REPO", Path(__file__).resolve().parent.parent))
 STATE = REPO / ".bridge"
+
+
+def load_dotenv(path: Path) -> None:
+    if not path.exists():
+        return
+    for line in path.read_text().splitlines():
+        key, sep, value = line.strip().partition("=")
+        if sep and key and not key.startswith("#"):
+            os.environ.setdefault(key.strip(), value.strip())
+
+
+# The opencode server inherits this env, so the builder's shell gets the keys without reading .env.
+load_dotenv(REPO / ".env")
 SESSION_FILE = STATE / "session"
 LAST_FILE = STATE / "builder_last.md"
 LOOP_LOG = STATE / "loop.log"
@@ -207,16 +220,23 @@ will review everything afterwards. Nobody will read an ESCALATE line, so:
   builder:
   * both label-audit passes (hand-checking evaluation instances against the
     filings; the second pass must be a week after the first);
-  * anything on Kaggle (notebooks, GPU sessions, quota);
   * anything on the RTX 3050 under WSL2 (another machine, not reachable here);
-  * any paid frontier-API call (probe, batches, latency sample, fresh-slice
-    control). This is real money against budget.usd_cap_total. Never approve
-    spend beyond the budget keys, and treat every batch submission as
-    OWNER-BLOCKED unless the developer pre-approved it in docs/TRADEOFFS.md;
-  * the public GitHub issue to the FinTagging authors.
+  * reading the Schema-Aware XBRL preprint (needs a logged-in browser);
+  * the public GitHub issue to the FinTagging authors, until the developer
+    approves its text.
   Have the builder build the tooling and instructions for these, log each as
   "OWNER-BLOCKED" in docs/OPEN.md, and move on to the next unblocked task.
   Never accept simulated, placeholder or model-written outputs in their place.
+- Kaggle is builder-run (OWNER DECISION T-033): the builder drives it with the
+  kaggle CLI and KAGGLE_API_TOKEN from the environment, inside the
+  training.kaggle quota and cap keys, with checkpoint-resume. While a kernel
+  runs, it does other unblocked work or polls inside its turn.
+- Money (OWNER DECISION T-033): billed spend is $0. The only frontier key is
+  the free-tier Gemini key (GEMINI_API_KEY), so the only arm that runs is
+  gemini-3.5-flash-lite. No other provider, no paid tier, never enable billing.
+  Dollar figures still come from measured tokens priced from the dated sheet.
+  A rate-limit or server error is retried with backoff, never scored as an
+  empty prediction. Never approve anything that would bill money.
 - Phases still run in order (PRD section 9: 0 pin and calibrate, 1 corpus,
   2 train, 3 frontier arms, 4 serve and load, 5 audit and write-up). When a
   phase's exit is met, verified against the repo, have the builder commit and

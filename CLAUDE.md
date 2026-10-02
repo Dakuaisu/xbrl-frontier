@@ -92,13 +92,21 @@ as **OWNER-BLOCKED** (what is ready, the exact command or steps the owner runs, 
 back), and move on to the next unblocked task. Never simulate, stub or model-generate their outputs.
 
 - Both label-audit passes: hand-checking instances against the filings. The second pass happens a
-  week after the first.
-- Anything on Kaggle: notebooks run there, GPU sessions, quota.
+  week after the first. Never have a model fill or pre-fill the audit sheets.
 - Anything on the RTX 3050 under WSL2. It's another machine and can't be reached from here.
-- Any paid frontier-API call: the probe, batch submissions, the latency sample, the fresh-slice
-  control. Spend never exceeds the `budget` keys. A batch is submitted only if the owner has
-  pre-approved it in `docs/TRADEOFFS.md`.
-- The public GitHub issue to the FinTagging authors.
+- Reading the Schema-Aware XBRL preprint, which needs a logged-in browser.
+- The public GitHub issue to the FinTagging authors, until the owner approves its text.
+
+## Kaggle and frontier calls (owner decision T-033)
+
+- You run Kaggle yourself with the `kaggle` CLI. `KAGGLE_API_TOKEN` is in your environment. Never
+  print it, never write it to a file, never read `.env`. Stay inside the `training.kaggle` quota
+  and cap keys, and record the GPU-hours used by each run.
+- Billed spend is $0. The only frontier key is the free-tier `GEMINI_API_KEY`, so
+  `gemini-3.5-flash-lite` is the only arm that runs. Never call another provider, use a paid tier,
+  or enable billing. Report dollar figures from measured tokens priced against the dated sheet.
+- A rate-limit (429) or server error is retried with backoff and never scored as an empty
+  prediction. Only a model reply that fails to parse counts as a parse failure.
 
 ## Engineering rules
 

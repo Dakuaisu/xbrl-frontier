@@ -737,3 +737,37 @@ registrants; 95.25% / 95.39% serializer assignment beside the Phase 0 94.29% / 9
 O-016 cap note; 18,184 flagged and removed, 0 after removal) and the contamination statement are read from the
 recorded files at generation time. The Mac pilot's format-check F1 is absent (O-021), which a test asserts. The
 README is regenerated after each result: nothing in it is typed by hand.
+
+## T-033 OWNER DECISION (Adnan, stated directly, 2026-10-02): $0 budget, Gemini free tier only, Kaggle automated
+
+This entry comes directly from the owner, unlike T-001 to T-032. Their "owner decision" and "owner
+approved" labels mostly record supervisor replies; the owner reviews those separately (see the end of
+this entry).
+
+1. **Money.** Billed spend is $0. The owner has no funds and no OpenAI key. The only frontier key is a
+   free-tier Google AI Studio key, which lists `models/gemini-3.5-flash-lite`. That was checked
+   2026-10-02 with a free model-list call, generating nothing. `budget.*` values stay as written. The
+   $0 billed rule sits on top of them.
+2. **Frontier arms.** Only `gemini-3.5-flash-lite` runs. `gpt-6-luna` and `gpt-5.4-mini-2026-03-17`
+   are not run, for lack of a key and funds. They stay in `pins.frontier_arms` as the planned design,
+   and their absence is disclosed in the README. The headline becomes "fraction of
+   gemini-3.5-flash-lite's F1", and the README names the arm. This goes further than the PRD's cut
+   order, which keeps the cheapest and mid-tier arms. The cause is money, not results.
+3. **Fresh-slice control arm.** `gpt-6-luna` can't run, so the control is `gemini-3.5-flash-lite`
+   (config change by the builder, citing this entry). `fresh_slice_filing_date_min` is unchanged:
+   2026-05-19 is still after the Gemini arm's cutoff (2026-03).
+4. **Free-tier collection.** Calls run within the free tier's rate limits, possibly synchronous only.
+   429 and 5xx responses are retried with backoff and are never scored as empty predictions. The
+   README states that tokens, the model field and latency come from the free tier. It also states that
+   dollars per filing are measured tokens priced at the dated sheet's batch and sync rates, and that
+   free-tier latency may include throttling. Google may use free-tier inputs; they are public SEC text.
+5. **Kaggle.** The builder runs every Kaggle step itself through the `kaggle` CLI with the owner's API
+   token, which is in the environment and never in the repo. It stays inside the `training.kaggle`
+   quota and cap keys. Kaggle is no longer an owner-only item.
+6. **Still owner-only:** the two label-audit passes (never model-filled), the RTX 3050 runs, reading the
+   preprint, and posting the GitHub issue (after the owner approves the text).
+7. **Review of earlier labels.** Entries T-001a, T-004 (pins and AutoAWQ), T-005, T-006, T-007, T-010,
+   T-019, T-022 and T-027, and findings O-003, O-007, O-012, O-013 and O-020, say "owner" where the
+   decision came from the autonomous supervisor. The builder relabels them "supervisor decision (owner
+   to review)" without changing their substance. T-001's four dependencies were approved on the
+   owner's behalf in the resume message. T-006 is superseded by O-011 (95.25%, which passes).
