@@ -1,0 +1,39 @@
+{
+ "generated": "2026-10-02T05:50:02+00:00",
+ "config_hash": "62ccd2196f95b4da6708b888d4069595bfe00b4968248f794ecd90c532765a25",
+ "fintagging_commit": "653650cbbab525227d20228c94a65600c1209c01",
+ "manifest_filings": 139,
+ "phase0_token_matcher": {
+  "assignment_rate_raw": 0.9428561503456422,
+  "assignment_rate_dedup": 0.9442797181254573
+ },
+ "serializer_only_rate_raw": 0.9309410497794143,
+ "assignment_rate_raw": 0.952513287247716,
+ "assignment_rate_dedup": 0.9539065809234086,
+ "instance_assignment_min_fraction": 0.95,
+ "methods_raw": {
+  "serializer_exact": 25770,
+  "serializer_ambiguous_cross_company": 243,
+  "serializer_exact_tie_within_company": 1029,
+  "token_none": 1115,
+  "token_fuzzy": 514,
+  "token_exact": 107,
+  "token_too_short": 6,
+  "token_ambiguous_cross_company": 3
+ },
+ "changed_filing_vs_phase0": 717,
+ "newly_assigned_vs_phase0": 278,
+ "lost_vs_phase0": 0,
+ "label_parity_on_serializer_exact": {
+  "instances": 25770,
+  "texts_with_several_label_sets": 4746,
+  "identical_label_set": 25768,
+  "tp": 221673,
+  "gold_only": 0,
+  "serializer_only": 2,
+  "identical_share": 0.9999223903764066,
+  "pair_precision_vs_gold": 0.9999909777827901,
+  "pair_recall_vs_gold": 1.0
+ },
+ "filings_with_unknown_concepts": {}
+}

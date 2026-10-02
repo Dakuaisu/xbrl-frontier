@@ -18,3 +18,5 @@ data/manifest_work/*
 !data/manifest_work/fts_queries.json
 !data/manifest_work/validation.json
 !data/eval_cik_candidates_unconfirmed.txt
+!data/manifest_work/serializer_rebuild.json
+!data/manifest_work/eval_instance_to_filing_phase0_tokenmatch.csv

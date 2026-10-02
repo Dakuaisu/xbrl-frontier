@@ -88,3 +88,24 @@ Dated implementation notes: what was built, how it was verified, what is next.
   (T-007, O-012 RESOLVED). Unconfirmed CIKs excluded from training (T-008).
 - TRADEOFFS reordered (T-003 before T-004). T-002 now quotes prompt rules (3) and (4) verbatim and
   states how negatives enter the per-instance mean.
+- Kaggle source tarball (O-005 step 1): `/tmp/xbrl-frontier-src.tar.gz` built with `git archive` from
+  commit 1c30e28 (pins filled, notebook accepts an auto-extracted dataset); sha256
+  517747cd3b60cf3e408535a70458bb13df6f6c68b8fd8a8a150f0ce7ec411a06.
+
+## 2026-10-02 Phase 1, unit 1: parser fork, benchmark serializer, assignment re-run
+
+- Built `ixbrl_facts/` (no FilingQA import): `dom.py` (stdlib HTML tree with the BeautifulSoup calls the
+  benchmark uses), `fintagging.py` (port of FinTagging `parse_xbrl_report.ipynb` at 653650c, with the
+  2023 ∪ 2024 us-gaap taxonomy from sha256-pinned xsds), `dei.py` (forked from FilingQA 895bf6d
+  `harvest_dei`). Provenance pins: `pins.fintagging_source` and `pins.filingqa_fork`. Decisions in T-009.
+- Built `scripts/rebuild_eval_contexts.py` and re-ran assignment over the 139 manifest filings (cached
+  EDGAR documents, no new SEC requests). Assignment is 95.25% raw / 95.39% dedup (Phase 0 token matcher:
+  94.29% / 94.43%), so O-011 is RESOLVED. Label parity is 25,768/25,770. Finding O-013.
+- A first parity run compared each context with only the first serialized label set and reported 180
+  mismatched instances. The cause was the twin texts in O-013, not the port. Fixed by comparing against
+  every candidate label set, then re-ran from the restored Phase 0 map so the before/after numbers are
+  correct.
+- Verified: `pytest -q tests` (36 passed, including 7 in `tests/test_ixbrl_facts.py`), plus
+  `scripts/validate_instance_map.py` on the new map.
+- Next: accession selection for the training corpus (filing date <= `train_filing_date_max`, excluding
+  every CIK under `contamination.exclude_ciks_from`, now including the unconfirmed list).

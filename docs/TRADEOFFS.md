@@ -212,3 +212,40 @@ Decision (owner): the 15 CIKs that FTS resolved but that have no present filing 
 `contamination.exclude_ciks_from`. Alternative: exclude only the 129 confirmed registrants. Why: an FTS
 phrase from an evaluation context resolved to each of them, so some may be among the 13 missing
 registrants. Excluding them is the conservative side of contamination control.
+
+## T-009 AUTONOMOUS DECISION - owner to review: parser fork and benchmark serializer (2026-10-02)
+
+1. **FilingQA fork.** Source: `/Users/apple/FillingQA` at commit `895bf6d7d1b4c94254c64b378d02c349d1e7399b`
+   (`pins.filingqa_fork`), read with `git show <commit>:<path>`. FilingQA's working tree has uncommitted
+   changes, and they were not used. Nothing in FilingQA was modified, and nothing imports it. Forked:
+   `api/parse/ixbrl.py::harvest_dei` -> `ixbrl_facts/dei.py` (dei fiscal labels from the whole document,
+   including `ix:hidden`), adapted to the stdlib tree. Not forked: FilingQA's offset-preserving text walker,
+   contexts/units and number parsing. They serve FilingQA's QA grounding, while FinTagging's labels are raw
+   value strings with no period, unit or offset, so carrying them would be unused code.
+2. **Serializer = FinTagging's own code, ported.** `ixbrl_facts/fintagging.py` ports `extract_text` /
+   `extract_table` from `parse_xbrl_report.ipynb` at The-FinAI/FinTagging commit
+   `653650cbbab525227d20228c94a65600c1209c01` (`pins.fintagging_source`), keeping the control flow line for
+   line. That includes the quirks: cells join `get_text` of every nested p/div/span, which is the doubled
+   text; text facts come only from direct-child leaf `ix:nonFraction`; negatives do not enter the seen-text
+   set; an unknown concept raises (`unknown="raise"`, the notebook's behaviour) or is listed
+   (`unknown="record"`). PRD section 4 asks for "the benchmark's own serialization", and this is it.
+3. **No new dependency.** The notebook uses BeautifulSoup over lxml's HTML parser. `ixbrl_facts/dom.py`
+   reproduces the parts of that tree and API the serializer uses, on stdlib `html.parser`: lowercased
+   prefixed names, decoded entities, comments and script/style text excluded, void elements, and libxml2's
+   p-auto-close. Alternative: ask for `beautifulsoup4` + `lxml`. Not needed: the port reproduces 93.1% of
+   all FinNI rows as exact strings, and label parity on those is 25,768/25,770 (O-011, O-013). If Phase 1
+   parity checks show a parser-driven divergence, the bs4+lxml question is raised then with the evidence.
+4. **Taxonomy = the 2023 ∪ 2024 us-gaap xsd element types** (`pins.fintagging_source.taxonomy_xsd`, sha256
+   verified on load; the later year wins on the one non-numeric type conflict). The notebook loads
+   `us-gaap-2024_taxonomy.json`, which the repo does not ship. The repo's 2024 xsd alone (17,388 elements,
+   identical to `research/bm25.jsonl`) lacks `StockRepurchaseProgramAuthorizedAmount1`, which an
+   evaluation filing (Omega FY2023) uses. Under the notebook's KeyError rule, that filing could not have
+   been in the benchmark. The union has exactly 17,688 elements, the paper's own count. With it, 0 of the
+   139 eval filings hit an unknown concept. Alternative: 2024 only. Rejected because of that
+   contradiction.
+5. **Assignment with the serializer** (`scripts/rebuild_eval_contexts.py`): exact string equality between
+   a FinNI context and a serialized context of a manifest filing comes first. Ties within a company go to
+   the filing with the most serializer-unique contexts, and ties across companies are ambiguous. Remaining
+   rows fall back to the unchanged Phase 0 token matcher over the same 139 filings. `instance_match.*` is
+   untouched. The Phase 0 map is kept as `data/manifest_work/eval_instance_to_filing_phase0_tokenmatch.csv`,
+   and both rates are recorded.

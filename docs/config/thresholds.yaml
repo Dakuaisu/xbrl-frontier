@@ -21,6 +21,13 @@ pins:
   seeds:             [ 1, 2 ]                          # primary student only; the 0.6B student runs seed 1
   software:          { vllm: "0.30.0", mlx_lm: "", transformers: "", peft: "", trl: "", unsloth: "", autoawq: "0.2.9", llmcompressor: "0.14.0", guidellm: "" }   # vllm/autoawq/llmcompressor pinned 2026-10-02 (owner, O-007); others pinned when their phase first installs them
   price_sheet:       "config/prices_2026-10-01.yaml"
+  fintagging_source:                                  # benchmark serializer + taxonomy (added 2026-10-02, TRADEOFFS T-009)
+    repo: "The-FinAI/FinTagging"
+    commit: "653650cbbab525227d20228c94a65600c1209c01"  # parse_xbrl_report.ipynb ported to ixbrl_facts/fintagging.py
+    taxonomy_xsd:                                     # union of element types = the paper's 17,688 concepts; later year wins
+      - { url: "https://xbrl.fasb.org/us-gaap/2023/elts/us-gaap-2023.xsd", sha256: "5b23edf9ea3f1a6e35a50214e72d8a21acc2c262c6490d606a72cee0c3fb342e" }
+      - { url: "https://raw.githubusercontent.com/The-FinAI/FinTagging/653650cbbab525227d20228c94a65600c1209c01/taxonomy/us-gaap-2024.xsd", sha256: "6a5daf96dc96edf69876ac9a34a3cb076f23eec3e2899e88ae92c1cecae0d70f" }
+  filingqa_fork:     { path: "/Users/apple/FillingQA", commit: "895bf6d7d1b4c94254c64b378d02c349d1e7399b", forked: [ "api/parse/ixbrl.py::harvest_dei" ] }   # no runtime dependency
 
 eval:
   dedup_policy:                 "exact_context_and_answer"   # report raw and deduplicated; headline uses deduplicated

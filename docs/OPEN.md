@@ -135,9 +135,22 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   it, re-run assignment, and report both the old and new numbers. The README and resume bullet say
   "129 of 142" until then.
 
-## O-011 Instance assignment rate 94.29% raw / 94.43% dedup, below 0.95 (OPEN)
+## O-011 Instance assignment rate: 94.29% with the Phase 0 token matcher, 95.25% with the benchmark serializer (RESOLVED)
 
-- Status: OPEN (below `contamination.instance_assignment_min_fraction`)
+- Status: RESOLVED (2026-10-02). With the PRD section 4 method (the benchmark's own serialization, then
+  the fuzzy fallback), the rate is **95.25% raw / 95.39% dedup**, which meets
+  `contamination.instance_assignment_min_fraction` with the threshold and `instance_match.*` unchanged. Both
+  rates are recorded: the Phase 0 token matcher alone gave 94.29% / 94.43% (run 1 before
+  de-doubling: 90.10% / 91.30%). Serializer exact strings alone cover 93.09% of rows. Source:
+  `data/manifest_work/serializer_rebuild.json`.
+- Phase 1 map methods (rows): serializer_exact 25,770; serializer_exact_tie_within_company 1,029;
+  serializer_ambiguous_cross_company 243; token fallback: exact 107, fuzzy 514, none 1,115, too_short 6,
+  ambiguous 3. Versus Phase 0: 278 rows newly assigned, 0 lost, and 717 moved to another filing, all
+  within the same company (year ties).
+- Validation of the Phase 1 map (`scripts/validate_instance_map.py`, positive instances): gold values found
+  in the assigned filing are 1.000 for serializer_exact (13,185), serializer ties (306) and token_exact (32),
+  and 0.819 for token_fuzzy (239; 23 below half).
+- History (Phase 0):
 - Found: 27,142 of 28,787 rows are assigned. Unassigned: 1,201 `none`, 372 `ambiguous_cross_company`
   (text shared verbatim by filings of different companies, for example parent and subsidiary), and
   72 `too_short`. Per PRD section 4 these form the unassigned stratum, excluded from the frontier sample,
@@ -146,9 +159,8 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Validation (`scripts/validate_instance_map.py`, all assigned positive instances): the share of gold fact
   values found in the assigned filing is 1.000 for exact (12,225) and exact-tie (370), 0.959 for fuzzy
   (1,062; 23 below half) and 1.000 for fuzzy-tie (12).
-- Next action (owner decision, TRADEOFFS T-006): disclose and do not retune; `instance_match.*` stays
-  untouched. Re-run assignment with the Phase 1 serializer (the benchmark's own serialization, PRD
-  section 4) and record both rates.
+- Next action: none. The unassigned stratum (4.75% of rows) stays excluded from the frontier sample and is
+  disclosed.
 
 ## O-012 FinNI draws on more than one 10-K per company (RESOLVED by owner decision T-007)
 
@@ -164,3 +176,20 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   Phase 3 probe measures real per-filing tokens anyway.
 - Next action: `between_filing_f1_sd` and `frontier.power_check` are computed per company, and that is
   stated next to each number. Sampling mechanics are decided in Phase 3.
+
+## O-013 The benchmark serializer emits the same text with different labels; FinNI inherits it (OPEN)
+
+- Status: OPEN (affects Phase 1 training-set construction)
+- Found: in FinTagging's `extract_text`, a `div` whose only content is a `p` yields the same text twice.
+  The `div` comes out as a **negative**, because its facts are not direct children, and the `p` as a
+  **positive**. Negatives never enter the seen-text set, so both survive. On the 25,770 serializer-exact
+  rows, 4,746 contexts have more than one label set in their filing. This is the likely origin of the
+  FinNI duplicate contexts with differing answers (204 groups per the evidence brief). Label parity against
+  the gold, taking the closest candidate per context, is 25,768/25,770 identical sets with gold recall
+  1.000. So the port is faithful, and the gold itself carries this ambiguity.
+- Evidence: `data/manifest_work/serializer_rebuild.json` (`label_parity_on_serializer_exact`),
+  `tests/test_ixbrl_facts.py::test_text_blocks_follow_notebook_rules`.
+- Next action: Phase 1 training construction must decide whether to keep the same text as both a positive
+  and a negative (faithful to the benchmark's conventions) or drop the negative twin (cleaner supervision).
+  That is a DECISIONS NEEDED item when accession selection and sampling are built. The eval set is
+  untouched either way.

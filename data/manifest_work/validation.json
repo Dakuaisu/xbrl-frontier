@@ -1,22 +1,22 @@
 {
- "exact": {
-  "instances": 12225,
+ "serializer_exact": {
+  "instances": 13185,
   "mean_share_gold_values_in_filing": 1.0,
   "instances_below_half": 0
  },
- "exact_tie_within_company": {
-  "instances": 370,
+ "serializer_exact_tie_within_company": {
+  "instances": 306,
   "mean_share_gold_values_in_filing": 1.0,
   "instances_below_half": 0
  },
- "fuzzy": {
-  "instances": 1062,
-  "mean_share_gold_values_in_filing": 0.9591722044335328,
+ "token_exact": {
+  "instances": 32,
+  "mean_share_gold_values_in_filing": 1.0,
+  "instances_below_half": 0
+ },
+ "token_fuzzy": {
+  "instances": 239,
+  "mean_share_gold_values_in_filing": 0.8185810925038153,
   "instances_below_half": 23
- },
- "fuzzy_tie_within_company": {
-  "instances": 12,
-  "mean_share_gold_values_in_filing": 1.0,
-  "instances_below_half": 0
  }
 }
