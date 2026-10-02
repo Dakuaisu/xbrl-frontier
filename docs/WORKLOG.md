@@ -287,3 +287,9 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - `training/kaggle_train.py --validation`, notebook `VALIDATION` flag, `scripts/curve_validation.py`. `tests/test_curve_validation.py` passed
   (identical runs: gap 0, no caveat; degraded nested run: positive gap, caveat). O-019 has run 5. T-027 records the owner decision
   to keep `vllm bench serve` and leave `pins.software.guidellm` empty.
+
+## 2026-10-02 Gate summary and zero-shot steps (T-031)
+
+- `scripts/gate_summary.py` (every `gates` key; the zero-shot gain slot decided with the company bootstrap and the decision rule).
+  `tests/test_gate_summary.py` passed (gain 1.0 -> pass through real scorer files; subset refused where the full set is required;
+  unmeasured gates blank). O-019 has the zero-shot base runs (1.7B and 0.6B, full set) and the full-set student predictions.

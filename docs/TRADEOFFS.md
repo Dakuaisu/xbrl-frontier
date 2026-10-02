@@ -709,3 +709,21 @@ two on the dev slice and (when scored) the frontier sample with the company-clus
 the gap with its paired interval and raises the curve caveat when |gap| exceeds the half-width of the nested
 checkpoint's own interval. In the cut order it is item 4: planned, not cut, and scheduled after run 1 and before
 run 2 (O-019 run 5).
+
+## T-031 AUTONOMOUS DECISION - owner to review: gate summary and the zero-shot comparison (2026-10-02)
+
+`scripts/gate_summary.py` evaluates every key under `gates` from result files only. A gate without its inputs is
+"not measured", with blank values and `ships: false`. Bootstrap statistics use the company-cluster paired
+bootstrap (T-007, T-028) and `gates.decision_rule`:
+- **gain over zero-shot** = student - zero-shot base, paired on the **full set** (both must be full-set scorer
+  outputs; subsets are refused). The same comparison on the shared sample (`--ids` scores of the same predictions,
+  so no extra run) is reported beside it, not gated. The zero-shot runs use the same prompt, template and greedy
+  decoding as the students (`enable_thinking=False`).
+- **fraction of best frontier arm** = student / best arm (highest point F1 on the shared sample), paired.
+- **quantized F1 drop** = fp16 merge - variant, paired, lower is better. The **flip rate** comes from
+  `scripts/flip_rate.py` and is compared at its point value (not a bootstrap statistic).
+- **cost ratio**: the gated-regime entries of `scripts/cost_model.py`, at their point value.
+- **fresh-slice gap** = F1(full set) - F1(fresh): different instance sets, so each is resampled on its own
+  companies and the interval is taken over the differences of the resamples. The control arm's gap and the
+  student-minus-control difference are reported in the note (`fresh_slice_control_gap_reported`).
+- **encoder / learning curve / Pareto chart**: presence of their result files.

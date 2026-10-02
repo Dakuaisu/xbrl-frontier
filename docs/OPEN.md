@@ -334,8 +334,20 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
      `MODEL = 'Qwen/Qwen3-1.7B'`, `SET = 'dev'` and `ADAPTERS` to the run's `curve/prefix_*` directories plus
      `final_adapter`. Run all.
   2. Return the `predictions_<name>_dev.jsonl` files and `predictions_dev.meta.json`, unpacked into
-     `data/phase2/kaggle/predictions/`. Full-set (`SET = 'finni'`), zero-shot (`BASE = True`) and
-     frontier-sample runs follow with their own step lists when those phases arrive.
+     `data/phase2/kaggle/predictions/`.
+- **Full-set predictions, fine-tuned students** (`kaggle_generate_predictions.ipynb`), once each run has a
+  `final_adapter`: set `MODEL`, `SET = 'finni'`, `BASE = False`, `ADAPTERS = {'<run>': '<final_adapter dir>'}`. Run all.
+  Return the predictions file and meta. The 1.7B seed-1 result feeds the power check (`scripts/power_check.py`),
+  which unlocks the frontier sample (T-026).
+- **Zero-shot base runs** (`gates.finni_f1_gain_over_zero_shot_min`; T-031), no training needed, so they can run any
+  time:
+  1. `MODEL = 'Qwen/Qwen3-1.7B'`, `SET = 'finni'`, `BASE = True`, `ADAPTERS = {}`. Run all and return
+     `predictions_base_finni.jsonl` and its meta into `data/phase2/kaggle/predictions/zeroshot-1p7b/`.
+  2. The same with `MODEL = 'Qwen/Qwen3-0.6B'`, into `.../zeroshot-0p6b/`.
+  3. The full set covers the frontier sample, so the sample comparison needs no extra run: I score the same
+     predictions with `scripts/score_predictions.py --ids data/frontier_sample_ids.txt` once the sample is pinned.
+  4. I run `scripts/score_predictions.py --set finni` on each, then `scripts/gate_summary.py --student-full ...
+     --zero-shot-full ...` (plus the `--student-sample`/`--zero-shot-sample` pair).
 - **Export runs** (`notebooks/phase2_kaggle_export.ipynb`, T-023), after a training run finishes (1.7B seed 1 first;
   INT8 is the second item in the cut order):
   1. Attach `xbrl-frontier-src`, `xbrl-frontier-corpus` and the run's output dataset. Set `MODEL` and `ADAPTER`
