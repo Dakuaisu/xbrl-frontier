@@ -475,3 +475,18 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Next action: every full-suite run now keeps its `-rf` summary in a log. If a failure recurs, its name and text go
   here and the cause gets fixed. The entry closes after the next 10 consecutive green full runs with no
   recurrence, recorded in WORKLOG.
+
+## O-027 Gemini free tier allows 500 requests per day per project; the one-arm plan needs about 18 days (OPEN)
+
+- Status: OPEN (scheduling finding; nothing billed)
+- Found (E4, 2026-10-02): after 500 successful calls (12:34:34-13:25:25 UTC, about 10 RPM, 0 retries), call 501 got a
+  per-day 429: `GenerateRequestsPerDayPerProjectPerModel-FreeTier`, quota value 500, `retryDelay` 38,068 s (to midnight
+  Pacific). No per-minute 429 occurred at 10 RPM, so the per-minute limit is at least 10 and otherwise unknown. Learned values:
+  `data/phase3/gemini_quota_state.json`.
+- Consequence: the quota is per project and model, shared by E1-E4. The plan's 8,598 requests (probe 202, accuracy run
+  4,662 at N = 23, latency 300, fresh control 3,434) need 18 free-tier days (`free_tier_days_needed` in
+  `data/phase3/frontier_plan.json`). E4 has 2,934 pending, which is 6 more days. If the power check raises N (one arm:
+  N up to the largest N leaving the notional reserve), the accuracy run grows by about 203 requests per extra filing
+  (about 0.4 days each).
+- Next action: E4 resumes daily after 07:00 UTC with the same command until complete. The schedule for E1-E3 is
+  set once D4 pins the sample (O-025 first). The README states that free-tier collection spanned these dates.

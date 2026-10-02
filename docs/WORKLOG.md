@@ -355,3 +355,11 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   wait per call. Status at commit: 81 calls, 0 retries, model field `gemini-3.5-flash-lite`, no 429 yet (pace 10 RPM).
 
 - 2026-10-02: O-026 closed. Full-suite runs 6-15 (after the fixes) all passed 88/88, logged with `-rf` in `/tmp/flaky/run6..15.log`.
+
+## 2026-10-02 E4 day 1
+
+- E4 collected 500 of 3,434 (12:34:34-13:25:25 UTC), then paused on the free-tier daily quota (RPD 500, learned from the
+  429; resume after 2026-10-03T07:00:05Z). 0 retries, model field `gemini-3.5-flash-lite` on every call, median request
+  latency 1.35 s, 388,771 input / 98,437 output tokens, notional $0.1814 at batch rates, $0 billed. 2,934 pending, listed in
+  `status.json` (O-027). `scripts/frontier_plan.py` now reports `free_tier_days_needed` (18). Collected files are committed
+  (`requests.json` excluded as reproducible).

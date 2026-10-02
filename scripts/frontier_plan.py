@@ -72,6 +72,10 @@ def main() -> None:
     out["free_tier_requests_total"] = sum(out["free_tier_requests_planned"].values())
     for r in out["rows"]:
         r["free_tier_requests"] = out["free_tier_requests_planned"][r["step"]]
+    state = PHASE3 / "gemini_quota_state.json"
+    rpd = json.loads(state.read_text()).get("rpd") if state.exists() else None
+    out["free_tier_rpd_learned"] = rpd
+    out["free_tier_days_needed"] = (-(-out["free_tier_requests_total"] // rpd)) if rpd else None
     out["billed_usd"] = 0.0
     out["note_t033"] = "T-033: only frontier.running_arms run, on the free tier; dollars are notional (measured tokens x the dated sheet)"
     out.update(price_sheet=config.get("pins.price_sheet"), price_sheet_observed=config.prices()["observed"],

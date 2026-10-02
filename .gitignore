@@ -40,3 +40,7 @@ data/phase3/*
 !data/kaggle/
 data/kaggle/*
 !data/kaggle/gpu-check/
+!data/phase3/gemini_quota_state.json
+!data/phase3/spend_ledger.jsonl
+!data/phase3/live/
+data/phase3/live/*/requests.json
