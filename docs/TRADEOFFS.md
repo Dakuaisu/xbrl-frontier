@@ -2,7 +2,7 @@
 
 Each entry: decision, alternatives, why. Decisions taken without the owner go under a heading containing "AUTONOMOUS DECISION - owner to review".
 
-## T-001 Phase 0 dependency set (owner decision, 2026-10-02)
+## T-001 Phase 0 dependency set (approved on the owner's behalf in the resume message, 2026-10-02; T-033 item 7)
 
 Decision: `.venv/` on Python 3.12.14 (Homebrew), with exactly these direct dependencies, pinned in
 `requirements.txt` (full transitive freeze in `requirements.lock`):
@@ -19,11 +19,11 @@ system Python 3.9.6 (too old for every pinned package). vLLM and GuideLLM are no
 They are installed only inside the owner-run Kaggle and WSL2 scripts, at the versions in
 `pins.software`.
 
-Approved by the owner on 2026-10-02.
+Approved on the owner's behalf in the resume message, 2026-10-02 (T-033 item 7).
 
 ### T-001a AUTONOMOUS DECISION - owner to review: `tokenizers` and the context-token buckets (2026-10-02)
 
-The owner approved `tokenizers==0.23.2` (pinned in `requirements.txt` / `requirements.lock`) for the
+The supervisor approved (supervisor decision, owner to review) `tokenizers==0.23.2` (pinned in `requirements.txt` / `requirements.lock`) for the
 `context_token_bucket` slice. `transformers` is not installed locally. Counts use the primary student's
 `tokenizer.json` (`Qwen/Qwen3-1.7B` at its pinned `hf_revision`). Both Qwen3 students ship byte-identical
 `tokenizer.json`, `tokenizer_config.json`, `vocab.json` and `merges.txt` at their pinned revisions (sha256
@@ -161,7 +161,7 @@ Confirmed as written by the owner on 2026-10-02. It stays AUTONOMOUS for owner r
    They are never scored, and Phase 2 re-quantizes the fine-tuned students with training-context
    calibration. AutoAWQ's last release (0.2.9) is 2025-05-11 and it is unmaintained, so it runs in its own
    virtualenv. Whether its GEMM format still runs on vLLM 0.30 on Turing is exactly what the smoke test
-   answers. Owner decision 2026-10-02: keep AutoAWQ, as PRD section 5 names it, with no switch before the
+   answers. Supervisor decision (owner to review), 2026-10-02: keep AutoAWQ, as PRD section 5 names it, with no switch before the
    T4 smoke test exists. If AutoAWQ GEMM fails there, the failure is recorded per
    `serving.smoke_test.failure_action` and the llm-compressor AWQ question is raised then, as a data-wins
    entry.
@@ -169,7 +169,7 @@ Confirmed as written by the owner on 2026-10-02. It stays AUTONOMOUS for owner r
    regimes, every non-blank T4 source in `serving.hardware.kaggle_t4.market_rate_keys`, at the regime's
    utilization and at every `serving.utilization_scenarios` value. The blank AWS source is dropped and
    listed as dropped (see O-008).
-7. **Software pins (owner approval 2026-10-02, O-007).** `pins.software.vllm = 0.30.0`,
+7. **Software pins (supervisor decision (owner to review), 2026-10-02, O-007).** `pins.software.vllm = 0.30.0`,
    `llmcompressor = 0.14.0`, `autoawq = 0.2.9`. Only these three are filled now. Every other
    `pins.software` field is filled when the phase that first installs it arrives, and is never edited
    after. `transformers`, `torch` and `compressed-tensors` are **not pinned**: they are left to vLLM's and
@@ -179,7 +179,7 @@ Confirmed as written by the owner on 2026-10-02. It stays AUTONOMOUS for owner r
 
 ## T-005 AUTONOMOUS DECISION - owner to review: manifest shortfall accepted at 129 of 142 (2026-10-02)
 
-Decision (owner): option (c), accept 129 recovered registrants and disclose them.
+Supervisor decision (owner to review): option (c), accept 129 recovered registrants and disclose them.
 `contamination.eval_manifest_required_recovered` is **NOT MET** (129/142) and the threshold is unchanged.
 Option (a), the public GitHub issue to the FinTagging authors, is OWNER-BLOCKED. The draft is
 `docs/owner/fintagging_issue_draft.md`. Option (b), a second FTS budget with a new phrase strategy, is
@@ -187,7 +187,10 @@ Option (a), the public GitHub issue to the FinTagging authors, is OWNER-BLOCKED.
 results. The diagnostics also show the remaining `none` rows are mostly tables, which phrase search cannot
 resolve, and no unqueried unmatched context was left. The README and resume bullet will say 129 of 142.
 
-## T-006 Instance assignment below threshold: disclosed, not retuned (owner decision, 2026-10-02)
+## T-006 Instance assignment below threshold: disclosed, not retuned (supervisor decision (owner to review), 2026-10-02; SUPERSEDED by O-011)
+
+Superseded by O-011 (T-033 item 7): with the benchmark's own serializer the rate is 95.25% raw / 95.39% dedup,
+which meets `contamination.instance_assignment_min_fraction`. The text below is the original record.
 
 The assignment rate stays reported as below `contamination.instance_assignment_min_fraction`, disclosed,
 with the threshold unchanged and `instance_match.*` values untouched. PRD section 4 prescribes rebuilding
@@ -197,7 +200,7 @@ both rates.
 
 ## T-007 AUTONOMOUS DECISION - owner to review: bootstrap resampling unit is the company (CIK) (2026-10-02)
 
-Decision (owner): the resampling cluster is the company (CIK), for the full set and for the shared frontier
+Supervisor decision (owner to review): the resampling cluster is the company (CIK), for the full set and for the shared frontier
 sample. `between_filing_f1_sd` and `frontier.power_check` are computed **per company**, and that is stated
 next to the number wherever it appears. Phase 3 draws the frontier sample so that a company is never split
 across in/out of the sample (mechanics decided in Phase 3). Alternatives: resample filings, as PRD
@@ -252,7 +255,7 @@ registrants. Excluding them is the conservative side of contamination control.
 
 ## T-010 AUTONOMOUS DECISION - owner to review: drop the negative twin in training (2026-10-02)
 
-Decision (owner, O-013): within one filing, when the serializer emits a text that also appears with a
+Supervisor decision (owner to review), O-013: within one filing, when the serializer emits a text that also appears with a
 non-empty label set, the empty-labelled copy is **not** written to the training corpus. Dropped twins are
 counted per filing and in total, and the corpus negatives fraction is computed after dropping.
 Alternative: keep both copies, faithful to the benchmark's conventions. Why rejected: the negative label on
@@ -453,7 +456,7 @@ wrong direction.
 
 ## T-019 AUTONOMOUS DECISION - owner to review: Kaggle training-stack pins (2026-10-02)
 
-Decision (owner approval of O-020): `pins.software.transformers = "5.18.0"`, `peft = "0.21.2"`,
+Supervisor decision (owner to review), approving O-020: `pins.software.transformers = "5.18.0"`, `peft = "0.21.2"`,
 `bitsandbytes = "0.50.2"`, `accelerate = "1.15.0"`, filled once and never edited after. Why these:
 `transformers` 5.18.0 is the version mlx-lm installed locally (T-017), so the Mac pilot and Kaggle training
 tokenize and render the chat template identically. The others are the current PyPI releases, checked
@@ -519,7 +522,7 @@ template could differ from the Mac and from scoring.
    printed by the notebook. Prompts that do not fit the effective value are `not_generated`. The limit is
    never lowered silently, and the configured value stays as written.
 
-## T-022 Curve aggregation (owner-approved tooling, 2026-10-02)
+## T-022 Curve aggregation (supervisor decision (owner to review), 2026-10-02)
 
 `scripts/curve_table.py` builds the learning-curve table and chart series from a run's `run.json` and one
 scorer output per checkpoint (`--point PREFIX=SCORE_JSON`). It refuses any file that does not carry the
@@ -634,7 +637,7 @@ robust to the probe filing's instance mix differing from the sample's.
    outside its own Python loader, so a parser could not be verified offline before spending Kaggle hours.
    `pins.software.guidellm` is also empty. `vllm bench serve` is already pinned, and its JSON fields
    (`request_throughput`, `median/p95_ttft_ms`, `median/p95_e2el_ms`, `completed`) are parsed by the Phase 0 code.
-   Owner decision 2026-10-02: keep `vllm bench serve`. `pins.software.guidellm` stays empty: GuideLLM was not
+   Supervisor decision (owner to review), 2026-10-02: keep `vllm bench serve`. `pins.software.guidellm` stays empty: GuideLLM was not
    installed because it is not used.
 2. **Prompts**: the pinned latency ids (`serving.load_test.prompts` -> `data/frontier_latency_ids.txt`), rendered with
    the inference format, sent pre-rendered (`--dataset-name custom --custom-skip-chat-template`), oversampled to
@@ -771,3 +774,14 @@ this entry).
    decision came from the autonomous supervisor. The builder relabels them "supervisor decision (owner
    to review)" without changing their substance. T-001's four dependencies were approved on the
    owner's behalf in the resume message. T-006 is superseded by O-011 (95.25%, which passes).
+
+### T-033a Builder addendum: records relabelled; `kaggle` pinned (2026-10-02)
+
+- Relabelled per item 7, substance unchanged: T-001 (approved on the owner's behalf in the resume message), T-001a,
+  T-004 items 5 and 7, T-005, T-006, T-007, T-010, T-019, T-022 and T-027 now read "supervisor decision (owner to
+  review)", as do O-003, O-007, O-012, O-013, O-020 and the O-010 reference to T-005. T-006 is marked SUPERSEDED by
+  O-011.
+- `kaggle==2.2.4` (installed by the owner in `.venv/`) is pinned in `requirements.txt`. `requirements.lock` is
+  re-frozen, which adds kaggle 2.2.4, kagglesdk 0.1.37 and their dependencies (bleach, jupytext, python-dotenv,
+  python-slugify, requests, urllib3 and others). The token comes from `KAGGLE_API_TOKEN` in the environment and is
+  never printed or written.

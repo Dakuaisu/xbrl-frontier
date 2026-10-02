@@ -30,7 +30,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 
 ## O-003 `context_token_bucket` slice has no bucket edges in config (RESOLVED)
 
-- Status: RESOLVED (2026-10-02): the owner approved `tokenizers==0.23.2` and tercile edges.
+- Status: RESOLVED (2026-10-02): the supervisor approved (supervisor decision, owner to review) `tokenizers==0.23.2` and tercile edges.
   `eval.context_token_bucket_edges` was written once by `scripts/derive_token_bucket_edges.py` over the
   deduplicated set with the `Qwen/Qwen3-1.7B` tokenizer at its pin (identical in both students).
   Buckets hold 8,627 / 8,677 / 8,665 instances. See TRADEOFFS T-001a.
@@ -79,9 +79,9 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - What I need back: that tarball. A variant that fails stays recorded with its error and is removed
   from the serving table per `serving.smoke_test.failure_action` (PRD risk: the 1.7B may not fit).
 
-## O-007 Kaggle/WSL2 software pins need owner approval (RESOLVED)
+## O-007 Kaggle/WSL2 software pins need approval (RESOLVED)
 
-- Status: RESOLVED (2026-10-02): the owner approved the three pins and they are filled in
+- Status: RESOLVED (2026-10-02): the supervisor approved the three pins (supervisor decision, owner to review) and they are filled in
   `pins.software` (TRADEOFFS T-004 item 7).
 - Found: `pins.software` is empty. Phase 0 remote runs need vllm, llmcompressor and autoawq. Proposed
   versions (current PyPI releases, checked 2026-10-02): vllm 0.30.0 (2026-09-22), llmcompressor 0.14.0
@@ -120,7 +120,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 ## O-010 Eval manifest recovered 129 of 142 registrants: `eval_manifest_required_recovered` NOT MET (OWNER-BLOCKED)
 
 - Status: OWNER-BLOCKED for option (a). `contamination.eval_manifest_required_recovered` is **NOT MET**
-  at 129/142, and the threshold is unchanged. Owner decision (TRADEOFFS T-005): (c) accept and disclose
+  at 129/142, and the threshold is unchanged. Supervisor decision (owner to review; TRADEOFFS T-005): (c) accept and disclose
   now, (a) owner-blocked, (b) rejected.
 - Found: `data/eval_manifest.csv` lists 139 filings from 129 companies. 117 filings come from the 111
   seed CIKs and 22 from 18 CIKs found by FTS. Filing dates run 2024-02-06 to 2025-02-13 (fiscal years
@@ -170,7 +170,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Next action: none. The unassigned stratum (4.75% of rows) stays excluded from the frontier sample and is
   disclosed.
 
-## O-012 FinNI draws on more than one 10-K per company (RESOLVED by owner decision T-007)
+## O-012 FinNI draws on more than one 10-K per company (RESOLVED by supervisor decision T-007, owner to review)
 
 - Status: RESOLVED (2026-10-02): the resampling cluster is the company (CIK). Phase 3 must draw the
   frontier sample so that no company is split across in/out of the sample.
@@ -187,7 +187,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 
 ## O-013 The benchmark serializer emits the same text with different labels; FinNI inherits it (RESOLVED)
 
-- Status: RESOLVED (2026-10-02): owner decision, recorded in TRADEOFFS T-010. In training, drop the negative twin.
+- Status: RESOLVED (2026-10-02): supervisor decision (owner to review), recorded in TRADEOFFS T-010. In training, drop the negative twin.
   The eval set is untouched.
 - Found: in FinTagging's `extract_text`, a `div` whose only content is a `p` yields the same text twice.
   The `div` comes out as a **negative**, because its facts are not direct children, and the `p` as a
@@ -366,9 +366,9 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
      `scripts/score_predictions.py` and `scripts/flip_rate.py` (fp16 vs each quantized variant) decide inclusion
      under `gates.quantized_f1_drop_max` and `gates.quantized_flip_rate_max` before any load test.
 
-## O-020 Kaggle training stack pins need owner approval (RESOLVED)
+## O-020 Kaggle training stack pins need approval (RESOLVED)
 
-- Status: RESOLVED (2026-10-02): owner-approved and filled (T-019).
+- Status: RESOLVED (2026-10-02): supervisor-approved (supervisor decision, owner to review) and filled (T-019).
 - Proposed versions (current PyPI releases, checked 2026-10-02): transformers 5.18.0 (2026-09-30; also the
   version mlx-lm installed locally, so tokenization matches the Mac), peft 0.21.2 (2026-10-01),
   bitsandbytes 0.50.2 (2026-08-27), accelerate 1.15.0 (2026-09-09). Torch is Kaggle's preinstalled build,
