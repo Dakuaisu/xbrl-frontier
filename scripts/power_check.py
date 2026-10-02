@@ -32,7 +32,8 @@ def main() -> None:
     imap = eval_sets.load_instance_map()
     sd = company_f1_sd(per, {i: m["cik"] for i, m in imap.items()})
     pc = config.get("frontier.power_check")
-    arms = list(config.get("pins.frontier_arms"))
+    planned = list(config.get("pins.frontier_arms"))
+    arms = list(config.get("frontier.running_arms"))
     n_filings = len({m["accession"] for m in imap.values()})
     n_all = min(config.get("frontier.sample_filings"), largest_n(arms, n_filings))
     hw = half_width(pc["expected_half_width"], sd["sd"], n_all)
@@ -43,15 +44,19 @@ def main() -> None:
            "sd": sd["sd"], "companies": sd["companies"], "expression": pc["expected_half_width"],
            "sample_filings_all_arms": n_all, "expected_half_width_all_arms": hw,
            "headline_margin_f1": margin, "exceeded": hw > margin, "config_hash": config.config_hash()}
+    out["planned_arms"], out["running_arms"] = planned, arms
+    out["running_arms_reason"] = "owner decision T-033: only gemini-3.5-flash-lite has a key; billed spend $0"
     if hw > margin:
-        kept = [a for k, a in enumerate(arms) if k != 2]
+        kept = [a for k, a in enumerate(arms) if not (len(arms) == len(planned) and k == 2)]
         n2 = largest_n(kept, n_filings)
-        out.update(applied=pc["if_exceeded"], dropped_arm=arms[2], arms=kept, sample_filings=n2,
-                   expected_half_width=half_width(pc["expected_half_width"], sd["sd"], n2),
-                   headline="fraction of the best remaining arm")
+        out.update(applied=pc["if_exceeded"], dropped_arm=(arms[2] if len(kept) < len(arms) else None), arms=kept,
+                   sample_filings=n2, expected_half_width=half_width(pc["expected_half_width"], sd["sd"], n2),
+                   applied_note=("one running arm (T-033): no arm left to drop; N raised to the largest N whose notional "
+                                 "priced plan leaves frontier.usd_reserve_min" if len(kept) == len(arms) else None),
+                   headline=("fraction of " + kept[0] + "'s F1") if len(kept) == 1 else "fraction of the best remaining arm")
     else:
         out.update(applied=None, arms=arms, sample_filings=n_all, expected_half_width=hw,
-                   headline="fraction of the best frontier arm")
+                   headline=("fraction of " + arms[0] + "'s F1") if len(arms) == 1 else "fraction of the best frontier arm")
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(out, indent=1))
     print(json.dumps(out, indent=1))

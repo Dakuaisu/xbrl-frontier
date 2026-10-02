@@ -58,7 +58,15 @@ frontier:                    # all $ figures priced from pins.price_sheet, batch
   sample_filings:            23                               # default; recomputed from the probe, see PRD section 7
   stratify_by:               [ "table_share_tercile", "instances_per_filing_tercile" ]   # 3 x 3 cells, 2-3 filings each
   balance_check:             [ "sector" ]                      # reported against the manifest; redraw if a sector with > proportional share is empty
-  fresh_slice_control_arm:   "gpt-6-luna"                     # zero-shot on the full fresh slice, batch price, same reasoning margin
+  fresh_slice_control_arm:   "gemini-3.5-flash-lite"          # zero-shot on the full fresh slice; was gpt-6-luna, changed per owner decision T-033 item 3 (no key for gpt-6-luna)
+  running_arms:              [ "gemini-3.5-flash-lite" ]      # T-033: the only arm with a key ($0 billed, free tier); pins.frontier_arms stays the planned design, the others are not run (README discloses)
+  free_tier:                                                  # Gemini free-tier collection (T-033, TRADEOFFS T-034)
+    policy:                  "T-033"
+    api_key_env:             "GEMINI_API_KEY"
+    batch_api:               false                            # Batch API quota tables list paid tiers only; refused as potentially billable
+    assumed_rpm:             10                               # starting pace until a 429 reports the real limit (docs give no free-tier numbers; no rate-limit headers)
+    backoff_seconds:         [ 5, 15, 60, 300 ]               # 429 without a retryDelay and 5xx; then the run stops with the instance still pending
+    daily_reset_tz:          "America/Los_Angeles"            # RPD resets at midnight Pacific (rate-limits page)
   probe_filings:             1                                # per arm, synchronous, to measure real tokens before committing
   reasoning_token_margin:    0.15                             # multiplier on the batch estimate for thinking/retry overhead
   sync_latency_instances:    100                              # fixed ids, same for every arm and student

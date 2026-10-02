@@ -1,4 +1,4 @@
-"""Frontier-arm harness: dry-run by default; live steps only behind the spend guard (PRD sections 3, 7; T-024).
+"""Frontier-arm harness: dry-run by default; live steps only behind the T-033 guard (PRD sections 3, 7; T-024, T-034).
 
 Steps and the instances they cover:
   probe          --accession ACC     instances of one eval filing (pins.eval_instance_map), synchronous prices
@@ -7,9 +7,12 @@ Steps and the instances they cover:
   fresh_control  (fresh slice)       every fresh instance, batch prices + reasoning margin
 --dry-run (default): renders the exact requests to data/phase3/requests/ and prices them from the price sheet
 using token estimates (Qwen3 tokenizer as a proxy for input; the gold answer as a proxy for output). No
-network, no key. --live --approval T-NNN: spend guard first (frontier.guard), then the key, then the calls.
-Live outputs: predictions in the scorer's format, usage/latency logs, the returned model field, ledger rows
-priced from the returned usage. `collect` fetches a submitted batch.
+network, no key. --live --approval T-033: guard first (frontier.guard: Gemini free tier only, synchronous only),
+then the key, then resumable synchronous calls paced by frontier.freetier (429/5xx retried, never scored empty).
+Every step, including the accuracy run (`batch`) and the fresh control, is collected synchronously; it is priced
+notionally at the sheet's batch rates for accuracy steps and sync rates for probe/latency. Billed spend is $0.
+Live outputs: predictions in the scorer's format, usage/latency logs (request time and throttle wait separately),
+the returned model field, status.json (complete / paused_daily_quota / stopped_call_failed), ledger rows.
 """
 import argparse
 import csv
@@ -17,7 +20,6 @@ import json
 import os
 import time
 import urllib.request
-import uuid
 from pathlib import Path
 
 from frontier import guard, requests as fr
@@ -99,7 +101,9 @@ def _api_key(arm: str) -> str:
 
 def _http(url: str, key: str, api: str, data: bytes | None = None, ctype: str = "application/json",
           method: str | None = None) -> bytes:
-    h = {"Authorization": f"Bearer {key}"} if api == "openai_responses" else {"x-goog-api-key": key}
+    if api != "gemini_generate_content":
+        raise guard.GuardRefused("only the Gemini API is called (T-033)")
+    h = {"x-goog-api-key": key}
     if data is not None:
         h["Content-Type"] = ctype
     req = urllib.request.Request(url, data=data, headers=h, method=method)
@@ -107,89 +111,43 @@ def _http(url: str, key: str, api: str, data: bytes | None = None, ctype: str = 
         return r.read()
 
 
-def run_sync(arm: str, step: str, items: list[dict], key: str, out: Path) -> float:
+def run_free_tier(arm: str, step: str, items: list[dict], key: str, out: Path, pacer=None) -> dict:
+    """Resumable synchronous collection on the free tier (T-033, T-034). Completed (id, run) pairs are skipped;
+    a call that fails after retries, or a daily-quota stop, leaves its instance pending (never an empty prediction)."""
+    from frontier.freetier import Pacer, call_with_retries
+    pacer = pacer or Pacer()
     api = fr.arm_spec(arm)["api"]
     runs = config.get("frontier.sync_runs") if step == "latency" else 1
-    total = 0.0
-    with open(out / "predictions.jsonl", "w") as pf, open(out / "usage.jsonl", "w") as uf:
+    priced_sync = step in SYNC_STEPS
+    usage_p, pred_p = out / "usage.jsonl", out / "predictions.jsonl"
+    done = {(r["id"], r["run"]) for r in map(json.loads, open(usage_p))} if usage_p.exists() else set()
+    priced = 0.0
+    n_new = 0
+    with open(pred_p, "a") as pf, open(usage_p, "a") as uf:
         for run in range(runs):
             for x in items:
+                if (x["id"], run) in done:
+                    continue
                 b = json.dumps(fr.body(arm, sft_format.query(x["context"]))).encode()
-                t0 = time.perf_counter()
-                resp = json.loads(_http(fr.sync_endpoint(arm), key, api, b))
-                lat = time.perf_counter() - t0
-                r = fr.parse(arm, resp)
-                usd = actual_usd(arm, True, r["input_tokens"] or 0, r["output_tokens"] or 0)
-                total += usd
-                uf.write(json.dumps({"id": x["id"], "run": run, "latency_s": lat, **{k: v for k, v in r.items() if k != "text"},
-                                     "usd": usd}) + "\n")
+                raw, req_s, log = call_with_retries(lambda: _http(fr.sync_endpoint(arm), key, api, b), pacer)
+                r = fr.parse(arm, json.loads(raw))
+                usd = actual_usd(arm, priced_sync, r["input_tokens"] or 0, r["output_tokens"] or 0)
+                priced += usd
+                uf.write(json.dumps({"id": x["id"], "run": run, "latency_s": req_s, **log,
+                                     **{k: v for k, v in r.items() if k != "text"}, "priced_usd": usd,
+                                     "priced_at": "sync" if priced_sync else "batch", "tier": "free"}) + "\n")
+                uf.flush()
                 if run == 0:
                     pf.write(json.dumps({"id": x["id"], "text": r["text"]}) + "\n")
-    return total
-
-
-def submit_batch(arm: str, items: list[dict], key: str, out: Path) -> dict:
-    api = fr.arm_spec(arm)["api"]
-    payload = fr.batch_payload(arm, [(x["id"], sft_format.query(x["context"])) for x in items])
-    if api == "openai_responses":
-        boundary = uuid.uuid4().hex
-        data = (f"--{boundary}\r\nContent-Disposition: form-data; name=\"purpose\"\r\n\r\nbatch\r\n"
-                f"--{boundary}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"batch.jsonl\"\r\n"
-                f"Content-Type: application/jsonl\r\n\r\n").encode() + payload.encode() + f"\r\n--{boundary}--\r\n".encode()
-        f = json.loads(_http(f"{fr.OPENAI}/files", key, api, data, f"multipart/form-data; boundary={boundary}"))
-        b = json.loads(_http(f"{fr.OPENAI}/batches", key, api, json.dumps(
-            {"input_file_id": f["id"], "endpoint": "/v1/responses", "completion_window": "24h"}).encode()))
-        state = {"api": api, "batch_id": b["id"], "input_file_id": f["id"]}
-    else:
-        b = json.loads(_http(f"{fr.GEMINI}/models/{arm}:batchGenerateContent", key, api, json.dumps(payload).encode()))
-        state = {"api": api, "batch_name": b["name"]}
-    (out / "batch_state.json").write_text(json.dumps(state, indent=1))
-    return state
-
-
-def collect(arm: str, step: str, out: Path) -> None:
-    state = json.loads((out / "batch_state.json").read_text())
-    key = _api_key(arm)
-    api = state["api"]
-    rows = []
-    if api == "openai_responses":
-        b = json.loads(_http(f"{fr.OPENAI}/batches/{state['batch_id']}", key, api))
-        if b["status"] != "completed":
-            print("batch status:", b["status"], b.get("request_counts"))
-            return
-        for line in _http(f"{fr.OPENAI}/files/{b['output_file_id']}/content", key, api).decode().splitlines():
-            r = json.loads(line)
-            body = (r.get("response") or {}).get("body") or {}
-            rows.append((r["custom_id"], fr.parse(arm, body) if body else None, r.get("error")))
-    else:
-        b = json.loads(_http(f"{fr.GEMINI}/{state['batch_name']}", key, api))
-        if b.get("state") != "JOB_STATE_SUCCEEDED":
-            print("batch state:", b.get("state"))
-            return
-        inl = (b.get("dest") or b.get("response") or {}).get("inlinedResponses")
-        inl = inl.get("inlinedResponses", []) if isinstance(inl, dict) else (inl or [])
-        for r in inl:
-            rows.append(((r.get("metadata") or {}).get("key"), fr.parse(arm, r["response"]) if r.get("response") else None,
-                         r.get("error")))
-    total = 0.0
-    with open(out / "predictions.jsonl", "w") as pf, open(out / "usage.jsonl", "w") as uf:
-        for cid, r, err in rows:
-            cid = int(cid) if str(cid).isdigit() else cid
-            if r is None:
-                pf.write(json.dumps({"id": cid, "text": None}) + "\n")
-                uf.write(json.dumps({"id": cid, "error": err}) + "\n")
-                continue
-            usd = actual_usd(arm, False, r["input_tokens"] or 0, r["output_tokens"] or 0)
-            total += usd
-            pf.write(json.dumps({"id": cid, "text": r["text"]}) + "\n")
-            uf.write(json.dumps({"id": cid, **{k: v for k, v in r.items() if k != "text"}, "usd": usd}) + "\n")
-    guard.record(step, arm, total, {"source": str(out), "kind": "batch"})
-    print(f"collected {len(rows)} responses, ${total:.4f} at batch prices")
+                    pf.flush()
+                n_new += 1
+    return {"new_calls": n_new, "priced_usd": priced, "total_expected": runs * len(items),
+            "done": len(done) + n_new}
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("action", choices=["run", "collect"])
+    ap.add_argument("action", choices=["run"])
     ap.add_argument("--step", required=True, choices=["probe", "batch", "latency", "fresh_control"])
     ap.add_argument("--arm", required=True)
     ap.add_argument("--accession")
@@ -200,9 +158,6 @@ def main() -> None:
     args = ap.parse_args()
     out = PHASE3 / ("live" if args.live else "requests") / f"{args.step}_{args.arm}"
     out.mkdir(parents=True, exist_ok=True)
-    if args.action == "collect":
-        collect(args.arm, args.step, out)
-        return
     items = instances(args.step, args.accession, args.accessions, args.ids)
     est = price(args.arm, args.step, items)
     rendered = fr.batch_payload(args.arm, [(x["id"], sft_format.query(x["context"])) for x in items])
@@ -212,20 +167,28 @@ def main() -> None:
     print(json.dumps(est, indent=1))
     if not args.live:
         return
-    repriced = reprice_from_probe(args.arm, est) if args.step in guard.BATCH_STEPS else None
-    if repriced:
-        est = repriced
-        (out / "estimate.json").write_text(json.dumps(est, indent=1))
-        print("re-priced from probe:", json.dumps({k: est[k] for k in ("usd_estimate", "proxy_usd_estimate",
-              "ratio_input_measured_over_proxy", "ratio_output_measured_over_proxy")}))
-    g = guard.check(args.step, args.arm, est["usd_estimate"], args.approval, repriced_from_probe=bool(repriced))
+    g = guard.check(args.step, args.arm, args.approval, mode="sync")
     key = _api_key(args.arm)
-    if args.step in SYNC_STEPS:
-        usd = run_sync(args.arm, args.step, items, key, out)
-        guard.record(args.step, args.arm, usd, {"source": str(out), "kind": "sync", **g})
-        print(f"done: ${usd:.4f} at synchronous prices")
-    else:
-        print("submitted:", submit_batch(args.arm, items, key, out), "; run `collect` later")
+    from frontier.freetier import CallFailed, DailyQuotaExhausted
+    status = {"step": args.step, "arm": args.arm, "guard": g, "updated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    code = 0
+    try:
+        res = run_free_tier(args.arm, args.step, items, key, out)
+        status.update(state="complete", **res)
+    except DailyQuotaExhausted as e:
+        status.update(state="paused_daily_quota", resume_after=e.resume_at, quota=e.detail)
+        code = 3
+    except CallFailed as e:
+        status.update(state="stopped_call_failed", error=str(e))
+        code = 4
+    usage = [json.loads(l) for l in open(out / "usage.jsonl")] if (out / "usage.jsonl").exists() else []
+    status["done"] = len(usage)
+    status["expected"] = len(items) * (config.get("frontier.sync_runs") if args.step == "latency" else 1)
+    (out / "status.json").write_text(json.dumps(status, indent=1))
+    guard.record(args.step, args.arm, sum(u["priced_usd"] for u in usage), {"source": str(out), "kind": "free_tier_sync",
+                 "state": status["state"], "calls": len(usage)})
+    print(json.dumps({k: v for k, v in status.items() if k != "guard"}, indent=1))
+    raise SystemExit(code)
 
 
 if __name__ == "__main__":

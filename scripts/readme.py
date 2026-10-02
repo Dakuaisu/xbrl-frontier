@@ -33,7 +33,7 @@ def build() -> str:
          "market-priced T4 and on owned hardware. The deliverable is the harness and the chart, not a model. Spec: "
          "`docs/PRD.md`; decisions: `docs/TRADEOFFS.md`; findings: `docs/OPEN.md`.", "",
          "## Headline", "",
-         f"{B}% of the best frontier arm's FinNI F1 at {B}x lower cost per filing and {B} ms p95 at {B} requests per second on one T4 "
+         f"{B}% of {' / '.join(config.get('frontier.running_arms'))}'s FinNI F1 at {B}x lower cost per filing and {B} ms p95 at {B} requests per second on one T4 "
          "(paired company-level bootstrap over the shared frontier sample; blanks fill only from measured runs).", "",
          "## Gates", "", "| gate (key under `gates`) | status | point | interval |", "|---|---|---|---|"]
     rows = gates["gates"] if gates else [{"gate": k, "status": "not measured", "point": None, "ci": None}
@@ -53,6 +53,13 @@ def build() -> str:
           f"\"{config.get('serving.hardware.rtx3050_wsl2.cost_label')}\"",
           f"- Encoder baseline (SEC-BERT): {B}; zero-shot base models: {B}; fresh-slice gap and control gap: {B}", "",
           "## Disclosures (from recorded files)", ""]
+    planned, running = config.get("pins.frontier_arms"), config.get("frontier.running_arms")
+    L.append(f"- Frontier arms run: {', '.join(f'`{a}`' for a in running)}. Planned but not run: "
+             f"{', '.join(f'`{a}`' for a in planned if a not in running)} (owner decision T-033: no key and $0 billed spend; "
+             "this goes beyond the PRD cut order, and the cause is money, not results).")
+    L.append("- Frontier collection runs on the Gemini free tier: tokens, the returned model field and latency come from the free "
+             "tier; free-tier latency may include throttling; dollars per filing are measured tokens priced at the dated sheet's "
+             "batch (accuracy) and sync (latency) rates, with $0 billed. Google may use free-tier inputs; they are public SEC text (T-033).")
     L.append(f"- Evaluation filings recovered: {companies} of {config.get('contamination.eval_manifest_required_recovered')} registrants "
              f"({len(man)} filings); `contamination.eval_manifest_required_recovered` not met (O-010).")
     if ser:

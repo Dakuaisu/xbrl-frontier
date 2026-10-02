@@ -785,3 +785,35 @@ this entry).
   re-frozen, which adds kaggle 2.2.4, kagglesdk 0.1.37 and their dependencies (bleach, jupytext, python-dotenv,
   python-slugify, requests, urllib3 and others). The token comes from `KAGGLE_API_TOKEN` in the environment and is
   never printed or written.
+
+## T-034 AUTONOMOUS DECISION - owner to review: free-tier Gemini collection and the T-033 guard (2026-10-02)
+
+1. **Config (citing T-033)**: `frontier.fresh_slice_control_arm` = `gemini-3.5-flash-lite` (item 3).
+   `frontier.running_arms` = [`gemini-3.5-flash-lite`] records which arms run and why. `pins.frontier_arms` is
+   unchanged as the planned design. The power check, plan, sampler and README read `running_arms`. With one
+   arm, `frontier.power_check.if_exceeded` cannot drop an arm, so only its second half applies (N = the largest N
+   whose notional priced plan leaves the reserve), and the headline names the arm.
+2. **Free-tier limits, as found** (2026-10-02): the Gemini rate-limits page publishes the rules (RPM, input TPM
+   and RPD per project; RPD resets at midnight Pacific; "can be viewed in Google AI Studio") but no per-model
+   free-tier numbers. Its Batch API quota table lists Tiers 1-3 only. `models/gemini-3.5-flash-lite` (version
+   `3.5-flash-lite-07-2026`) lists `batchGenerateContent`, but batch has no free-tier quota, so it is treated as
+   potentially billable and refused. One minimal `generateContent` call (9 tokens) returned no rate-limit
+   headers, only `x-gemini-service-tier: standard`. Hence `frontier.free_tier`: start at `assumed_rpm` (10), learn
+   the real per-minute and per-day limits from 429 `QuotaFailure`/`RetryInfo` details, persist them in
+   `data/phase3/gemini_quota_state.json`, and pace by them (`frontier/freetier.py`).
+3. **Retries, never empty**: a per-minute 429 waits the server's `retryDelay` (or the backoff list) and retries
+   the same request, as do 5xx and network errors (`backoff_seconds`). A per-day 429 stops the run with
+   `resume_after` = the next midnight in `daily_reset_tz`, spreading the work across days. If retries are
+   exhausted the run stops. In every case the instance stays pending and no prediction is written, so the
+   scorer refuses an incomplete set. Collection is resumable: completed (id, run) pairs are skipped.
+4. **Guard** (`frontier/guard.py`, replacing the T-024/T-025 spend approvals, which assumed paid calls): a live call
+   needs `--approval T-033` and that owner entry in TRADEOFFS. The arm must be in `running_arms`, use the
+   Gemini API with `GEMINI_API_KEY`, and have a verified thinking source. Only synchronous `generateContent` is
+   allowed. Everything else is refused before the key is read: other arms, other providers (the HTTP layer
+   only speaks to Gemini), any other approval, and Batch-API mode. The OpenAI batch submit/collect code is
+   removed. The ledger records `billed_usd` 0 and the notional `priced_usd`.
+5. **Pricing and latency**: every step is collected synchronously. Accuracy steps (`batch`, `fresh_control`) are
+   priced notionally at the sheet's batch rates, and `probe`/`latency` at sync rates (T-033 item 4). Usage rows
+   keep the request time (`latency_s`) separate from the client-side throttle wait, and the README states that
+   free-tier latency may include throttling. The plan is about 8,600 free-tier requests: probe 202, accuracy
+   4,662, latency 300, fresh control 3,434.

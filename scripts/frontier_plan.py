@@ -62,7 +62,15 @@ def largest_n(arms: list[str], n_max: int) -> int:
 
 def main() -> None:
     from frontier.harness import PHASE3
-    out = plan(config.get("pins.frontier_arms"), config.get("frontier.sample_filings"))
+    out = plan(config.get("frontier.running_arms"), config.get("frontier.sample_filings"))
+    shape = cost.planning_shape()
+    f = config.get("frontier")
+    from frontier.harness import instances
+    out["free_tier_requests_planned"] = {
+        "probe": int(f["probe_filings"] * shape.instances_per_filing), "batch": int(f["sample_filings"] * shape.instances_per_filing),
+        "latency": f["sync_latency_instances"] * f["sync_runs"], "fresh_control": len(instances("fresh_control", None, None, None))}
+    out["billed_usd"] = 0.0
+    out["note_t033"] = "T-033: only frontier.running_arms run, on the free tier; dollars are notional (measured tokens x the dated sheet)"
     out.update(price_sheet=config.get("pins.price_sheet"), price_sheet_observed=config.prices()["observed"],
                config_hash=config.config_hash(),
                note="estimates; the probe replaces the planning shape with measured tokens and N is recomputed (PRD section 7)")

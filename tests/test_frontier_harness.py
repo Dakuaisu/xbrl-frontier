@@ -51,41 +51,6 @@ def test_parse_records_text_usage_and_returned_model():
     assert g["text"] == "{}" and g["output_tokens"] == 15 and g["reasoning_tokens"] == 5 and g["model_returned"].startswith("gemini")
 
 
-def _tradeoffs(tmp_path, body):
-    p = tmp_path / "TRADEOFFS.md"
-    p.write_text("# Decisions log\n\n## T-900 owner pre-approval\n\n" + body + "\n\n## T-901 other\n\nPRE-APPROVED SPEND: step=batch arm=gpt-6-luna usd_max=9\n")
-    return p
-
-
-def test_guard_refusals_and_pass(tmp_path):
-    t = _tradeoffs(tmp_path, "PRE-APPROVED SPEND: step=probe arm=gpt-6-luna usd_max=0.10")
-    ledger = tmp_path / "ledger.jsonl"
-    with pytest.raises(guard.GuardRefused, match="no --approval"):
-        guard.check("probe", "gpt-6-luna", 0.05, None, t, ledger)
-    with pytest.raises(guard.GuardRefused, match="has no"):
-        guard.check("probe", "gemini-3.5-flash-lite", 0.05, "T-900", t, ledger)
-    with pytest.raises(guard.GuardRefused, match="has no"):
-        guard.check("batch", "gpt-6-luna", 0.05, "T-900", t, ledger)
-    with pytest.raises(guard.GuardRefused, match="exceeds the approved"):
-        guard.check("probe", "gpt-6-luna", 0.11, "T-900", t, ledger)
-    limit = config.get("budget.usd_cap_frontier_api") - config.get("frontier.usd_reserve_min")
-    ledger.write_text(json.dumps({"step": "x", "arm": "y", "usd": limit - 0.01}) + "\n")
-    with pytest.raises(guard.GuardRefused, match="usd_reserve_min"):
-        guard.check("probe", "gpt-6-luna", 0.05, "T-900", t, ledger)
-    ledger.unlink()
-    assert guard.check("probe", "gpt-6-luna", 0.05, "T-900", t, ledger)["usd_max"] == 0.10
-
-
-def test_live_without_approval_refuses_before_any_key(tmp_path):
-    ids = tmp_path / "ids.txt"
-    ids.write_text("0\n1\n")
-    env = {k: v for k, v in os.environ.items() if k not in KEYS}
-    out = subprocess.run([sys.executable, "-m", "frontier.harness", "run", "--step", "latency", "--arm", "gpt-6-luna",
-                          "--ids", str(ids), "--live"], capture_output=True, text=True, cwd=config.REPO_ROOT, env=env)
-    assert out.returncode != 0
-    assert "GuardRefused" in out.stderr and "no --approval" in out.stderr and "KeyError" not in out.stderr
-
-
 def test_dry_run_prices_from_sheet(tmp_path):
     ids = tmp_path / "ids.txt"
     ids.write_text("0\n")
@@ -95,17 +60,6 @@ def test_dry_run_prices_from_sheet(tmp_path):
     runs = config.get("frontier.sync_runs")
     assert est["runs"] == runs and est["price_mode"] == "sync" and est["margin"] == 0.0
     assert est["usd_estimate"] == pytest.approx((est["est_input_tokens"] * p["input"] + est["est_output_tokens"] * p["output"]) / 1e6)
-
-
-def test_unverified_arm_and_unrepriced_batch_are_refused(tmp_path):
-    t = _tradeoffs(tmp_path, "PRE-APPROVED SPEND: step=probe arm=gpt-5.4-nano-2026-03-17 usd_max=1\n"
-                             "PRE-APPROVED SPEND: step=batch arm=gemini-3.5-flash-lite usd_max=5")
-    ledger = tmp_path / "ledger.jsonl"
-    with pytest.raises(guard.GuardRefused, match="no verified source"):
-        guard.check("probe", "gpt-5.4-nano-2026-03-17", 0.01, "T-900", t, ledger)
-    with pytest.raises(guard.GuardRefused, match="must be priced from that arm's probe"):
-        guard.check("batch", "gemini-3.5-flash-lite", 1.0, "T-900", t, ledger)
-    assert guard.check("batch", "gemini-3.5-flash-lite", 1.0, "T-900", t, ledger, repriced_from_probe=True)
 
 
 def test_reprice_from_probe_scales_by_measured_ratios(tmp_path):
@@ -124,3 +78,95 @@ def test_reprice_from_probe_scales_by_measured_ratios(tmp_path):
     p = config.prices()["api_per_million_tokens"]["gemini-3.5-flash-lite"]
     assert r["ratio_input_measured_over_proxy"] == pytest.approx(2) and r["ratio_output_measured_over_proxy"] == pytest.approx(3)
     assert r["usd_estimate"] == pytest.approx((2000 * p["batch_input"] + 300 * p["batch_output"]) / 1e6 * 1.15)
+
+
+def test_t033_guard_allows_only_gemini_free_tier_sync(tmp_path):
+    t = tmp_path / "TRADEOFFS.md"
+    t.write_text("# Decisions\n\n## T-033 OWNER DECISION (Adnan): free tier\n")
+    ok = guard.check("probe", "gemini-3.5-flash-lite", "T-033", "sync", t)
+    assert ok["billed_usd"] == 0.0
+    for arm in ("gpt-6-luna", "gpt-5.4-mini-2026-03-17", "gpt-5.4-nano-2026-03-17"):
+        with pytest.raises(guard.GuardRefused, match="not in frontier.running_arms"):
+            guard.check("probe", arm, "T-033", "sync", t)
+    with pytest.raises(guard.GuardRefused, match="only --approval T-033"):
+        guard.check("probe", "gemini-3.5-flash-lite", "T-900", "sync", t)
+    with pytest.raises(guard.GuardRefused, match="only --approval T-033"):
+        guard.check("probe", "gemini-3.5-flash-lite", None, "sync", t)
+    with pytest.raises(guard.GuardRefused, match="Batch API could bill"):
+        guard.check("batch", "gemini-3.5-flash-lite", "T-033", "batch_api", t)
+    t.write_text("# Decisions\n")
+    with pytest.raises(guard.GuardRefused, match="OWNER DECISION"):
+        guard.check("probe", "gemini-3.5-flash-lite", "T-033", "sync", t)
+
+
+def test_live_without_t033_refuses_before_any_key(tmp_path):
+    ids = tmp_path / "ids.txt"
+    ids.write_text("0\n")
+    env = {k: v for k, v in os.environ.items() if k not in KEYS}
+    for arm, approval in (("gpt-6-luna", "T-033"), ("gemini-3.5-flash-lite", "T-024")):
+        out = subprocess.run([sys.executable, "-m", "frontier.harness", "run", "--step", "latency", "--arm", arm,
+                              "--ids", str(ids), "--live", "--approval", approval],
+                             capture_output=True, text=True, cwd=config.REPO_ROOT, env=env)
+        assert out.returncode != 0 and "GuardRefused" in out.stderr and "KeyError" not in out.stderr
+    import shutil
+    shutil.rmtree(config.REPO_ROOT / "data" / "phase3" / "live", ignore_errors=True)
+
+
+def test_parse_429_and_pacer_learning(tmp_path):
+    from frontier import freetier
+    body = json.dumps({"error": {"code": 429, "message": "quota", "details": [
+        {"@type": "type.googleapis.com/google.rpc.QuotaFailure", "violations": [
+            {"quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",
+             "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier", "quotaValue": "15"}]},
+        {"@type": "type.googleapis.com/google.rpc.RetryInfo", "retryDelay": "7s"}]}}).encode()
+    info = freetier.parse_429(body)
+    assert info["per_minute"] and not info["per_day"] and info["quota_value"] == 15 and info["retry_s"] == 7.0
+    clock = [0.0]
+    slept = []
+    p = freetier.Pacer(tmp_path / "state.json", clock=lambda: clock[0], sleep=lambda s: slept.append(s))
+    assert p.rpm == config.get("frontier.free_tier.assumed_rpm")
+    p.learn(info)
+    assert p.rpm == 15 and json.loads((tmp_path / "state.json").read_text())["rpm"] == 15
+    p.wait(); p.wait()
+    assert slept == [pytest.approx(4.0)]
+
+
+class _FakeHTTPError(Exception):
+    pass
+
+
+def _err(code, body=b"{}"):
+    import io
+    import urllib.error
+    return urllib.error.HTTPError("u", code, "x", {}, io.BytesIO(body))
+
+
+def test_retries_never_score_failures_and_daily_quota_leaves_pending(tmp_path, monkeypatch):
+    from frontier import freetier
+    ok = json.dumps({"modelVersion": "gemini-3.5-flash-lite", "candidates": [{"content": {"parts": [{"text": "{\"result\": []}"}]},
+                                                                             "finishReason": "STOP"}],
+                     "usageMetadata": {"promptTokenCount": 900, "candidatesTokenCount": 5}}).encode()
+    per_day = json.dumps({"error": {"code": 429, "details": [{"@type": "type.googleapis.com/google.rpc.QuotaFailure",
+                          "violations": [{"quotaId": "GenerateRequestsPerDayPerProjectPerModel-FreeTier", "quotaValue": "1000"}]}]}}).encode()
+    script = [_err(429, b'{"error":{"details":[{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"0s"}]}}'),
+              _err(503), ok, ok, _err(429, per_day)]
+    def fake_http(*a, **k):
+        x = script.pop(0)
+        if isinstance(x, Exception):
+            raise x
+        return x
+    monkeypatch.setattr(harness, "_http", fake_http)
+    monkeypatch.setattr(freetier.time, "sleep", lambda s: None)
+    pacer = freetier.Pacer(tmp_path / "state.json", clock=lambda: 0.0, sleep=lambda s: None)
+    items = [{"id": i, "context": "Revenue was 5 million.", "answer": "{}"} for i in range(3)]
+    with pytest.raises(freetier.DailyQuotaExhausted):
+        harness.run_free_tier("gemini-3.5-flash-lite", "probe", items, "k", tmp_path, pacer)
+    preds = [json.loads(l) for l in open(tmp_path / "predictions.jsonl")]
+    usage = [json.loads(l) for l in open(tmp_path / "usage.jsonl")]
+    assert [p["id"] for p in preds] == [0, 1] and all(p["text"] == '{"result": []}' for p in preds)
+    assert usage[0]["retries_429"] == 1 and usage[0]["retries_5xx"] == 1 and usage[0]["tier"] == "free"
+    assert json.loads((tmp_path / "state.json").read_text())["rpd"] == 1000
+    script.extend([ok])
+    res = harness.run_free_tier("gemini-3.5-flash-lite", "probe", items, "k", tmp_path, pacer)
+    assert res["new_calls"] == 1 and [json.loads(l)["id"] for l in open(tmp_path / "predictions.jsonl")] == [0, 1, 2]
+

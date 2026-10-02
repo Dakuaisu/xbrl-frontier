@@ -4,7 +4,7 @@ An accuracy / cost-per-filing / latency frontier for fine-tuned Qwen3-0.6B and Q
 
 ## Headline
 
-__% of the best frontier arm's FinNI F1 at __x lower cost per filing and __ ms p95 at __ requests per second on one T4 (paired company-level bootstrap over the shared frontier sample; blanks fill only from measured runs).
+__% of gemini-3.5-flash-lite's FinNI F1 at __x lower cost per filing and __ ms p95 at __ requests per second on one T4 (paired company-level bootstrap over the shared frontier sample; blanks fill only from measured runs).
 
 ## Gates
 
@@ -31,6 +31,8 @@ Decisions follow `gates.decision_rule`: an interval that straddles the threshold
 
 ## Disclosures (from recorded files)
 
+- Frontier arms run: `gemini-3.5-flash-lite`. Planned but not run: `gpt-6-luna`, `gpt-5.4-mini-2026-03-17` (owner decision T-033: no key and $0 billed spend; this goes beyond the PRD cut order, and the cause is money, not results).
+- Frontier collection runs on the Gemini free tier: tokens, the returned model field and latency come from the free tier; free-tier latency may include throttling; dollars per filing are measured tokens priced at the dated sheet's batch (accuracy) and sync (latency) rates, with $0 billed. Google may use free-tier inputs; they are public SEC text (T-033).
 - Evaluation filings recovered: 129 of 142 registrants (139 filings); `contamination.eval_manifest_required_recovered` not met (O-010).
 - Instances mapped to a filing: 95.25% raw / 95.39% dedup with the benchmark's own serializer; Phase 0 token matcher 94.29% / 94.43% (O-011).
 - Training corpus: 38,788 (cap 40,000 not reached after decontamination, O-016); dev slice 1,933 (cap 2,000 not reached after decontamination, O-016). Curve points count distinct instances (T-016).
@@ -52,7 +54,7 @@ Decisions follow `gates.decision_rule`: an interval that straddles the threshold
 
 **Fresh slice.** 30 10-K filings dated 2026-05-19 to 2026-09-29 (after `fresh_slice_filing_date_min` = 2026-05-19, the latest arm cutoff + 1 day), from CIKs outside the eval manifest, the exclusion files and the training list; 6 of them filled outside their stratum (`fill=relaxed`) because these cells could not be filled in the window: 10-K|energy & transportation|large_accelerated (1), 10-K|real estate & construction|large_accelerated (5) (December year-end filers file no 10-K in it; T-015). 3,434 instances (sha256 `18b5f52c12e3bdd2...`).
 
-**Fresh-slice gaps.** Student FinTagging-minus-fresh F1 gap: __ (not yet measured: student fresh-slice run); control arm (`gpt-6-luna`) gap: __ (not yet measured: control run (O-022)); difference: __ (not yet measured: both gaps). The student gap is gated by `gates.fresh_slice_f1_gap_max`.
+**Fresh-slice gaps.** Student FinTagging-minus-fresh F1 gap: __ (not yet measured: student fresh-slice run); control arm (`gemini-3.5-flash-lite`) gap: __ (not yet measured: control run (O-022)); difference: __ (not yet measured: both gaps). The student gap is gated by `gates.fresh_slice_f1_gap_max`.
 
 **Label noise.** Estimated auto-label error rate: __ (not yet measured: label audit, two passes).
 

@@ -1,26 +1,9 @@
 {
- "price_sheet": "config/prices_2026-10-01.yaml",
- "price_sheet_observed": "2026-10-01",
- "config_hash": "40bcd90d0e7f290da9841c26d060fb1f1032fc33bb96c730c4a59751b8a7f50c",
+ "arms": [
+  "gemini-3.5-flash-lite"
+ ],
+ "sample_filings": 23,
  "rows": [
-  {
-   "arm": "gpt-6-luna",
-   "step": "probe",
-   "usd": 0.04003825704225352,
-   "basis": "planning shape, sync"
-  },
-  {
-   "arm": "gpt-6-luna",
-   "step": "batch",
-   "usd": 0.5295059493838028,
-   "basis": "planning shape, batch x (1+margin)"
-  },
-  {
-   "arm": "gpt-6-luna",
-   "step": "latency",
-   "usd": 0.059250000000000004,
-   "basis": "planning shape, sync"
-  },
   {
    "arm": "gemini-3.5-flash-lite",
    "step": "probe",
@@ -31,7 +14,7 @@
    "arm": "gemini-3.5-flash-lite",
    "step": "batch",
    "usd": 2.057700334947183,
-   "basis": "planning shape, batch x (1+margin)"
+   "basis": "planning shape, 23 filings, batch x (1+margin)"
   },
   {
    "arm": "gemini-3.5-flash-lite",
@@ -40,34 +23,27 @@
    "basis": "planning shape, sync"
   },
   {
-   "arm": "gpt-5.4-mini-2026-03-17",
-   "step": "probe",
-   "usd": 0.32689463028169014,
-   "basis": "planning shape, sync"
-  },
-  {
-   "arm": "gpt-5.4-mini-2026-03-17",
-   "step": "batch",
-   "usd": 4.323181485475352,
-   "basis": "planning shape, batch x (1+margin)"
-  },
-  {
-   "arm": "gpt-5.4-mini-2026-03-17",
-   "step": "latency",
-   "usd": 0.48375,
-   "basis": "planning shape, sync"
-  },
-  {
-   "arm": "gpt-6-luna",
+   "arm": "gemini-3.5-flash-lite",
    "step": "fresh_control",
-   "usd": 0.3001276325,
+   "usd": 1.1396369474999999,
    "basis": "actual fresh instances, token proxy, batch x (1+margin)"
   }
  ],
- "total_usd": 8.506289997376761,
+ "total_usd": 3.5831789901936615,
  "budget_usd_cap_frontier_api": 10,
  "frontier_usd_reserve_min": 1.0,
  "leaves_reserve": true,
- "unspent_usd": 1.4937100026232386,
+ "unspent_usd": 6.4168210098063385,
+ "free_tier_requests_planned": {
+  "probe": 202,
+  "batch": 4662,
+  "latency": 300,
+  "fresh_control": 3434
+ },
+ "billed_usd": 0.0,
+ "note_t033": "T-033: only frontier.running_arms run, on the free tier; dollars are notional (measured tokens x the dated sheet)",
+ "price_sheet": "config/prices_2026-10-01.yaml",
+ "price_sheet_observed": "2026-10-01",
+ "config_hash": "436f56aca5b082840306f1d6d01ae81fd68e0dd5589489c108fa4dcb50acc57f",
  "note": "estimates; the probe replaces the planning shape with measured tokens and N is recomputed (PRD section 7)"
 }

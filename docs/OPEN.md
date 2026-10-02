@@ -392,45 +392,18 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   pilot ran one setting, and loss fell without instability.
 
 
-## O-022 Live frontier-arm steps: probe, batches, synchronous latency sample, fresh-slice control (OWNER-BLOCKED)
+## O-022 Live frontier-arm steps: probe, accuracy run, latency sample, fresh-slice control (OPEN; builder-run under T-033)
 
-- Status: OWNER-BLOCKED (paid API calls are owner-only; the builder never calls an API). Prerequisites in PRD
-  order: the primary student's full-set run, then the power check (`frontier.power_check`, company-level SD,
-  T-007), then the sample filings and the latency instance ids pinned (Phase 3 sampling tooling, not yet built),
-  then the probe, re-sizing from measured tokens, and the batches. The power check and the sample draw are built (T-026):
-  after the primary student's full-set predictions exist (O-019), run `scripts/score_predictions.py --set finni`,
-  then `scripts/power_check.py --score <that file>`, then `scripts/draw_frontier_sample.py`. These spend nothing
-  and the builder can run them as soon as the predictions arrive. The probe uses the filing pinned per arm in
-  `data/frontier_sample.json`, batch uses `--accessions data/frontier_sample_accessions.txt`, and latency uses
-  `--ids data/frontier_latency_ids.txt`.
-- Ready: `frontier/harness.py` (`run` / `collect`), `frontier/requests.py`, `frontier/guard.py`,
-  `scripts/frontier_plan.py`. Tests in `tests/test_frontier_harness.py` read no keys and make no calls.
-- Priced plan (`data/phase3/frontier_plan.json`; prices `config/prices_2026-10-01.yaml`, observed 2026-10-01;
-  estimates until the probe measures tokens):
-
-  | arm | probe | batch | latency | fresh control |
-  |---|---|---|---|---|
-  | gpt-6-luna | 0.040 | 0.530 | 0.059 | 0.300 |
-  | gemini-3.5-flash-lite | 0.156 | 2.058 | 0.230 | |
-  | gpt-5.4-mini-2026-03-17 | 0.327 | 4.323 | 0.484 | |
-
-  Total $8.506 against `budget.usd_cap_frontier_api` ($10) with `frontier.usd_reserve_min` ($1.00) left over:
-  yes ($1.494 unspent).
-- Owner steps for each live step (one approval per step and arm):
-  1. Dry run: `.venv/bin/python -m frontier.harness run --step <step> --arm <arm> <instances>` with
-     `--accession ACC` (probe), `--accessions FILE` (batch), `--ids FILE` (latency) or nothing (fresh_control).
-     Read `usd_estimate` in the printed estimate.
-  2. Add to `docs/TRADEOFFS.md` a section `## T-NNN Owner pre-approval: <step> <arm>` containing the line
-     `PRE-APPROVED SPEND: step=<step> arm=<arm> usd_max=<dollars>` (at least the estimate). Commit it.
-  3. Export the key (`OPENAI_API_KEY` or `GEMINI_API_KEY`) in your shell, then rerun step 1 with
-     `--live --approval T-NNN`. For batch steps, run the same command with `collect` instead of `run`
-     until it reports the results collected.
-  Order constraint (T-025): each arm's `probe` must run before its `batch` (and gpt-6-luna's probe before
-  `fresh_control`). Batch-priced steps are re-priced from the probe's measured tokens, and the guard refuses
-  them otherwise. The swap arm `gpt-5.4-nano-2026-03-17` is refused until its thinking setting has a
-  verified source in `frontier.thinking_per_arm`.
-  4. Return nothing: outputs land in `data/phase3/live/<step>_<arm>/` (predictions in the scorer's format,
-     usage and latency logs, returned model fields), and every dollar is in `data/phase3/spend_ledger.jsonl`.
+- Status: OPEN. Under owner decision T-033 the builder runs these for `gemini-3.5-flash-lite` only
+  (`frontier.running_arms`), on the free tier, synchronously, with billed spend $0 (T-034). `gpt-6-luna` and
+  `gpt-5.4-mini-2026-03-17` are not run (no key). Prerequisite: the frontier sample is pinned (D4: full-set
+  predictions -> `scripts/power_check.py` -> `scripts/draw_frontier_sample.py`).
+- Commands (builder): `.venv/bin/python -m frontier.harness run --step <probe|batch|latency|fresh_control> --arm
+  gemini-3.5-flash-lite <instances> --live --approval T-033`, rerun after each `paused_daily_quota` until
+  `status.json` says `complete`. Scoring: `scripts/score_predictions.py` (`--ids data/frontier_sample_ids.txt` for
+  the accuracy run; `--set fresh` for the control).
+- Plan: about 8,600 requests (`data/phase3/frontier_plan.json`), paced by the learned free-tier limits; the
+  previous paid-arm plan is superseded.
 
 ## O-023 Phase 4 load tests on the T4 and the RTX 3050 (OWNER-BLOCKED)
 

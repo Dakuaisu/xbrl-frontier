@@ -322,3 +322,13 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   tests), O-024 (label audit passes 1 and 2).
 - OPEN, not owner-blocked: O-002 (scorer cross-check, waits on O-010's reply), O-017 (finding, carried into the reports),
   O-018 (statement blanks fill from O-019/O-022/O-024 results). Disclosed shortfall: O-010 (129/142).
+
+## 2026-10-02 T-033 adoption: free-tier guard and collection (T-034)
+
+- Config: control arm = gemini-3.5-flash-lite, `frontier.running_arms`, `frontier.free_tier`. Guard rewritten (T-033 only,
+  Gemini, sync); `frontier/freetier.py` (429 parsing, learned pacing, retries, daily stop, resumable runs). Power check and
+  plan use running arms. README discloses the arms run and the free-tier caveats.
+- One free `generateContent` call (9 tokens) checked headers: no rate-limit headers. Docs: no free-tier numbers, batch
+  quota for paid tiers only.
+- Verified: `tests/test_frontier_harness.py` (9: guard, refusal before key, 429 parsing, pacer learning, retries never
+  scored, daily-quota stop leaves the instance pending, resume).
