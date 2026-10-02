@@ -102,9 +102,12 @@ back), and move on to the next unblocked task. Never simulate, stub or model-gen
 
 ## Engineering rules
 
-- Ask before adding any dependency: name it, give the reason and the version you'll pin, and wait
-  for approval. Pin approved versions and log each one in `docs/TRADEOFFS.md`. Use the project
-  virtualenv in `.venv/`, never a global install.
+- You run headless: nobody can answer an interactive prompt. Never use a question or ask-user tool.
+  Every question goes in the `DECISIONS NEEDED:` section of your end-of-turn report. Do all the
+  unblocked work you can first, then end the turn.
+- Ask before adding any dependency: request it under `DECISIONS NEEDED:` with the reason and the
+  version you'll pin, and don't install it until a reply approves it. Pin approved versions and log
+  each one in `docs/TRADEOFFS.md`. Use the project virtualenv in `.venv/`, never a global install.
 - Commit each coherent unit of work, with tests passing. Never add a remote, push, or rewrite
   history.
 - Never put secrets in the repo. API keys come from the environment, and `.env` is git-ignored.

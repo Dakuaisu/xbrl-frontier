@@ -674,8 +674,8 @@ def wait(seconds: int, why: str) -> None:
         time.sleep(5)
 
 
-def forever() -> None:
-    if not last_builder():
+def forever(kickoff: str | None = None) -> None:
+    if kickoff is None and not last_builder():
         sys.exit('No builder output yet. Start with: --kickoff "<message>"')
     STOP_FILE.unlink(missing_ok=True)
     print(f"FOREVER: until supervisor writes {COMPLETE_SENTINEL!r}")
@@ -683,7 +683,7 @@ def forever() -> None:
 
     i = 0
     backoff = BACKOFF_START
-    pending: str | None = None
+    pending: str | None = kickoff
     last_fp: int | None = None
 
     while not STOP_FILE.exists():
@@ -830,8 +830,11 @@ def run(a: argparse.Namespace) -> None:
         msg = a.kickoff
         if msg.startswith("@"):
             msg = Path(msg[1:]).read_text(encoding="utf-8")
+        if a.forever:
+            forever(kickoff=msg)
+            return
         print(tail(run_builder(msg)))
-        if not (a.loop or a.forever):
+        if not a.loop:
             return
     if a.forever:
         forever()
