@@ -673,3 +673,25 @@ robust to the probe filing's instance mix differing from the sample's.
    `missing`.
 5. Tests use synthetic inputs and clean up every output they write, so no synthetic file is left where real
    results go.
+
+## T-029 AUTONOMOUS DECISION - owner to review: label-audit draw and contamination-statement draft (2026-10-02)
+
+1. **Label-audit population**: dedup FinNI instances **assigned to a filing** (an audit is a check against the filing).
+   The unassigned stratum cannot be audited, and the reported error rate is weighted to the assigned dedup
+   population. Strata per `eval.label_audit.stratify_by`: context type x entity type, where an instance's entity
+   type is its most frequent gold type and negatives are "none". Proportional largest-remainder allocation of
+   `sample_size`, at least one per non-empty stratum (12 strata, 300 instances). Seeds `eval.label_audit.seed` and
+   `second_pass_seed` (new keys). The second pass draws `second_pass_size` from the first-pass ids, on its own
+   sheet with no first-pass verdicts.
+2. **Sheets** (`data/label_audit/pass1_sheet.csv`, `pass2_sheet.csv`, shipped): instance id, stratum, accession,
+   CIK, the filing's EDGAR URL, the context and the gold pairs, plus owner columns (verdict correct/incorrect;
+   counts of missing, spurious and wrong-type facts; notes). `scripts/label_audit.py score` refuses blank or
+   unknown verdicts and sheets that do not match the drawn ids. It reports the raw and stratum-weighted
+   instance error rates (`label_audit_error_rate`), fact counts, and self-agreement against
+   `min_self_agreement`. The draw was run now: it is spend-free and its inputs exist.
+3. **Contamination statement** (`scripts/contamination_statement.py` -> `docs/drafts/contamination_statement_draft.md`):
+   every figure is read from a recorded file or config at generation time. Unmeasured figures print as
+   `__ (not yet measured: ...)`, and gate values are named by key, not restated. It covers the O-018 checklist:
+   fresh-slice relaxed rows and unfillable cells, audit counts before and after, size disclosures, and the fresh
+   instance hash. The arms' knowledge cutoffs are recorded once in config with sources
+   (`contamination.frontier_arm_cutoffs`), so the statement and `fresh_slice_filing_date_min` share one source.

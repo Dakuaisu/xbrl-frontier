@@ -51,6 +51,8 @@ eval:
     second_pass_size:           100                          # re-checked a week later by the same person for self-agreement
     stratify_by:                [ "context_type", "entity_type" ]
     min_self_agreement:         0.90
+    seed:                       20261011                     # first-pass draw (added 2026-10-02, TRADEOFFS T-029)
+    second_pass_seed:           20261012                     # second-pass subset (T-029)
 
 frontier:                    # all $ figures priced from pins.price_sheet, batch endpoints for accuracy, sync for latency
   sample_filings:            23                               # default; recomputed from the probe, see PRD section 7
@@ -90,6 +92,10 @@ contamination:
   minhash_seed:                     20261004                  # permutation parameters; added 2026-10-02, TRADEOFFS T-014
   fresh_slice_min_filings:          30
   fresh_slice_filing_date_min:      "2026-05-19"             # = max knowledge cutoff among pinned frontier arms + 1 day; filled at pin time (2026-10-02): gpt-6-luna 2026-05-18 is the latest (TRADEOFFS T-015)
+  frontier_arm_cutoffs:                                       # knowledge cutoffs behind fresh_slice_filing_date_min (vendor docs, checked 2026-10-02; T-015)
+    gpt-6-luna:              { cutoff: "2026-05-18", source: "developers.openai.com/api/docs/models/gpt-6-luna: 'May 18, 2026 knowledge cutoff'" }
+    gpt-5.4-mini-2026-03-17: { cutoff: "2025-08-31", source: "developers.openai.com/api/docs/models/gpt-5.4-mini: 'Aug 31, 2025 knowledge cutoff'" }
+    gemini-3.5-flash-lite:   { cutoff: "2026-03", source: "deepmind.google/models/model-cards/gemini-3-5-flash-lite: 'knowledge cutoff ... March 2026'" }
   fresh_slice_selection:            { filing_date_max: "2026-10-02", forms: [ "10-K" ], seed: 20261005 }   # selection date is the upper bound; same strata as training (added 2026-10-02, T-015)
   eval_filing_window_end:           "2025-02-13"             # FinTagging v5: 142 10-Ks filed 2023-02-13..2025-02-13; start = train_filing_date_max + 1 day (added 2026-10-02, TRADEOFFS T-003)
   instance_match:                                             # instance -> filing assignment (added 2026-10-02, TRADEOFFS T-003)

@@ -284,6 +284,8 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   (2) the audit counts before and after removal (18,184 of 215,284 flagged; 0 of 40,721 after) and the
   decontamination skew of positives (O-017); (3) the corpus sizes below cap (T-016); (4) the fresh-slice
   instance file pinned by sha256 in `data/fresh_selection_report.json`.
+- Progress (2026-10-02): `scripts/contamination_statement.py` generates `docs/drafts/contamination_statement_draft.md`
+  with items (1)-(4) from recorded files. The fresh-slice gaps and the label-noise rate stay blank until measured.
 
 ## O-019 Kaggle student training sessions (OWNER-BLOCKED)
 
@@ -416,3 +418,15 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Owner steps (RTX 3050, WSL2): copy the repo (same commit) and the export directories, then run
   `serving/run_rtx3050_load.sh <export of 0.6B> <export of 1.7B>`, and return `data/phase4/rtx3050_wsl2/`.
   Rows from this card carry `serving.hardware.rtx3050_wsl2.cost_label` and no dollars.
+
+## O-024 Label audit, two hand passes (OWNER-BLOCKED)
+
+- Status: OWNER-BLOCKED (the label audit is the owner's human instrument)
+- Ready: `data/label_audit/pass1_sheet.csv` (300 instances, 12 strata) and `pass2_sheet.csv` (100 of them, blind),
+  drawn by `scripts/label_audit.py draw` (T-029).
+- Owner steps:
+  1. For each row of `pass1_sheet.csv`, open `filing_url`, find the context, and check the gold pairs against the
+     iXBRL tags. Fill `verdict (correct|incorrect)` and the counts of `missing_facts`, `spurious_facts` and
+     `wrong_type_facts` (0 when none), plus `notes`. Commit the sheet. PRD section 9 estimates 6 hours for both passes.
+  2. At least a week later, fill `pass2_sheet.csv` the same way without looking at pass 1, and commit it.
+  3. Tell me when both are committed. I run `scripts/label_audit.py score` and regenerate the contamination statement.

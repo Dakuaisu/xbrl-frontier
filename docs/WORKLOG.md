@@ -273,3 +273,11 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - Verified: `tests/test_phase4_analysis.py` (decision rule, seeded company-level paired bootstrap, cost model end to end on a
   synthetic three-company sample with the comparator rule, refusals, chart refusals). An earlier run of the test left
   synthetic cost/chart files under `data/phase4` and `data/charts`; they were deleted and the test now cleans up.
+
+## 2026-10-02 Phase 5 tooling: label audit, contamination statement draft
+
+- Built `scripts/label_audit.py` (draw and score) and `scripts/contamination_statement.py` (T-029). New keys: `eval.label_audit.seed`,
+  `second_pass_seed`, `contamination.frontier_arm_cutoffs`. Drew the audit sample (300 / 100, spend-free). Generated the draft
+  statement, with unmeasured figures blank.
+- Verified: `tests/test_label_audit.py` (entity type, allocation, weighted error, self-agreement, refusals, blanks in the draft).
+  Owner-blocked: O-024.
