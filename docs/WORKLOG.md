@@ -403,3 +403,5 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   sheet), free tier free of charge, released 2026-07-21 with no shutdown date. Recorded as `reobservations` in the price sheet
   (no value edited). The pricing page lists a free-tier Batch row, at odds with the rate-limits page: O-028, guard unchanged.
 - Verified before commit: full suite with `-rf`, 93 passed (price sheet changed).
+
+- 2026-10-02: O-028 resolved by T-037 (no Batch API, ever; no code change, so the suite was not re-run).

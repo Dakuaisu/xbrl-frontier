@@ -845,3 +845,14 @@ measurement design choice, not a schedule variable, and nothing waits on the fro
 `gates.decision_rule`, never by the day count.
 Also: `scripts/smoke_summary.py` (new) consumes the T4 and 3050 smoke outputs under `serving.smoke_test.failure_action`, and
 every OWNER-BLOCKED entry in OPEN.md now names the action, the artefact path and the consuming script, matching the RUNBOOK.
+
+## T-037 AUTONOMOUS DECISION - owner to review: no free-tier Batch API in this project (2026-10-02)
+
+Supervisor decision (owner to review), resolving O-028: the Batch API is never used in this project, on the free tier or
+otherwise. Collection stays synchronous (`frontier.free_tier.batch_api: false`; `frontier/guard.py` refuses any mode but
+`sync`). Why: Google's own pages disagree on whether free-tier Batch exists (the pricing page has a free-tier Batch row, while
+the rate-limits page gives Batch quotas for paid tiers only), and T-033 says to stop any path that could bill. Staying
+synchronous costs only calendar days, which O-027 already budgets.
+Rejected: probing free-tier Batch with one request. A single mis-tiered request would break the $0-billed rule, and the
+ledger records only notional prices from returned usage, so it could not prove that nothing was billed.
+No code change.

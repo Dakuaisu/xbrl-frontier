@@ -505,9 +505,10 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Next action: E4 resumes daily after 07:00 UTC with the same command until complete. The schedule for E1-E3 is
   set once D4 pins the sample (O-025 first). The README states that free-tier collection spanned these dates.
 
-## O-028 Gemini docs disagree on Batch API availability on the free tier (OPEN)
+## O-028 Gemini docs disagree on Batch API availability on the free tier (RESOLVED by T-037)
 
-- Status: OPEN (no behaviour change; the guard keeps refusing batch)
+- Status: RESOLVED (2026-10-02): no Batch API in this project, ever (TRADEOFFS T-037). Collection stays synchronous and the
+  guard is unchanged.
 - Found (2026-10-02 14:10 UTC): the pricing page (last updated 2026-10-01) lists a **Batch** row for `gemini-3.5-flash-lite`
   with the free tier "Free of charge", while the rate-limits page gives Batch enqueued-token quotas for Tiers 1-3 only (T-034
   item 2). Whether a free-tier project can submit batch jobs, and whether doing so can trigger billing, is therefore
