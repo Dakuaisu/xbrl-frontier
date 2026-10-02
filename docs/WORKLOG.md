@@ -405,3 +405,7 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - Verified before commit: full suite with `-rf`, 93 passed (price sheet changed).
 
 - 2026-10-02: O-028 resolved by T-037 (no Batch API, ever; no code change, so the suite was not re-run).
+
+## 2026-10-02 GPU re-checks (O-025)
+
+- 16:43Z: no GPU, no internet (committed in ba45428; from now on negative re-checks are logged here only, at most once a day).

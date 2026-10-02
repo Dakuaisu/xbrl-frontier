@@ -461,6 +461,8 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   No other change is needed: the token in the environment stays as it is.
 - Artefact: none (tell me it is done). Consumer: the builder re-pushes `kaggle/kernels/gpu-check` and records the
   result in `data/kaggle/gpu-check/` (RUNBOOK B, C, D, E5 follow).
+- Re-check cadence (from 2026-10-02): at most once per day, in the same turn as the day's E4 report. A negative result is a
+  one-line WORKLOG entry, not a commit; only a changed result (GPU or internet appears) is committed.
 - Next action: after verification, I re-push the same check kernel (`.venv/bin/kaggle kernels push -p
   kaggle/kernels/gpu-check --accelerator NvidiaTeslaT4`) and confirm a T4 with internet. Then I continue with
   RUNBOOK B1, B2, C1 and D1-D11, then E5. All Gemini steps (E1-E4) wait for D4 (the pinned frontier sample).
