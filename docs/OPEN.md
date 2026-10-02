@@ -25,15 +25,16 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Next action: the owner reviews T-002. If the FinTagging authors publish or share their scorer,
   re-score with it as a cross-check and report any difference (do not swap metrics silently).
 
-## O-003 `context_token_bucket` slice has no bucket edges in config (OPEN)
+## O-003 `context_token_bucket` slice has no bucket edges in config (RESOLVED)
 
-- Status: OPEN
+- Status: RESOLVED (2026-10-02): the owner approved `tokenizers==0.23.2` and tercile edges.
+  `eval.context_token_bucket_edges` was written once by `scripts/derive_token_bucket_edges.py` over the
+  deduplicated set with the `Qwen/Qwen3-1.7B` tokenizer at its pin (identical in both students).
+  Buckets hold 8,627 / 8,677 / 8,665 instances. See TRADEOFFS T-001a.
 - Found: `eval.slices` lists `context_token_bucket`, but `thresholds.yaml` defines no bucket edges or
   tokenizer, and the config is frozen. `xbrl_frontier/eval_sets.py` raises rather than invent edges.
 - Evidence: `grep context_token docs/config/thresholds.yaml`.
-- Next action: owner decision. Add `eval.context_token_bucket_edges` (plus which tokenizer counts the
-  tokens; the pinned Qwen3 tokenizer is the natural choice), and approve the `tokenizers` dependency.
-  See DECISIONS NEEDED in the turn report.
+- Next action: none.
 
 ## O-004 `company` and `fiscal_year` slices wait on the instance map (RESOLVED)
 
@@ -41,17 +42,18 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   tested in `tests/test_oracles.py::test_company_and_fiscal_year_slices_from_shipped_map`.
 - Found: both slice keys come from `pins.eval_instance_map`. `eval_sets.slice_keys` reads them from that
   map and labels unmapped instances `unassigned`.
-- Next action: becomes RESOLVED when the instance map ships (Phase 0, step 4).
 
 ## O-005 Kaggle T4 Phase 0 runs: throughput benchmark, smoke quantization, T4 smoke test (OWNER-BLOCKED)
 
-- Status: OWNER-BLOCKED (Kaggle is owner-only; it also needs O-007 approval first)
+- Status: OWNER-BLOCKED (Kaggle is owner-only; the software pins are filled, O-007 RESOLVED)
 - Ready: `notebooks/phase0_kaggle_t4.ipynb` (thin driver), `serving/phase0_benchmark.py`,
   `serving/quantize_base.py`, `serving/smoke_test.py`, `serving/common.py`. Local analysis is in
   `scripts/phase0_cost.py`. All are covered by `tests/test_cost_and_serving.py`, which needs no GPU.
 - Owner steps:
-  1. After the O-007 pins are filled and committed, build the source tarball on the Mac:
-     `git archive --format=tar.gz -o /tmp/xbrl-frontier-src.tar.gz HEAD`
+  1. Source tarball, built by the builder from the commit that filled the pins (see WORKLOG for the
+     commit and sha256): `/tmp/xbrl-frontier-src.tar.gz`, made with
+     `git archive --format=tar.gz -o /tmp/xbrl-frontier-src.tar.gz HEAD`. Rebuild it the same way if
+     `/tmp` was cleared.
   2. On Kaggle, create a private dataset `xbrl-frontier-src` and upload that file.
   3. New notebook: import `notebooks/phase0_kaggle_t4.ipynb`. Settings: Accelerator GPU T4, Internet on.
      Add the dataset `xbrl-frontier-src`. Run all. Budget is about 1 GPU-hour (PRD section 9).
@@ -64,7 +66,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 
 ## O-006 RTX 3050 (WSL2) smoke test (OWNER-BLOCKED)
 
-- Status: OWNER-BLOCKED (the laptop is unreachable from here; needs O-005's `smoke_checkpoints` and O-007)
+- Status: OWNER-BLOCKED (the laptop is unreachable from here; needs O-005's `smoke_checkpoints`)
 - Ready: `serving/run_rtx3050_smoke.sh`, which runs `serving.smoke_test --card rtx3050_wsl2` with
   `serving.hardware.rtx3050_wsl2.vllm_flags`.
 - Owner steps (in WSL2, NVIDIA driver with WSL CUDA support installed):
@@ -74,14 +76,15 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - What I need back: that tarball. A variant that fails stays recorded with its error and is removed
   from the serving table per `serving.smoke_test.failure_action` (PRD risk: the 1.7B may not fit).
 
-## O-007 Kaggle/WSL2 software pins need owner approval (OPEN)
+## O-007 Kaggle/WSL2 software pins need owner approval (RESOLVED)
 
-- Status: OPEN (blocks O-005 and O-006)
+- Status: RESOLVED (2026-10-02): the owner approved the three pins and they are filled in
+  `pins.software` (TRADEOFFS T-004 item 7).
 - Found: `pins.software` is empty. Phase 0 remote runs need vllm, llmcompressor and autoawq. Proposed
   versions (current PyPI releases, checked 2026-10-02): vllm 0.30.0 (2026-09-22), llmcompressor 0.14.0
   (2026-09-22), autoawq 0.2.9 (2025-05-11, unmaintained). Transformers, torch and compressed-tensors
   are left to vllm/llmcompressor's resolver, and the installed versions are recorded in every run's `env`.
-- Next action: on approval, fill `pins.software.{vllm,llmcompressor,autoawq}` once and log them in TRADEOFFS.
+- Next action: none. The other `pins.software` fields are filled when their phase first installs them.
 
 ## O-008 AWS g4dn.xlarge T4 price is blank in the sheet (RESOLVED)
 
@@ -111,9 +114,11 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   the authors, saves the PDF outside the repo, and tells me the path. I then summarize it against PRD
   section 1 and reposition if needed. Retry Semantic Scholar once the rate limit clears.
 
-## O-010 Eval manifest recovered 129 of 142 registrants (OPEN)
+## O-010 Eval manifest recovered 129 of 142 registrants: `eval_manifest_required_recovered` NOT MET (OWNER-BLOCKED)
 
-- Status: OPEN (below `contamination.eval_manifest_required_recovered`)
+- Status: OWNER-BLOCKED for option (a). `contamination.eval_manifest_required_recovered` is **NOT MET**
+  at 129/142, and the threshold is unchanged. Owner decision (TRADEOFFS T-005): (c) accept and disclose
+  now, (a) owner-blocked, (b) rejected.
 - Found: `data/eval_manifest.csv` lists 139 filings from 129 companies. 117 filings come from the 111
   seed CIKs and 22 from 18 CIKs found by FTS. Filing dates run 2024-02-06 to 2025-02-13 (fiscal years
   2023 and 2024 only). The `edgar.fts_query_budget` total is spent (1,966 queries across two runs: 33
@@ -122,10 +127,13 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   `instance_match.min_unique_exact_for_filing`) uniquely exact-matching contexts, so the phrase hit was
   shared wording (diagnostics in `data/manifest_work/report.json`).
 - Evidence: `data/manifest_work/report.json`, `data/manifest_work/fts_queries.json`.
-- Next action (choose under DECISIONS NEEDED): (a) the owner files the public GitHub issue asking the
-  FinTagging authors for the 142 CIKs/accessions (owner-only); (b) approve a second FTS budget with a
-  different phrase strategy (several phrases per remaining text context; table contexts are mostly
-  unresolvable by phrase); (c) accept 129 and disclose it.
+- The 15 unconfirmed CIKs are listed in `data/eval_cik_candidates_unconfirmed.txt` and excluded from
+  training through `contamination.exclude_ciks_from` (T-008).
+- Owner steps for (a): post the issue text in `docs/owner/fintagging_issue_draft.md` on
+  `https://github.com/The-FinAI/FinTagging/issues` (add the repository link where marked).
+- What I need back: the issue URL. If the authors reply with the filing list, I rebuild the manifest from
+  it, re-run assignment, and report both the old and new numbers. The README and resume bullet say
+  "129 of 142" until then.
 
 ## O-011 Instance assignment rate 94.29% raw / 94.43% dedup, below 0.95 (OPEN)
 
@@ -138,12 +146,14 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Validation (`scripts/validate_instance_map.py`, all assigned positive instances): the share of gold fact
   values found in the assigned filing is 1.000 for exact (12,225) and exact-tie (370), 0.959 for fuzzy
   (1,062; 23 below half) and 1.000 for fuzzy-tie (12).
-- Next action: the rate rises only if O-010 recovers the missing companies (their contexts are among the
-  `none` rows) or if the Phase 1 serializer fork matches tables better. Thresholds are not changed.
+- Next action (owner decision, TRADEOFFS T-006): disclose and do not retune; `instance_match.*` stays
+  untouched. Re-run assignment with the Phase 1 serializer (the benchmark's own serialization, PRD
+  section 4) and record both rates.
 
-## O-012 FinNI draws on more than one 10-K per company (OPEN, affects bootstrap unit and cost shape)
+## O-012 FinNI draws on more than one 10-K per company (RESOLVED by owner decision T-007)
 
-- Status: OPEN
+- Status: RESOLVED (2026-10-02): the resampling cluster is the company (CIK). Phase 3 must draw the
+  frontier sample so that no company is split across in/out of the sample.
 - Found: 10 of 129 companies contribute two fiscal years (FY2023 and FY2024), for 139 filings in total.
   Evidence: year-specific sentences that occur only in one year's filing (T-003 item 2), plus
   `unique_exact_contexts` of at least `instance_match.min_unique_exact_for_filing` for both filings of
@@ -152,6 +162,5 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Consequences: (1) "Bootstrap over filings" is ambiguous where a company has two filings and some
   rows tie between them. (2) The PRD's instances-per-filing (rows / 142) is a planning figure. The
   Phase 3 probe measures real per-filing tokens anyway.
-- Next action: owner decision on the resampling unit (DECISIONS NEEDED). Recommendation: resample
-  **companies (CIK)**, which is the conservative cluster: same-company filings are correlated and the tie
-  attribution is arbitrary.
+- Next action: `between_filing_f1_sd` and `frontier.power_check` are computed per company, and that is
+  stated next to each number. Sampling mechanics are decided in Phase 3.

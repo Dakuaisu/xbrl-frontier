@@ -17,3 +17,4 @@ data/manifest_work/*
 !data/manifest_work/report.json
 !data/manifest_work/fts_queries.json
 !data/manifest_work/validation.json
+!data/eval_cik_candidates_unconfirmed.txt

@@ -74,3 +74,17 @@ Dated implementation notes: what was built, how it was verified, what is next.
   Full-set validation is in O-011.
 - Findings: O-010 (129/142), O-011 (rate below threshold), O-012 (multi-filing companies).
   O-004 is resolved.
+
+## 2026-10-02 Phase 0 exit: owner decisions applied
+
+- `pins.software.{vllm,llmcompressor,autoawq}` filled (O-007 RESOLVED; T-004 items 5 and 7).
+- `tokenizers==0.23.2` installed and pinned. `xbrl_frontier/tokens.py` counts context tokens.
+  `scripts/derive_token_bucket_edges.py` wrote `eval.context_token_bucket_edges` once (O-003 RESOLVED,
+  T-001a). Verified that bucket sizes are near-equal thirds of the dedup set and that the two students'
+  tokenizer files are byte-identical. The longest context is 20,575 tokens, past
+  `training.kaggle.max_seq_len_tokens`; that is noted for the Phase 2 sequence-cap handling.
+- Manifest shortfall accepted and disclosed (T-005, O-010 NOT MET at 129/142). Issue draft in
+  `docs/owner/fintagging_issue_draft.md`. Assignment rate disclosed (T-006). Company-level bootstrap
+  (T-007, O-012 RESOLVED). Unconfirmed CIKs excluded from training (T-008).
+- TRADEOFFS reordered (T-003 before T-004). T-002 now quotes prompt rules (3) and (4) verbatim and
+  states how negatives enter the per-instance mean.

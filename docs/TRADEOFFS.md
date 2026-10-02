@@ -21,6 +21,19 @@ They are installed only inside the owner-run Kaggle and WSL2 scripts, at the ver
 
 Approved by the owner on 2026-10-02.
 
+### T-001a AUTONOMOUS DECISION - owner to review: `tokenizers` and the context-token buckets (2026-10-02)
+
+The owner approved `tokenizers==0.23.2` (pinned in `requirements.txt` / `requirements.lock`) for the
+`context_token_bucket` slice. `transformers` is not installed locally. Counts use the primary student's
+`tokenizer.json` (`Qwen/Qwen3-1.7B` at its pinned `hf_revision`). Both Qwen3 students ship byte-identical
+`tokenizer.json`, `tokenizer_config.json`, `vocab.json` and `merges.txt` at their pinned revisions (sha256
+prefixes `aeb13307a71acd8f`, `d5d09f07b48c3086`, `ca10d7e9fb3ed185`, `8831e4f1a0444713`), so one count serves
+both. Counts are the context string alone, with no prompt template and no special tokens.
+`eval.context_token_bucket_edges` are the tercile boundaries over the deduplicated pinned set, written once by
+`scripts/derive_token_bucket_edges.py` (the derivation is in the key's comment; the script refuses to
+overwrite). Alternatives: fixed round-number edges (arbitrary), or counting with the full prompt
+(adds a constant and blurs the slice). Why: terciles give equal-mass slices that do not depend on a guess.
+
 ## T-002 AUTONOMOUS DECISION - owner to review: FinNI scorer details the spec leaves open (2026-10-02)
 
 FinTagging Appendix E defines a match as entity string AND type exactly equal, with set-based P/R/F1. It
@@ -35,6 +48,13 @@ leaves the remaining details unspecified (evidence_brief section 3), so they wer
    collapse whitespace, including NBSP, and strip. Type strings are compared exactly, after stripping only.
    Alternative: also converting words to digits. Rejected because the gold does not do it, so it would
    create mismatches against correct answers.
+   The benchmark prompt's rules, verbatim from every FinNI-eval-v2 `query` at the pinned revision:
+   rule (3): "If a number is followed by a magnitude term (e.g., Hundred, Thousand, Million, Billion), do not
+   expand it into the full numerical value. * "Two hundred" → Extract only "two", not "200". * "10.6
+   million" → Extract only "10.6", not "10,600,000"." Rule (4): "Standardize numerical formatting by
+   removing currency symbols (e.g., "USD"), percentage signs ("%"), and commas (",") while preserving the
+   numeric value. These elements must be removed to ensure consistency." Removing `USD` follows rule (4)'s
+   own example, and removing `$` follows its "currency symbols".
 3. **Parsing.** Remove `<think>…</think>`, take the first ```` ```json ```` fence if there is one, then
    `json.loads`. Failing that, parse the outermost `{…}` substring. Anything without a `result` list is a
    parse failure: an empty prediction, counted in `parse_failure_rate`. Items missing a string `Type`
@@ -44,7 +64,9 @@ leaves the remaining details unspecified (evidence_brief section 3), so they wer
    the parse-failure rate measure formatting habit rather than extraction. Both the raw text and the
    parse outcome are stored, so a strict re-score is possible.
 4. **Per-instance mean** (stored next to the global pooled score): an instance with empty gold and an
-   empty prediction scores P=R=F1=1. Otherwise P or R is 0 when its denominator is 0.
+   empty prediction scores P=R=F1=1. Otherwise P or R is 0 when its denominator is 0. The per-instance
+   mean therefore **includes the negative instances**, each scored 1 when correctly left empty (and 0
+   when anything is predicted). The global pooled score is unaffected by correct negatives.
 5. **Oracle constructions.** "Types swapped" re-types every gold pair to the next type in a fixed cyclic
    order that is not itself gold for that value, so two gold types on one value never collide into a
    true positive. "Half dropped" keeps every other pair in one global sorted order, giving recall
@@ -56,38 +78,7 @@ leaves the remaining details unspecified (evidence_brief section 3), so they wer
    config or test files are staged. `.github/workflows/oracles.yml` runs the same tests on push, for when a
    remote exists.
 
-## T-004 AUTONOMOUS DECISION - owner to review: Phase 0 serving tooling (2026-10-02)
-
-1. **Load tool for Phase 0: `vllm bench serve`**, with random prompts at the FinNI token shape
-   (`serving.phase0_throughput_benchmark.input_tokens` / `output_tokens`, `--ignore-eos` so the output length
-   is fixed), `--request-rate inf` at each `concurrency_levels` value, and `requests_per_point` prompts. A
-   warm-up of `serving.warmup_requests` runs first and is discarded. Alternative: GuideLLM. It is kept for
-   the Phase 4 sweeps (`serving.request_rate_sweep_rps`). Here it would add a second pinned package for no
-   extra information.
-2. **Goodput definition**: the highest request throughput among complete points whose p95 TTFT and p95
-   E2E both meet `serving.slo`. `serving.slo` is stated at p95, so per-request SLO goodput (vLLM's
-   `--goodput`) is recorded only as a secondary field. Points with failed requests are excluded from both
-   maxima and counted. Filings/hour = req/s x 3600 / instances-per-filing.
-3. **Instances per filing for the token shape** = `pins.eval_finni.rows_expected` /
-   `contamination.eval_manifest_required_recovered`, which is the PRD section 7 basis. Note that O-005 shows
-   some companies contribute more than one filing. The Phase 3 probe replaces this shape with measured
-   per-filing tokens in any case.
-4. **Pinned weights are served from a local `snapshot_download` at the pinned SHA**
-   (`--served-model-name` keeps the public id), so the revision is enforced by path and not by a server
-   flag. Scripts refuse to run unless the installed version equals `pins.software.<pkg>`, and they refuse
-   if that pin is empty.
-5. **Smoke-test quantization** (new keys `serving.smoke_test.smoke_quantization`): INT8 W8A8 uses
-   llm-compressor `QuantizationModifier` (data-free, dynamic per-token activations). AWQ-INT4 uses AutoAWQ
-   GEMM, as PRD section 5 names it, with AutoAWQ's own default calibration (pile-val), because the
-   training corpus does not exist yet. These checkpoints only prove that each variant loads and runs.
-   They are never scored, and Phase 2 re-quantizes the fine-tuned students with training-context
-   calibration. AutoAWQ's last release (0.2.9) is 2025-05-11 and it is unmaintained, so it runs in its own
-   virtualenv. Whether its GEMM format still runs on vLLM 0.30 on Turing is exactly what the smoke test
-   answers. See DECISIONS NEEDED (AutoAWQ vs llm-compressor AWQ).
-6. **Break-even table** (`scripts/phase0_cost.py`): every pinned arm plus the swap candidate, both
-   regimes, every non-blank T4 source in `serving.hardware.kaggle_t4.market_rate_keys`, at the regime's
-   utilization and at every `serving.utilization_scenarios` value. The blank AWS source is dropped and
-   listed as dropped (see O-008).
+Confirmed as written by the owner on 2026-10-02. It stays AUTONOMOUS for owner review.
 
 ## T-003 AUTONOMOUS DECISION - owner to review: eval manifest recovery and instance-to-filing map (2026-10-02)
 
@@ -142,3 +133,82 @@ leaves the remaining details unspecified (evidence_brief section 3), so they wer
    `validation.json` (gold values found in the assigned filing). These are small and make the
    assignment-rate claim checkable. The EDGAR cache (about 1.3 GB) stays untracked and is rebuilt by
    rerunning the script.
+
+## T-004 AUTONOMOUS DECISION - owner to review: Phase 0 serving tooling (2026-10-02)
+
+1. **Load tool for Phase 0: `vllm bench serve`**, with random prompts at the FinNI token shape
+   (`serving.phase0_throughput_benchmark.input_tokens` / `output_tokens`, `--ignore-eos` so the output length
+   is fixed), `--request-rate inf` at each `concurrency_levels` value, and `requests_per_point` prompts. A
+   warm-up of `serving.warmup_requests` runs first and is discarded. Alternative: GuideLLM. It is kept for
+   the Phase 4 sweeps (`serving.request_rate_sweep_rps`). Here it would add a second pinned package for no
+   extra information.
+2. **Goodput definition**: the highest request throughput among complete points whose p95 TTFT and p95
+   E2E both meet `serving.slo`. `serving.slo` is stated at p95, so per-request SLO goodput (vLLM's
+   `--goodput`) is recorded only as a secondary field. Points with failed requests are excluded from both
+   maxima and counted. Filings/hour = req/s x 3600 / instances-per-filing.
+3. **Instances per filing for the token shape** = `pins.eval_finni.rows_expected` /
+   `contamination.eval_manifest_required_recovered`, which is the PRD section 7 basis. Note that O-012 shows
+   some companies contribute more than one filing. The Phase 3 probe replaces this shape with measured
+   per-filing tokens in any case.
+4. **Pinned weights are served from a local `snapshot_download` at the pinned SHA**
+   (`--served-model-name` keeps the public id), so the revision is enforced by path and not by a server
+   flag. Scripts refuse to run unless the installed version equals `pins.software.<pkg>`, and they refuse
+   if that pin is empty.
+5. **Smoke-test quantization** (new keys `serving.smoke_test.smoke_quantization`): INT8 W8A8 uses
+   llm-compressor `QuantizationModifier` (data-free, dynamic per-token activations). AWQ-INT4 uses AutoAWQ
+   GEMM, as PRD section 5 names it, with AutoAWQ's own default calibration (pile-val), because the
+   training corpus does not exist yet. These checkpoints only prove that each variant loads and runs.
+   They are never scored, and Phase 2 re-quantizes the fine-tuned students with training-context
+   calibration. AutoAWQ's last release (0.2.9) is 2025-05-11 and it is unmaintained, so it runs in its own
+   virtualenv. Whether its GEMM format still runs on vLLM 0.30 on Turing is exactly what the smoke test
+   answers. Owner decision 2026-10-02: keep AutoAWQ, as PRD section 5 names it, with no switch before the
+   T4 smoke test exists. If AutoAWQ GEMM fails there, the failure is recorded per
+   `serving.smoke_test.failure_action` and the llm-compressor AWQ question is raised then, as a data-wins
+   entry.
+6. **Break-even table** (`scripts/phase0_cost.py`): every pinned arm plus the swap candidate, both
+   regimes, every non-blank T4 source in `serving.hardware.kaggle_t4.market_rate_keys`, at the regime's
+   utilization and at every `serving.utilization_scenarios` value. The blank AWS source is dropped and
+   listed as dropped (see O-008).
+7. **Software pins (owner approval 2026-10-02, O-007).** `pins.software.vllm = 0.30.0`,
+   `llmcompressor = 0.14.0`, `autoawq = 0.2.9`. Only these three are filled now. Every other
+   `pins.software` field is filled when the phase that first installs it arrives, and is never edited
+   after. `transformers`, `torch` and `compressed-tensors` are **not pinned**: they are left to vLLM's and
+   llm-compressor's resolvers, and the installed versions are captured in every run's `env` record
+   (`serving.common.env_record`). Alternative: pin them too. Rejected because a hand-picked combination
+   risks a resolver conflict with vLLM's own pins, and the `env` record keeps every run reproducible.
+
+## T-005 AUTONOMOUS DECISION - owner to review: manifest shortfall accepted at 129 of 142 (2026-10-02)
+
+Decision (owner): option (c), accept 129 recovered registrants and disclose them.
+`contamination.eval_manifest_required_recovered` is **NOT MET** (129/142) and the threshold is unchanged.
+Option (a), the public GitHub issue to the FinTagging authors, is OWNER-BLOCKED. The draft is
+`docs/owner/fintagging_issue_draft.md`. Option (b), a second FTS budget with a new phrase strategy, is
+**rejected**. Why: `edgar.fts_query_budget` was set before any result and is not raised after seeing
+results. The diagnostics also show the remaining `none` rows are mostly tables, which phrase search cannot
+resolve, and no unqueried unmatched context was left. The README and resume bullet will say 129 of 142.
+
+## T-006 Instance assignment below threshold: disclosed, not retuned (owner decision, 2026-10-02)
+
+The assignment rate stays reported as below `contamination.instance_assignment_min_fraction`, disclosed,
+with the threshold unchanged and `instance_match.*` values untouched. PRD section 4 prescribes rebuilding
+contexts "with the benchmark's own serialization" before matching, and the Phase 0 token matcher is a
+stand-in for that. The in-spec next step is to re-run assignment with the Phase 1 serializer and record
+both rates.
+
+## T-007 AUTONOMOUS DECISION - owner to review: bootstrap resampling unit is the company (CIK) (2026-10-02)
+
+Decision (owner): the resampling cluster is the company (CIK), for the full set and for the shared frontier
+sample. `between_filing_f1_sd` and `frontier.power_check` are computed **per company**, and that is stated
+next to the number wherever it appears. Phase 3 draws the frontier sample so that a company is never split
+across in/out of the sample (mechanics decided in Phase 3). Alternatives: resample filings, as PRD
+sections 3 and 7 word it. Why: data wins over "one 10-K per company" (O-012). Ten companies contribute
+two fiscal years, their filings are correlated, and 1,183 rows tie between two years of the same company,
+so attributing those ties to a filing is arbitrary. The company cluster is the conservative choice.
+
+## T-008 AUTONOMOUS DECISION - owner to review: unconfirmed FTS CIKs are excluded from training (2026-10-02)
+
+Decision (owner): the 15 CIKs that FTS resolved but that have no present filing (O-010) are written to
+`data/eval_cik_candidates_unconfirmed.txt` (shipped, whitelisted in `.gitignore`), and that file is added to
+`contamination.exclude_ciks_from`. Alternative: exclude only the 129 confirmed registrants. Why: an FTS
+phrase from an evaluation context resolved to each of them, so some may be among the 13 missing
+registrants. Excluding them is the conservative side of contamination control.

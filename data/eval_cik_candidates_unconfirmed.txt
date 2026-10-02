@@ -1,0 +1,17 @@
+# CIKs resolved by an FTS phrase from an FinNI eval context but with no present filing (O-010, TRADEOFFS T-008).
+# Source: data/manifest_work/report.json ciks_unconfirmed. Excluded from training via contamination.exclude_ciks_from.
+0000036966
+0000100517
+0000354647
+0000908255
+0001037676
+0001037868
+0001368622
+0001411168
+0001422183
+0001526520
+0001544400
+0001602065
+0001790982
+0001868941
+0001967680
