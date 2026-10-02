@@ -134,3 +134,21 @@ Dated implementation notes: what was built, how it was verified, what is next.
   plus 131 appended lines; the 208 frozen rows are unchanged (sha256 re-verified).
 - Re-serialized all 338: 524,439 instances, 27,234 positives, 7,617 twins dropped, negatives fraction 0.9481
   before sampling.
+
+## 2026-10-02 Phase 1, unit 4: sampled corpus, contamination audit, fresh slice
+
+- Built `scripts/build_corpus.py` (T-013), `scripts/contamination_audit.py` (T-014) and
+  `scripts/select_fresh_slice.py` (T-015). `scripts/format_parity.py` gained `--files`/`--tag`. New keys:
+  `training.corpus_sampling.seed`, `contamination.minhash_shingle_words`, `contamination.minhash_seed`,
+  `contamination.fresh_slice_selection`. `contamination.fresh_slice_filing_date_min` filled (2026-05-19).
+- Contamination audit (pool, 215,284 instances): 18,184 flagged (ngram only 12,867, both 5,317, minhash only
+  0; 2,801 positives / 15,383 negatives; 1,617 eval contexts matched). Unaudited sample (v0): 4,527 of 42,000
+  flagged. Final corpus re-audit: 40,721 audited, 0 flagged.
+- Final corpus (`data/corpus/{train,dev}.jsonl`, untracked; sha256 in `data/corpus_report.json`): train
+  38,788 (23,273 pos, negatives fraction 0.40000, negative table share 0.2042), dev 1,933 (1,160 pos, 0.3999).
+  Both below cap (O-016). No surplus.
+- Parity on the sampled corpus: negatives at parity (O-015 resolved for negatives). Decontamination skews
+  positives shorter and less table-heavy (O-017).
+- Fresh slice: universe 560 10-Ks, 542 eligible, 30 accepted (24 by quota, 6 relaxed fill), filed 2026-05-19
+  to 2026-09-29, 0 rejections. 3,434 instances (2,140 pos, negatives fraction 0.3768, 264 table negatives).
+- Verified: `pytest -q tests` (see commit), final audit 0 flagged.

@@ -1,0 +1,35 @@
+{
+ "generated": "2026-10-02T06:55:32+00:00",
+ "config_hash": "5d3753671a61490b24c0185cd66e910dfe2a33e8f47a76155d08242fefcf055c",
+ "window": [
+  "2026-05-19",
+  "2026-10-02"
+ ],
+ "rss_months_missing": [],
+ "universe": 560,
+ "eligible": 542,
+ "excluded_ciks": 489,
+ "accepted": 30,
+ "required": 30,
+ "rejected": {},
+ "filled_relaxed": 6,
+ "unfilled_quota": {
+  "10-K|energy & transportation|large_accelerated": 1,
+  "10-K|real estate & construction|large_accelerated": 5
+ },
+ "filing_dates": [
+  "2026-05-19",
+  "2026-09-29"
+ ],
+ "instances": 3434,
+ "positives": 2140,
+ "negatives": 1294,
+ "negatives_fraction": 0.3768200349446709,
+ "eval_negatives_fraction_dedup": 0.3767954099118179,
+ "negatives_table": 264,
+ "eval_negative_table_share": 0.20419008686765458,
+ "edgar_requests": {
+  "requests": 6,
+  "cache_hits": 717
+ }
+}

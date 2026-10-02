@@ -79,7 +79,8 @@ contamination:
   minhash_shingle_words:            5                         # word 5-gram shingles (Lee et al. 2022 dedup); added 2026-10-02, TRADEOFFS T-014
   minhash_seed:                     20261004                  # permutation parameters; added 2026-10-02, TRADEOFFS T-014
   fresh_slice_min_filings:          30
-  fresh_slice_filing_date_min:      ""                       # = max knowledge cutoff among pinned frontier arms + 1 day; filled at pin time
+  fresh_slice_filing_date_min:      "2026-05-19"             # = max knowledge cutoff among pinned frontier arms + 1 day; filled at pin time (2026-10-02): gpt-6-luna 2026-05-18 is the latest (TRADEOFFS T-015)
+  fresh_slice_selection:            { filing_date_max: "2026-10-02", forms: [ "10-K" ], seed: 20261005 }   # selection date is the upper bound; same strata as training (added 2026-10-02, T-015)
   eval_filing_window_end:           "2025-02-13"             # FinTagging v5: 142 10-Ks filed 2023-02-13..2025-02-13; start = train_filing_date_max + 1 day (added 2026-10-02, TRADEOFFS T-003)
   instance_match:                                             # instance -> filing assignment (added 2026-10-02, TRADEOFFS T-003)
     shingle_words:               8                            # word n-gram size over lowercased [a-z0-9]+ tokens

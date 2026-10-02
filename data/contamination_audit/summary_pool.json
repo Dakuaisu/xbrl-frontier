@@ -1,0 +1,21 @@
+{
+ "config_hash": "5d3753671a61490b24c0185cd66e910dfe2a33e8f47a76155d08242fefcf055c",
+ "input": "all serialized instances eligible for the corpus (positives + negatives passing FinTagging filters)",
+ "ngram_n": 13,
+ "minhash": {
+  "num_perm": 128,
+  "threshold": 0.8,
+  "shingle_words": 5,
+  "bands": 9,
+  "rows_per_band": 13
+ },
+ "eval_contexts": 25765,
+ "eval_contexts_matched": 1617,
+ "max_flagged_train_docs_after_removal": 0,
+ "audited": 215284,
+ "flagged::ngram": 12867,
+ "flagged_pos": 2801,
+ "flagged": 18184,
+ "flagged_neg": 15383,
+ "flagged::both": 5317
+}

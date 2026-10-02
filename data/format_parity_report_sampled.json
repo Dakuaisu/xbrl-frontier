@@ -1,0 +1,249 @@
+{
+ "config_hash": "5d3753671a61490b24c0185cd66e910dfe2a33e8f47a76155d08242fefcf055c",
+ "eval": {
+  "set": "FinNI-eval-v2 dedup",
+  "instances": 25969,
+  "positives": 16184,
+  "negatives_fraction": 0.3767954099118179,
+  "table_share": 0.40702375909738536,
+  "table_share_positives": 0.5296589223924864,
+  "context_tokens_quantiles": {
+   "0.1": 33,
+   "0.5": 144,
+   "0.9": 1556,
+   "0.99": 5172
+  },
+  "context_tokens_mean": 586.2632754437984,
+  "share_above_max_seq_len": 0.01640417420770919,
+  "facts_per_positive_quantiles": {
+   "0.1": 1,
+   "0.5": 5,
+   "0.9": 36,
+   "0.99": 121
+  },
+  "facts_per_positive_mean": 14.574826989619377,
+  "datatype_mix": {
+   "integerItemType": 0.0042,
+   "monetaryItemType": 0.8915,
+   "perShareItemType": 0.0211,
+   "percentItemType": 0.0473,
+   "sharesItemType": 0.0359
+  },
+  "html_tags": {
+   "td": 4087288,
+   "tr": 353032,
+   "table": 21140,
+   "th": 560
+  },
+  "doubled_cell_share": 0.14664792822490055
+ },
+ "train_all": {
+  "set": "serialized corpus after twin drop, all negatives",
+  "instances": 40721,
+  "positives": 24433,
+  "negatives_fraction": 0.39999017705852014,
+  "table_share": 0.3694408290562609,
+  "table_share_positives": 0.47967912249826056,
+  "context_tokens_quantiles": {
+   "0.1": 32,
+   "0.5": 130,
+   "0.9": 1280,
+   "0.99": 4033
+  },
+  "context_tokens_mean": 469.12622479801576,
+  "share_above_max_seq_len": 0.009601925296530046,
+  "facts_per_positive_quantiles": {
+   "0.1": 1,
+   "0.5": 4,
+   "0.9": 28,
+   "0.99": 85
+  },
+  "facts_per_positive_mean": 10.995702533458847,
+  "datatype_mix": {
+   "integerItemType": 0.0053,
+   "monetaryItemType": 0.867,
+   "perShareItemType": 0.0304,
+   "percentItemType": 0.0427,
+   "sharesItemType": 0.0546
+  },
+  "html_tags": {
+   "td": 5285252,
+   "tr": 442550,
+   "table": 30088,
+   "th": 46,
+   "budget": 1
+  },
+  "doubled_cell_share": 0.10647319912135692
+ },
+ "train_fintagging_negative_filter": {
+  "set": "serialized corpus, negatives restricted to FinTagging's filters",
+  "instances": 40721,
+  "positives": 24433,
+  "negatives_fraction": 0.39999017705852014,
+  "table_share": 0.3694408290562609,
+  "table_share_positives": 0.47967912249826056,
+  "context_tokens_quantiles": {
+   "0.1": 32,
+   "0.5": 130,
+   "0.9": 1280,
+   "0.99": 4033
+  },
+  "context_tokens_mean": 469.12622479801576,
+  "share_above_max_seq_len": 0.009601925296530046,
+  "facts_per_positive_quantiles": {
+   "0.1": 1,
+   "0.5": 4,
+   "0.9": 28,
+   "0.99": 85
+  },
+  "facts_per_positive_mean": 10.995702533458847,
+  "datatype_mix": {
+   "integerItemType": 0.0053,
+   "monetaryItemType": 0.867,
+   "perShareItemType": 0.0304,
+   "percentItemType": 0.0427,
+   "sharesItemType": 0.0546
+  },
+  "html_tags": {
+   "td": 5285252,
+   "tr": 442550,
+   "table": 30088,
+   "th": 46,
+   "budget": 1
+  },
+  "doubled_cell_share": 0.10647319912135692
+ },
+ "eval_positives": {
+  "set": "FinNI-eval-v2 dedup, positives",
+  "instances": 16184,
+  "positives": 16184,
+  "negatives_fraction": 0.0,
+  "table_share": 0.5296589223924864,
+  "table_share_positives": 0.5296589223924864,
+  "context_tokens_quantiles": {
+   "0.1": 57,
+   "0.5": 293,
+   "0.9": 1792,
+   "0.99": 5684
+  },
+  "context_tokens_mean": 731.66429807217,
+  "share_above_max_seq_len": 0.02218240237271379,
+  "facts_per_positive_quantiles": {
+   "0.1": 1,
+   "0.5": 5,
+   "0.9": 36,
+   "0.99": 121
+  },
+  "facts_per_positive_mean": 14.574826989619377,
+  "datatype_mix": {
+   "integerItemType": 0.0042,
+   "monetaryItemType": 0.8915,
+   "perShareItemType": 0.0211,
+   "percentItemType": 0.0473,
+   "sharesItemType": 0.0359
+  },
+  "html_tags": {
+   "td": 3369568,
+   "tr": 279536,
+   "table": 17144
+  },
+  "doubled_cell_share": 0.12426165021372666
+ },
+ "train_positives": {
+  "set": "serialized corpus, positives",
+  "instances": 24433,
+  "positives": 24433,
+  "negatives_fraction": 0.0,
+  "table_share": 0.47967912249826056,
+  "table_share_positives": 0.47967912249826056,
+  "context_tokens_quantiles": {
+   "0.1": 60,
+   "0.5": 236,
+   "0.9": 1438,
+   "0.99": 4309
+  },
+  "context_tokens_mean": 566.4486145786436,
+  "share_above_max_seq_len": 0.011582695534727622,
+  "facts_per_positive_quantiles": {
+   "0.1": 1,
+   "0.5": 4,
+   "0.9": 28,
+   "0.99": 85
+  },
+  "facts_per_positive_mean": 10.995702533458847,
+  "datatype_mix": {
+   "integerItemType": 0.0053,
+   "monetaryItemType": 0.867,
+   "perShareItemType": 0.0304,
+   "percentItemType": 0.0427,
+   "sharesItemType": 0.0546
+  },
+  "html_tags": {
+   "td": 3906756,
+   "tr": 334068,
+   "table": 23440
+  },
+  "doubled_cell_share": 0.09257723600929402
+ },
+ "eval_negatives": {
+  "set": "FinNI-eval-v2 dedup, negatives",
+  "instances": 9785,
+  "positives": 0,
+  "negatives_fraction": 1.0,
+  "table_share": 0.20419008686765458,
+  "table_share_positives": 0.0,
+  "context_tokens_quantiles": {
+   "0.1": 25,
+   "0.5": 60,
+   "0.9": 1132,
+   "0.99": 3656
+  },
+  "context_tokens_mean": 345.77577925396014,
+  "share_above_max_seq_len": 0.0068472151251916195,
+  "facts_per_positive_quantiles": {},
+  "facts_per_positive_mean": 0.0,
+  "datatype_mix": {},
+  "html_tags": {
+   "td": 717720,
+   "tr": 73496,
+   "table": 3996,
+   "th": 560
+  },
+  "doubled_cell_share": 0.22807875609950293
+ },
+ "train_negatives_fintagging_filter": {
+  "set": "serialized corpus, negatives passing FinTagging's filters",
+  "instances": 16288,
+  "positives": 0,
+  "negatives_fraction": 1.0,
+  "table_share": 0.20407662082514735,
+  "table_share_positives": 0.0,
+  "context_tokens_quantiles": {
+   "0.1": 25,
+   "0.5": 59,
+   "0.9": 1043,
+   "0.99": 3635
+  },
+  "context_tokens_mean": 323.13666502946955,
+  "share_above_max_seq_len": 0.006630648330058939,
+  "facts_per_positive_quantiles": {},
+  "facts_per_positive_mean": 0.0,
+  "datatype_mix": {},
+  "html_tags": {
+   "td": 1378496,
+   "tr": 108482,
+   "table": 6648,
+   "th": 46,
+   "budget": 1
+  },
+  "doubled_cell_share": 0.14087537140645803
+ },
+ "twin_drop_divergence": {
+  "twins_dropped_total": 7617,
+  "note": "TRADEOFFS T-010: the eval keeps such twins; the training corpus does not"
+ },
+ "train_source": [
+  "data/corpus/train.jsonl",
+  "data/corpus/dev.jsonl"
+ ]
+}

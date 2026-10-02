@@ -217,9 +217,14 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   which would mean changing `training.target_train_instances` / `curve_points` (a spec change); (c) shift
   the form share toward 10-K for the extension (about twice the positives per filing; the eval is all 10-K).
 
-## O-015 First format-parity comparison: positives match, negatives diverge (OPEN)
+## O-015 First format-parity comparison: positives match, negatives diverge (RESOLVED for negatives; see O-017)
 
-- Status: OPEN (to be handled by negative sampling in the corpus build, not by the serializer)
+- Status: RESOLVED (2026-10-02) for the negative divergence: after sampling (T-013), the negatives match the
+  eval set. Sampled-corpus report: `data/format_parity_report_sampled.json`. The pool report
+  `data/format_parity_report.json` is kept. Sampled negatives vs eval: table share 0.2041 vs 0.2042,
+  tokens p10/p50/p90/p99 25/59/1,043/3,635 vs 25/60/1,132/3,656, mean 323 vs 346. The remaining gap is
+  in the long tail (p90 about 8% shorter) and is left as a finding, with no further knobs. A new positive-side
+  divergence caused by decontamination is O-017.
 - Found (`scripts/format_parity.py` -> `data/format_parity_report.json`; eval = FinNI dedup set, train = the
   serialized corpus after twin drop):
   - Positives: table share 0.530 (eval) vs 0.516 (train). Context tokens p10/p50/p90/p99 57/293/1,792/5,684
@@ -237,3 +242,33 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Next action: the corpus-build sampler draws negatives to `training.negatives_fraction`, stratified by
   context type so the negatives' table share tracks the eval's. The parity script is re-run on the sampled
   corpus and both reports are kept.
+
+## O-016 Corpus is below both caps after decontamination (OPEN)
+
+- Status: OPEN (DECISIONS NEEDED)
+- Found: the contamination audit (T-014) flags 18,184 of 215,284 eligible instances (8.4%), including 2,801
+  positives. After removal: train 23,273 positives -> 38,788 instances at `negatives_fraction`, against
+  `target_train_instances` 40,000. Dev 1,160 positives -> 1,933 against `dev_slice_instances` 2,000.
+  The T-012 margin (10%) covered sizing variance but not an 8-10% removal of positives.
+  Without decontamination both caps were reached (v0: 40,000 / 2,000).
+- Evidence: `data/corpus_report.json`, `data/corpus_report_v0_unaudited.json`,
+  `data/contamination_audit/summary_pool.json`.
+- Consequence: the top `training.curve_points` value (40,000) is not reachable as a prefix. All lower points
+  are.
+- Next action: owner decision. (a) A second extension, sized by the post-audit positive yield (T-012 said
+  "extended once", so this needs the owner); (b) train on 38,788 and record the top curve point as 38,788,
+  not 40,000; (c) leave as is until the Phase 2 pilot shows whether the curve has flattened before 40,000.
+
+## O-017 Decontamination removes long table positives disproportionately (OPEN)
+
+- Status: OPEN (finding; nothing is retuned)
+- Found: positives in the pool (before the audit) matched the eval (table share 0.516 vs 0.530, median tokens
+  273 vs 293). In the decontaminated sampled corpus, positives drift: table share 0.480 vs 0.530, tokens
+  p50/p90/p99 236/1,438/4,309 vs 293/1,792/5,684, facts per positive mean 11.0 vs 14.6, doubled-cell share
+  0.106 vs 0.147. Of the 2,801 flagged positives, 2,255 are tables. A long table has more 13-grams, so it
+  is more likely to share one with an eval context (period headers, standard line items).
+- Evidence: `data/format_parity_report_sampled.json`, `data/contamination_audit/flags_pool.tsv`.
+- Reading: the 13-gram rule is spec (`contamination.ngram_n`) and is applied as written. The cost is a
+  corpus that is somewhat shorter and less table-heavy than the eval. That bears on the tables-vs-text
+  finding the project is after, so it is reported next to the table slice, not hidden.
+- Next action: report it in the contamination statement and next to the table slice. No change to the audit.

@@ -1,0 +1,32 @@
+# pins.fresh_accessions: selected once on 2026-10-02 by scripts/select_fresh_slice.py (TRADEOFFS T-015); never edited.
+accession	cik	form	filing_date	period	sic	sec_office	filer_size	fill	primary_document	company
+0000012659-26-000026	0000012659	10-K	2026-08-14	20260630	7200	trade & services	large_accelerated	quota	hrb-20260630.htm	H&R BLOCK INC
+0001024305-26-000048	0001024305	10-K	2026-08-20	20260630	2844	industrial applications and services	large_accelerated	quota	coty-20260630.htm	COTY INC.
+0001048911-26-000105	0001048911	10-K	2026-07-20	20260531	4513	energy & transportation	large_accelerated	quota	fdx-20260531.htm	FEDEX CORP
+0001104659-26-066795	0000067347	10-K	2026-05-27	20260331	3714	manufacturing	large_accelerated	quota	mod-20260331x10k.htm	MODINE MANUFACTURING CO
+0001104659-26-101493	0001069899	10-K	2026-08-26	20260630	2834	life sciences	large_accelerated	quota	pahc-20260630x10k.htm	PHIBRO ANIMAL HEALTH CORP
+0001104659-26-110772	0001067294	10-K	2026-09-25	20260731	5812	trade & services	large_accelerated	quota	cbrl-20260731x10k.htm	CRACKER BARREL OLD COUNTRY STORE, INC
+0001104659-26-111390	0001379006	10-K	2026-09-28	20260630	2834	life sciences	other	quota	nnvc-20260630x10k.htm	NANOVIRICIDES, INC.
+0001193125-26-237024	0000874866	10-K	2026-05-22	20260331	6411	finance	large_accelerated	quota	crvl-20260331.htm	CORVEL CORP
+0001193125-26-259683	0001002047	10-K	2026-06-05	20260424	3572	technology	large_accelerated	quota	ntap-20260424.htm	NetApp, Inc.
+0001193125-26-352872	0001078271	10-K	2026-08-17	20260630	3576	technology	large_accelerated	quota	extr-20260630.htm	EXTREME NETWORKS INC
+0001193125-26-356919	0000880117	10-K	2026-08-19	20260625	2060	manufacturing	large_accelerated	quota	jbss-20260625.htm	SANFILIPPO JOHN B & SON INC
+0001213900-26-103636	0001972529	10-K	2026-09-28	20260630	4220	energy & transportation	other	relaxed	ea0306339-10k_armlogi.htm	Armlogi Holding Corp.
+0001299709-26-000060	0001299709	10-K	2026-08-20	20260630	6035	finance	large_accelerated	quota	ax-20260630.htm	Axos Financial, Inc.
+0001302215-26-000053	0001302215	10-K	2026-05-22	20260331	6282	finance	large_accelerated	quota	hli-20260331.htm	HOULIHAN LOKEY, INC.
+0001336917-26-000073	0001336917	10-K	2026-05-19	20260331	2300	manufacturing	large_accelerated	quota	ua-20260331.htm	Under Armour, Inc.
+0001433642-26-000019	0001433642	10-K	2026-05-21	20260331	6282	finance	large_accelerated	quota	hlne-20260331.htm	Hamilton Lane INC
+0001437749-26-018588	0000099302	10-K	2026-05-27	20260328	3825	industrial applications and services	large_accelerated	quota	trns20260328_10k.htm	TRANSCAT INC
+0001437749-26-029621	0000763532	10-K	2026-09-03	20260630	3640	manufacturing	accelerated	relaxed	lyts20260630d_10k.htm	LSI INDUSTRIES INC
+0001437749-26-031414	0001334933	10-K	2026-09-29	20260731	1090	energy & transportation	large_accelerated	quota	uec20260731_10k.htm	URANIUM ENERGY CORP
+0001477932-26-005127	0002008027	10-K	2026-08-17	20260430	5600	trade & services	other	relaxed	calor_10k.htm	Calor Del Sol Inc.
+0001493152-26-032759	0002056016	10-K	2026-07-10	20260430	8742	trade & services	other	relaxed	form10-k.htm	Radiant Strategies Corp
+0001564708-26-000175	0001564708	10-K	2026-08-07	20260630	2711	manufacturing	large_accelerated	quota	nws-20260630.htm	NEWS CORP
+0001596993-26-000025	0001596993	10-K	2026-05-27	20260331	4412	energy & transportation	large_accelerated	quota	lpg-20260331x10k.htm	DORIAN LPG LTD.
+0001600033-26-000020	0001600033	10-K	2026-05-21	20260331	2844	industrial applications and services	large_accelerated	quota	elf-20260331.htm	e.l.f. Beauty, Inc.
+0001628280-26-038446	0001796022	10-K	2026-05-27	20260331	6282	finance	large_accelerated	quota	step-20260331.htm	StepStone Group Inc.
+0001640334-26-001019	0001697884	10-K	2026-06-08	20250131	8731	industrial applications and services	other	relaxed	vsbc_10k.htm	VITASPRING BIOMEDICAL CO. LTD.
+0001650372-26-000036	0001650372	10-K	2026-08-14	20260630	7372	technology	large_accelerated	quota	team-20260630.htm	Atlassian Corp
+0001764013-26-000064	0001764013	10-K	2026-05-20	20260331	2836	life sciences	large_accelerated	quota	imvt-20260331.htm	Immunovant, Inc.
+0001808997-26-000031	0001808997	10-K	2026-06-25	20260430	3949	manufacturing	accelerated	relaxed	aout-20260430.htm	American Outdoor Brands, Inc.
+0001834376-26-000049	0001834376	10-K	2026-09-09	20260630	8000	industrial applications and services	accelerated	quota	innv-20260630.htm	InnovAge Holding Corp.

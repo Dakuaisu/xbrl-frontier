@@ -318,3 +318,63 @@ Alternatives: (b) keep 208 and shrink `target_train_instances` / `curve_points`.
 spec and the shortfall is a planning-figure error (rows/142 counts the eval's sampled negatives), so the
 measured yield wins. (c) A higher 10-K share for the extension. Rejected because it puts two rules in one
 corpus.
+
+## T-013 AUTONOMOUS DECISION - owner to review: sampled training corpus (2026-10-02)
+
+`scripts/build_corpus.py`, per split (train / dev from `pins.train_accessions`):
+1. Every positive. Negatives are drawn only from those passing FinTagging's own negative filters
+   (`sample_pos&neg_data.ipynb` at `pins.fintagging_source.commit`: text 100 < len < 500 characters, tables
+   with at least 50 digits). No further matching knobs (owner instruction).
+2. `n_neg = round(n_pos x negatives_fraction / (1 - negatives_fraction))`, split by context type so the
+   negatives' table share equals the eval set's, measured at run time on the FinNI dedup negatives (0.2042).
+   If the table pool is short, every pool table is taken and the shortfall is reported.
+3. Positives and drawn negatives go into one order shuffled with `random.Random(f"{training.corpus_sampling.seed}:{split}")`.
+   Train uses the first `target_train_instances`, dev the first `dev_slice_instances`, and the rest is listed
+   in `data/corpus/surplus_ids.txt`, not trained on. This order is also the fixed order for the nested
+   learning-curve prefixes.
+4. `--exclude` removes instance ids before the draw. The final corpus excludes every contamination flag
+   (T-014). An unaudited build (`--tag v0_unaudited`) is kept only to report "before removal".
+Alternatives: negatives drawn without FinTagging's filters (diverges from how the eval negatives were made);
+FinTagging's per-filing cap of negatives at the number of positives (it does not reach the configured
+fraction).
+
+## T-014 AUTONOMOUS DECISION - owner to review: contamination audit implementation (2026-10-02)
+
+`scripts/contamination_audit.py`, stdlib only (no new dependency):
+1. **Normalization** (lm-eval-harness decontamination style): HTML tags replaced by spaces (otherwise
+   `<td>`-only grams would flag every table), entities decoded, lowercased, ASCII punctuation removed,
+   whitespace split.
+2. **n-gram**: a training instance is flagged if any `contamination.ngram_n`-gram occurs in any FinNI eval
+   context (all 25,765 distinct contexts, not just dedup). Texts shorter than n count as one gram of
+   their whole length, on both sides, as lm-eval does.
+3. **MinHash**: `minhash_num_perm` universal-hash permutations (mod 2^61-1, parameters from
+   `random.Random(contamination.minhash_seed)`) over word `minhash_shingle_words`-grams (new key: 5, the
+   Lee et al. dedup shingle). LSH bands x rows = 9 x 13 from datasketch's optimal-parameter rule
+   (equal FP/FN weights) at `minhash_jaccard_threshold`. A candidate is flagged if its estimated Jaccard is
+   at least the threshold. Alternative: the `datasketch` package (a new dependency, not needed).
+4. **Unit**: a training *instance* (PRD section 4 "every training instance"). Audited set: every
+   serialized instance that can enter the corpus (positives plus filter-passing negatives). Flagged
+   instances are excluded before sampling, and the final corpus is re-audited to show 0.
+Alternative: flag whole filings when any instance is flagged. Rejected because boilerplate 13-grams would
+remove most filings.
+
+## T-015 AUTONOMOUS DECISION - owner to review: fresh slice (2026-10-02)
+
+1. **Cutoffs** (vendor documentation, checked 2026-10-02): `gpt-6-luna` "May 18, 2026 knowledge cutoff"
+   (developers.openai.com/api/docs/models/gpt-6-luna); `gpt-5.4-mini-2026-03-17` "Aug 31, 2025"
+   (developers.openai.com/api/docs/models/gpt-5.4-mini); `gemini-3.5-flash-lite` "March 2026"
+   (deepmind.google model card, which adds that some domains stop at January 2025). The latest is
+   2026-05-18, so `contamination.fresh_slice_filing_date_min` = 2026-05-19. Month-only "March 2026" is
+   earlier than May in any reading.
+2. **Selection** (`scripts/select_fresh_slice.py`, new key `contamination.fresh_slice_selection`): 10-K only,
+   like the eval. Window [2026-05-19, selection date 2026-10-02]. CIKs outside the eval manifest, all
+   exclusion files and every training CIK (so the gap is not confounded by company overlap with
+   training). One filing per CIK, the same strata and serializer acceptance rule as training, seeded walk.
+   Two large-accelerated cells (real estate & construction 5, energy & transportation 1) cannot be filled,
+   because those filers have December year-ends and file no 10-K in the window. The 6 slots are filled from the same
+   seeded order regardless of cell and marked `fill=relaxed`: the minimum count is spec, my strata are not.
+   A first run without that fallback produced 24 rows. It was my own uncommitted output and was replaced.
+3. **Instances** mirror the benchmark (`data/fresh/instances.jsonl`, untracked): every positive plus
+   negatives passing FinTagging's filters, drawn to the eval set's dedup negatives fraction (0.3768) and
+   negative table share (0.2042). **Twins are not dropped**, because this is an evaluation set built to the
+   benchmark's conventions (T-010 applies to training only).

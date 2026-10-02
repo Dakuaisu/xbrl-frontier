@@ -5,8 +5,10 @@ share above training.kaggle.max_seq_len_tokens, HTML tag vocabulary, facts per p
 mix, negatives fraction, and the doubled-cell artifact. Training negatives are also shown restricted to
 those passing FinTagging's own negative filters, since the eval negatives went through them. Divergences
 are reported, not fixed here: fixes go in the serializer (CLAUDE.md).
-Writes data/format_parity_report.json.
+Writes data/format_parity_report.json; with --files (sampled corpus jsonl) and --tag, the train side is those
+files and the report is data/format_parity_report_<tag>.json.
 """
+import argparse
 import html as htmlmod
 import json
 import re
@@ -62,12 +64,16 @@ def profile(items: list[dict]) -> dict:
 
 
 def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--files", nargs="*")
+    ap.add_argument("--tag", default="")
+    args = ap.parse_args()
     rows = finni.load()
     keep = set(eval_sets.dedup_indices(rows))
     ev = [{"text": r.context, "context_type": eval_sets.context_type(r),
            "pairs": sorted(scorer.gold_set(r.answer))} for r in rows if r.idx in keep]
     tr = []
-    for path in sorted(OUT_DIR.glob("*.jsonl")):
+    for path in (args.files or sorted(OUT_DIR.glob("*.jsonl"))):
         for line in open(path):
             x = json.loads(line)
             pairs = sorted(scorer.pair_set({"Fact": e["value"], "Type": e["type"]} for e in x["numeric_entities"]))
@@ -89,7 +95,10 @@ def main() -> None:
         "twin_drop_divergence": {"twins_dropped_total": serialize_report["twins_dropped_total"],
                                  "note": "TRADEOFFS T-010: the eval keeps such twins; the training corpus does not"},
     }
-    REPORT.write_text(json.dumps(report, indent=1))
+    if args.files:
+        report["train_source"] = args.files
+    out = REPORT.with_name(f"format_parity_report_{args.tag}.json") if args.tag else REPORT
+    out.write_text(json.dumps(report, indent=1))
     keys = ["instances", "positives", "negatives_fraction", "table_share", "table_share_positives",
             "context_tokens_quantiles", "context_tokens_mean", "share_above_max_seq_len",
             "facts_per_positive_quantiles", "facts_per_positive_mean", "datatype_mix", "doubled_cell_share"]

@@ -23,3 +23,7 @@ data/manifest_work/*
 !data/train_selection_report.json
 !data/corpus_serialize_report.json
 !data/format_parity_report.json
+!data/fresh_selection_report.json
+!data/corpus_report.json
+!data/corpus_report_v0_unaudited.json
+!data/format_parity_report_sampled.json

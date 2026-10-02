@@ -1,0 +1,55 @@
+{
+ "config_hash": "5d3753671a61490b24c0185cd66e910dfe2a33e8f47a76155d08242fefcf055c",
+ "seed": 20261003,
+ "negatives_fraction_target": 0.4,
+ "eval_negative_table_share": 0.20419008686765458,
+ "excluded_ids": 18184,
+ "pool_stats": {
+  "train::excluded": 17186,
+  "train::neg_failing_fintagging_filter": 294746,
+  "dev::excluded": 998,
+  "dev::neg_failing_fintagging_filter": 14409
+ },
+ "splits": {
+  "train": {
+   "positives_available": 23273,
+   "negatives_drawn": 15515,
+   "negatives_table_wanted": 3168,
+   "negatives_table_drawn": 3168,
+   "table_pool_shortfall": 0,
+   "negatives_text_drawn": 12347,
+   "pool_negatives_table": 4414,
+   "pool_negatives_text": 159972,
+   "ordered_instances": 38788,
+   "cap": 40000,
+   "used": 38788,
+   "surplus": 0,
+   "used_positives": 23273,
+   "used_negatives": 15515,
+   "used_negatives_fraction": 0.3999948437661132,
+   "used_negative_table_share": 0.20418949403802772,
+   "cap_reached": false,
+   "sha256": "59025e0e1f8b0256193735cdc5147a4777fa03945f4a7f8ae08b433cef7a5b42"
+  },
+  "dev": {
+   "positives_available": 1160,
+   "negatives_drawn": 773,
+   "negatives_table_wanted": 158,
+   "negatives_table_drawn": 156,
+   "table_pool_shortfall": 2,
+   "negatives_text_drawn": 617,
+   "pool_negatives_table": 156,
+   "pool_negatives_text": 8125,
+   "ordered_instances": 1933,
+   "cap": 2000,
+   "used": 1933,
+   "surplus": 0,
+   "used_positives": 1160,
+   "used_negatives": 773,
+   "used_negatives_fraction": 0.3998965338851526,
+   "used_negative_table_share": 0.2018111254851229,
+   "cap_reached": false,
+   "sha256": "e5b1f16488cf504a05e757770d4a7b9d80a6f53656416a687e701d51be7f0746"
+  }
+ }
+}
