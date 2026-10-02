@@ -437,3 +437,10 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - D1 zero-shot kernels `xbrl-frontier-zeroshot-1p7b` and `-0p6b` pushed on source 951adbf (kernel-side code unchanged since; GPU quota 1.2 h used before).
 - `training/kaggle_train.py` checkpoints and stops `training.kaggle.session_stop_margin_minutes` before `session_hours_max`; `final_adapter` only when complete (T-038).
 - Verified before commit: full suite with `-rf`, 94 passed (new schedule test).
+
+## 2026-10-02 D1 first attempt failed: torchaudio CUDA mismatch
+
+- Both zero-shot kernels failed at ~5 min on `from vllm import LLM`: transformers imports Kaggle's torchaudio (CUDA 12.8), which refuses
+  vllm's torch (CUDA 13.0). No predictions produced. The vLLM notebooks now `pip uninstall torchaudio` after installing vllm. Logs in
+  `data/kaggle/zeroshot-*` (not tracked); rows in `data/kaggle/runs.jsonl`. GPU quota used 1.41 h after (D2 running concurrently).
+- Verified before commit: full suite with `-rf`, 94 passed.
