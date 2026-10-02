@@ -15,6 +15,7 @@ from pathlib import Path
 from xbrl_frontier import config, eval_sets, finni, scorer, sft_format, tokens
 
 SCORES = config.REPO_ROOT / "data" / "scores"
+KIND = "xbrl_frontier.score_predictions/v1"
 
 
 @dataclass(frozen=True)
@@ -87,7 +88,9 @@ def main() -> None:
         raise SystemExit(f"{len(missing)} instances have no prediction (e.g. {missing[:3]}); refusing to score")
     counts = tokens.context_token_counts(items)
     keep = set(eval_sets.dedup_indices(items))
-    rep = {"set": args.set, "predictions": str(args.pred), "config_hash": config.config_hash(),
+    import hashlib
+    rep = {"kind": KIND, "set": args.set, "predictions": str(args.pred),
+           "predictions_sha256": hashlib.sha256(args.pred.read_bytes()).hexdigest(), "config_hash": config.config_hash(),
            "instances_raw": len(items), "instances_dedup": len(keep),
            "raw": score_items(items, raw_preds, imap, counts),
            "dedup": score_items([it for it in items if it.idx in keep], raw_preds, imap, counts)}

@@ -222,3 +222,10 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   parse failures, not-generated rows, refusal on missing predictions). No local torch install: the encoder
   trains on Kaggle per PRD section 5.
 - Owner-blocked: O-019 run 4 (encoder) and the prediction runs, each with its own step list.
+
+## 2026-10-02 Phase 2, unit 3: curve aggregation; effective max_model_len
+
+- Built `scripts/curve_table.py` (T-022). Scorer outputs now carry `kind` and `predictions_sha256`. The vLLM runner
+  records the effective `max_model_len` and refusals (T-021 addendum).
+- Verified: `tests/test_curve_table.py` (non-scorer file refused; rows only for scored prefixes; exact O-016
+  label; recorded instances_seen; missing listed) and `tests/test_score_predictions.py` (still calibrated).

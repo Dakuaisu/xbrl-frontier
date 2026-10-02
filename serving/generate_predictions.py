@@ -3,7 +3,9 @@
 Owner-run on Kaggle (OPEN O-019). Same prompt as training (xbrl_frontier.sft_format.prompt_text,
 enable_thinking=False), temperature eval.generation.temperature, max_model_len eval.generation.max_model_len.
 A prompt that does not fit is not truncated: it is written as not_generated and scored as an empty
-prediction, counted separately. One output file per target: OUT/predictions_<target>_<set>.jsonl.
+prediction, counted separately. If vLLM refuses the configured max_model_len (e.g. not enough KV cache on a
+16 GB T4), each refusal is recorded and the next halving is tried; the accepted (effective) value is
+recorded in the meta file and decides which prompts fit. Nothing is lowered silently. One output file per target: OUT/predictions_<target>_<set>.jsonl.
 """
 import argparse
 import json
@@ -34,24 +36,36 @@ def main() -> None:
     local = pinned_snapshot(args.model)
     tok = AutoTokenizer.from_pretrained(local)
     items = load_set(args.set, args.corpus)
-    prompts, fits = [], []
+    prompts = []
     for x in items:
         p = sft_format.prompt_text(tok, x["text"])
-        n = len(tok.encode(p, add_special_tokens=False))
-        prompts.append((p, n))
-        fits.append(n < g["max_model_len"])
+        prompts.append((p, len(tok.encode(p, add_special_tokens=False))))
     targets = ([("base", None)] if args.base else []) + [tuple(a.split("=", 1)) for a in args.adapter]
     if not targets:
         raise SystemExit("nothing to predict: pass --base and/or --adapter NAME=DIR")
-    llm = LLM(model=local, tokenizer=local, dtype="half", max_model_len=g["max_model_len"],
-              enable_lora=any(d for _, d in targets), max_lora_rank=config.get("training.lora_rank"),
-              seed=config.get("pins.seeds")[0])
+    llm, refusals, limit = None, [], g["max_model_len"]
+    floor = config.get("training.kaggle.max_seq_len_tokens")
+    while llm is None:
+        try:
+            llm = LLM(model=local, tokenizer=local, dtype="half", max_model_len=limit,
+                      enable_lora=any(d for _, d in targets), max_lora_rank=config.get("training.lora_rank"),
+                      seed=config.get("pins.seeds")[0])
+        except (ValueError, RuntimeError) as e:
+            refusals.append({"max_model_len": limit, "error": f"{type(e).__name__}: {str(e)[:500]}"})
+            print("vLLM refused max_model_len", limit, "->", refusals[-1]["error"], flush=True)
+            if limit // 2 < floor:
+                raise SystemExit(f"vLLM refused every max_model_len down to {limit}; see the error above")
+            limit //= 2
+    effective = llm.llm_engine.model_config.max_model_len
+    fits = [n < effective for _, n in prompts]
     args.out.mkdir(parents=True, exist_ok=True)
     run_prompts = [p for (p, n), ok in zip(prompts, fits) if ok]
-    params = [SamplingParams(temperature=g["temperature"], max_tokens=g["max_model_len"] - n)
+    params = [SamplingParams(temperature=g["temperature"], max_tokens=effective - n)
               for (p, n), ok in zip(prompts, fits) if ok]
     meta = {"model": args.model, "revision": model_pin(args.model), "set": args.set, "versions": versions,
             "env": env_record("kaggle_t4"), "config_hash": config.config_hash(), "generation": g,
+            "configured_max_model_len": g["max_model_len"], "effective_max_model_len": effective,
+            "max_model_len_refusals": refusals,
             "instances": len(items), "not_generated_over_max_model_len": fits.count(False), "targets": {}}
     for k, (name, path) in enumerate(targets):
         lora = LoRARequest(name, k + 1, path) if path else None

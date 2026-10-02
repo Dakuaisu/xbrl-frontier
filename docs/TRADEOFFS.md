@@ -512,3 +512,20 @@ template could differ from the Mac and from scoring.
    0, raw and dedup, on dev and on the full FinNI set (`tests/test_score_predictions.py`).
 3. **Curve checkpoints**: scored on the dev slice now. The frontier sample is added once Phase 3 pins its ids.
    The pilot's F1 (O-021) is a format check and is never charted or tabled.
+4. **Addendum (owner note, 2026-10-02): effective `max_model_len`.** A 1.7B in fp16 on a 16 GB T4 may not leave
+   vLLM enough KV cache for 32,768 tokens. `serving/generate_predictions.py` therefore records every startup
+   refusal (`max_model_len_refusals`) and retries at the next halving, never below
+   `training.kaggle.max_seq_len_tokens`. The accepted value is recorded as `effective_max_model_len` and
+   printed by the notebook. Prompts that do not fit the effective value are `not_generated`. The limit is
+   never lowered silently, and the configured value stays as written.
+
+## T-022 Curve aggregation (owner-approved tooling, 2026-10-02)
+
+`scripts/curve_table.py` builds the learning-curve table and chart series from a run's `run.json` and one
+scorer output per checkpoint (`--point PREFIX=SCORE_JSON`). It refuses any file that does not carry the
+scorer's `kind` marker (`xbrl_frontier.score_predictions/v1`, added to every scorer output together with the
+predictions file's sha256), the expected set, and the raw/dedup metrics with the context-type slice. A
+checkpoint without a score file gets no row and is listed under `missing`. Rows carry the recorded
+`instances_seen` and `global_step`. The full-corpus point is labelled
+"38,788 (cap 40,000 not reached after decontamination, O-016)" (built from the run's own numbers), with a
+skip note if any instance was skipped (T-018). Series are given overall and by table vs text, raw and dedup.
