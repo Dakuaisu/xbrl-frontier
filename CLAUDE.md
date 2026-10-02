@@ -70,7 +70,7 @@ starting it. `docs/REVIEW.md` explains why the spec looks the way it does, and
   `docs/TRADEOFFS.md`. There is no runtime dependency on FilingQA, and nothing in FilingQA is modified.
 - EDGAR access follows SEC fair-access rules (rate limit, declared User-Agent), and the downloader
   enforces them. The declared User-Agent is
-  `xbrl-frontier Dakuaisu 88734719+Dakuaisu@users.noreply.github.com`. If SEC throttles or rejects
+  `Adnan Rashid adnanrashid230@gmail.com` (SEC rejects the GitHub noreply address with a 403). If SEC throttles or rejects
   it, stop, log it as OWNER-BLOCKED, and don't switch to a different identity or route around it.
 - Format divergences found by the parity check are fixed in the serializer, not in the model.
 
