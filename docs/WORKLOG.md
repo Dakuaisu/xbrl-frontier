@@ -52,3 +52,7 @@ Dated implementation notes: what was built, how it was verified, what is next.
 - Owner-blocked: O-005 (Kaggle), O-006 (RTX 3050), both waiting on O-007 (software pins).
 
 - 2026-10-02: observed the AWS g4dn.xlarge T4 rate at pin time (O-008 RESOLVED). `scripts/phase0_cost.py` now uses all three `market_rate_keys` sources.
+
+## 2026-10-02 Phase 0, unit 6: Schema-Aware XBRL preprint
+
+- Tried DOI resolution, ResearchGate, Crossref, OpenAlex, Semantic Scholar, arXiv and Exa. Only metadata is reachable; logged as O-009.

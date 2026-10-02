@@ -92,3 +92,20 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   URL and file hash are in the price sheet under `gpu_per_hour.aws_g4dn_xlarge_T4_observation`. The
   sheet's top-level `observed` date stays 2026-10-01, and this source carries its own date. All three T4
   sources now appear in `scripts/phase0_cost.py`.
+
+## O-009 "A Schema-Aware Large Language Model for XBRL Tagging and Cross-Statement Consistency Checking" could not be read (OPEN)
+
+- Status: OPEN (PRD section 10 risk: possible scoop)
+- Found (metadata only): Zhaoyue Peng, Shuncheng Liu, Xuhao Meng, Zhe Su, Ningjing Sang; posted
+  2026-07-07; DOI 10.13140/RG.2.2.19518.86080 (a ResearchGate-minted DOI); OpenAlex W7167572144 lists it
+  as an article with no PDF location, no abstract and 0 citations.
+- Attempts on 2026-10-02: the DOI resolves to `researchgate.net/doi/10.13140/RG.2.2.19518.86080`, which
+  returns HTTP 403 ("ResearchGate - Temporarily Unavailable"). ResearchGate search also returns 403.
+  Crossref has no record. Semantic Scholar does not know the DOI (its title search was rate-limited, 429).
+  The arXiv title search returned nothing. An Exa library page has the metadata only.
+- Evidence of scope: none beyond the title. The title suggests concept tagging plus cross-statement
+  consistency checks, not a serving cost/latency frontier or a small-model learning curve. That is
+  unverified until the text is read.
+- Next action: the owner opens it in a logged-in browser (ResearchGate often needs an account) or emails
+  the authors, saves the PDF outside the repo, and tells me the path. I then summarize it against PRD
+  section 1 and reposition if needed. Retry Semantic Scholar once the rate limit clears.
