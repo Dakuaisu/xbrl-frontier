@@ -44,6 +44,19 @@ def available_universe(lo: dt.date, hi: dt.date, forms: set) -> tuple[list, list
     return out, missing
 
 
+def instances_file_record(path) -> dict:
+    """sha256 and counts of the fresh instances file, so the slice is pinned by hash as well as by accessions."""
+    import hashlib
+    body = path.read_bytes()
+    items = [json.loads(l) for l in body.decode().splitlines()]
+    c = Counter(("pos" if x["numeric_entities"] else "neg", x["context_type"]) for x in items)
+    return {"path": str(path.relative_to(config.REPO_ROOT)), "sha256": hashlib.sha256(body).hexdigest(),
+            "instances": len(items), "positives": sum(v for (l, _), v in c.items() if l == "pos"),
+            "negatives": sum(v for (l, _), v in c.items() if l == "neg"),
+            "by_label_and_context_type": {f"{l}::{t}": v for (l, t), v in sorted(c.items())},
+            "filings": len({x["accession"] for x in items})}
+
+
 def main() -> None:
     if OUT.exists():
         raise SystemExit(f"{OUT} exists: the fresh slice is selected once")
@@ -129,7 +142,8 @@ def main() -> None:
               "instances": len(items), "positives": len(pos), "negatives": n_t + n_x,
               "negatives_fraction": (n_t + n_x) / max(len(items), 1), "eval_negatives_fraction_dedup": nf,
               "negatives_table": n_t, "eval_negative_table_share": t_share,
-              "edgar_requests": dict(edgar.stats)}
+              "edgar_requests": dict(edgar.stats),
+              "instances_file": instances_file_record(FRESH / "instances.jsonl")}
     REPORT.write_text(json.dumps(report, indent=1))
     print(json.dumps(report, indent=1))
 

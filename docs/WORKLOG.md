@@ -152,3 +152,15 @@ Dated implementation notes: what was built, how it was verified, what is next.
 - Fresh slice: universe 560 10-Ks, 542 eligible, 30 accepted (24 by quota, 6 relaxed fill), filed 2026-05-19
   to 2026-09-29, 0 rejections. 3,434 instances (2,140 pos, negatives fraction 0.3768, 264 table negatives).
 - Verified: `pytest -q tests` (see commit), final audit 0 flagged.
+
+## 2026-10-02 Phase 1 close: O-016 decision
+
+- T-016: train on 38,788 / dev 1,933 with config caps unchanged; curve points count distinct instances of the
+  fixed order. O-016 is RESOLVED. O-017 stays OPEN (reported next to the table slice).
+- `data/fresh_selection_report.json` now carries the fresh instance file's sha256
+  (18b5f52c12e3bdd2da6744f9391caac4e27f0fac5f28ac717cdde21148b5ab25), with 3,434 instances, 2,140 pos and
+  1,294 neg, computed from the existing file. `scripts/select_fresh_slice.py` writes that block itself.
+- O-018 carries the Phase 5 contamination-statement checklist (fresh-slice relaxed fill and unfillable
+  cells, audit counts, size disclosures).
+- Phase 1 complete: parser fork, serializer, assignment re-run, accession selection and extension, serialization,
+  format parity, sampled corpus, contamination audit and fresh slice are all built and verified.

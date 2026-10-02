@@ -243,9 +243,10 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   context type so the negatives' table share tracks the eval's. The parity script is re-run on the sampled
   corpus and both reports are kept.
 
-## O-016 Corpus is below both caps after decontamination (OPEN)
+## O-016 Corpus is below both caps after decontamination (RESOLVED by T-016)
 
-- Status: OPEN (DECISIONS NEEDED)
+- Status: RESOLVED (2026-10-02): train on 38,788 / dev 1,933. Config values are unchanged, and the
+  disclosure "38,788 (cap 40,000 not reached after decontamination, O-016)" goes everywhere (T-016).
 - Found: the contamination audit (T-014) flags 18,184 of 215,284 eligible instances (8.4%), including 2,801
   positives. After removal: train 23,273 positives -> 38,788 instances at `negatives_fraction`, against
   `target_train_instances` 40,000. Dev 1,160 positives -> 1,933 against `dev_slice_instances` 2,000.
@@ -272,3 +273,14 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   corpus that is somewhat shorter and less table-heavy than the eval. That bears on the tables-vs-text
   finding the project is after, so it is reported next to the table slice, not hidden.
 - Next action: report it in the contamination statement and next to the table slice. No change to the audit.
+
+## O-018 Contamination statement checklist for Phase 5 (OPEN, carried)
+
+- Status: OPEN until the README contamination statement is written (Phase 5).
+- The statement text must include, not only reference: (1) the fresh slice's 6 `fill=relaxed` rows
+  (`data/fresh_accessions.txt`, column `fill`) and the two strata cells unfillable in the window
+  (10-K | real estate & construction | large_accelerated: 5; 10-K | energy & transportation |
+  large_accelerated: 1; December year-end filers file no 10-K between 2026-05-19 and 2026-10-02), T-015;
+  (2) the audit counts before and after removal (18,184 of 215,284 flagged; 0 of 40,721 after) and the
+  decontamination skew of positives (O-017); (3) the corpus sizes below cap (T-016); (4) the fresh-slice
+  instance file pinned by sha256 in `data/fresh_selection_report.json`.

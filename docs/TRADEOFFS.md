@@ -378,3 +378,18 @@ remove most filings.
    negatives passing FinTagging's filters, drawn to the eval set's dedup negatives fraction (0.3768) and
    negative table share (0.2042). **Twins are not dropped**, because this is an evaluation set built to the
    benchmark's conventions (T-010 applies to training only).
+
+## T-016 AUTONOMOUS DECISION - owner to review: train on the decontaminated corpus below cap (2026-10-02)
+
+Decision (owner, O-016 option b): train on the corpus as built, with 38,788 train and 1,933 dev
+instances. `training.target_train_instances`, `dev_slice_instances` and `curve_points` stay as written in
+`thresholds.yaml` and are **not** edited to the realised sizes. The top curve point is "full corpus",
+realised at 38,788 distinct instances. Every chart, table and the README say "38,788 (cap 40,000 not
+reached after decontamination, O-016)", and dev says "1,933 (cap 2,000 not reached after decontamination,
+O-016)". **Curve points count distinct instances**: nested prefixes of the one fixed shuffled order
+(T-013), seen in epoch 1. They are not optimizer examples across `training.epochs`, so the 40,000 point is
+not "reached in epoch 2". The training script states the same.
+Alternatives: (a) a second extension. Rejected because it breaks T-012's "extended once", re-opens the
+pinned list a second time, and needs a third sizing rule and a re-audit, all to close a 3% gap. (c) defer
+to the Phase 2 pilot. Rejected because a Phase 2 result would decide a Phase 1 corpus question, which is the
+wrong direction.

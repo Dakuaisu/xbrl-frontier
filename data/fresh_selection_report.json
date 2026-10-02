@@ -31,5 +31,20 @@
  "edgar_requests": {
   "requests": 6,
   "cache_hits": 717
+ },
+ "instances_file": {
+  "path": "data/fresh/instances.jsonl",
+  "sha256": "18b5f52c12e3bdd2da6744f9391caac4e27f0fac5f28ac717cdde21148b5ab25",
+  "instances": 3434,
+  "positives": 2140,
+  "negatives": 1294,
+  "by_label_and_context_type": {
+   "neg::table": 264,
+   "neg::text": 1030,
+   "pos::table": 1093,
+   "pos::text": 1047
+  },
+  "filings": 30,
+  "added": "2026-10-02, computed from the existing file (no re-selection)"
  }
 }
