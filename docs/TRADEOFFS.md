@@ -553,3 +553,30 @@ skip note if any instance was skipped (T-018). Series are given overall and by t
    `gates.quantized_f1_drop_max` beside them. Alternative denominators: fp16 facts only (|A|). Rejected
    because a variant that only adds facts would then read as more stable. Point values only; bootstrap
    decisions belong to the scoring phase (`gates.decision_rule`).
+
+## T-024 AUTONOMOUS DECISION - owner to review: frontier-arm harness and spend guard (2026-10-02)
+
+1. **Requests** (`frontier/requests.py`): one user message holding the benchmark's verbatim FinNI query, zero-shot.
+   OpenAI arms use the Responses API (`store: false`); Gemini uses `generateContent`. Thinking per
+   `frontier.thinking_per_arm` (new key), the minimum each API allows per its documentation (checked
+   2026-10-02): `gpt-6-luna` reasoning effort `none` ("GPT-6 Sol and GPT-6 Luna support `none`"),
+   `gpt-5.4-mini-2026-03-17` `none` ("Reasoning.effort supports: none (default)"), `gemini-3.5-flash-lite`
+   thinking level `minimal` (its default; the Cloud docs name minimal as the low end). The swap candidate
+   `gpt-5.4-nano-2026-03-17` is set to `none` by analogy with gpt-5.4-mini. This is **unverified** and must be
+   checked before the swap is ever used. No temperature or output cap is set, so arms run at API defaults.
+   Every response's text, returned model field, input/output/reasoning tokens and finish reason are logged.
+2. **Batch formats**: OpenAI Batch API JSONL against `/v1/responses` (file upload, then a batch with a 24 h
+   window); Gemini `batchGenerateContent` with inline requests keyed by instance id, results read from
+   `dest.inlinedResponses` (both per the vendor docs fetched 2026-10-02). Outputs are matched by
+   `custom_id` / metadata key, not by order.
+3. **Dry run is the default**: it renders the exact request payload and prices it from the dated price sheet.
+   Input is estimated with the Qwen3 tokenizer as a proxy and output with the gold answer's tokens, labelled
+   as estimates. Batch steps add `frontier.reasoning_token_margin`, synchronous steps do not (PRD section 7).
+   `scripts/frontier_plan.py` prices every live step, using the planning shape until the probe measures
+   real tokens, and the actual fresh instances for the control.
+4. **Spend guard** (`frontier/guard.py`): `--live` requires `--approval T-NNN`, and that TRADEOFFS section must
+   contain `PRE-APPROVED SPEND: step=<step> arm=<arm> usd_max=<dollars>`, written by the owner. The estimate must
+   be at most `usd_max`, and the ledger (`data/phase3/spend_ledger.jsonl`, priced from returned usage) plus the
+   estimate must leave `frontier.usd_reserve_min` under `budget.usd_cap_frontier_api`. The guard runs **before**
+   the API key is read. Tests strip the key variables, replace key reading and HTTP with failing stubs, and
+   exercise every refusal path. The builder makes no live call; every live step is OWNER-BLOCKED (O-022).

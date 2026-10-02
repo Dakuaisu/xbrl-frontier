@@ -360,3 +360,34 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   nothing yet about the full run, which the curve will show. The LR stays at `training.learning_rate`: the
   pilot ran one setting, and loss fell without instability.
 
+
+## O-022 Live frontier-arm steps: probe, batches, synchronous latency sample, fresh-slice control (OWNER-BLOCKED)
+
+- Status: OWNER-BLOCKED (paid API calls are owner-only; the builder never calls an API). Prerequisites in PRD
+  order: the primary student's full-set run, then the power check (`frontier.power_check`, company-level SD,
+  T-007), then the sample filings and the latency instance ids pinned (Phase 3 sampling tooling, not yet built),
+  then the probe, re-sizing from measured tokens, and the batches.
+- Ready: `frontier/harness.py` (`run` / `collect`), `frontier/requests.py`, `frontier/guard.py`,
+  `scripts/frontier_plan.py`. Tests in `tests/test_frontier_harness.py` read no keys and make no calls.
+- Priced plan (`data/phase3/frontier_plan.json`; prices `config/prices_2026-10-01.yaml`, observed 2026-10-01;
+  estimates until the probe measures tokens):
+
+  | arm | probe | batch | latency | fresh control |
+  |---|---|---|---|---|
+  | gpt-6-luna | 0.040 | 0.530 | 0.059 | 0.300 |
+  | gemini-3.5-flash-lite | 0.156 | 2.058 | 0.230 | |
+  | gpt-5.4-mini-2026-03-17 | 0.327 | 4.323 | 0.484 | |
+
+  Total $8.506 against `budget.usd_cap_frontier_api` ($10) with `frontier.usd_reserve_min` ($1.00) left over:
+  yes ($1.494 unspent).
+- Owner steps for each live step (one approval per step and arm):
+  1. Dry run: `.venv/bin/python -m frontier.harness run --step <step> --arm <arm> <instances>` with
+     `--accession ACC` (probe), `--accessions FILE` (batch), `--ids FILE` (latency) or nothing (fresh_control).
+     Read `usd_estimate` in the printed estimate.
+  2. Add to `docs/TRADEOFFS.md` a section `## T-NNN Owner pre-approval: <step> <arm>` containing the line
+     `PRE-APPROVED SPEND: step=<step> arm=<arm> usd_max=<dollars>` (at least the estimate). Commit it.
+  3. Export the key (`OPENAI_API_KEY` or `GEMINI_API_KEY`) in your shell, then rerun step 1 with
+     `--live --approval T-NNN`. For batch steps, run the same command with `collect` instead of `run`
+     until it reports the results collected.
+  4. Return nothing: outputs land in `data/phase3/live/<step>_<arm>/` (predictions in the scorer's format,
+     usage and latency logs, returned model fields), and every dollar is in `data/phase3/spend_ledger.jsonl`.

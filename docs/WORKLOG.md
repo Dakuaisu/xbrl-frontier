@@ -238,3 +238,13 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   exported checkpoints. T-023; O-019 has the export step list.
 - Verified: `tests/test_export_and_flips.py` (calibration sample fixed and rendered in the training format;
   flip rate 0 for identical files, exact counts for one parse failure).
+
+## 2026-10-02 Phase 3 tooling: frontier harness, spend guard, priced plan
+
+- Built `frontier/requests.py`, `frontier/guard.py`, `frontier/harness.py` and `scripts/frontier_plan.py` (T-024). New
+  key `frontier.thinking_per_arm`.
+- Dry-run plan: $8.506 for every live step, leaving the $1.00 reserve under the $10 cap
+  (`data/phase3/frontier_plan.json`). No call was made, and no key was read.
+- Verified: `tests/test_frontier_harness.py` (6: request shapes, parsing, every guard refusal, a live attempt
+  without approval refusing before any key read, dry-run pricing from the sheet).
+- Owner-blocked: O-022 (all live steps), after the Phase 3 sampling tooling and the power check.

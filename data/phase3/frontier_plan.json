@@ -1,0 +1,73 @@
+{
+ "price_sheet": "config/prices_2026-10-01.yaml",
+ "price_sheet_observed": "2026-10-01",
+ "config_hash": "eb718f0008bc00d3cebff24137359a071f4511df5881d61bed1431acb1571415",
+ "rows": [
+  {
+   "arm": "gpt-6-luna",
+   "step": "probe",
+   "usd": 0.04003825704225352,
+   "basis": "planning shape, sync"
+  },
+  {
+   "arm": "gpt-6-luna",
+   "step": "batch",
+   "usd": 0.5295059493838028,
+   "basis": "planning shape, batch x (1+margin)"
+  },
+  {
+   "arm": "gpt-6-luna",
+   "step": "latency",
+   "usd": 0.059250000000000004,
+   "basis": "planning shape, sync"
+  },
+  {
+   "arm": "gemini-3.5-flash-lite",
+   "step": "probe",
+   "usd": 0.15559170774647887,
+   "basis": "planning shape, sync"
+  },
+  {
+   "arm": "gemini-3.5-flash-lite",
+   "step": "batch",
+   "usd": 2.057700334947183,
+   "basis": "planning shape, batch x (1+margin)"
+  },
+  {
+   "arm": "gemini-3.5-flash-lite",
+   "step": "latency",
+   "usd": 0.23024999999999998,
+   "basis": "planning shape, sync"
+  },
+  {
+   "arm": "gpt-5.4-mini-2026-03-17",
+   "step": "probe",
+   "usd": 0.32689463028169014,
+   "basis": "planning shape, sync"
+  },
+  {
+   "arm": "gpt-5.4-mini-2026-03-17",
+   "step": "batch",
+   "usd": 4.323181485475352,
+   "basis": "planning shape, batch x (1+margin)"
+  },
+  {
+   "arm": "gpt-5.4-mini-2026-03-17",
+   "step": "latency",
+   "usd": 0.48375,
+   "basis": "planning shape, sync"
+  },
+  {
+   "arm": "gpt-6-luna",
+   "step": "fresh_control",
+   "usd": 0.3001276325,
+   "basis": "actual fresh instances, token proxy, batch x (1+margin)"
+  }
+ ],
+ "total_usd": 8.506289997376761,
+ "budget_usd_cap_frontier_api": 10,
+ "frontier_usd_reserve_min": 1.0,
+ "leaves_reserve": true,
+ "unspent_usd": 1.4937100026232386,
+ "note": "estimates; the probe replaces the planning shape with measured tokens and N is recomputed (PRD section 7)"
+}

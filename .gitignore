@@ -28,3 +28,6 @@ data/manifest_work/*
 !data/corpus_report_v0_unaudited.json
 !data/format_parity_report_sampled.json
 !data/phase2_mac_pilot_Qwen3-0.6B.json
+!data/phase3/
+data/phase3/*
+!data/phase3/frontier_plan.json
