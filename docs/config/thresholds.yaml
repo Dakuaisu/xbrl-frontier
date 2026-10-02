@@ -70,6 +70,18 @@ contamination:
   minhash_jaccard_threshold:        0.8
   fresh_slice_min_filings:          30
   fresh_slice_filing_date_min:      ""                       # = max knowledge cutoff among pinned frontier arms + 1 day; filled at pin time
+  eval_filing_window_end:           "2025-02-13"             # FinTagging v5: 142 10-Ks filed 2023-02-13..2025-02-13; start = train_filing_date_max + 1 day (added 2026-10-02, TRADEOFFS T-003)
+  instance_match:                                             # instance -> filing assignment (added 2026-10-02, TRADEOFFS T-003)
+    shingle_words:               8                            # word n-gram size over lowercased [a-z0-9]+ tokens
+    max_shingles_per_context:    64                           # evenly spaced sample per context
+    fuzzy_min_containment:       0.5                          # share of a context's sampled shingles found in the filing
+    min_unique_exact_for_filing: 3                            # a filing is in the eval set if this many contexts match it, and no other scanned filing, exactly
+
+edgar:                       # SEC fair-access (added 2026-10-02, TRADEOFFS T-003)
+  max_requests_per_second:   8                                # SEC ceiling is 10/s; stay under it
+  fts_query_budget:          2000                             # PRD section 9 estimate for manifest completion
+  fts_phrase_words:          11                               # PRD section 4 recipe
+  retry_backoff_seconds:     [ 2, 10, 60 ]                    # on 429/5xx only; a 403 stops the run (OWNER-BLOCKED)
 
 training:
   target_train_instances:    40000                            # sized to the Kaggle quota, see PRD section 9
@@ -140,6 +152,10 @@ serving:
     variants:                "all planned variants of serving.hardware.<card>.variants, using base-model checkpoints quantized the same way"
     requests_per_variant:    20
     failure_action:          "remove the variant from the serving table before training hours are spent; record the error"
+    smoke_quantization:                                      # base-model checkpoints for the smoke test only; never scored (added 2026-10-02, TRADEOFFS T-004)
+      int8_w8a8:             { tool: "llmcompressor", scheme: "W8A8", calibration: "none (dynamic per-token activations)" }
+      awq_int4:              { tool: "autoawq", w_bit: 4, q_group_size: 128, zero_point: true, version: "GEMM",
+                               calib_data: "pileval", calib_samples: 128, calib_max_seq_len: 512 }   # AutoAWQ defaults; Phase 2 re-calibrates on training contexts
 
 
 gates:                       # the minimum defensible version ships only if every gate passes

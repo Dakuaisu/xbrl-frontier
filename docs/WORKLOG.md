@@ -36,3 +36,17 @@ Dated implementation notes: what was built, how it was verified, what is next.
   F1 0.000000; half dropped R 0.500002 with P 1.000000. All are within `eval.oracles.tolerance`.
 - Enforcement: `.githooks/pre-commit` (installed into `.git/hooks/`) and `.github/workflows/oracles.yml`.
 - Open: O-003 (token-bucket edges), O-004 (company/fiscal-year need the instance map).
+
+## 2026-10-02 Phase 0, unit 5: owner-run serving tooling and break-even script
+
+- Built `xbrl_frontier/cost.py` (arm $/filing per regime, break-even and gate-pass goodput,
+  self-host $/filing), `xbrl_frontier/throughput.py` (max throughput and SLO goodput in filings/hour),
+  `scripts/phase0_cost.py` (writes `data/phase0/break_even.{json,md}`; with `--results` it adds measured
+  base-model throughput and a beatable flag per arm, regime and T4 source),
+  `serving/{common,phase0_benchmark,quantize_base,smoke_test}.py`, `serving/run_rtx3050_smoke.sh`
+  and `notebooks/phase0_kaggle_t4.ipynb`. Decisions are in T-004.
+- Verified: `tests/test_cost_and_serving.py` (6 tests) checks the variant expansion against config, the
+  3050 vLLM flags, the break-even/self-host identity, the blank-source handling and the goodput
+  selection. `.venv/bin/python -m scripts.phase0_cost` runs on the price sheet alone and reproduces the
+  PRD section 7 break-even and gate-pass figures from config keys.
+- Owner-blocked: O-005 (Kaggle), O-006 (RTX 3050), both waiting on O-007 (software pins).

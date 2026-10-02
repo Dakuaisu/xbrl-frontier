@@ -55,3 +55,36 @@ leaves the remaining details unspecified (evidence_brief section 3), so they wer
    change to git config) runs `tests/test_scorer_unit.py` and `tests/test_oracles.py` whenever scorer,
    config or test files are staged. `.github/workflows/oracles.yml` runs the same tests on push, for when a
    remote exists.
+
+## T-004 AUTONOMOUS DECISION - owner to review: Phase 0 serving tooling (2026-10-02)
+
+1. **Load tool for Phase 0: `vllm bench serve`**, with random prompts at the FinNI token shape
+   (`serving.phase0_throughput_benchmark.input_tokens` / `output_tokens`, `--ignore-eos` so the output length
+   is fixed), `--request-rate inf` at each `concurrency_levels` value, and `requests_per_point` prompts. A
+   warm-up of `serving.warmup_requests` runs first and is discarded. Alternative: GuideLLM. It is kept for
+   the Phase 4 sweeps (`serving.request_rate_sweep_rps`). Here it would add a second pinned package for no
+   extra information.
+2. **Goodput definition**: the highest request throughput among complete points whose p95 TTFT and p95
+   E2E both meet `serving.slo`. `serving.slo` is stated at p95, so per-request SLO goodput (vLLM's
+   `--goodput`) is recorded only as a secondary field. Points with failed requests are excluded from both
+   maxima and counted. Filings/hour = req/s x 3600 / instances-per-filing.
+3. **Instances per filing for the token shape** = `pins.eval_finni.rows_expected` /
+   `contamination.eval_manifest_required_recovered`, which is the PRD section 7 basis. Note that O-005 shows
+   some companies contribute more than one filing. The Phase 3 probe replaces this shape with measured
+   per-filing tokens in any case.
+4. **Pinned weights are served from a local `snapshot_download` at the pinned SHA**
+   (`--served-model-name` keeps the public id), so the revision is enforced by path and not by a server
+   flag. Scripts refuse to run unless the installed version equals `pins.software.<pkg>`, and they refuse
+   if that pin is empty.
+5. **Smoke-test quantization** (new keys `serving.smoke_test.smoke_quantization`): INT8 W8A8 uses
+   llm-compressor `QuantizationModifier` (data-free, dynamic per-token activations). AWQ-INT4 uses AutoAWQ
+   GEMM, as PRD section 5 names it, with AutoAWQ's own default calibration (pile-val), because the
+   training corpus does not exist yet. These checkpoints only prove that each variant loads and runs.
+   They are never scored, and Phase 2 re-quantizes the fine-tuned students with training-context
+   calibration. AutoAWQ's last release (0.2.9) is 2025-05-11 and it is unmaintained, so it runs in its own
+   virtualenv. Whether its GEMM format still runs on vLLM 0.30 on Turing is exactly what the smoke test
+   answers. See DECISIONS NEEDED (AutoAWQ vs llm-compressor AWQ).
+6. **Break-even table** (`scripts/phase0_cost.py`): every pinned arm plus the swap candidate, both
+   regimes, every non-blank T4 source in `serving.hardware.kaggle_t4.market_rate_keys`, at the regime's
+   utilization and at every `serving.utilization_scenarios` value. The blank AWS source is dropped and
+   listed as dropped (see O-008).
