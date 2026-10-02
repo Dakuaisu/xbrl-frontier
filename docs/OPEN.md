@@ -524,3 +524,33 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Evidence: price sheet `reobservations[0]`; `/ai.google.dev/gemini-api/docs/pricing` and `/rate-limits` text as fetched.
 - Next action: none from the builder. If the owner wants batch on the free tier explored, that is an owner decision (it touches
   the $0-billed rule).
+
+## O-029 AWQ int4 smoke test not yet run on Kaggle (virtualenv fix 5486d9f untested) (OPEN)
+
+- Status: OPEN. Both `awq-int4` variants are NOT TESTED, not removed. INT4 stays in the fp16 / INT8 / INT4 set (PRD section 5).
+- Found (C1, 2026-10-02): `python -m venv` on the Kaggle image failed at ensurepip, so autoawq was never installed, the AWQ base
+  checkpoints were never built, and `serving/smoke_test.py` recorded `FileNotFoundError: missing quantized checkpoint` for both
+  sizes. vLLM never served them, so `serving.smoke_test.failure_action` (a variant that failed the smoke test) does not apply.
+  `scripts/smoke_summary.py` now lists a missing-checkpoint result under `not_tested` with its reason, and merges a later
+  rerun file over the first (`data/phase0/smoke_kaggle_t4_awq/`).
+- Fix under test: the AWQ venv is built with virtualenv (5486d9f). `notebooks/phase0_kaggle_t4.ipynb` has `AWQ_ONLY` (builds
+  the AWQ checkpoints and smoke-tests `awq-int4` only, both sizes, `serving.smoke_test.requests_per_variant` each, skipping the
+  benchmark and INT8); `serving/smoke_test.py --precision` filters the planned variants.
+- Next action: push the rerun in the first GPU slot that frees after D1 0.6B, before any D3/D4 export step that quantizes.
+  If it passes, the variants are kept and the T-004 item 5 note is updated. If it fails on AWQ itself (load, kernel, or
+  generation in vLLM), removal stands per `failure_action` and the error is the record.
+
+## O-030 Phase 0 base-model serving on one T4 meets no latency SLO point (OPEN, finding)
+
+- Status: OPEN (finding; no config change).
+- Found (C1, 2026-10-02, `data/phase0/phase0_kaggle_t4/`, `data/phase0/break_even.{json,md}`): with the base models
+  (pre-finetune) on one Kaggle T4, no measured concurrency point meets `serving.slo` (ttft_p95_ms and e2e_p95_ms), so goodput
+  at the SLO is 0 filings/hour for both sizes and the online regime breaks even against no arm.
+- Offline regime (denominator: max throughput, 18.9 / 15.3 filings/hour for 0.6B / 1.7B): break-even is reached against
+  `gemini-3.5-flash-lite` and `gpt-5.4-mini-2026-03-17` at utilization 0.5 and 0.9, and `gpt-5.4-nano-2026-03-17` at 0.9, for
+  every non-blank T4 rate source. The gate-pass margin (`cost.gate_pass_filings_per_hour`) is reached only against
+  `gpt-5.4-mini-2026-03-17` offline: at the gated utilization 0.9 for both sizes on every source, and at 0.5 for 0.6B on the
+  Hugging Face endpoint rate only. Never at 0.1. Read values from the files.
+- These are base models before fine-tuning. The gated numbers are Phase 4 on the trained students; Phase 0 only sizes the
+  break-even. No change to `serving.slo` or `serving.utilization_scenarios`.
+- Next action: none now. Phase 4 measures the trained students against the same SLO and scenarios.

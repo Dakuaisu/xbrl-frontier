@@ -165,6 +165,8 @@ Confirmed as written on 2026-10-02 (supervisor decision, owner to review). It st
    T4 smoke test exists. If AutoAWQ GEMM fails there, the failure is recorded per
    `serving.smoke_test.failure_action` and the llm-compressor AWQ question is raised then, as a data-wins
    entry.
+   Status 2026-10-02 (C1): AWQ int4 is NOT TESTED, not removed. The AWQ virtualenv failed at ensurepip, so no checkpoint was
+   built and vLLM never served it. The rerun with virtualenv is O-029.
 6. **Break-even table** (`scripts/phase0_cost.py`): every pinned arm plus the swap candidate, both
    regimes, every non-blank T4 source in `serving.hardware.kaggle_t4.market_rate_keys`, at the regime's
    utilization and at every `serving.utilization_scenarios` value. The blank AWS source is dropped and

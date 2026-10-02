@@ -2,7 +2,9 @@
  "failure_action": "remove the variant from the serving table before training hours are spent; record the error",
  "cards": {
   "kaggle_t4": {
-   "source": "/Users/apple/xbrl-frontier/data/phase0/smoke_kaggle_t4/smoke_kaggle_t4.json",
+   "source": [
+    "/Users/apple/xbrl-frontier/data/phase0/smoke_kaggle_t4/smoke_kaggle_t4.json"
+   ],
    "versions": {
     "vllm": "0.30.0"
    },
@@ -12,17 +14,15 @@
     "0.6B-int8-w8a8",
     "1.7B-int8-w8a8"
    ],
-   "removed": [
-    {
-     "variant": "0.6B-awq-int4",
-     "error": "FileNotFoundError: missing quantized checkpoint /kaggle/working/smoke_checkpoints/Qwen3-0.6B-awq-int4 (run serving.quantize_base first)"
-    },
-    {
-     "variant": "1.7B-awq-int4",
-     "error": "FileNotFoundError: missing quantized checkpoint /kaggle/working/smoke_checkpoints/Qwen3-1.7B-awq-int4 (run serving.quantize_base first)"
-    }
+   "removed": [],
+   "not_tested": [
+    "0.6B-awq-int4",
+    "1.7B-awq-int4"
    ],
-   "not_tested": []
+   "not_tested_reasons": {
+    "0.6B-awq-int4": "FileNotFoundError: missing quantized checkpoint /kaggle/working/smoke_checkpoints/Qwen3-0.6B-awq-int4 (run serving.quantize_base first)",
+    "1.7B-awq-int4": "FileNotFoundError: missing quantized checkpoint /kaggle/working/smoke_checkpoints/Qwen3-1.7B-awq-int4 (run serving.quantize_base first)"
+   }
   },
   "rtx3050_wsl2": {
    "source": null,
@@ -32,7 +32,8 @@
     "0.6B-bf16",
     "0.6B-awq-int4",
     "1.7B-awq-int4"
-   ]
+   ],
+   "not_tested_reasons": {}
   }
  }
 }

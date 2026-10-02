@@ -450,3 +450,13 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - zeroshot-1p7b v2 running (source 9ca5492). zeroshot-0p6b re-push rejected: "Maximum batch GPU session count of 2 reached" (D2 holds the other);
   the CLI exits 0 on this, so `kaggle_run push` now refuses any output without "successfully pushed". It is pushed when a slot frees.
 - Verified before commit: full suite with `-rf`, 94 passed.
+
+## 2026-10-02 Corrections: AWQ not tested (O-029); C1 finding (O-030); GPU quota log
+
+- Correction to the C1 entry above: the awq-int4 variants were not removed, they were never tested (O-029). `serving_variants.json`
+  regenerated: kept fp16 and int8-w8a8 for both sizes, removed none, `not_tested` both awq-int4 with the missing-checkpoint reason.
+  `scripts/smoke_summary.py` merges a rerun file; `serving/smoke_test.py --precision`; `notebooks/phase0_kaggle_t4.ipynb` `AWQ_ONLY`.
+- C1 serving finding logged as O-030 (base models; no SLO point met; no config change).
+- `kaggle quota` readings (GPU-hours used of the weekly `training.kaggle.weekly_gpu_hours_quota`), D1 1.7B v2 and D2 running together:
+  23:41Z 5.47 h; 23:46Z 5.63 h. From now on each fetch row's `gpu_used_hours_after` is copied here with the fetch.
+- Verified before commit: full suite with `-rf`, 95 passed (new smoke-summary test).

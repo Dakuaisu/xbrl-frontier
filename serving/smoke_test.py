@@ -68,6 +68,7 @@ def main() -> None:
     ap.add_argument("--card", choices=config.get("serving.smoke_test.cards"), required=True)
     ap.add_argument("--checkpoints", type=Path, required=True, help="directory from serving.quantize_base")
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--precision", action="append", help="test only these planned precisions (a rerun); repeatable")
     args = ap.parse_args()
     versions = require_pins("vllm")
     from xbrl_frontier import finni
@@ -77,7 +78,10 @@ def main() -> None:
     shape = config.get("serving.phase0_throughput_benchmark")
     args.out.mkdir(parents=True, exist_ok=True)
     results = []
-    for label, model_id, precision in planned(args.card):
+    todo = [x for x in planned(args.card) if not args.precision or x[2] in args.precision]
+    if not todo:
+        raise SystemExit(f"no planned {args.card} variant has precision {args.precision}")
+    for label, model_id, precision in todo:
         r = {"variant": label, "model": model_id, "precision": precision, "ok": False}
         log = args.out / f"server_{label}.log"
         try:
@@ -99,7 +103,7 @@ def main() -> None:
         print(label, "OK" if r["ok"] else f"FAIL {r.get('error', '')}", flush=True)
     (args.out / f"smoke_{args.card}.json").write_text(json.dumps(
         {"card": args.card, "versions": versions, "env": env_record(args.card),
-         "failure_action": spec["failure_action"], "results": results}, indent=1))
+         "failure_action": spec["failure_action"], "precision_filter": args.precision, "results": results}, indent=1))
     print("archive:", archive(args.out))
 
 
