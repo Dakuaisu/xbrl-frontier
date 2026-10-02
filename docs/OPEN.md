@@ -20,7 +20,8 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 
 ## O-002 Scorer details are not specified upstream (OPEN)
 
-- Status: OPEN
+- Status: OPEN (the scorer choices are confirmed by the owner, T-002; a cross-check waits on the FinTagging
+  authors' reply to the O-010 issue)
 - Found: no public FinNI scorer exists. Set vs multiset, normalization, aggregation details and
   parse handling are unspecified in FinTagging.
 - Evidence: evidence_brief section 3. Our choices are in TRADEOFFS T-002.
@@ -99,9 +100,9 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   sheet's top-level `observed` date stays 2026-10-01, and this source carries its own date. All three T4
   sources now appear in `scripts/phase0_cost.py`.
 
-## O-009 "A Schema-Aware Large Language Model for XBRL Tagging and Cross-Statement Consistency Checking" could not be read (OPEN)
+## O-009 "A Schema-Aware Large Language Model for XBRL Tagging and Cross-Statement Consistency Checking" could not be read (OWNER-BLOCKED)
 
-- Status: OPEN (PRD section 10 risk: possible scoop)
+- Status: OWNER-BLOCKED (PRD section 10 risk: possible scoop; needs a logged-in browser or the authors; RUNBOOK A1)
 - Found (metadata only): Zhaoyue Peng, Shuncheng Liu, Xuhao Meng, Zhe Su, Ningjing Sang; posted
   2026-07-07; DOI 10.13140/RG.2.2.19518.86080 (a ResearchGate-minted DOI); OpenAlex W7167572144 lists it
   as an article with no PDF location, no abstract and 0 citations.
@@ -264,7 +265,8 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 
 ## O-017 Decontamination removes long table positives disproportionately (OPEN)
 
-- Status: OPEN (finding; nothing is retuned)
+- Status: OPEN (finding; nothing is retuned). It is carried into the generated contamination statement and README,
+  and is reported next to the table slice once the slice is measured.
 - Found: positives in the pool (before the audit) matched the eval (table share 0.516 vs 0.530, median tokens
   273 vs 293). In the decontaminated sampled corpus, positives drift: table share 0.480 vs 0.530, tokens
   p50/p90/p99 236/1,438/4,309 vs 293/1,792/5,684, facts per positive mean 11.0 vs 14.6, doubled-cell share
@@ -278,7 +280,9 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 
 ## O-018 Contamination statement checklist for Phase 5 (OPEN, carried)
 
-- Status: OPEN until the README contamination statement is written (Phase 5).
+- Status: OPEN. The draft is generated (`docs/drafts/contamination_statement_draft.md`, also embedded in `README.md`) with
+  items (1)-(4). The fresh-slice gaps and the label-noise rate stay blank until the O-019 (D9), O-022 (E4) and
+  O-024 results arrive.
 - The statement text must include, not only reference: (1) the fresh slice's 6 `fill=relaxed` rows
   (`data/fresh_accessions.txt`, column `fill`) and the two strata cells unfillable in the window
   (10-K | real estate & construction | large_accelerated: 5; 10-K | energy & transportation |
@@ -289,7 +293,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Progress (2026-10-02): `scripts/contamination_statement.py` generates `docs/drafts/contamination_statement_draft.md`
   with items (1)-(4) from recorded files. The fresh-slice gaps and the label-noise rate stay blank until measured.
 
-## O-019 Kaggle student training sessions (OWNER-BLOCKED)
+## O-019 Kaggle runs: training runs 1-5, encoder, predictions (zero-shot, full set, dev, fresh), export (OWNER-BLOCKED)
 
 - Status: OWNER-BLOCKED (Kaggle is owner-only). The training-stack pins are filled (O-020 RESOLVED, T-019);
   only the Kaggle sessions remain. Start with owner step 1, the tarball.

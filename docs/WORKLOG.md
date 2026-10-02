@@ -304,3 +304,21 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 
 - `scripts/readme.py` generated `README.md` (blanks for results, gates by key, disclosures from recorded files, pilot F1 absent).
   `tests/test_readme.py` passed.
+
+## 2026-10-02 Closing pass: state of the repo
+
+- Verified at commit 7b63284 (`env -u OPENAI_API_KEY -u GEMINI_API_KEY .venv/bin/python -m pytest -q tests`): **87 passed**. Oracle
+  calibration group (`tests/test_scorer_unit.py tests/test_oracles.py tests/test_score_predictions.py tests/test_bio.py`, the
+  pre-commit hook set): **27 passed**. No synthetic file is left in `data/scores`, `data/gates`, `data/curve`, `data/charts` or
+  `data/phase4`. The commit that follows this entry changes docs only.
+- Done by the builder (spend-free): Phase 0 pins, scorer and oracles, manifest and serializer assignment; Phase 1 parser fork,
+  serializer, accessions (208 + 130), corpus, parity, contamination audit, fresh slice; Phase 2 Mac pilot and all Kaggle tooling
+  (training with curve and validation modes, encoder, predictions, export, flip rate, curve table, curve validation); Phase 3
+  harness, spend guard, priced plan, power check, sampler; Phase 4 load tests, bootstrap, cost model, charts; Phase 5 label-audit
+  draw and sheets, contamination statement draft, gate summary, README skeleton; owner runbook.
+- OWNER-BLOCKED (`docs/owner/RUNBOOK.md` orders them): O-005 (T4 Phase 0 notebook), O-006 (3050 smoke), O-009 (preprint),
+  O-010 (GitHub issue), O-019 (Kaggle: zero-shot runs, training runs 1-5 including the encoder, dev/full/fresh predictions,
+  export and variant predictions), O-022 (each arm's probe, batch, latency; the luna fresh control), O-023 (T4 and 3050 load
+  tests), O-024 (label audit passes 1 and 2).
+- OPEN, not owner-blocked: O-002 (scorer cross-check, waits on O-010's reply), O-017 (finding, carried into the reports),
+  O-018 (statement blanks fill from O-019/O-022/O-024 results). Disclosed shortfall: O-010 (129/142).
