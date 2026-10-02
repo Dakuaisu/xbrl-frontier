@@ -76,6 +76,8 @@ contamination:
   max_flagged_train_docs_after_removal: 0
   minhash_num_perm:                 128
   minhash_jaccard_threshold:        0.8
+  minhash_shingle_words:            5                         # word 5-gram shingles (Lee et al. 2022 dedup); added 2026-10-02, TRADEOFFS T-014
+  minhash_seed:                     20261004                  # permutation parameters; added 2026-10-02, TRADEOFFS T-014
   fresh_slice_min_filings:          30
   fresh_slice_filing_date_min:      ""                       # = max knowledge cutoff among pinned frontier arms + 1 day; filled at pin time
   eval_filing_window_end:           "2025-02-13"             # FinTagging v5: 142 10-Ks filed 2023-02-13..2025-02-13; start = train_filing_date_max + 1 day (added 2026-10-02, TRADEOFFS T-003)
@@ -104,6 +106,10 @@ training:
     max_filings_per_cik:     1
     strata:                  [ "sec_office", "filer_size" ]   # target = the eval manifest's distribution over these cells
     seed:                    20261002
+    frozen_rows:             { count: 208, sha256: "71440ef5e3534d24ff66f745fb8c7c6ae06130a11dd20e01881d29b4e392d5a7" }   # data rows (after the column header) of the initial selection; --extend verifies them (T-012)
+    extension_margin:        0.10                             # extension sized to the positive need x (1 + margin), from measured per-form yields (T-012)
+  corpus_sampling:                                            # sampled training corpus (added 2026-10-02, TRADEOFFS T-013)
+    seed:                    20261003
   epochs:                    2
   lora_rank:                 16
   lora_alpha:                32

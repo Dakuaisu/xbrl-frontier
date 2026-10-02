@@ -292,3 +292,29 @@ Selected once by `scripts/select_train_accessions.py` into `data/train_accession
 Alternatives: SIC divisions as the sector key (not what the eval's SEC-office data offers); a 10-K-only
 corpus (the PRD names both forms); seeding from `pins.seeds` (those are training seeds). Report:
 `data/train_selection_report.json`.
+
+## T-012 AUTONOMOUS DECISION - owner to review: extend the training accession list once (2026-10-02)
+
+Decision (owner, O-014 option a): continue the **same** seeded walk under the same rule, quotas and 50/50
+`form_share`, appending only. `scripts/select_train_accessions.py --extend` (1) checks the column header,
+the row count and the sha256 of the 208 frozen rows (`training.accession_selection.frozen_rows`) and refuses
+on any mismatch; (2) replays the original walk and refuses unless it reproduces exactly those 208
+accessions; (3) continues from the stopping point (eligible index 2,490). Candidates the first walk skipped
+because their cell was full are not revisited. The extension is sized from the **measured** per-form
+positive yields of the first 208 (10-K 108.37, 10-Q 56.00 positives per filing; 50/50-weighted 82.18) to
+`(target_train_instances + dev_slice_instances) x (1 - negatives_fraction) x (1 + extension_margin)` =
+25,200 x 1.10 = 27,720 positives. The first 208 had 17,094, so 130 more filings (65 + 65), with quotas
+allocated over the eval distribution exactly as before. Dev: `dev_slice_instances x (1 - negatives_fraction) x
+(1 + margin) / weighted yield` = 17 dev filings in total. The frozen rows keep their 10, and the 7 extra
+are drawn with the `seed + 1` rule (`random.Random(seed + 1).sample`) **over the extension rows**. That
+departs from "over the extended list", because redrawing over all 338 would change the `split` column of
+frozen rows, which must stay byte-identical. One filing per CIK keeps dev disjoint from train. Training
+uses the first `target_train_instances` of one seeded order, and the surplus is listed, not trained on
+(T-013). The header now reads "selected 2026-10-02, extended once 2026-10-02 (T-012); the first 208 rows
+are frozen and hash-verified". Result: 130 accepted, 1 rejected (no positive instance), all quotas filled;
+the 338 filings serialize to 27,234 positives. Both sizes and the yields are in
+`data/train_selection_report.json` (`extension`).
+Alternatives: (b) keep 208 and shrink `target_train_instances` / `curve_points`. Rejected because those are
+spec and the shortfall is a planning-figure error (rows/142 counts the eval's sampled negatives), so the
+measured yield wins. (c) A higher 10-K share for the extension. Rejected because it puts two rules in one
+corpus.

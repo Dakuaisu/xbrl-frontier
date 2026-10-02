@@ -198,9 +198,10 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Next action: none. `scripts/serialize_corpus.py` applies T-010 and counts the dropped twins per filing
   and in total. The format-parity script reports the divergence from the benchmark's conventions.
 
-## O-014 The frozen accession list yields 17,094 positives, short of what the training target needs (OPEN)
+## O-014 The frozen accession list yields 17,094 positives, short of what the training target needs (RESOLVED)
 
-- Status: OPEN (DECISIONS NEEDED)
+- Status: RESOLVED (2026-10-02): the list was extended once with the same walk (TRADEOFFS T-012). 338 filings
+  give 27,234 positives against a need of 25,200.
 - Found: the 208 filings (sized by the eval set's planning instances-per-filing, T-011 item 3) serialize to
   321,080 instances. 17,094 are positives (10-K: 11,270 over 104 filings, mean 108.4; 10-Q: 5,824 over
   104, mean 56.0) and 303,986 are negatives after dropping 4,511 twins. At `training.negatives_fraction`,

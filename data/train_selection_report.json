@@ -166,5 +166,109 @@
  "edgar_requests": {
   "requests": 1284,
   "cache_hits": 191
+ },
+ "extension": {
+  "generated": "2026-10-02T06:46:15+00:00",
+  "config_hash": "71a10afabef6577be7fb0e264245f0e27367d133cbb028c89d6aa75bbcffb6f2",
+  "replay_reproduced_frozen_rows": true,
+  "replay_rejected": {
+   "unknown_us_gaap_concept": 1
+  },
+  "resumed_at_index": 2490,
+  "measured_positive_yield_per_filing": {
+   "10-K": 108.36538461538461,
+   "10-Q": 56.0
+  },
+  "weighted_yield": 82.1826923076923,
+  "positives_need": 25200.0,
+  "margin": 0.1,
+  "positives_have": 17094,
+  "filings_target": {
+   "total": 130,
+   "by_form": {
+    "10-K": 65,
+    "10-Q": 65
+   }
+  },
+  "accepted": 130,
+  "rejected_in_extension": {
+   "unknown_us_gaap_concept": 0,
+   "no_positive_instance": 1
+  },
+  "unfilled_quota": {},
+  "dev": {
+   "filings_total_target": 17,
+   "initial": 10,
+   "added_from_extension": 7
+  },
+  "sizes": {
+   "initial_filings": 208,
+   "extension_filings": 130,
+   "total_filings": 338
+  },
+  "extension_distribution": {
+   "sec_office": {
+    "energy & transportation": {
+     "n": 22,
+     "share": 0.1692
+    },
+    "finance": {
+     "n": 20,
+     "share": 0.1538
+    },
+    "industrial applications and services": {
+     "n": 14,
+     "share": 0.1077
+    },
+    "life sciences": {
+     "n": 10,
+     "share": 0.0769
+    },
+    "manufacturing": {
+     "n": 18,
+     "share": 0.1385
+    },
+    "real estate & construction": {
+     "n": 24,
+     "share": 0.1846
+    },
+    "technology": {
+     "n": 14,
+     "share": 0.1077
+    },
+    "trade & services": {
+     "n": 8,
+     "share": 0.0615
+    }
+   },
+   "filer_size": {
+    "accelerated": {
+     "n": 6,
+     "share": 0.0462
+    },
+    "large_accelerated": {
+     "n": 116,
+     "share": 0.8923
+    },
+    "other": {
+     "n": 8,
+     "share": 0.0615
+    }
+   },
+   "form": {
+    "10-K": {
+     "n": 65,
+     "share": 0.5
+    },
+    "10-Q": {
+     "n": 65,
+     "share": 0.5
+    }
+   }
+  },
+  "edgar_requests": {
+   "requests": 858,
+   "cache_hits": 1616
+  }
  }
 }

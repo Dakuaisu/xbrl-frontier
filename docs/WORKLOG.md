@@ -126,3 +126,11 @@ Dated implementation notes: what was built, how it was verified, what is next.
   Positives fall short of the target (O-014).
 - First parity comparison: O-015.
 - Verified: `pytest -q tests` (41 passed, including `tests/test_corpus_selection.py`).
+
+## 2026-10-02 Phase 1, unit 3: accession extension (T-012)
+
+- `--extend` verified the frozen rows (hash and replay), resumed at index 2,490, and added 130 filings
+  (65 10-K / 65 10-Q; 7 new dev, 17 dev in total). `git diff` on `data/train_accessions.txt`: the header line
+  plus 131 appended lines; the 208 frozen rows are unchanged (sha256 re-verified).
+- Re-serialized all 338: 524,439 instances, 27,234 positives, 7,617 twins dropped, negatives fraction 0.9481
+  before sampling.
