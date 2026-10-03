@@ -36,6 +36,7 @@ Decisions follow `gates.decision_rule`: an interval that straddles the threshold
 - Evaluation filings recovered: 129 of 142 registrants (139 filings); `contamination.eval_manifest_required_recovered` not met (O-010).
 - Instances mapped to a filing: 95.25% raw / 95.39% dedup with the benchmark's own serializer; Phase 0 token matcher 94.29% / 94.43% (O-011).
 - Training corpus: 38,788 (cap 40,000 not reached after decontamination, O-016); dev slice 1,933 (cap 2,000 not reached after decontamination, O-016). Curve points count distinct instances (T-016).
+- Cut (T-041): One training seed (1.7B seed 1); intervals come from the company-level bootstrap of that seed. The second seed was cut first in the PRD cut order because the measured T4 training rate put it over the GPU-hour cap (T-041, O-033).
 - Training instances: run 1 trains on 37,721 of 38,788 instances; 1,067 exceed `training.kaggle.max_seq_len_tokens` (4,096) and are skipped; learning-curve x-values are distinct instances actually trained on (T-016).
 - Contamination audit: 18,184 of 215,284 eligible training instances flagged and removed; 0 flagged in the final corpus of 40,721.
 

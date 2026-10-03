@@ -594,6 +594,8 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   Resumes are sized to the remaining weekly quota (`SESSION_HOURS` / `kaggle_run push --planned-hours`, counted in the
   committed-hours refusal); if the room is under about 3 h, the resume waits for the 2026-10-10 reset. Run 1's state is safe on Kaggle (checkpoint-1388, curve prefixes 2,500 /
   5,000 / 10,000 / 20,000; `data/phase2/kaggle/run-Qwen3-1.7B-s1/session1_run.json`, `complete: false`).
+- GPU-hour table: pending D1 0.6B's capped zero-shot generation rate; filled in here when it lands and updated after every
+  fetch. Cuts so far are recorded in `data/budget/cuts.json`, from which the README disclosure is generated.
 - Found (D2 session 1, 2026-10-02T21:41Z to 2026-10-03T08:52Z, stopped on the T-038 margin, 11.27 GPU-hours measured):
   `processed_tokens_per_sec` 517 against `training.planning_tokens_per_sec.t4_qlora_1p7b` 1,500. Step 1,388 of 4,716
   (2 epochs x 2,358 steps); loss about 0.017. Run 1 needs about 38 GPU-hours in total, about 27 more.

@@ -70,6 +70,9 @@ def build() -> str:
         t, d = cor["splits"]["train"], cor["splits"]["dev"]
         L.append(f"- Training corpus: {t['used']:,} (cap {t['cap']:,} not reached after decontamination, O-016); dev slice "
                  f"{d['used']:,} (cap {d['cap']:,} not reached after decontamination, O-016). Curve points count distinct instances (T-016).")
+        cuts = config.REPO_ROOT / "data" / "budget" / "cuts.json"
+        for c in (json.loads(cuts.read_text())["cuts"] if cuts.exists() else []):
+            L.append(f"- Cut ({c['decision']}): {c['readme']}")
         tr = run1_trained()
         if tr:
             L.append(f"- Training instances: {tr}; learning-curve x-values are distinct instances actually trained on (T-016).")

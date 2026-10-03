@@ -1,0 +1,8 @@
+{
+ "rule": "PRD section 9 cut order, one item at a time, only when a measured GPU-hour table (docs/OPEN.md O-033) says the next item does not fit",
+ "cuts": [
+  {"item": "second training seed (D6, run 2: 1.7B seed 2)", "cut_order_position": 1, "decision": "T-041", "date": "2026-10-03",
+   "reason": "measured training rate 517 tokens/s (planning 1,500): used 26.8 + run 1 remainder 29.9 + seed 2 38.0 = 94.7 GPU-hours > training.kaggle.gpu_hours_cap_total 70",
+   "readme": "One training seed (1.7B seed 1); intervals come from the company-level bootstrap of that seed. The second seed was cut first in the PRD cut order because the measured T4 training rate put it over the GPU-hour cap (T-041, O-033)."}
+ ]
+}

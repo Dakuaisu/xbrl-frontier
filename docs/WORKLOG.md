@@ -548,3 +548,9 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   `instances_seen` in the trained order (after skips), unchanged.
 - O-031 status updated (D1 proceeds under T-039). Seed 2 (D6) cut: T-041 with the table that forced it.
 - Verified before commit: full suite with `-rf`, 105 passed.
+
+## 2026-10-03 One-seed disclosure generated from a recorded file
+
+- `data/budget/cuts.json` records each cut (T-041: seed 2) with its reason and README sentence; `scripts/readme.py` generates the
+  disclosure from it. O-033 notes the GPU-hour table is pending D1 0.6B's rate.
+- Verified before commit: full suite with `-rf`, 105 passed.
