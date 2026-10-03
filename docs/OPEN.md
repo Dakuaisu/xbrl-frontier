@@ -594,6 +594,14 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   Resumes are sized to the remaining weekly quota (`SESSION_HOURS` / `kaggle_run push --planned-hours`, counted in the
   committed-hours refusal); if the room is under about 3 h, the resume waits for the 2026-10-10 reset. Run 1's state is safe on Kaggle (checkpoint-1388, curve prefixes 2,500 /
   5,000 / 10,000 / 20,000; `data/phase2/kaggle/run-Qwen3-1.7B-s1/session1_run.json`, `complete: false`).
+- Kaggle quota attribution (reconciled 2026-10-03 14:22Z): `kaggle quota` read 6.55 h used, which matches AWQ 0.88 h plus
+  D1 0.6B's live wall-clock 5.67 h, and neither "clipped to the week" (~16.4 h + D1 0.6B) nor "whole session in the week it ends"
+  (~21.2 h + D1 0.6B). Earlier readings agree: 0.00 h at 01:36Z with two pre-reset sessions running; 1.09 h at 08:54Z (AWQ +
+  ~0.2 h of D1 0.6B); last week 1.44 h at 21:40Z rising to 5.63 h at 23:46Z with D1 1.7B and D2 running. Rule: usage posts live
+  and a whole session counts in the week it started. Last week therefore used about 21.6 h (1.44 + 9.0 + 11.27, less ~0.07 h
+  counted twice), recorded as `week_total_hours` in the quota_reset row. `kaggle_run.committed_estimate` uses this rule and
+  reserves each running kernel's planned hours (12 h if unrecorded). No quota-kill risk for D1 0.6B: its full 12 h reaches about
+  12.9 h this week.
 - GPU-hour table: pending D1 0.6B's capped zero-shot generation rate; filled in here when it lands and updated after every
   fetch. Cuts so far are recorded in `data/budget/cuts.json`, from which the README disclosure is generated.
 - Found (D2 session 1, 2026-10-02T21:41Z to 2026-10-03T08:52Z, stopped on the T-038 margin, 11.27 GPU-hours measured):

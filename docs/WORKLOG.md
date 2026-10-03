@@ -554,3 +554,14 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - `data/budget/cuts.json` records each cut (T-041: seed 2) with its reason and README sentence; `scripts/readme.py` generates the
   disclosure from it. O-033 notes the GPU-hour table is pending D1 0.6B's rate.
 - Verified before commit: full suite with `-rf`, 105 passed.
+
+## 2026-10-03 Kaggle quota attribution reconciled (O-033)
+
+- `kaggle quota` 14:22Z: 6.55 h used, 23.45 h left. Matches AWQ 0.88 h + D1 0.6B live 5.67 h; matches neither the clipped model
+  (~16.4 h before D1 0.6B) nor the end-week model (~21.2 h before D1 0.6B). Rule: usage posts live; a whole session counts in the week
+  it started. Previous week ≈ 21.6 h (quota_reset row `week_total_hours`). D1 0.6B can run its full 12 h (about 12.9 h this week).
+- `committed_estimate` now counts sessions pushed since the last reset (measured hours when fetched; running kernels at their planned
+  hours, 12 h if unrecorded), with the quota reading as a floor; push rows record `planned_hours`. Cumulative 28.2 h of 70 at 14:23Z.
+- Notebook fixes for the resume: train notebook resolves a `RESUME` glob to the one directory holding run.json; every setup cell
+  prefers the `xbrl-frontier-src` tree, since an attached kernel output carries its own repo copy.
+- Verified before commit: full suite with `-rf`, 104 passed (tests/test_kaggle_run.py rewritten for the attribution rule).

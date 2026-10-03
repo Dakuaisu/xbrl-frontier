@@ -45,23 +45,27 @@ def log(row: dict) -> None:
 
 
 def committed_estimate(quota_used: float, rows: list[dict], running: set[str], now: dt.datetime, planned: float = 0.0) -> dict:
-    """Kaggle posts GPU hours late, so a live quota reading understates use: take the larger of the reading and the measured
-    hours in this week's fetch rows, then add the wall-clock of every RUNNING kernel since its latest push. Prior weeks come
-    from quota_reset rows (cumulative cap)."""
-    pushes = {}
+    """Committed GPU-hours under Kaggle's observed attribution rule (O-033, 2026-10-03): usage posts live and a whole session
+    counts in the week it started. This week = sessions pushed since the last quota_reset (fetched: measured hours; running:
+    their planned hours, or session_hours_max if not recorded, since they may run that long), with the quota reading as a floor. Earlier weeks come from quota_reset rows (week_total_hours)."""
+    resets = [r for r in rows if r.get("action") == "quota_reset"]
+    since = resets[-1]["at_utc"] if resets else ""
+    pushes, hours = {}, {}
     for r in rows:
-        if r.get("action") == "push" and not str(r.get("note", "")).startswith("NOT RUN"):
+        if r.get("action") == "push" and r["at_utc"] > since and not str(r.get("note", "")).startswith("NOT RUN"):
             pushes[r["name"]] = r
+        if r.get("action") == "fetch" and r["name"] in pushes and r["at_utc"] > pushes[r["name"]]["at_utc"]:
+            hours[r["name"]] = r.get("gpu_hours_this_run") or 0.0
+    k = config.get("training.kaggle")
     live = {n: round((now - dt.datetime.fromisoformat(pushes[n]["at_utc"])).total_seconds() / 3600, 2)
             for n in sorted(running) if n in pushes}
-    resets = [r["at_utc"] for r in rows if r.get("action") == "quota_reset"]
-    measured = sum(r.get("gpu_hours_this_run") or 0 for r in rows
-                   if r.get("action") == "fetch" and (not resets or r["at_utc"] > resets[-1]))
-    week = round(max(quota_used, measured) + sum(live.values()), 2)
-    prior = sum(r["last_reading_before_reset"]["gpu_used_hours"] for r in rows if r.get("action") == "quota_reset")
-    k = config.get("training.kaggle")
-    return {"quota_reading": quota_used, "measured_fetch_hours_this_week": round(measured, 2),
-            "running_wall_clock_hours": live, "week_estimate": week,
+    reserved = {n: max(live[n], pushes[n].get("planned_hours") or k["session_hours_max"]) for n in live}
+    done = sum(hours.get(n, 0.0) for n in pushes if n not in live)
+    sessions = round(done + sum(live.values()), 2)
+    week = round(max(quota_used, sessions) - sum(live.values()) + sum(reserved.values()), 2)
+    prior = sum(r.get("week_total_hours", r["last_reading_before_reset"]["gpu_used_hours"]) for r in resets)
+    return {"quota_reading": quota_used, "sessions_started_this_week_hours": sessions,
+            "running_wall_clock_hours": live, "running_reserved_hours": reserved, "week_estimate": week,
             "weekly_quota": k["weekly_gpu_hours_quota"], "cumulative_estimate": round(prior + week, 2),
             "cap_total": k["gpu_hours_cap_total"], "new_kernel_planned_hours": planned,
             "within_caps": week + planned <= k["weekly_gpu_hours_quota"] and prior + week + planned <= k["gpu_hours_cap_total"]}
@@ -105,7 +109,7 @@ def push(name: str, notebook: Path, param_cell: str | None, datasets: list[str],
     git = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, cwd=config.REPO_ROOT).stdout.strip()
     log({"action": "push", "name": name, "kernel": meta["id"], "notebook": str(notebook.resolve().relative_to(config.REPO_ROOT)),
          "param_cell": param_cell, "datasets": datasets, "kernel_sources": kernels, "git_head": git,
-         "gpu_used_hours_before": before, "committed_estimate": est, "out": out.strip()[-300:]})
+         "gpu_used_hours_before": before, "planned_hours": planned_hours, "committed_estimate": est, "out": out.strip()[-300:]})
     print(out.strip())
 
 
