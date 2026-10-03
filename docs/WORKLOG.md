@@ -460,3 +460,10 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - `kaggle quota` readings (GPU-hours used of the weekly `training.kaggle.weekly_gpu_hours_quota`), D1 1.7B v2 and D2 running together:
   23:41Z 5.47 h; 23:46Z 5.63 h. From now on each fetch row's `gpu_used_hours_after` is copied here with the fetch.
 - Verified before commit: full suite with `-rf`, 95 passed (new smoke-summary test).
+
+## 2026-10-03 Kaggle weekly GPU quota reset
+
+- `kaggle quota` at 00:18Z: 0.00 h used of 30, refresh 2026-10-10T00:00. Week ending 2026-10-03T00:00Z used at least 5.63 h (last reading
+  23:46Z, two kernels running; a `quota_reset` row in `data/kaggle/runs.jsonl`). Cumulative toward `training.kaggle.gpu_hours_cap_total`
+  sums the weeks. Runs spanning the reset (D1 1.7B v2, D2) get no per-run hours from the quota difference; `kaggle_run fetch` records null.
+- Verified before commit: full suite with `-rf`, 95 passed.

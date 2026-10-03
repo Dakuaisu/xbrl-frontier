@@ -103,7 +103,9 @@ def fetch(name: str, to: Path, pattern: str | None = None) -> None:
     after = gpu_used_hours()
     before = pushes[-1]["gpu_used_hours_before"] if pushes else None
     row = {"action": "fetch", "name": name, "status": status(name), "to": str(to.resolve().relative_to(config.REPO_ROOT)),
-           "gpu_used_hours_after": after, "gpu_hours_this_run": None if before is None else round(after - before, 2),
+           "gpu_used_hours_after": after,
+           "gpu_hours_this_run": None if before is None or after < before else round(after - before, 2),
+           "note": "weekly quota reset during the run; hours not separable from the quota reading" if before is not None and after < before else None,
            "files": sorted(str(p.relative_to(to)) for p in to.rglob("*") if p.is_file())[:50]}
     log(row)
     print(json.dumps(row, indent=1))
