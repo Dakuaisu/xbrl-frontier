@@ -52,8 +52,10 @@ def main() -> None:
     ap.add_argument("--curve", action="store_true", help="save curve checkpoints (primary student, seed 1)")
     ap.add_argument("--validation", action="store_true",
                     help="independent curve-validation run on the first training.curve_validation_run trained instances")
+    ap.add_argument("--session-hours", type=float, help="planned session length (<= training.kaggle.session_hours_max)")
     args = ap.parse_args()
     session_start = time.time()
+    planned_hours = schedule.session_hours(args.session_hours)
 
     from serving.common import env_record, model_pin, pinned_snapshot, require_pins
     versions = require_pins("transformers", "peft", "bitsandbytes", "accelerate")
@@ -135,6 +137,7 @@ def main() -> None:
         report_to=[], remove_unused_columns=False, dataloader_drop_last=False)
 
     session = {"started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "resumed_from": None,
+               "planned_hours": planned_hours,
                "processed_tokens": 0, "train_seconds": 0.0}
     tok_len = [len(d["input_ids"]) for d in data]
 
@@ -163,7 +166,7 @@ def main() -> None:
             if schedule.due_for_resume_checkpoint(time.time(), self.last):
                 control.should_save = True
                 self.last = time.time()
-            if schedule.session_time_up(time.time(), session_start):
+            if schedule.session_time_up(time.time(), session_start, planned_hours):
                 control.should_save = True
                 control.should_training_stop = True
                 session["stopped_for_session_limit"] = True

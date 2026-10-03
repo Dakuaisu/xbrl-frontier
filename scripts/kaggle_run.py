@@ -1,7 +1,7 @@
 """Builder-run Kaggle steps (T-033): datasets, notebook kernels, status, outputs and GPU-hour accounting.
 
   dataset  --slug S --dir D [--message M]     create the private dataset adnanrashid29/S from D, or add a version
-  push     --name N --notebook P [--param-cell CODE] [--dataset S ...] [--kernel-source K ...] [--timeout SEC]
+  push     --name N --notebook P [--param-cell CODE] [--dataset S ...] [--kernel-source K ...] [--planned-hours H]
            builds kernel adnanrashid29/xbrl-frontier-N from notebook P (the first code cell replaced by CODE when given),
            T4 accelerator, internet on, private; logs the push with the GPU quota used before it
   wait     --name N [--minutes M]             polls `kaggle kernels status` until complete/error/cancel or M minutes
@@ -44,7 +44,7 @@ def log(row: dict) -> None:
         f.write(json.dumps({"at_utc": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), **row}) + "\n")
 
 
-def committed_estimate(quota_used: float, rows: list[dict], running: set[str], now: dt.datetime) -> dict:
+def committed_estimate(quota_used: float, rows: list[dict], running: set[str], now: dt.datetime, planned: float = 0.0) -> dict:
     """Kaggle posts GPU hours late, so a live quota reading understates use: take the larger of the reading and the measured
     hours in this week's fetch rows, then add the wall-clock of every RUNNING kernel since its latest push. Prior weeks come
     from quota_reset rows (cumulative cap)."""
@@ -63,8 +63,8 @@ def committed_estimate(quota_used: float, rows: list[dict], running: set[str], n
     return {"quota_reading": quota_used, "measured_fetch_hours_this_week": round(measured, 2),
             "running_wall_clock_hours": live, "week_estimate": week,
             "weekly_quota": k["weekly_gpu_hours_quota"], "cumulative_estimate": round(prior + week, 2),
-            "cap_total": k["gpu_hours_cap_total"],
-            "within_caps": week < k["weekly_gpu_hours_quota"] and prior + week < k["gpu_hours_cap_total"]}
+            "cap_total": k["gpu_hours_cap_total"], "new_kernel_planned_hours": planned,
+            "within_caps": week + planned <= k["weekly_gpu_hours_quota"] and prior + week + planned <= k["gpu_hours_cap_total"]}
 
 
 def dataset(slug: str, d: Path, message: str) -> None:
@@ -76,7 +76,7 @@ def dataset(slug: str, d: Path, message: str) -> None:
     print(out.strip())
 
 
-def push(name: str, notebook: Path, param_cell: str | None, datasets: list[str], kernels: list[str], timeout: int | None) -> None:
+def push(name: str, notebook: Path, param_cell: str | None, datasets: list[str], kernels: list[str], planned_hours: float) -> None:
     nb = json.loads(notebook.read_text())
     if param_cell is not None:
         cell = next(c for c in nb["cells"] if c["cell_type"] == "code")
@@ -94,12 +94,11 @@ def push(name: str, notebook: Path, param_cell: str | None, datasets: list[str],
         rows = [json.loads(l) for l in open(RUNS)] if RUNS.exists() else []
         names = {r["name"] for r in rows if r.get("action") == "push"} - {name}
         running = {n for n in names if any(w in status(n) for w in ("RUNNING", "QUEUED"))}
-        est = committed_estimate(before, rows, running, dt.datetime.now(dt.timezone.utc))
+        est = committed_estimate(before, rows, running, dt.datetime.now(dt.timezone.utc), planned_hours)
         if not est["within_caps"]:
             raise SystemExit(f"refusing push: committed GPU-hours estimate over a training.kaggle cap: {est}")
         args = ["kernels", "push", "-p", str(t), "--accelerator", "NvidiaTeslaT4"]
-        if timeout:
-            args += ["-t", str(timeout)]
+        args += ["-t", str(int(planned_hours * 3600))]
         out = sh(*args)
     if "successfully pushed" not in out:
         raise SystemExit(f"kaggle push rejected (exit 0): {out.strip()[-300:]}")
@@ -152,7 +151,8 @@ def main() -> None:
     ap.add_argument("--param-cell")
     ap.add_argument("--dataset", action="append", default=[])
     ap.add_argument("--kernel-source", action="append", default=[])
-    ap.add_argument("--timeout", type=int)
+    ap.add_argument("--planned-hours", type=float, help="kernel timeout and quota reservation; <= training.kaggle.session_hours_max "
+                    "(the notebook's SESSION_HOURS should match, so the run stops on the T-038 margin first)")
     ap.add_argument("--minutes", type=float, default=110)
     ap.add_argument("--to", type=Path)
     ap.add_argument("--pattern", help="regex passed to --file-pattern; skip multi-GB weights, which hang the CLI download")
@@ -160,7 +160,8 @@ def main() -> None:
     if a.action == "dataset":
         dataset(a.slug, a.dir, a.message)
     elif a.action == "push":
-        push(a.name, a.notebook, a.param_cell, a.dataset, a.kernel_source, a.timeout)
+        from training.schedule import session_hours
+        push(a.name, a.notebook, a.param_cell, a.dataset, a.kernel_source, session_hours(a.planned_hours))
     elif a.action == "wait":
         wait(a.name, a.minutes)
     elif a.action == "status":

@@ -27,3 +27,9 @@ def test_cut_off_outputs_are_flagged_and_scored_as_written():
     assert cut and not ng and parsed.parse_failed
     assert to_parsed({"id": 1, "text": '{"result": []}'}, "MAX_TOKENS")[2]
     assert not to_parsed({"id": 1, "text": '{"result": []}'}, "STOP")[2]
+
+
+def test_gemini_cap_scales_the_qwen_cap_up():
+    ctx = "<td>1</td><td>2</td>"
+    r = config.get("eval.generation.output_cap.gemini_token_ratio")
+    assert r >= 1 and output_cap.gemini_cap(ctx) == -(-r * output_cap.cap(ctx) // 1)

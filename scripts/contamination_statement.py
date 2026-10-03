@@ -18,6 +18,17 @@ def _j(path: Path):
     return json.loads(path.read_text()) if path.exists() else None
 
 
+def run1_trained() -> str | None:
+    """Trained-instance line from run 1's latest run.json (final, else the newest session file); None before run 1 exists."""
+    d = D / "phase2" / "kaggle" / "run-Qwen3-1.7B-s1"
+    files = [d / "run.json"] if (d / "run.json").exists() else sorted(d.glob("session*_run.json"))
+    if not files:
+        return None
+    r = json.loads(files[-1].read_text())
+    return (f"run 1 trains on {r['trained_instances']:,} of {r['corpus_size']:,} instances; {r['skipped_over_max_seq_len']:,} exceed "
+            f"`training.kaggle.max_seq_len_tokens` ({r['max_seq_len']:,}) and are skipped")
+
+
 def _blank(what: str) -> str:
     return f"__ (not yet measured: {what})"
 
@@ -62,8 +73,9 @@ def build() -> str:
         L.append(_blank("overlap audit") + "\n")
     if cor:
         t, d = cor["splits"]["train"], cor["splits"]["dev"]
+        tr = run1_trained()
         L.append(f"**Corpus size.** Train {t['used']:,} instances (cap {t['cap']:,} not reached after decontamination, O-016); dev "
-                 f"{d['used']:,} (cap {d['cap']:,} not reached after decontamination, O-016).\n")
+                 f"{d['used']:,} (cap {d['cap']:,} not reached after decontamination, O-016)." + (f" {tr[0].upper()}{tr[1:]}." if tr else "") + "\n")
     if par_pool and par_s:
         a, b, e = par_pool["train_positives"], par_s["train_positives"], par_s["eval_positives"]
         L.append(f"**What decontamination removed (O-017).** Training positives before the audit: table share {a['table_share']:.3f}, median "

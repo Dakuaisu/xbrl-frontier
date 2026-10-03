@@ -911,5 +911,26 @@ That covers zero-shot base models, fine-tuned students, every exported variant, 
 3. **Where it applies**: `serving/generate_predictions.py` (max_tokens = min(cap, remaining context)), every frontier request
    step including latency (`maxOutputTokens` for Gemini, `max_output_tokens` for OpenAI), recorded per row. The scorer reports
    `cut_off_rate` (vLLM `length`, Gemini `MAX_TOKENS`) next to `parse_failure_rate`.
-4. **Open point, not decided**: Gemini counts `maxOutputTokens` in its own tokens, about 1.06x the Qwen count at the median of
-   999 E4 replies (5th percentile 1.22x). The cap is in Qwen tokens, so it is somewhat tighter for Gemini. Raised to the owner.
+4. **AUTONOMOUS DECISION - owner to review (supervisor decision 2026-10-03): Gemini's cap is scaled.** Gemini counts
+   `maxOutputTokens` in its own tokens, about 1.06x the Qwen count at the median of the 999 kept E4 replies and up to 1.273x
+   (14 vs 11 tokens). An unscaled cap would cut the comparator more than the students and inflate the student's relative result.
+   `eval.generation.output_cap.gemini_token_ratio` = 1.28 (that maximum, rounded up); Gemini cap = ceil(1.28 x the Qwen cap),
+   set before any Gemini call is scored and never adjusted after. The six O-032 re-runs use it.
+   Rejected: unscaled (biases against the comparator); countTokens verification of every gold in Gemini tokens (spends free-tier
+   requests that E4 needs).
+
+## T-041 AUTONOMOUS DECISION - owner to review: cut the second training seed (PRD section 9 cut order, item 1) (2026-10-03)
+
+Supervisor decision (owner to review), O-033 option (a): finish run 1 as configured and cut strictly in PRD section 9 order, one
+item at a time, only when the measured budget table says the next item does not fit. Table that forced this cut (GPU-hours
+against `training.kaggle.gpu_hours_cap_total` = 70; rates measured, O-033):
+
+| item | hours | basis | running total |
+|---|---|---|---|
+| used so far | 26.8 | week to 2026-10-03 read 5.63; since then measured 9.0 + 0.88 + 11.27 (part pre-reset, counted twice) | 26.8 |
+| run 1 remainder | 29.9 | steps 1,388 to 4,716 at 29.0 s/step (517 tok/s) = 26.8 h, plus ~1 h setup and margin per session x 3 | 56.7 |
+| run 2, 1.7B seed 2 | 38.0 | 4,716 steps at 29.0 s/step plus sessions | 94.7 |
+
+94.7 > 70 before any scoring, the encoder (never cut) or load tests, so seed 2 (D6) is cut. Headline intervals rest on the company
+bootstrap of one seed; the README says one seed was trained and why. Next items in order, cut only if a later table forces it:
+INT8 variant, 3050 rows (owner-blocked), curve validation run, 0.6B student, third arm. The full table lives in O-033.

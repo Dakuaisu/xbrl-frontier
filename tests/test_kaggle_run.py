@@ -14,7 +14,7 @@ def test_committed_estimate_adds_running_wall_clock_and_prior_weeks():
     assert e["running_wall_clock_hours"] == {"a": 3.0, "b": 0.5}
     assert e["week_estimate"] == 4.5 and e["cumulative_estimate"] == 9.5 and e["within_caps"]
     k = config.get("training.kaggle")
-    assert not committed_estimate(k["weekly_gpu_hours_quota"], rows, set(), now)["within_caps"]
+    assert not committed_estimate(k["weekly_gpu_hours_quota"] + 0.5, rows, set(), now)["within_caps"]
 
 
 def test_measured_fetch_hours_count_when_the_quota_lags():
@@ -24,3 +24,10 @@ def test_measured_fetch_hours_count_when_the_quota_lags():
             {"action": "fetch", "at_utc": "2026-10-03T01:00:00+00:00", "gpu_hours_this_run": 9.0}]
     e = committed_estimate(0.5, rows, set(), now)
     assert e["measured_fetch_hours_this_week"] == 9.0 and e["week_estimate"] == 9.0
+
+
+def test_planned_hours_of_the_new_kernel_count_against_the_week():
+    now = dt.datetime(2026, 10, 3, 2, 0, tzinfo=dt.timezone.utc)
+    q = config.get("training.kaggle.weekly_gpu_hours_quota")
+    assert committed_estimate(q - 3, [], set(), now, planned=3)["within_caps"]
+    assert not committed_estimate(q - 3, [], set(), now, planned=3.5)["within_caps"]

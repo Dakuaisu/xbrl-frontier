@@ -53,12 +53,12 @@ def _run(monkeypatch, out, extra=()):
 
 def test_deadline_stop_then_resume_completes(stubbed, monkeypatch):
     ticks = iter([False, True])
-    monkeypatch.setattr(gp.schedule, "session_time_up", lambda now, start: next(ticks, True))
+    monkeypatch.setattr(gp.schedule, "session_time_up", lambda now, start, hours=None: next(ticks, True))
     m = _run(monkeypatch, stubbed / "s1")
     assert m["complete"] is False and m["stopped_for_session_limit"]
     first = [json.loads(l)["id"] for l in open(stubbed / "s1" / "predictions_base_dev.jsonl")]
     assert len(first) == 3 and "i3" in first  # one chunk of 2 plus the prompt over max_model_len
-    monkeypatch.setattr(gp.schedule, "session_time_up", lambda now, start: False)
+    monkeypatch.setattr(gp.schedule, "session_time_up", lambda now, start, hours=None: False)
     m = _run(monkeypatch, stubbed / "s2", ["--resume", str(stubbed / "s1")])
     rows = [json.loads(l) for l in open(stubbed / "s2" / "predictions_base_dev.jsonl")]
     assert m["complete"] and sorted(r["id"] for r in rows) == [f"i{k}" for k in range(7)]

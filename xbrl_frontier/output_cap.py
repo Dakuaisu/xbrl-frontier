@@ -4,6 +4,7 @@ max_tokens = eval.generation.output_cap.tokens_per_numeric x numeric_count(conte
 bounded by the remaining context. numeric_count counts every span in the context that a FinNI fact can be:
 digit numbers, standalone dash cells (nil), and the number / nil words that occur as gold facts.
 """
+import math
 import re
 
 from . import config
@@ -23,3 +24,8 @@ def cap(context: str, remaining: int | None = None) -> int:
     c = config.get("eval.generation.output_cap")
     n = c["tokens_per_numeric"] * numeric_count(context) + c["base_tokens"]
     return n if remaining is None else min(n, remaining)
+
+
+def gemini_cap(context: str) -> int:
+    """The cap in Gemini tokens: ceil(gemini_token_ratio x cap) (T-040 item 4), since maxOutputTokens counts Gemini tokens."""
+    return math.ceil(config.get("eval.generation.output_cap.gemini_token_ratio") * cap(context))

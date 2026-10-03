@@ -33,3 +33,15 @@ def test_session_stop_leaves_margin_before_limit():
     assert 0 < stop < k["session_hours_max"] * 3600
     assert not schedule.session_time_up(stop - 1, 0)
     assert schedule.session_time_up(stop, 0)
+
+
+def test_session_hours_bounded_and_used_by_the_stop_rule():
+    import pytest
+    k = config.get("training.kaggle")
+    assert schedule.session_hours(None) == k["session_hours_max"]
+    with pytest.raises(SystemExit):
+        schedule.session_hours(k["session_hours_max"] + 1)
+    with pytest.raises(SystemExit):
+        schedule.session_hours(k["session_stop_margin_minutes"] / 60)
+    stop = 3 * 3600 - k["session_stop_margin_minutes"] * 60
+    assert not schedule.session_time_up(stop - 1, 0, 3) and schedule.session_time_up(stop, 0, 3)

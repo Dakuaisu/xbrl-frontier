@@ -7,7 +7,7 @@ No value is typed by hand. The Mac pilot's format-check F1 never appears (O-021)
 """
 import json
 
-from scripts.contamination_statement import build as contamination_statement
+from scripts.contamination_statement import build as contamination_statement, run1_trained
 from xbrl_frontier import config
 
 D = config.REPO_ROOT / "data"
@@ -70,6 +70,9 @@ def build() -> str:
         t, d = cor["splits"]["train"], cor["splits"]["dev"]
         L.append(f"- Training corpus: {t['used']:,} (cap {t['cap']:,} not reached after decontamination, O-016); dev slice "
                  f"{d['used']:,} (cap {d['cap']:,} not reached after decontamination, O-016). Curve points count distinct instances (T-016).")
+        tr = run1_trained()
+        if tr:
+            L.append(f"- Training instances: {tr}; learning-curve x-values are distinct instances actually trained on (T-016).")
     if pool and final:
         L.append(f"- Contamination audit: {pool['flagged']:,} of {pool['audited']:,} eligible training instances flagged and removed; "
                  f"{final['flagged']} flagged in the final corpus of {final['audited']:,}.")

@@ -33,8 +33,10 @@ def main() -> None:
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--resume", type=Path, help="previous session's OUT directory; its written predictions are kept")
     ap.add_argument("--chunk", type=int, default=1024, help="prompts per llm.generate call; output is appended per chunk")
+    ap.add_argument("--session-hours", type=float, help="planned session length (<= training.kaggle.session_hours_max)")
     args = ap.parse_args()
     started = time.time()
+    planned_hours = schedule.session_hours(args.session_hours)
 
     from serving.common import env_record, model_pin, pinned_snapshot, require_pins
     versions = require_pins("vllm")
@@ -94,7 +96,7 @@ def main() -> None:
                     f.write(json.dumps({"id": x["id"], "text": None, "not_generated": True, "prompt_tokens": n}) + "\n")
             gen = [(x, p, n) for x, p, n, ok in todo if ok]
             for c in range(0, len(gen), args.chunk):
-                if schedule.session_time_up(time.time(), started):
+                if schedule.session_time_up(time.time(), started, planned_hours):
                     stopped = True
                     break
                 part = gen[c:c + args.chunk]

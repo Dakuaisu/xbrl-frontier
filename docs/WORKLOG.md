@@ -535,3 +535,16 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   11.27 GPU-hours measured (log clock 40,589 s; written into the fetch row). 517 tokens/s against the 1,500 planning rate: O-033.
 - `kaggle quota` 08:54Z: 1.09 h (still lags). Resume not pushed: budget decision needed (O-033).
 - Docs and data only; suite not re-run.
+
+## 2026-10-03 Decisions applied: O-033 (a), seed 2 cut (T-041), Gemini cap scaled (T-040 item 4), skip disclosure
+
+- `eval.generation.output_cap.gemini_token_ratio` 1.28 (max 1.273 over the 999 kept E4 replies, 14 vs 11 tokens); harness sends
+  ceil(1.28 x cap) as Gemini `maxOutputTokens`. Set before any Gemini call is scored.
+- Session length per push: `SESSION_HOURS` (training and prediction notebooks), `--session-hours`, `schedule.session_hours`
+  (<= `session_hours_max`, T-038 margin kept); `kaggle_run push --planned-hours` sets the kernel timeout and is added to the
+  committed-hours refusal.
+- README disclosures and the contamination statement's corpus-size line now carry "run 1 trains on 37,721 of 38,788 instances;
+  1,067 exceed `training.kaggle.max_seq_len_tokens` (4,096) and are skipped", generated from run.json. Curve x-values are
+  `instances_seen` in the trained order (after skips), unchanged.
+- O-031 status updated (D1 proceeds under T-039). Seed 2 (D6) cut: T-041 with the table that forced it.
+- Verified before commit: full suite with `-rf`, 105 passed.

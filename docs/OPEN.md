@@ -561,7 +561,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 
 ## O-031 Zero-shot base generation on FinNI runs away: 789 of 28,787 prompts in 9 GPU-hours (OPEN, finding)
 
-- Status: OPEN; D1 (both sizes) on hold pending a decision. Nothing scored.
+- Status: OPEN (finding). It is the reason for the T-039 output cap; D1 proceeds under T-039 (D1 0.6B pushed 2026-10-03 08:41Z).
 - Found (D1 1.7B v2, 2026-10-02T21:40:41Z push, killed at the 32,400 s kernel timeout, log clock 32,413 s, log in
   `data/kaggle/zeroshot-1p7b/`, not tracked): vLLM 0.30.0, Qwen3-1.7B fp16, `max_model_len` 32,768 accepted, KV cache 78,320
   tokens ("maximum concurrency for 32,768 tokens per request: 2.39x"). Progress: 57 prompts at 3 s, 266 at 3 min, 447 at 8.6 min,
@@ -575,7 +575,7 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Not decided here (what gets scored is the owner's call; T-038 note): options are listed in the turn report.
 - Unknown: whether fine-tuned students (D3/D4) also run away; they are trained to emit the answer and stop, so D3 dev predictions
   will measure it (chunked, so partial results survive).
-- Next action: owner decision on D1. Until then no D1 push; GPU slots go to the AWQ rerun (O-029) and D2/D3.
+- Next action: none beyond T-039; capped D1 runs report cut_off_rate and completion_tokens.
 
 ## O-032 Six E4 fresh-control calls made before the cap exceed it (OPEN)
 
@@ -589,7 +589,10 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 
 ## O-033 T4 QLoRA trains at 517 tokens/s, about a third of the planning rate; the 70 GPU-hour plan no longer fits (OPEN)
 
-- Status: OPEN; D2 resume on hold for a decision. Run 1's state is safe on Kaggle (checkpoint-1388, curve prefixes 2,500 /
+- Status: OPEN. Decision (supervisor, owner to review, 2026-10-03): option (a), finish run 1 as configured (full corpus,
+  `training.epochs` 2, same schedule); cut in PRD section 9 order only when a measured budget table forces it; seed 2 cut (T-041).
+  Resumes are sized to the remaining weekly quota (`SESSION_HOURS` / `kaggle_run push --planned-hours`, counted in the
+  committed-hours refusal); if the room is under about 3 h, the resume waits for the 2026-10-10 reset. Run 1's state is safe on Kaggle (checkpoint-1388, curve prefixes 2,500 /
   5,000 / 10,000 / 20,000; `data/phase2/kaggle/run-Qwen3-1.7B-s1/session1_run.json`, `complete: false`).
 - Found (D2 session 1, 2026-10-02T21:41Z to 2026-10-03T08:52Z, stopped on the T-038 margin, 11.27 GPU-hours measured):
   `processed_tokens_per_sec` 517 against `training.planning_tokens_per_sec.t4_qlora_1p7b` 1,500. Step 1,388 of 4,716

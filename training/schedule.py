@@ -50,7 +50,18 @@ def due_for_resume_checkpoint(now_s: float, last_save_s: float) -> bool:
     return now_s - last_save_s >= config.get("training.kaggle.checkpoint_every_minutes") * 60
 
 
-def session_time_up(now_s: float, session_start_s: float) -> bool:
+def session_hours(requested: float | None) -> float:
+    """The planned session length: requested (sized to the remaining weekly quota, O-033) or session_hours_max."""
+    k = config.get("training.kaggle")
+    h = k["session_hours_max"] if requested is None else requested
+    if not 0 < h <= k["session_hours_max"]:
+        raise SystemExit(f"session hours {h} must be in (0, training.kaggle.session_hours_max={k['session_hours_max']}]")
+    if h * 60 <= k["session_stop_margin_minutes"]:
+        raise SystemExit(f"session hours {h} leave no time after the {k['session_stop_margin_minutes']}-minute stop margin")
+    return h
+
+
+def session_time_up(now_s: float, session_start_s: float, hours: float | None = None) -> bool:
     """True once the session should checkpoint and exit so Kaggle keeps its output (T-038)."""
     k = config.get("training.kaggle")
-    return now_s - session_start_s >= k["session_hours_max"] * 3600 - k["session_stop_margin_minutes"] * 60
+    return now_s - session_start_s >= session_hours(hours) * 3600 - k["session_stop_margin_minutes"] * 60

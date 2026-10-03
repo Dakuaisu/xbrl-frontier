@@ -129,7 +129,7 @@ def run_free_tier(arm: str, step: str, items: list[dict], key: str, out: Path, p
             for x in items:
                 if (x["id"], run) in done:
                     continue
-                cap = output_cap.cap(x["context"])
+                cap = output_cap.gemini_cap(x["context"]) if api == "gemini_generate_content" else output_cap.cap(x["context"])
                 b = json.dumps(fr.body(arm, sft_format.query(x["context"]), max_output_tokens=cap)).encode()
                 raw, req_s, log = call_with_retries(lambda: _http(fr.sync_endpoint(arm), key, api, b), pacer)
                 r = fr.parse(arm, json.loads(raw))
