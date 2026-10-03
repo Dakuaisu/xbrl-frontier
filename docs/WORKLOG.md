@@ -520,3 +520,10 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - E4: 6 of 1,005 prior calls exceed the cap in Gemini tokens; superseded and re-run tomorrow (O-032). Gemini reports 0 thinking tokens.
 - No scored run was pushed before this. D2 (training, not scored) kept running.
 - Verified before commit: full suite with `-rf`, 101 passed (new tests/test_output_cap.py).
+
+## 2026-10-03 D1 0.6B pushed (capped); committed-hours estimate counts measured fetch hours
+
+- `zeroshot-0p6b` v2 pushed 08:41Z on source 6d8aa54 (T-039 cap, chunked, timeout = `session_hours_max`).
+- The quota still omitted D1 1.7B's measured 9.0 h at 08:41Z, so the push-time estimate now takes max(quota reading, measured fetch
+  hours since the last reset) plus running wall-clock. Re-estimate 08:45Z: week 21.0 h of 30, cumulative 26.6 h of 70.
+- Verified before commit: full suite with `-rf`, 102 passed.

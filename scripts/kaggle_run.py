@@ -45,18 +45,23 @@ def log(row: dict) -> None:
 
 
 def committed_estimate(quota_used: float, rows: list[dict], running: set[str], now: dt.datetime) -> dict:
-    """Kaggle posts GPU hours when a session ends, so a live quota reading understates use: add the wall-clock of every
-    RUNNING kernel since its latest push. Prior weeks come from quota_reset rows (cumulative cap)."""
+    """Kaggle posts GPU hours late, so a live quota reading understates use: take the larger of the reading and the measured
+    hours in this week's fetch rows, then add the wall-clock of every RUNNING kernel since its latest push. Prior weeks come
+    from quota_reset rows (cumulative cap)."""
     pushes = {}
     for r in rows:
         if r.get("action") == "push" and not str(r.get("note", "")).startswith("NOT RUN"):
             pushes[r["name"]] = r
     live = {n: round((now - dt.datetime.fromisoformat(pushes[n]["at_utc"])).total_seconds() / 3600, 2)
             for n in sorted(running) if n in pushes}
-    week = round(quota_used + sum(live.values()), 2)
+    resets = [r["at_utc"] for r in rows if r.get("action") == "quota_reset"]
+    measured = sum(r.get("gpu_hours_this_run") or 0 for r in rows
+                   if r.get("action") == "fetch" and (not resets or r["at_utc"] > resets[-1]))
+    week = round(max(quota_used, measured) + sum(live.values()), 2)
     prior = sum(r["last_reading_before_reset"]["gpu_used_hours"] for r in rows if r.get("action") == "quota_reset")
     k = config.get("training.kaggle")
-    return {"quota_reading": quota_used, "running_wall_clock_hours": live, "week_estimate": week,
+    return {"quota_reading": quota_used, "measured_fetch_hours_this_week": round(measured, 2),
+            "running_wall_clock_hours": live, "week_estimate": week,
             "weekly_quota": k["weekly_gpu_hours_quota"], "cumulative_estimate": round(prior + week, 2),
             "cap_total": k["gpu_hours_cap_total"],
             "within_caps": week < k["weekly_gpu_hours_quota"] and prior + week < k["gpu_hours_cap_total"]}
