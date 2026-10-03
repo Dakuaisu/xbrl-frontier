@@ -576,6 +576,15 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Unknown: whether fine-tuned students (D3/D4) also run away; they are trained to emit the answer and stop, so D3 dev predictions
   will measure it (chunked, so partial results survive).
 - Next action: none beyond T-039; capped D1 runs report cut_off_rate and completion_tokens.
+- Decision rule if the measured rate forces it (supervisor, owner to review, 2026-10-03): full-set FinNI is the gate as
+  specified (`finni_f1_gain_over_zero_shot_min` is defined on FinNI F1). The sample fallback applies only if the measured
+  generation rate, plus run 1's remainder and the never-cut items, exceeds 70 h (`training.kaggle.gpu_hours_cap_total`). Then:
+  the frontier sample is drawn by the pinned stratified company-whole procedure and its ids committed before any zero-shot score
+  is computed; zero-shot is scored on that sample, paired with the student on the same ids; the gate is reported as computed on
+  the sample, with the full-set gate marked not measured, and the README gates table says so (it is not restated as the full-set
+  gate); the partial full-set predictions already generated are kept and reported, not discarded; and the decision is recorded
+  in TRADEOFFS as an AUTONOMOUS DECISION with the table that forced it. Zero-shot is not in the PRD cut order, so this does not
+  reorder the cuts (INT8 remains next).
 
 ## O-032 Six E4 fresh-control calls made before the cap exceed it (OPEN)
 
