@@ -482,3 +482,12 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   `serving/generate_predictions.py` now appends per chunk, stops before the session deadline and resumes (`RESUME`); the running
   D1 1.7B kernel uses the old code and is left running. Later pushes use timeout = `training.kaggle.session_hours_max`.
 - Verified before commit: full suite with `-rf`, 97 passed (new tests/test_generate_predictions_resume.py).
+
+## 2026-10-03 D1 1.7B timed out: 789 of 28,787 prompts in 9 h (O-031)
+
+- Killed at the 32,400 s kernel timeout (log clock 32,413 s; CANCEL_ACKNOWLEDGED seen 06:41:27Z). Lost 9.0 GPU-hours, measured from
+  the kernel clock (push 21:40:41Z to kill); a finding about the pre-chunking code (output written only at the end), not a Kaggle fault.
+  Runaway zero-shot outputs, inferred from progress (O-031). D1 is on hold for an owner decision; no D1 0.6B push.
+- `kaggle quota` 06:43Z: 0.00 h used, after D1's session ended, so Kaggle posts usage later than session end; the push-time
+  committed estimate (quota + running wall-clock) still applies, and fetch rows carry measured hours.
+- Docs only (plus the T-038 label fix: "Supervisor decision (owner to review)"); suite not re-run.

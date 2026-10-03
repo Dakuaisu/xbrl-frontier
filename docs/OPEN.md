@@ -554,3 +554,21 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - These are base models before fine-tuning. The gated numbers are Phase 4 on the trained students; Phase 0 only sizes the
   break-even. No change to `serving.slo` or `serving.utilization_scenarios`.
 - Next action: none now. Phase 4 measures the trained students against the same SLO and scenarios.
+
+## O-031 Zero-shot base generation on FinNI runs away: 789 of 28,787 prompts in 9 GPU-hours (OPEN, finding)
+
+- Status: OPEN; D1 (both sizes) on hold pending a decision. Nothing scored.
+- Found (D1 1.7B v2, 2026-10-02T21:40:41Z push, killed at the 32,400 s kernel timeout, log clock 32,413 s, log in
+  `data/kaggle/zeroshot-1p7b/`, not tracked): vLLM 0.30.0, Qwen3-1.7B fp16, `max_model_len` 32,768 accepted, KV cache 78,320
+  tokens ("maximum concurrency for 32,768 tokens per request: 2.39x"). Progress: 57 prompts at 3 s, 266 at 3 min, 447 at 8.6 min,
+  then 342 more in the next 8.6 h (789 at kill). Output budget per prompt is the remaining context (PRD section 5; T-038 note).
+  Reading: a minority of greedy zero-shot outputs run toward the full context; each holds up to ~31k tokens of a 78k-token KV
+  cache, so concurrency collapses to 2-3 sequences and the tail dominates. Output lengths are inferred from progress, not
+  measured: the pre-chunking code wrote predictions only at the end, so all 789 were lost (9.0 GPU-hours, measured).
+- Cost at this rate: about 28,787 / 789 x 9 h, roughly 330 GPU-hours per zero-shot pass per size, against
+  `training.kaggle.weekly_gpu_hours_quota` and `gpu_hours_cap_total`. Chunking (f49d5d0) keeps completed work but does not
+  change the rate. Re-pushing D1 as specified would spend a full session for about 3% of the set.
+- Not decided here (what gets scored is the owner's call; T-038 note): options are listed in the turn report.
+- Unknown: whether fine-tuned students (D3/D4) also run away; they are trained to emit the answer and stop, so D3 dev predictions
+  will measure it (chunked, so partial results survive).
+- Next action: owner decision on D1. Until then no D1 push; GPU slots go to the AWQ rerun (O-029) and D2/D3.
