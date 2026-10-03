@@ -8,19 +8,36 @@ from serving import generate_predictions as gp
 
 
 class _Out:
-    def __init__(self, text):
+    def __init__(self, rid, text):
+        self.request_id, self.finished = rid, True
         self.outputs = [types.SimpleNamespace(text=text, finish_reason="stop", token_ids=[1, 2])]
 
 
+class _Engine:
+    def __init__(self):
+        self.pending, self.aborted, self.caps = [], [], {}
+
+    def add_request(self, rid, prompt, params, lora_request=None):
+        self.pending.append(rid)
+        self.caps[rid] = params["max_tokens"]
+        return rid
+
+    def step(self):  # finishes one request per step
+        return [_Out(self.pending.pop(0), "[]")] if self.pending else []
+
+    def has_unfinished_requests(self):
+        return bool(self.pending)
+
+    def abort_request(self, ids):
+        self.aborted += ids
+        self.pending = [r for r in self.pending if r not in ids]
+
+
 class _LLM:
-    calls = 0
-
     def __init__(self, **kw):
-        self.llm_engine = types.SimpleNamespace(model_config=types.SimpleNamespace(max_model_len=100))
-
-    def generate(self, prompts, params, lora_request=None):
-        _LLM.calls += 1
-        return [_Out("[]") for _ in prompts]
+        self.llm_engine = _Engine()
+        self.llm_engine.model_config = types.SimpleNamespace(max_model_len=100)
+        _LLM.last = self
 
 
 @pytest.fixture
@@ -46,21 +63,23 @@ def stubbed(monkeypatch, tmp_path):
 
 def _run(monkeypatch, out, extra=()):
     monkeypatch.setattr(sys, "argv", ["gp", "--model", "Qwen/Qwen3-0.6B", "--set", "dev", "--base", "--out", str(out),
-                                      "--chunk", "2", *extra])
+                                      "--window", "3", *extra])
     gp.main()
     return json.load(open(out / "predictions_dev.meta.json"))
 
 
 def test_deadline_stop_then_resume_completes(stubbed, monkeypatch):
-    ticks = iter([False, True])
+    ticks = iter([False, False, True])
     monkeypatch.setattr(gp.schedule, "session_time_up", lambda now, start, hours=None: next(ticks, True))
     m = _run(monkeypatch, stubbed / "s1")
     assert m["complete"] is False and m["stopped_for_session_limit"]
     first = [json.loads(l)["id"] for l in open(stubbed / "s1" / "predictions_base_dev.jsonl")]
-    assert len(first) == 3 and "i3" in first  # one chunk of 2 plus the prompt over max_model_len
+    assert first == ["i3", "i0", "i1"]  # the over-long prompt, then two finished before the deadline
+    assert _LLM.last.llm_engine.aborted == ["i2", "i4"]  # in flight at the deadline (window refilled): aborted, not written
     monkeypatch.setattr(gp.schedule, "session_time_up", lambda now, start, hours=None: False)
     m = _run(monkeypatch, stubbed / "s2", ["--resume", str(stubbed / "s1")])
     rows = [json.loads(l) for l in open(stubbed / "s2" / "predictions_base_dev.jsonl")]
     assert m["complete"] and sorted(r["id"] for r in rows) == [f"i{k}" for k in range(7)]
     assert [r["id"] for r in rows if r["not_generated"]] == ["i3"]
     assert m["targets"]["base"]["resumed_with"] == 3
+    assert all(r["max_tokens"] <= 100 - r["prompt_tokens"] for r in rows if not r["not_generated"])

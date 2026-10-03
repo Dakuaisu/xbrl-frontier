@@ -565,3 +565,15 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - Notebook fixes for the resume: train notebook resolves a `RESUME` glob to the one directory holding run.json; every setup cell
   prefers the `xbrl-frontier-src` tree, since an attached kernel output carries its own repo copy.
 - Verified before commit: full suite with `-rf`, 104 passed (tests/test_kaggle_run.py rewritten for the attribution rule).
+
+## 2026-10-03 D2 session 2 running; D1 0.6B chunk timings; continuous batching for predictions
+
+- D2 session 2 (`run-1p7b-s1-sess2`, pushed 14:27Z, `--planned-hours 12`, refusal check passed: week 12.88 + 12 = 24.88 of 30,
+  cumulative 34.5 of 70). Live log (`kaggle kernels logs -f`): RESUME resolved to
+  /kaggle/input/notebooks/adnanrashid29/xbrl-frontier-run-1p7b-s1/run-Qwen3-1.7B-s1; training resumed at step 1,389 of 4,716.
+- D1 0.6B (capped, chunked) live log at 14:40Z: 3 chunks of 1,024 done, taking 1:19:44, 2:13:51 and 1:34:26; the end of each chunk runs
+  at 400+ s/prompt, i.e. one long generation keeps the batch waiting. At this rate a full FinNI pass is about 47 GPU-hours.
+- `serving/generate_predictions.py` now feeds the vLLM engine continuously (`--window` requests in flight, each output written as it
+  finishes, deadline checked every step, in-flight requests aborted at the stop and redone on resume). Same prompts, caps and greedy
+  decoding; only scheduling changes. D1 0.6B keeps its running session; its resume and D1 1.7B use the new loop.
+- Verified before commit: full suite with `-rf`, 104 passed.

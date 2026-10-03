@@ -7,7 +7,8 @@ A prompt that does not fit is not truncated: it is written as not_generated and 
 prediction, counted separately. If vLLM refuses the configured max_model_len (e.g. not enough KV cache on a
 16 GB T4), each refusal is recorded and the next halving is tried; the accepted (effective) value is
 recorded in the meta file and decides which prompts fit. Nothing is lowered silently. One output file per target: OUT/predictions_<target>_<set>.jsonl.
-Prompts are generated in chunks and appended as each chunk finishes. Before each chunk the run checks the Kaggle session
+Requests are fed to the engine continuously (a window in flight) and each output is appended as it finishes, so one long
+generation never idles the batch. Before each engine step the run checks the Kaggle session
 deadline (training.kaggle.session_hours_max less session_stop_margin_minutes, from process start; T-038) and stops cleanly,
 with meta "complete": false; --resume DIR (a previous session's OUT) keeps the ids already written and continues.
 """
@@ -32,7 +33,8 @@ def main() -> None:
     ap.add_argument("--corpus", type=Path)
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--resume", type=Path, help="previous session's OUT directory; its written predictions are kept")
-    ap.add_argument("--chunk", type=int, default=1024, help="prompts per llm.generate call; output is appended per chunk")
+    ap.add_argument("--window", type=int, default=2048,
+                    help="requests kept in the engine at once; each output is written as it finishes (continuous batching)")
     ap.add_argument("--session-hours", type=float, help="planned session length (<= training.kaggle.session_hours_max)")
     args = ap.parse_args()
     started = time.time()
@@ -94,21 +96,32 @@ def main() -> None:
             for x, p, n, ok in todo:
                 if not ok:
                     f.write(json.dumps({"id": x["id"], "text": None, "not_generated": True, "prompt_tokens": n}) + "\n")
-            gen = [(x, p, n) for x, p, n, ok in todo if ok]
-            for c in range(0, len(gen), args.chunk):
-                if schedule.session_time_up(time.time(), started, planned_hours):
+            queue = [(x, p, n, output_cap.cap(x["text"], effective - n)) for x, p, n, ok in todo if ok]
+            queue.reverse()
+            engine, flight = llm.llm_engine, {}
+            while queue or flight:
+                if not stopped and schedule.session_time_up(time.time(), started, planned_hours):
                     stopped = True
+                    queue.clear()
+                    if flight:
+                        engine.abort_request(list(flight))
                     break
-                part = gen[c:c + args.chunk]
-                caps = [output_cap.cap(x["text"], effective - n) for x, _, n in part]
-                outs = llm.generate([p for _, p, _ in part], [SamplingParams(temperature=g["temperature"], max_tokens=c)
-                                                              for c in caps], lora_request=lora)
-                for (x, _, n), c, o in zip(part, caps, outs):
+                while queue and len(flight) < args.window:
+                    x, pr, n, c = queue.pop()
+                    rid = engine.add_request(str(x["id"]), pr, SamplingParams(temperature=g["temperature"], max_tokens=c),
+                                             lora_request=lora)
+                    flight[rid] = (x, n, c)
+                for o in engine.step():
+                    if not o.finished or o.request_id not in flight:
+                        continue
+                    x, n, c = flight.pop(o.request_id)
                     o = o.outputs[0]
                     f.write(json.dumps({"id": x["id"], "text": o.text, "finish_reason": o.finish_reason,
                                         "prompt_tokens": n, "completion_tokens": len(o.token_ids), "max_tokens": c,
                                         "not_generated": False}) + "\n")
-                f.flush()
+                    f.flush()
+                if flight and not engine.has_unfinished_requests():
+                    raise SystemExit(f"engine idle with {len(flight)} unmatched request ids (e.g. {next(iter(flight))}); vLLM id mismatch")
         written = sum(1 for _ in open(out_path))
         meta["targets"][name] = {"adapter": path, "file": out_path.name, "seconds_this_session": time.time() - t0,
                                  "resumed_with": len(done), "written": written, "complete": written == len(items)}
