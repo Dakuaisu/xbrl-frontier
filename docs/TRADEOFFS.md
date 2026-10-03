@@ -872,3 +872,24 @@ each chunk, checks the same deadline (from process start) before each chunk, and
 `--resume` (notebook `RESUME`) keeps the written ids. The scorer already refuses a file with missing ids. Output length is not
 capped (max_tokens = effective max_model_len - prompt), so what gets scored is unchanged.
 No output cap for scored runs, per PRD section 5 (Supervisor decision (owner to review), 2026-10-03): max_tokens stays effective max_model_len - prompt; a cut-off answer is finish_reason=length and usually a parse failure, which counts. `serving.load_test.max_output_tokens` is for Phase 4 latency only.
+
+## T-039 OWNER DECISION (Adnan, stated directly, 2026-10-03): output length is capped from the input
+
+This decision supersedes the T-038 note "no output cap for scored runs", which was a supervisor reading of PRD section 5.
+That section covers training and does not settle generation length. With no cap, zero-shot base runs loop until the
+context is full: 789 of 28,787 prompts in 9 GPU-hours (O-031), or roughly 330 GPU-hours per pass, against
+`training.kaggle.gpu_hours_cap_total`.
+
+Rule. Every scored generation gets `max_tokens` = `eval.generation.output_cap.tokens_per_numeric` x (the number of
+numeric values in that prompt's context) + `eval.generation.output_cap.base_tokens`, bounded by the remaining context.
+That covers zero-shot base models, fine-tuned students, every exported variant, and Gemini (as `maxOutputTokens`).
+- The bound comes only from the input, so no labels leak. An answer cannot hold more facts than the context has numbers.
+- Before any capped run, the builder sets the two keys from the benchmark's own answer format (tokens per
+  `{"Fact","Type"}` entry, with the pinned tokenizers), and verifies over all 28,787 gold answers that none would exceed
+  its cap. The cap must hold for every gold answer, not a percentile. If one exceeds it, the parameters are raised and
+  re-verified before any run; they are never adjusted after a run is scored. The check and its result ship in the repo.
+- A cut-off output (`finish_reason=length`) is scored as written. It is usually a parse failure, which counts, and the
+  rate of cut-off outputs is reported per arm next to `parse_failure_rate`.
+- The cap applies identically to every arm, which keeps the comparison fair. Gemini fresh-control calls already made
+  without the cap stay as recorded, with their output token counts checked against the cap. If any exceeds it, that
+  goes in OPEN and the affected calls are re-run under the cap.

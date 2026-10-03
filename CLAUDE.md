@@ -111,6 +111,9 @@ back), and move on to the next unblocked task. Never simulate, stub or model-gen
   or enable billing. Report dollar figures from measured tokens priced against the dated sheet.
 - A rate-limit (429) or server error is retried with backoff and never scored as an empty
   prediction. Only a model reply that fails to parse counts as a parse failure.
+- Output length for every scored generation, Gemini included, is capped from the input per
+  `docs/TRADEOFFS.md` T-039 (owner decision). Don't push a scored run until that cap is implemented
+  and verified against every gold answer.
 
 ## Engineering rules
 
