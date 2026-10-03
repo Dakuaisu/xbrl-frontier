@@ -871,3 +871,4 @@ Extension (2026-10-03): prediction runs follow the same rule. `serving/generate_
 each chunk, checks the same deadline (from process start) before each chunk, and writes meta `complete: false` when it stops;
 `--resume` (notebook `RESUME`) keeps the written ids. The scorer already refuses a file with missing ids. Output length is not
 capped (max_tokens = effective max_model_len - prompt), so what gets scored is unchanged.
+No output cap for scored runs, per PRD section 5 (owner, 2026-10-03): max_tokens stays effective max_model_len - prompt; a cut-off answer is finish_reason=length and usually a parse failure, which counts. `serving.load_test.max_output_tokens` is for Phase 4 latency only.
