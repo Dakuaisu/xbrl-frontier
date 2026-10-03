@@ -510,3 +510,13 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   (phase0 and phase2 export notebooks); `kaggle_run fetch` lists 200 files per page.
 - `kaggle quota` 08:22Z: 0.88 h used, which matches this run alone; D1 1.7B's 9.0 h session (killed 06:41Z) is not in it yet.
 - Verified before commit: full suite with `-rf`, 97 passed.
+
+## 2026-10-03 T-039 output cap implemented and verified (T-040, O-032)
+
+- Owner decision T-039 (719bad4) supersedes the T-038 no-cap note. `xbrl_frontier/output_cap.py`; `eval.generation.output_cap`
+  {tokens_per_numeric 24, base_tokens 64} set from the gold answer format; `scripts/verify_output_cap.py` ->
+  `data/output_cap_check.json`: every gold within its cap (FinNI 28,787, dev 1,933, fresh 3,434; both tokenizers; min slack 58).
+- Applied to student generation, every frontier request (Gemini `maxOutputTokens`), recorded per row; scorer reports `cut_off_rate`.
+- E4: 6 of 1,005 prior calls exceed the cap in Gemini tokens; superseded and re-run tomorrow (O-032). Gemini reports 0 thinking tokens.
+- No scored run was pushed before this. D2 (training, not scored) kept running.
+- Verified before commit: full suite with `-rf`, 101 passed (new tests/test_output_cap.py).

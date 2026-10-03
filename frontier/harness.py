@@ -23,7 +23,7 @@ import urllib.request
 from pathlib import Path
 
 from frontier import guard, requests as fr
-from xbrl_frontier import config, finni, sft_format
+from xbrl_frontier import config, finni, output_cap, sft_format
 
 # XBRL_FRONTIER_PHASE3_DIR lets tests write outside data/phase3 (never touch real collected data).
 PHASE3 = Path(os.environ.get("XBRL_FRONTIER_PHASE3_DIR") or config.REPO_ROOT / "data" / "phase3")
@@ -129,13 +129,14 @@ def run_free_tier(arm: str, step: str, items: list[dict], key: str, out: Path, p
             for x in items:
                 if (x["id"], run) in done:
                     continue
-                b = json.dumps(fr.body(arm, sft_format.query(x["context"]))).encode()
+                cap = output_cap.cap(x["context"])
+                b = json.dumps(fr.body(arm, sft_format.query(x["context"]), max_output_tokens=cap)).encode()
                 raw, req_s, log = call_with_retries(lambda: _http(fr.sync_endpoint(arm), key, api, b), pacer)
                 r = fr.parse(arm, json.loads(raw))
                 usd = actual_usd(arm, priced_sync, r["input_tokens"] or 0, r["output_tokens"] or 0)
                 priced += usd
                 uf.write(json.dumps({"id": x["id"], "run": run, "at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                                     "latency_s": req_s, **log,
+                                     "latency_s": req_s, "max_output_tokens": cap, **log,
                                      **{k: v for k, v in r.items() if k != "text"}, "priced_usd": usd,
                                      "priced_at": "sync" if priced_sync else "batch", "tier": "free"}) + "\n")
                 uf.flush()

@@ -576,3 +576,13 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Unknown: whether fine-tuned students (D3/D4) also run away; they are trained to emit the answer and stop, so D3 dev predictions
   will measure it (chunked, so partial results survive).
 - Next action: owner decision on D1. Until then no D1 push; GPU slots go to the AWQ rerun (O-029) and D2/D3.
+
+## O-032 Six E4 fresh-control calls made before the cap exceed it (OPEN)
+
+- Status: OPEN until the six are re-run under the cap (E4 day 3, 2026-10-04 from 07:00Z).
+- Found (2026-10-03, T-039 check): of 1,005 uncapped `gemini-3.5-flash-lite` calls, 6 returned more output tokens than their
+  T-039 cap in Gemini tokens (largest 3,767 vs cap 3,688; one also exceeds in Qwen tokens: 1,977 vs 1,936). Ids are in
+  `superseded_uncapped.jsonl`. The other 999 are within the cap and stay as recorded.
+- Action taken: their usage and prediction rows moved to `data/phase3/live/fresh_control_gemini-3.5-flash-lite/superseded_uncapped.jsonl`
+  (kept, not deleted), so the harness sees them as pending and re-calls them with `maxOutputTokens`. The ledger still counts the
+  original calls (they were made; $0 billed). `status.json` reads 1,005 done until the next run rewrites it.

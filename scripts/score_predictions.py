@@ -51,25 +51,33 @@ def gold_set(name: str, corpus: Path | None) -> tuple[list[Item], dict]:
     return items, imap
 
 
-def to_parsed(p: dict) -> tuple[scorer.Parsed, bool]:
+CUT = {"length", "MAX_TOKENS"}  # vLLM finish_reason / Gemini finishReason when the output cap was hit (T-039)
+
+
+def to_parsed(p: dict, finish: str | None = None) -> tuple[scorer.Parsed, bool, bool]:
+    """(parsed, not_generated, cut_off). A cut-off output is scored as written (T-039)."""
     if p.get("not_generated"):
-        return scorer.Parsed(frozenset(), False, 0), True
+        return scorer.Parsed(frozenset(), False, 0), True, False
+    cut = (p.get("finish_reason") or p.get("finish") or finish) in CUT
     if "pairs" in p:
-        return scorer.Parsed(scorer.pair_set(p["pairs"]), False, 0), False
-    return scorer.parse_prediction(p["text"]), False
+        return scorer.Parsed(scorer.pair_set(p["pairs"]), False, 0), False, cut
+    return scorer.parse_prediction(p["text"]), False, cut
 
 
 def score_items(items, preds, imap, counts) -> dict:
     golds = [scorer.gold_set(it.answer) for it in items]
     parsed = [preds[it.id] for it in items]
     keys = eval_sets.slice_keys(items, imap, {it.idx: counts[it.idx] for it in items})
-    s = scorer.score(golds, [p for p, _ in parsed], keys)
-    ng = sum(flag for _, flag in parsed)
+    s = scorer.score(golds, [p for p, _, _ in parsed], keys)
+    ng = sum(flag for _, flag, _ in parsed)
+    cut = sum(c for _, _, c in parsed)
     s.overall["not_generated"] = ng
     s.overall["not_generated_rate"] = ng / len(items) if items else 0.0
+    s.overall["cut_off"] = cut
+    s.overall["cut_off_rate"] = cut / len(items) if items else 0.0
     return {"overall": s.overall, "slices": s.slices,
-            "per_instance": [[it.id, pi["tp"], pi["fp"], pi["fn"], pi["parse_failed"], flag]
-                             for it, pi, (_, flag) in zip(items, s.per_instance, parsed)]}
+            "per_instance": [[it.id, pi["tp"], pi["fp"], pi["fn"], pi["parse_failed"], flag, c]
+                             for it, pi, (_, flag, c) in zip(items, s.per_instance, parsed)]}
 
 
 def main() -> None:
@@ -89,9 +97,12 @@ def main() -> None:
         if len(items) != len(want):
             raise SystemExit(f"{len(want) - len(items)} ids in {args.ids} are not in set {args.set}; refusing")
         ids_sha = hashlib.sha256(args.ids.read_bytes()).hexdigest()
+    usage = args.pred.parent / "usage.jsonl"
+    finish = ({u["id"]: u.get("finish") for u in map(json.loads, open(usage)) if u.get("run", 0) == 0}
+              if usage.exists() else {})
     raw_preds = {}
     for p in map(json.loads, open(args.pred)):
-        raw_preds[p["id"]] = to_parsed(p)
+        raw_preds[p["id"]] = to_parsed(p, finish.get(p["id"]))
     missing = [it.id for it in items if it.id not in raw_preds]
     if missing:
         raise SystemExit(f"{len(missing)} instances have no prediction (e.g. {missing[:3]}); refusing to score")
@@ -109,7 +120,8 @@ def main() -> None:
     for k in ("raw", "dedup"):
         o = rep[k]["overall"]
         print(f"{k}: F1 {o['finni_f1']:.4f} P {o['finni_precision']:.4f} R {o['finni_recall']:.4f} "
-              f"parse_failure_rate {o['parse_failure_rate']:.4f} not_generated_rate {o['not_generated_rate']:.4f} "
+              f"parse_failure_rate {o['parse_failure_rate']:.4f} cut_off_rate {o['cut_off_rate']:.4f} "
+              f"not_generated_rate {o['not_generated_rate']:.4f} "
               f"n={o['instances']}")
 
 

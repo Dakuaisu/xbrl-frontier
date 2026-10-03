@@ -1,8 +1,9 @@
 """Request builders and response parsers for the pinned frontier arms (pure; no network, no keys).
 
 Prompt: the benchmark's verbatim FinNI query (xbrl_frontier.sft_format.query), zero-shot, one user message.
-Thinking: frontier.thinking_per_arm (the minimum each API allows). No temperature or output cap is set, so
-each arm runs at its API defaults; the settings sent are recorded with every response.
+Thinking: frontier.thinking_per_arm (the minimum each API allows). No temperature is set, so each arm runs at its
+API default. Output length is capped from the input (xbrl_frontier.output_cap, TRADEOFFS T-039) when the caller passes
+max_output_tokens; the settings sent are recorded with every response.
 """
 import json
 
@@ -19,14 +20,19 @@ def arm_spec(arm: str) -> dict:
     return spec
 
 
-def body(arm: str, prompt: str) -> dict:
+def body(arm: str, prompt: str, max_output_tokens: int | None = None) -> dict:
     s = arm_spec(arm)
     if s["api"] == "openai_responses":
-        return {"model": arm, "input": [{"role": "user", "content": prompt}],
-                "reasoning": {"effort": s["reasoning_effort"]}, "store": False}
+        b = {"model": arm, "input": [{"role": "user", "content": prompt}],
+             "reasoning": {"effort": s["reasoning_effort"]}, "store": False}
+        if max_output_tokens is not None:
+            b["max_output_tokens"] = max_output_tokens
+        return b
     if s["api"] == "gemini_generate_content":
-        return {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
-                "generationConfig": {"thinkingConfig": {"thinkingLevel": s["thinking_level"]}}}
+        gc = {"thinkingConfig": {"thinkingLevel": s["thinking_level"]}}
+        if max_output_tokens is not None:
+            gc["maxOutputTokens"] = max_output_tokens
+        return {"contents": [{"role": "user", "parts": [{"text": prompt}]}], "generationConfig": gc}
     raise ValueError(s["api"])
 
 

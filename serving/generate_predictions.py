@@ -1,7 +1,8 @@
 """Greedy student predictions with vLLM for scoring (base model and/or LoRA adapters; T-021).
 
 Owner-run on Kaggle (OPEN O-019). Same prompt as training (xbrl_frontier.sft_format.prompt_text,
-enable_thinking=False), temperature eval.generation.temperature, max_model_len eval.generation.max_model_len.
+enable_thinking=False), temperature eval.generation.temperature, max_model_len eval.generation.max_model_len,
+max_tokens from the input per xbrl_frontier.output_cap (T-039), bounded by the remaining context.
 A prompt that does not fit is not truncated: it is written as not_generated and scored as an empty
 prediction, counted separately. If vLLM refuses the configured max_model_len (e.g. not enough KV cache on a
 16 GB T4), each refusal is recorded and the next halving is tried; the accepted (effective) value is
@@ -18,7 +19,7 @@ from pathlib import Path
 
 from training.encoder_train import load_set
 from training import schedule
-from xbrl_frontier import config, sft_format
+from xbrl_frontier import config, output_cap, sft_format
 
 
 def main() -> None:
@@ -97,12 +98,13 @@ def main() -> None:
                     stopped = True
                     break
                 part = gen[c:c + args.chunk]
-                outs = llm.generate([p for _, p, _ in part], [SamplingParams(temperature=g["temperature"], max_tokens=effective - n)
-                                                              for _, _, n in part], lora_request=lora)
-                for (x, _, n), o in zip(part, outs):
+                caps = [output_cap.cap(x["text"], effective - n) for x, _, n in part]
+                outs = llm.generate([p for _, p, _ in part], [SamplingParams(temperature=g["temperature"], max_tokens=c)
+                                                              for c in caps], lora_request=lora)
+                for (x, _, n), c, o in zip(part, caps, outs):
                     o = o.outputs[0]
                     f.write(json.dumps({"id": x["id"], "text": o.text, "finish_reason": o.finish_reason,
-                                        "prompt_tokens": n, "completion_tokens": len(o.token_ids),
+                                        "prompt_tokens": n, "completion_tokens": len(o.token_ids), "max_tokens": c,
                                         "not_generated": False}) + "\n")
                 f.flush()
         written = sum(1 for _ in open(out_path))

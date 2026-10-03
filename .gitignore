@@ -25,6 +25,7 @@ data/manifest_work/*
 !data/format_parity_report.json
 !data/fresh_selection_report.json
 !data/corpus_report.json
+!data/output_cap_check.json
 !data/corpus_report_v0_unaudited.json
 !data/format_parity_report_sampled.json
 !data/phase2_mac_pilot_Qwen3-0.6B.json

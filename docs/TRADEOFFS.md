@@ -895,3 +895,21 @@ That covers zero-shot base models, fine-tuned students, every exported variant, 
 - The cap applies identically to every arm, which keeps the comparison fair. Gemini fresh-control calls already made
   without the cap stay as recorded, with their output token counts checked against the cap. If any exceeds it, that
   goes in OPEN and the affected calls are re-run under the cap.
+
+## T-040 AUTONOMOUS DECISION - owner to review: how the T-039 output cap is implemented (2026-10-03)
+
+1. **Numeric values in a context** (`xbrl_frontier/output_cap.numeric_count`): digit numbers, standalone dash cells (— – -),
+   and the number / nil words that occur as gold facts (zero..ninety, hundred, thousand, million, billion, no, none, not, nil,
+   immaterial, nominal). Every non-digit gold fact form in FinNI-eval-v2 is one of these (26 forms; "—" alone is 8,414 facts).
+   A digit-only count left 225 golds with more facts than numbers in their context; this count leaves 2, both within the cap.
+2. **Parameters** (`eval.generation.output_cap`): `tokens_per_numeric` 24 = the longest single `{"Fact","Type"}` entry in any
+   gold (pinned Qwen tokenizers, identical counts). `base_tokens` 64. The smallest base covering every gold at 24 is 6 (the empty
+   answer `{"result": []}` plus the turn end); 64 adds room for a code fence and whitespace, which the scorer strips, so a
+   correct but fenced zero-shot answer to a context with no numbers is not cut. Verified by `scripts/verify_output_cap.py`
+   (`data/output_cap_check.json`): 0 of 28,787 FinNI golds, 0 of 1,933 dev, 0 of 3,434 fresh exceed, both tokenizers; minimum
+   slack 58 tokens. Set before any capped run; never adjusted after a run is scored.
+3. **Where it applies**: `serving/generate_predictions.py` (max_tokens = min(cap, remaining context)), every frontier request
+   step including latency (`maxOutputTokens` for Gemini, `max_output_tokens` for OpenAI), recorded per row. The scorer reports
+   `cut_off_rate` (vLLM `length`, Gemini `MAX_TOKENS`) next to `parse_failure_rate`.
+4. **Open point, not decided**: Gemini counts `maxOutputTokens` in its own tokens, about 1.06x the Qwen count at the median of
+   999 E4 replies (5th percentile 1.22x). The cap is in Qwen tokens, so it is somewhat tighter for Gemini. Raised to the owner.

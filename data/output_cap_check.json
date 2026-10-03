@@ -1,0 +1,59 @@
+{
+ "output_cap": {
+  "tokens_per_numeric": 24,
+  "base_tokens": 64
+ },
+ "rule": "cap = tokens_per_numeric x numeric_count(context) + base_tokens",
+ "results": {
+  "Qwen/Qwen3-0.6B|finni": {
+   "golds": 28787,
+   "exceeding": 0,
+   "examples": [],
+   "min_base_tokens_covering_all": 6,
+   "min_slack": 58,
+   "median_slack": 259
+  },
+  "Qwen/Qwen3-0.6B|dev": {
+   "golds": 1933,
+   "exceeding": 0,
+   "examples": [],
+   "min_base_tokens_covering_all": 6,
+   "min_slack": 58,
+   "median_slack": 231
+  },
+  "Qwen/Qwen3-0.6B|fresh": {
+   "golds": 3434,
+   "exceeding": 0,
+   "examples": [],
+   "min_base_tokens_covering_all": 6,
+   "min_slack": 58,
+   "median_slack": 227
+  },
+  "Qwen/Qwen3-1.7B|finni": {
+   "golds": 28787,
+   "exceeding": 0,
+   "examples": [],
+   "min_base_tokens_covering_all": 6,
+   "min_slack": 58,
+   "median_slack": 259
+  },
+  "Qwen/Qwen3-1.7B|dev": {
+   "golds": 1933,
+   "exceeding": 0,
+   "examples": [],
+   "min_base_tokens_covering_all": 6,
+   "min_slack": 58,
+   "median_slack": 231
+  },
+  "Qwen/Qwen3-1.7B|fresh": {
+   "golds": 3434,
+   "exceeding": 0,
+   "examples": [],
+   "min_base_tokens_covering_all": 6,
+   "min_slack": 58,
+   "median_slack": 227
+  }
+ },
+ "all_within_cap": true,
+ "config_hash": "e5348f9a842b9d6f9f1d36f7380d29cc49f38d28f34f58befe903f64bbc10153"
+}
