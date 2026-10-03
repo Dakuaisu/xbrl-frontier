@@ -167,6 +167,8 @@ Confirmed as written on 2026-10-02 (supervisor decision, owner to review). It st
    entry.
    Status 2026-10-02 (C1): AWQ int4 is NOT TESTED, not removed. The AWQ virtualenv failed at ensurepip, so no checkpoint was
    built and vLLM never served it. The rerun with virtualenv is O-029.
+   Result 2026-10-03 (O-029 rerun): AutoAWQ 0.2.9 GEMM builds both base checkpoints and vLLM 0.30.0 serves them on the T4
+   (20 of 20 requests each). Both awq-int4 variants are kept; no llm-compressor AWQ question arises.
 6. **Break-even table** (`scripts/phase0_cost.py`): every pinned arm plus the swap candidate, both
    regimes, every non-blank T4 source in `serving.hardware.kaggle_t4.market_rate_keys`, at the regime's
    utilization and at every `serving.utilization_scenarios` value. The blank AWS source is dropped and

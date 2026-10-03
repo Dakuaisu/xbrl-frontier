@@ -122,7 +122,8 @@ def wait(name: str, minutes: float) -> str:
 
 def fetch(name: str, to: Path, pattern: str | None = None) -> None:
     to.mkdir(parents=True, exist_ok=True)
-    out = sh("kernels", "output", f"{OWNER}/xbrl-frontier-{name}", "-p", str(to), *(["--file-pattern", pattern] if pattern else []))
+    out = sh("kernels", "output", f"{OWNER}/xbrl-frontier-{name}", "-p", str(to), "--page-size", "200",
+              *(["--file-pattern", pattern] if pattern else []))
     pushes = [json.loads(l) for l in open(RUNS) if json.loads(l).get("action") == "push" and json.loads(l)["name"] == name]
     after = gpu_used_hours()
     before = pushes[-1]["gpu_used_hours_before"] if pushes else None

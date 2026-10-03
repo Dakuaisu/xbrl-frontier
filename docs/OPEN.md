@@ -525,9 +525,13 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Next action: none from the builder. If the owner wants batch on the free tier explored, that is an owner decision (it touches
   the $0-billed rule).
 
-## O-029 AWQ int4 smoke test not yet run on Kaggle (virtualenv fix 5486d9f untested) (OPEN)
+## O-029 AWQ int4 smoke test not yet run on Kaggle (virtualenv fix 5486d9f untested) (RESOLVED: both pass)
 
-- Status: OPEN. Both `awq-int4` variants are NOT TESTED, not removed. INT4 stays in the fp16 / INT8 / INT4 set (PRD section 5).
+- Status: RESOLVED 2026-10-03. AWQ_ONLY rerun (push 06:44:00Z, 0.88 GPU-hours measured): autoawq 0.2.9 built both base
+  checkpoints; vLLM 0.30.0 served both on the T4, 20 of 20 requests and a non-empty generation each. Both `awq-int4` variants
+  are kept (`data/phase0/smoke_kaggle_t4_awq/`, `data/phase0/serving_variants.json`). The AWQ venv now lives in /tmp so the
+  kernel output stays small (the /kaggle/working venv made the output listing hit 429s).
+- History: Both `awq-int4` variants were NOT TESTED, not removed. INT4 stays in the fp16 / INT8 / INT4 set (PRD section 5).
 - Found (C1, 2026-10-02): `python -m venv` on the Kaggle image failed at ensurepip, so autoawq was never installed, the AWQ base
   checkpoints were never built, and `serving/smoke_test.py` recorded `FileNotFoundError: missing quantized checkpoint` for both
   sizes. vLLM never served them, so `serving.smoke_test.failure_action` (a variant that failed the smoke test) does not apply.

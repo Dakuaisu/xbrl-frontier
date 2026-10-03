@@ -491,3 +491,22 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - `kaggle quota` 06:43Z: 0.00 h used, after D1's session ended, so Kaggle posts usage later than session end; the push-time
   committed estimate (quota + running wall-clock) still applies, and fetch rows carry measured hours.
 - Docs only (plus the T-038 label fix: "Supervisor decision (owner to review)"); suite not re-run.
+
+## 2026-10-03 E4 day 2 (free tier, `gemini-3.5-flash-lite`, T-033)
+
+- Wrapper (PID 90944) ran at 07:00:05Z; 505 calls 07:00:11-07:50:39Z (10.0 RPM), then the per-day 429
+  (`GenerateRequestsPerDayPerProjectPerModel-FreeTier`, quota value 500; Google accepted 505 this Pacific day). Done 1,005 of 3,434,
+  pending 2,429; resume 2026-10-04T07:00:05Z. Day 2: model field `gemini-3.5-flash-lite` on all 505, tier free, 0 retries (429 or 5xx),
+  finish STOP on all, 0 empty predictions. Ledger: billed $0.00; priced $0.189 for day 2, $0.371 cumulative (notional, dated sheet).
+- Day-1 note: day 1's `status.json` `updated_utc` read 12:34:32Z, the run start, not the pause time (bug fixed in 1f9b83c); day 2's
+  `updated_utc` is 07:50:44Z, the pause.
+
+## 2026-10-03 AWQ int4 rerun passes (O-029 resolved)
+
+- `phase0-t4` v2 with `AWQ_ONLY = True` (source f49d5d0): autoawq 0.2.9 built Qwen3-0.6B/1.7B awq-int4; smoke test kept both
+  (20 of 20 requests, non-empty generation). 0.88 GPU-hours measured (log clock 3,157 s). `serving_variants.json`: all six T4
+  variants kept, none removed, none untested. T-004 item 5 updated.
+- Fetch hit 429 on the output listing: the venv in /kaggle/working made thousands of output files. The AWQ venv moved to /tmp
+  (phase0 and phase2 export notebooks); `kaggle_run fetch` lists 200 files per page.
+- `kaggle quota` 08:22Z: 0.88 h used, which matches this run alone; D1 1.7B's 9.0 h session (killed 06:41Z) is not in it yet.
+- Verified before commit: full suite with `-rf`, 97 passed.

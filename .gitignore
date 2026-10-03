@@ -52,3 +52,4 @@ data/phase0/*
 !data/phase0/serving_variants.json
 !data/phase0/phase0_kaggle_t4/
 !data/phase0/smoke_kaggle_t4/
+!data/phase0/smoke_kaggle_t4_awq/

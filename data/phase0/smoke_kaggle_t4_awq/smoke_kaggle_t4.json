@@ -1,0 +1,120 @@
+{
+ "card": "kaggle_t4",
+ "versions": {
+  "vllm": "0.30.0"
+ },
+ "env": {
+  "card": "kaggle_t4",
+  "hardware": {
+   "gpu": "NVIDIA T4 16GB",
+   "sm": 7.5,
+   "dtype": "fp16",
+   "variants": [
+    "fp16",
+    "int8-w8a8",
+    "awq-int4"
+   ],
+   "market_rate_keys": [
+    "gpu_per_hour.modal.T4",
+    "gpu_per_hour.huggingface_endpoints.T4",
+    "gpu_per_hour.aws.g4dn_xlarge_T4"
+   ],
+   "load_generator_colocated": true
+  },
+  "python": "3.12.13 (main, Mar  4 2026, 09:23:07) [GCC 11.4.0]",
+  "platform": "Linux-6.18.48+-x86_64-with-glibc2.35",
+  "nvidia_smi": "Tesla T4, 580.178.04, 15360 MiB, 7.5\nTesla T4, 580.178.04, 15360 MiB, 7.5",
+  "config_hash": "cc084aaea3620701a437904c20d08f9e9ec13b7f75aae7d3e704a658c74202f4",
+  "time_utc": "2026-10-03T07:33:54Z",
+  "version::vllm": "0.30.0",
+  "version::torch": "2.13.0",
+  "version::transformers": "5.18.0",
+  "version::compressed-tensors": "0.17.0"
+ },
+ "failure_action": "remove the variant from the serving table before training hours are spent; record the error",
+ "precision_filter": [
+  "awq-int4"
+ ],
+ "results": [
+  {
+   "variant": "0.6B-awq-int4",
+   "model": "Qwen/Qwen3-0.6B",
+   "precision": "awq-int4",
+   "ok": true,
+   "checkpoint": "/kaggle/working/smoke_checkpoints/Qwen3-0.6B-awq-int4",
+   "server_flags": [
+    "--served-model-name",
+    "Qwen/Qwen3-0.6B",
+    "--dtype",
+    "half",
+    "--seed",
+    "1",
+    "--max-model-len",
+    "4096"
+   ],
+   "generation": {
+    "text": " {\"result\":[{\"Fact\": \"29,315\", \"Type\": \"integerItemType\"},{\"Fact\": \"24,045\", \"Type\": \"integerItemType\"},{\"Fact\": \"24,045\", \"Type\": \"integerItemType\"},{\"Fact\": \"24,045\", \"Type\": \"integerItemType\"},{\"Fact\": \"24,045\", \"Type\": \"integerItemType\"},{\"Fact\": \"24,045\", \"Type\": \"integerItemType\"},{\"Fact\": \"24,045\", \"Type\": \"integerItemType\"},{\"Fact\": \"24,045\", \"Type\": \"integerItemType\"},{\"Fact\": \"24,045\", \"Type\": \"integerItemType\"},{\"Fact\": \"24,045\", \"Type\": \"integerItemType\"},{\"Fact\":",
+    "usage": {
+     "prompt_tokens": 1965,
+     "total_tokens": 2140,
+     "completion_tokens": 175,
+     "prompt_tokens_details": null,
+     "completion_tokens_details": null
+    }
+   },
+   "throughput_check": {
+    "concurrency": 16,
+    "num_prompts": 20,
+    "completed": 20,
+    "request_throughput": 0.6769387602027808,
+    "output_throughput": 118.46428303548663,
+    "p50_ttft_ms": 8644.729359999928,
+    "p95_ttft_ms": 15748.075105749831,
+    "p50_e2el_ms": 25832.678489499813,
+    "p95_e2el_ms": 26592.184649499995,
+    "request_goodput_per_request_slo": 0.0,
+    "raw_file": "raw_0.6B-awq-int4.json"
+   }
+  },
+  {
+   "variant": "1.7B-awq-int4",
+   "model": "Qwen/Qwen3-1.7B",
+   "precision": "awq-int4",
+   "ok": true,
+   "checkpoint": "/kaggle/working/smoke_checkpoints/Qwen3-1.7B-awq-int4",
+   "server_flags": [
+    "--served-model-name",
+    "Qwen/Qwen3-1.7B",
+    "--dtype",
+    "half",
+    "--seed",
+    "1",
+    "--max-model-len",
+    "4096"
+   ],
+   "generation": {
+    "text": " {\"result\":[{\"Fact\":\"29315\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"15866\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"32066\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"14818\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"86314\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"98493\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"39614\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"59384\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"40416\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"15315\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"161564\",\"Type\":\"monetaryItemType\"},{\"Fact\":\"2017805\",\"Type\":\"monetaryItemType\"},{\"Fact",
+    "usage": {
+     "prompt_tokens": 1965,
+     "total_tokens": 2140,
+     "completion_tokens": 175,
+     "prompt_tokens_details": null,
+     "completion_tokens_details": null
+    }
+   },
+   "throughput_check": {
+    "concurrency": 16,
+    "num_prompts": 20,
+    "completed": 20,
+    "request_throughput": 0.6056140911406184,
+    "output_throughput": 105.98246594960821,
+    "p50_ttft_ms": 9491.977183000017,
+    "p95_ttft_ms": 16915.809430349942,
+    "p50_e2el_ms": 28211.876434499798,
+    "p95_e2el_ms": 29284.216048349845,
+    "request_goodput_per_request_slo": 0.0,
+    "raw_file": "raw_1.7B-awq-int4.json"
+   }
+  }
+ ]
+}
