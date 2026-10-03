@@ -527,3 +527,11 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - The quota still omitted D1 1.7B's measured 9.0 h at 08:41Z, so the push-time estimate now takes max(quota reading, measured fetch
   hours since the last reset) plus running wall-clock. Re-estimate 08:45Z: week 21.0 h of 30, cumulative 26.6 h of 70.
 - Verified before commit: full suite with `-rf`, 102 passed.
+
+## 2026-10-03 D2 session 1 stopped on the T-038 margin (O-033)
+
+- Confirmed before any resume: run.json `complete: false`, `stopped_for_session_limit: true`, `final_adapter` null; checkpoint-1388
+  (and checkpoint-1379) plus curve prefixes 2,500 / 5,000 / 10,000 / 20,000 in the kernel output (`kaggle kernels files`).
+  11.27 GPU-hours measured (log clock 40,589 s; written into the fetch row). 517 tokens/s against the 1,500 planning rate: O-033.
+- `kaggle quota` 08:54Z: 1.09 h (still lags). Resume not pushed: budget decision needed (O-033).
+- Docs and data only; suite not re-run.

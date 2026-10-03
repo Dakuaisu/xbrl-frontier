@@ -54,3 +54,8 @@ data/phase0/*
 !data/phase0/phase0_kaggle_t4/
 !data/phase0/smoke_kaggle_t4/
 !data/phase0/smoke_kaggle_t4_awq/
+!data/phase2/
+data/phase2/*
+!data/phase2/kaggle/
+data/phase2/kaggle/*
+!data/phase2/kaggle/run-Qwen3-1.7B-s1/

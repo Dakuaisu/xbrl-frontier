@@ -586,3 +586,19 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Action taken: their usage and prediction rows moved to `data/phase3/live/fresh_control_gemini-3.5-flash-lite/superseded_uncapped.jsonl`
   (kept, not deleted), so the harness sees them as pending and re-calls them with `maxOutputTokens`. The ledger still counts the
   original calls (they were made; $0 billed). `status.json` reads 1,005 done until the next run rewrites it.
+
+## O-033 T4 QLoRA trains at 517 tokens/s, about a third of the planning rate; the 70 GPU-hour plan no longer fits (OPEN)
+
+- Status: OPEN; D2 resume on hold for a decision. Run 1's state is safe on Kaggle (checkpoint-1388, curve prefixes 2,500 /
+  5,000 / 10,000 / 20,000; `data/phase2/kaggle/run-Qwen3-1.7B-s1/session1_run.json`, `complete: false`).
+- Found (D2 session 1, 2026-10-02T21:41Z to 2026-10-03T08:52Z, stopped on the T-038 margin, 11.27 GPU-hours measured):
+  `processed_tokens_per_sec` 517 against `training.planning_tokens_per_sec.t4_qlora_1p7b` 1,500. Step 1,388 of 4,716
+  (2 epochs x 2,358 steps); loss about 0.017. Run 1 needs about 38 GPU-hours in total, about 27 more.
+- Also from run.json: 1,067 of 38,788 training instances exceed `training.kaggle.max_seq_len_tokens` and are skipped, so run 1 trains
+  on 37,721 (not yet disclosed in the README; curve points count instances seen, so they are unaffected).
+- Budget (`training.kaggle.gpu_hours_cap_total`): used about 24 h so far (week to 2026-10-03: 5.63 h read; since then measured 9.0 +
+  0.88 + 11.27, part of which falls before the reset). The ~46 h left must cover the rest of run 1 (~27), zero-shot and student
+  scoring, D3/D4, the encoder (never cut), exports and load tests. The PRD's section 9 estimate assumed the planning rate.
+- PRD mitigations (section 10 risk row and section 9 cut order): "shrink the corpus, keep curve fractions; drop the second seed
+  first". Options are in the turn report. The weekly quota also matters: a 12 h resume now would cross 30 h this week, and a
+  session killed by quota keeps no output, so no resume is pushed before the decision.
