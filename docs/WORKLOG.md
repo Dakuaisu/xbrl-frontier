@@ -589,3 +589,9 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - T-042: continuous batching recorded in TRADEOFFS. Meta files list each session (git head from `SOURCE_COMMIT`, code path); rows
   carry `session`. `kaggle_run srcdataset` builds the source dataset with `SOURCE_COMMIT` inside; `config.source_commit()`.
 - Verified before commit: full suite with `-rf`, 104 passed (same count: the resume test gained assertions, no test added or removed).
+
+## 2026-10-03 Generation statistics script
+
+- `scripts/generation_stats.py`: per predictions file (partial allowed), split table vs text: finish_reason counts, completion_tokens
+  quantiles, cap hits, per-session counts; writes `<pred>.stats.json`.
+- Verified before commit: full suite with `-rf`, 105 passed (new tests/test_generation_stats.py; 104 -> 105).
