@@ -44,6 +44,24 @@ def log(row: dict) -> None:
         f.write(json.dumps({"at_utc": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), **row}) + "\n")
 
 
+def committed_estimate(quota_used: float, rows: list[dict], running: set[str], now: dt.datetime) -> dict:
+    """Kaggle posts GPU hours when a session ends, so a live quota reading understates use: add the wall-clock of every
+    RUNNING kernel since its latest push. Prior weeks come from quota_reset rows (cumulative cap)."""
+    pushes = {}
+    for r in rows:
+        if r.get("action") == "push" and not str(r.get("note", "")).startswith("NOT RUN"):
+            pushes[r["name"]] = r
+    live = {n: round((now - dt.datetime.fromisoformat(pushes[n]["at_utc"])).total_seconds() / 3600, 2)
+            for n in sorted(running) if n in pushes}
+    week = round(quota_used + sum(live.values()), 2)
+    prior = sum(r["last_reading_before_reset"]["gpu_used_hours"] for r in rows if r.get("action") == "quota_reset")
+    k = config.get("training.kaggle")
+    return {"quota_reading": quota_used, "running_wall_clock_hours": live, "week_estimate": week,
+            "weekly_quota": k["weekly_gpu_hours_quota"], "cumulative_estimate": round(prior + week, 2),
+            "cap_total": k["gpu_hours_cap_total"],
+            "within_caps": week < k["weekly_gpu_hours_quota"] and prior + week < k["gpu_hours_cap_total"]}
+
+
 def dataset(slug: str, d: Path, message: str) -> None:
     meta = {"title": slug, "id": f"{OWNER}/{slug}", "licenses": [{"name": "other"}]}
     (d / "dataset-metadata.json").write_text(json.dumps(meta, indent=1))
@@ -68,6 +86,12 @@ def push(name: str, notebook: Path, param_cell: str | None, datasets: list[str],
                 "kernel_sources": [f"{OWNER}/xbrl-frontier-{k}" for k in kernels], "model_sources": []}
         (t / "kernel-metadata.json").write_text(json.dumps(meta, indent=1))
         before = gpu_used_hours()
+        rows = [json.loads(l) for l in open(RUNS)] if RUNS.exists() else []
+        names = {r["name"] for r in rows if r.get("action") == "push"} - {name}
+        running = {n for n in names if any(w in status(n) for w in ("RUNNING", "QUEUED"))}
+        est = committed_estimate(before, rows, running, dt.datetime.now(dt.timezone.utc))
+        if not est["within_caps"]:
+            raise SystemExit(f"refusing push: committed GPU-hours estimate over a training.kaggle cap: {est}")
         args = ["kernels", "push", "-p", str(t), "--accelerator", "NvidiaTeslaT4"]
         if timeout:
             args += ["-t", str(timeout)]
@@ -77,7 +101,7 @@ def push(name: str, notebook: Path, param_cell: str | None, datasets: list[str],
     git = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, cwd=config.REPO_ROOT).stdout.strip()
     log({"action": "push", "name": name, "kernel": meta["id"], "notebook": str(notebook.resolve().relative_to(config.REPO_ROOT)),
          "param_cell": param_cell, "datasets": datasets, "kernel_sources": kernels, "git_head": git,
-         "gpu_used_hours_before": before, "out": out.strip()[-300:]})
+         "gpu_used_hours_before": before, "committed_estimate": est, "out": out.strip()[-300:]})
     print(out.strip())
 
 

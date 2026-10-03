@@ -469,3 +469,8 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - Verified before commit: full suite with `-rf`, 95 passed.
 - 01:36Z `kaggle quota`: 0.00 h used, with D1 1.7B v2 and D2 running since before the reset. Kaggle appears to post usage when a session
   ends, so mid-run readings understate use; per-run hours come from fetch rows. Docs only; suite not re-run.
+- Rule (quota posts at session end): before each push, `kaggle_run push` estimates committed hours = quota reading + wall-clock since push
+  of every RUNNING/QUEUED kernel, adds prior weeks from `quota_reset` rows, refuses the push if over `training.kaggle.weekly_gpu_hours_quota`
+  or `gpu_hours_cap_total`, and logs the estimate as `committed_estimate` in the push row. Kernels spanning a reset are counted again in the
+  new week, so the estimate errs high. Fetch rows stay the per-run record. No config change. Dry run 01:39Z: week 8.05 h, cumulative 13.68 h.
+- Verified before commit: full suite with `-rf`, 96 passed (new tests/test_kaggle_run.py).
