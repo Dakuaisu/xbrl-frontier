@@ -934,3 +934,16 @@ against `training.kaggle.gpu_hours_cap_total` = 70; rates measured, O-033):
 94.7 > 70 before any scoring, the encoder (never cut) or load tests, so seed 2 (D6) is cut. Headline intervals rest on the company
 bootstrap of one seed; the README says one seed was trained and why. Next items in order, cut only if a later table forces it:
 INT8 variant, 3050 rows (owner-blocked), curve validation run, 0.6B student, third arm. The full table lives in O-033.
+
+## T-042 AUTONOMOUS DECISION - owner to review: continuous batching for scored generation; mixed-session prediction sets are recorded (2026-10-03)
+
+Extends T-038. `serving/generate_predictions.py` (715b501) feeds the vLLM engine continuously (a window of requests in flight,
+each output written as it finishes) instead of one `llm.generate` per chunk of 1,024, because each chunk waited on its longest
+generation (D1 0.6B session 1: 1:19-2:13 per chunk, the tail at 400+ s per prompt). Scheduling only: the prompts, the T-039 caps
+and greedy decoding (temperature 0) are unchanged. Caveat: in fp16, batch composition can change a greedy output at the margin,
+so a prediction set produced across sessions mixes outputs from both code paths (D1 0.6B: session 1 chunked, later sessions
+continuous). Session 1's rows are not re-run; what was generated is what gets scored. To keep this auditable each meta file
+lists every session (`session`, `git_head` from `SOURCE_COMMIT` in the source archive, `code_path` chunked/continuous,
+`written_this_session`), and every prediction row carries its `session`. Session 1 of D1 0.6B predates these records: its meta
+has none, so it is recorded as session 1, `code_path` chunked, `git_head` null (source 6d8aa54 per its push row in
+`data/kaggle/runs.jsonl`). Rejected: re-running session 1's rows on the new path (spends GPU-hours to remove a margin effect).

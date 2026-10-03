@@ -60,3 +60,4 @@ data/phase2/*
 data/phase2/kaggle/*
 !data/phase2/kaggle/run-Qwen3-1.7B-s1/
 !data/budget/
+SOURCE_COMMIT

@@ -1,6 +1,7 @@
 """Builder-run Kaggle steps (T-033): datasets, notebook kernels, status, outputs and GPU-hour accounting.
 
   dataset  --slug S --dir D [--message M]     create the private dataset adnanrashid29/S from D, or add a version
+  srcdataset                                  version xbrl-frontier-src from HEAD (git archive + SOURCE_COMMIT)
   push     --name N --notebook P [--param-cell CODE] [--dataset S ...] [--kernel-source K ...] [--planned-hours H]
            builds kernel adnanrashid29/xbrl-frontier-N from notebook P (the first code cell replaced by CODE when given),
            T4 accelerator, internet on, private; logs the push with the GPU quota used before it
@@ -80,6 +81,15 @@ def dataset(slug: str, d: Path, message: str) -> None:
     print(out.strip())
 
 
+def srcdataset() -> None:
+    """New version of xbrl-frontier-src from HEAD, with SOURCE_COMMIT inside so kernels can record their code (T-042)."""
+    head = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, cwd=config.REPO_ROOT, check=True).stdout.strip()
+    with tempfile.TemporaryDirectory() as tmp:
+        subprocess.run(["git", "archive", "--format=tar.gz", f"--add-virtual-file=SOURCE_COMMIT:{head}\n",
+                        "-o", str(Path(tmp) / "xbrl-frontier-src.tar.gz"), "HEAD"], cwd=config.REPO_ROOT, check=True)
+        dataset("xbrl-frontier-src", Path(tmp), f"HEAD {head[:7]}")
+
+
 def push(name: str, notebook: Path, param_cell: str | None, datasets: list[str], kernels: list[str], planned_hours: float) -> None:
     nb = json.loads(notebook.read_text())
     if param_cell is not None:
@@ -146,7 +156,7 @@ def fetch(name: str, to: Path, pattern: str | None = None) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("action", choices=["dataset", "push", "wait", "fetch", "status"])
+    ap.add_argument("action", choices=["dataset", "srcdataset", "push", "wait", "fetch", "status"])
     ap.add_argument("--slug")
     ap.add_argument("--dir", type=Path)
     ap.add_argument("--message", default="update")
@@ -163,6 +173,8 @@ def main() -> None:
     a = ap.parse_args()
     if a.action == "dataset":
         dataset(a.slug, a.dir, a.message)
+    elif a.action == "srcdataset":
+        srcdataset()
     elif a.action == "push":
         from training.schedule import session_hours
         push(a.name, a.notebook, a.param_cell, a.dataset, a.kernel_source, session_hours(a.planned_hours))

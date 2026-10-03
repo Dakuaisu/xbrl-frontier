@@ -38,3 +38,13 @@ def config_hash() -> str:
     h = hashlib.sha256(THRESHOLDS_PATH.read_bytes())
     h.update(docs_path(thresholds()["pins"]["price_sheet"]).read_bytes())
     return h.hexdigest()
+
+
+def source_commit() -> str | None:
+    """Commit the running code came from: SOURCE_COMMIT written into the Kaggle source archive, else git, else None."""
+    f = REPO_ROOT / "SOURCE_COMMIT"
+    if f.exists():
+        return f.read_text().strip()
+    import subprocess
+    r = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, cwd=REPO_ROOT)
+    return r.stdout.strip() if r.returncode == 0 else None

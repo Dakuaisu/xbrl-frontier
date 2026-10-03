@@ -13,7 +13,6 @@ deadline (training.kaggle.session_hours_max less session_stop_margin_minutes, fr
 with meta "complete": false; --resume DIR (a previous session's OUT) keeps the ids already written and continues.
 """
 import argparse
-import shutil
 import json
 import time
 from pathlib import Path
@@ -83,19 +82,30 @@ def main() -> None:
             "max_model_len_refusals": refusals,
             "instances": len(items), "not_generated_over_max_model_len": fits.count(False), "targets": {}}
     meta["complete"] = True
+    prior_meta = args.resume / f"predictions_{args.set}.meta.json" if args.resume else None
+    prior = json.loads(prior_meta.read_text()) if prior_meta and prior_meta.exists() else None
+    sessions = (prior.get("sessions") or [{"session": 1, "git_head": None, "code_path": "chunked",
+                                            "note": "session meta predates per-session records; chunked code (T-042)"}]) if prior else []
+    this = {"session": len(sessions) + 1, "git_head": config.source_commit(), "code_path": "continuous",
+            "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(started))}
+    meta["sessions"] = sessions + [this]
     for k, (name, path) in enumerate(targets):
         lora = LoRARequest(name, k + 1, path) if path else None
         t0 = time.time()
         out_path = args.out / f"predictions_{name}_{args.set}.jsonl"
         if args.resume and (args.resume / out_path.name).exists() and not out_path.exists():
-            shutil.copy(args.resume / out_path.name, out_path)
+            last = sessions[-1]["session"] if sessions else 1
+            with open(out_path, "w") as w:
+                for r in map(json.loads, open(args.resume / out_path.name)):
+                    w.write(json.dumps({**r, "session": r.get("session", last)}) + "\n")
         done = {json.loads(l)["id"] for l in open(out_path)} if out_path.exists() else set()
         todo = [(x, p, n, ok) for x, (p, n), ok in zip(items, prompts, fits) if x["id"] not in done]
         stopped = False
         with open(out_path, "a") as f:
             for x, p, n, ok in todo:
                 if not ok:
-                    f.write(json.dumps({"id": x["id"], "text": None, "not_generated": True, "prompt_tokens": n}) + "\n")
+                    f.write(json.dumps({"id": x["id"], "text": None, "not_generated": True, "prompt_tokens": n,
+                                        "session": this["session"]}) + "\n")
             queue = [(x, p, n, output_cap.cap(x["text"], effective - n)) for x, p, n, ok in todo if ok]
             queue.reverse()
             engine, flight = llm.llm_engine, {}
@@ -118,13 +128,14 @@ def main() -> None:
                     o = o.outputs[0]
                     f.write(json.dumps({"id": x["id"], "text": o.text, "finish_reason": o.finish_reason,
                                         "prompt_tokens": n, "completion_tokens": len(o.token_ids), "max_tokens": c,
-                                        "not_generated": False}) + "\n")
+                                        "not_generated": False, "session": this["session"]}) + "\n")
                     f.flush()
                 if flight and not engine.has_unfinished_requests():
                     raise SystemExit(f"engine idle with {len(flight)} unmatched request ids (e.g. {next(iter(flight))}); vLLM id mismatch")
         written = sum(1 for _ in open(out_path))
         meta["targets"][name] = {"adapter": path, "file": out_path.name, "seconds_this_session": time.time() - t0,
                                  "resumed_with": len(done), "written": written, "complete": written == len(items)}
+        this.setdefault("written_this_session", {})[name] = written - len(done)
         meta["complete"] = meta["complete"] and written == len(items)
         if stopped:
             meta["stopped_for_session_limit"] = True

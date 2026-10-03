@@ -577,3 +577,15 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   finishes, deadline checked every step, in-flight requests aborted at the stop and redone on resume). Same prompts, caps and greedy
   decoding; only scheduling changes. D1 0.6B keeps its running session; its resume and D1 1.7B use the new loop.
 - Verified before commit: full suite with `-rf`, 104 passed.
+
+## 2026-10-03 Test count note; per-session provenance for predictions (T-042)
+
+- Test count: the suite went from 105 to 104 in a8088bf, not 715b501 (which stayed at 104). In a8088bf `tests/test_kaggle_run.py`
+  was rewritten for the start-week attribution rule: its three tests (`..._adds_running_wall_clock_and_prior_weeks`,
+  `..._measured_fetch_hours_count_when_the_quota_lags`, `..._planned_hours_of_the_new_kernel_count_against_the_week`) became two
+  (`test_sessions_count_in_the_week_they_started`, `test_quota_reading_is_a_floor_and_planned_hours_count`). The measured-fetch rule
+  they tested was retired; the planned-hours and prior-week checks moved into the two new tests. That WORKLOG entry said "rewritten"
+  but did not state the drop; stated here.
+- T-042: continuous batching recorded in TRADEOFFS. Meta files list each session (git head from `SOURCE_COMMIT`, code path); rows
+  carry `session`. `kaggle_run srcdataset` builds the source dataset with `SOURCE_COMMIT` inside; `config.source_commit()`.
+- Verified before commit: full suite with `-rf`, 104 passed (same count: the resume test gained assertions, no test added or removed).

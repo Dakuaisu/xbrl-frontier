@@ -602,8 +602,27 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   counted twice), recorded as `week_total_hours` in the quota_reset row. `kaggle_run.committed_estimate` uses this rule and
   reserves each running kernel's planned hours (12 h if unrecorded). No quota-kill risk for D1 0.6B: its full 12 h reaches about
   12.9 h this week.
-- GPU-hour table: pending D1 0.6B's capped zero-shot generation rate; filled in here when it lands and updated after every
-  fetch. Cuts so far are recorded in `data/budget/cuts.json`, from which the README disclosure is generated.
+- GPU-hour table, PROVISIONAL (2026-10-03 16:30Z; replaced when the continuous-loop rate is measured). Generation rows use the
+  chunked capped zero-shot rate as an UPPER BOUND: 0.6B 1.71 h per 1,024 prompts measured (D1 0.6B session 1), so ~47 h per FinNI
+  pass (28,787); 1.7B scaled by the Phase 0 throughput ratio (18.9 / 15.3) to ~58 h. Fine-tuned students are trained to stop, so
+  their rows (D3, D4, D9, D11) are upper bounds only and likely far lower; unmeasured. Cap: `training.kaggle.gpu_hours_cap_total` 70.
+
+  | item | hours | basis | running total |
+  |---|---|---|---|
+  | committed so far | 46.5 | last week 21.64 (start-week rule) + AWQ 0.88 + D1 0.6B s1 12 (reserved) + D2 s2 12 (reserved) | 46.5 |
+  | run 1 remainder after s2 | 18.7 | 29.9 remaining at 517 tok/s less s2's ~11.25 | 65.2 |
+  | D1 0.6B remainder | ~37 | upper bound: ~47 per pass less ~6 of 28 chunks done in s1 | ~102 |
+  | D1 1.7B | ~58 | upper bound, scaled | ~160 |
+  | D3 dev scoring, 5 checkpoints x 1,933 | ~20 | upper bound at the 1.7B rate | ~180 |
+  | D4 FinNI + D9 fresh, final 1.7B | ~65 | upper bound | ~245 |
+  | D8 encoder (never cut) | ~6 | planning 3 h x measured slowdown | ~251 |
+  | D10 exports + D11 variant passes (merged, AWQ; INT8 is cut-order item 2) | ~2 + 2x58 | upper bound | ~369 |
+  | E5 load tests | ~6 | PRD section 9 | ~375 |
+
+  At the upper bound, run 1's remainder plus D1 for both sizes (65.2 + 37 + 58 = ~160) does not fit under 70. No cut is made on
+  this table: cuts come in PRD section 9 order (next: INT8 variant) only when the measured continuous-loop rate confirms it.
+  Zero-shot is not in the cut order; if the measured rate still puts full-set zero-shot out of reach, that is an owner question.
+  Cuts so far are recorded in `data/budget/cuts.json`, from which the README disclosure is generated.
 - Found (D2 session 1, 2026-10-02T21:41Z to 2026-10-03T08:52Z, stopped on the T-038 margin, 11.27 GPU-hours measured):
   `processed_tokens_per_sec` 517 against `training.planning_tokens_per_sec.t4_qlora_1p7b` 1,500. Step 1,388 of 4,716
   (2 epochs x 2,358 steps); loss about 0.017. Run 1 needs about 38 GPU-hours in total, about 27 more.

@@ -77,9 +77,16 @@ def test_deadline_stop_then_resume_completes(stubbed, monkeypatch):
     assert first == ["i3", "i0", "i1"]  # the over-long prompt, then two finished before the deadline
     assert _LLM.last.llm_engine.aborted == ["i2", "i4"]  # in flight at the deadline (window refilled): aborted, not written
     monkeypatch.setattr(gp.schedule, "session_time_up", lambda now, start, hours=None: False)
+    meta1 = stubbed / "s1" / "predictions_dev.meta.json"
+    legacy = json.loads(meta1.read_text())
+    del legacy["sessions"]  # session 1 of D1 0.6B ran before per-session records existed
+    meta1.write_text(json.dumps(legacy))
     m = _run(monkeypatch, stubbed / "s2", ["--resume", str(stubbed / "s1")])
+    assert [(x["session"], x["code_path"]) for x in m["sessions"]] == [(1, "chunked"), (2, "continuous")]
+    assert m["sessions"][1]["written_this_session"] == {"base": 4}
     rows = [json.loads(l) for l in open(stubbed / "s2" / "predictions_base_dev.jsonl")]
     assert m["complete"] and sorted(r["id"] for r in rows) == [f"i{k}" for k in range(7)]
     assert [r["id"] for r in rows if r["not_generated"]] == ["i3"]
+    assert {r["id"]: r["session"] for r in rows} == {**{i: 1 for i in first}, **{f"i{k}": 2 for k in (2, 4, 5, 6)}}
     assert m["targets"]["base"]["resumed_with"] == 3
     assert all(r["max_tokens"] <= 100 - r["prompt_tokens"] for r in rows if not r["not_generated"])
