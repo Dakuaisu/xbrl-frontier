@@ -661,3 +661,9 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - The mixed-session caveat in T-042 no longer applies to D1 0.6B: nothing from session 1 survives, so the set restarts on the
   continuous path.
 - Measured rate from this session (chunked, upper bound for the O-033 table): 7,168 prompts in 11.42 h = 1.59 h per 1,000 prompts.
+- Exposure assessed (2026-10-03): D2 session 2 (`run-1p7b-s1-sess2`, pushed 14:27:24Z, kernel timeout 02:27:24Z) runs the
+  pre-fix clock (deadline from process start). Training checks the deadline every optimizer step (~29 s), so only the clock offset
+  matters. Session 1 on the same code: process start 21:41:11Z, 5 min after its 21:36:11Z push; stopped 08:52:34Z against a
+  09:36:11Z timeout, a measured real margin of 43.6 min (log clock 11.27 h). Session 2 is expected to stop around 01:45-01:50Z with
+  a similar margin (setup may be a few minutes longer because it mounts session 1's output). If it is killed instead, it is logged
+  the same way as this entry and run 1 resumes from checkpoint-1388 on the fixed code after the 2026-10-10 reset.
