@@ -643,3 +643,21 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - PRD mitigations (section 10 risk row and section 9 cut order): "shrink the corpus, keep curve fractions; drop the second seed
   first". Options are in the turn report. The weekly quota also matters: a 12 h resume now would cross 30 h this week, and a
   session killed by quota keeps no output, so no resume is pushed before the decision.
+
+## O-034 D1 0.6B session 1 hit the kernel timeout and lost 7,168 generated prompts (OPEN, finding)
+
+- Status: OPEN until D1 0.6B completes on the fixed code.
+- Found (2026-10-03): `zeroshot-0p6b` v2 (source 6d8aa54, chunked, capped) pushed 08:41:21Z, killed at the 43,200 s kernel timeout
+  (CANCEL_ACKNOWLEDGED 20:43Z). 12.0 GPU-hours, measured push to kill. Live log: 7 chunks of 1,024 finished (1:19:44, 2:13:51,
+  1:34:26, 1:15:20, 1:16:42, 1:13:49, 1:51:17; 11 h 25 min of generation), then chunk 8 started. The kernel output listing is empty
+  after the timeout, so the 7,168 rows written and flushed to /kaggle/working are lost: a timed-out session keeps nothing (the T-038
+  premise holds; files seen in D1 1.7B's fetch at 06:43Z are not listed now and are not evidence otherwise).
+- Cause, two parts: (1) the chunked loop checked the deadline only between chunks, and a chunk (1.2-2.2 h) is longer than the
+  45-minute margin, so chunk 8 started just inside the margin and ran into the timeout; (2) the deadline was counted from process
+  start, but Kaggle's timeout counts from session start, before the pip installs. A finding about the chunked code, not a Kaggle
+  fault.
+- Fix: the continuous loop (715b501) checks the deadline every engine step and aborts in-flight requests; the notebooks now export
+  `XF_SESSION_START` in their setup cell and `schedule.session_start()` uses it (training and predictions).
+- The mixed-session caveat in T-042 no longer applies to D1 0.6B: nothing from session 1 survives, so the set restarts on the
+  continuous path.
+- Measured rate from this session (chunked, upper bound for the O-033 table): 7,168 prompts in 11.42 h = 1.59 h per 1,000 prompts.

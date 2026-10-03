@@ -45,3 +45,11 @@ def test_session_hours_bounded_and_used_by_the_stop_rule():
         schedule.session_hours(k["session_stop_margin_minutes"] / 60)
     stop = 3 * 3600 - k["session_stop_margin_minutes"] * 60
     assert not schedule.session_time_up(stop - 1, 0, 3) and schedule.session_time_up(stop, 0, 3)
+
+
+def test_session_start_from_notebook_env(monkeypatch):
+    monkeypatch.setenv("XF_SESSION_START", "1000.5")
+    assert schedule.session_start() == 1000.5
+    monkeypatch.delenv("XF_SESSION_START")
+    import time
+    assert abs(schedule.session_start() - time.time()) < 5

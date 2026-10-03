@@ -36,7 +36,7 @@ def main() -> None:
                     help="requests kept in the engine at once; each output is written as it finishes (continuous batching)")
     ap.add_argument("--session-hours", type=float, help="planned session length (<= training.kaggle.session_hours_max)")
     args = ap.parse_args()
-    started = time.time()
+    started = schedule.session_start()
     planned_hours = schedule.session_hours(args.session_hours)
 
     from serving.common import env_record, model_pin, pinned_snapshot, require_pins

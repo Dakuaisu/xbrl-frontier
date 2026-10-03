@@ -5,6 +5,8 @@ Curve points count DISTINCT instances: nested prefixes of the one fixed corpus o
 corpus is not "reached in epoch 2"; it is realised as "full corpus" at the corpus size.
 """
 import math
+import os
+import time
 
 from xbrl_frontier import config
 
@@ -65,3 +67,9 @@ def session_time_up(now_s: float, session_start_s: float, hours: float | None = 
     """True once the session should checkpoint and exit so Kaggle keeps its output (T-038)."""
     k = config.get("training.kaggle")
     return now_s - session_start_s >= session_hours(hours) * 3600 - k["session_stop_margin_minutes"] * 60
+
+
+def session_start() -> float:
+    """Kaggle's timeout runs from session start, not from this process: the notebook's first cell exports XF_SESSION_START
+    (O-034); outside a notebook, now."""
+    return float(os.environ.get("XF_SESSION_START", time.time()))

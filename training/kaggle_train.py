@@ -54,7 +54,7 @@ def main() -> None:
                     help="independent curve-validation run on the first training.curve_validation_run trained instances")
     ap.add_argument("--session-hours", type=float, help="planned session length (<= training.kaggle.session_hours_max)")
     args = ap.parse_args()
-    session_start = time.time()
+    session_start = schedule.session_start()
     planned_hours = schedule.session_hours(args.session_hours)
 
     from serving.common import env_record, model_pin, pinned_snapshot, require_pins

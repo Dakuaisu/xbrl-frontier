@@ -595,3 +595,10 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - `scripts/generation_stats.py`: per predictions file (partial allowed), split table vs text: finish_reason counts, completion_tokens
   quantiles, cap hits, per-session counts; writes `<pred>.stats.json`.
 - Verified before commit: full suite with `-rf`, 105 passed (new tests/test_generation_stats.py; 104 -> 105).
+
+## 2026-10-03 D1 0.6B session 1 lost at the kernel timeout (O-034)
+
+- 7 chunks (7,168 prompts) done in 11 h 25 min, chunk 8 started inside the margin, kernel timeout at 20:41Z, output empty: 12.0
+  GPU-hours lost (measured push to kill). Finding about the chunked code and the process-start clock; fixed (continuous loop checks
+  every step; `XF_SESSION_START` from the notebook's setup cell).
+- Verified before commit: full suite with `-rf`, 106 passed (new session-start test; 105 -> 106).
