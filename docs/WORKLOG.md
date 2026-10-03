@@ -474,3 +474,11 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   or `gpu_hours_cap_total`, and logs the estimate as `committed_estimate` in the push row. Kernels spanning a reset are counted again in the
   new week, so the estimate errs high. Fetch rows stay the per-run record. No config change. Dry run 01:39Z: week 8.05 h, cumulative 13.68 h.
 - Verified before commit: full suite with `-rf`, 96 passed (new tests/test_kaggle_run.py).
+
+## 2026-10-03 Prediction runs survive the session limit (T-038 extension)
+
+- Risk found while D1 1.7B runs: generation wrote nothing until every prompt finished, and max output tokens is effective
+  max_model_len minus the prompt, so a looping zero-shot output could push the run past its 9 h kernel timeout and lose it all.
+  `serving/generate_predictions.py` now appends per chunk, stops before the session deadline and resumes (`RESUME`); the running
+  D1 1.7B kernel uses the old code and is left running. Later pushes use timeout = `training.kaggle.session_hours_max`.
+- Verified before commit: full suite with `-rf`, 97 passed (new tests/test_generate_predictions_resume.py).

@@ -6,13 +6,18 @@ A prompt that does not fit is not truncated: it is written as not_generated and 
 prediction, counted separately. If vLLM refuses the configured max_model_len (e.g. not enough KV cache on a
 16 GB T4), each refusal is recorded and the next halving is tried; the accepted (effective) value is
 recorded in the meta file and decides which prompts fit. Nothing is lowered silently. One output file per target: OUT/predictions_<target>_<set>.jsonl.
+Prompts are generated in chunks and appended as each chunk finishes. Before each chunk the run checks the Kaggle session
+deadline (training.kaggle.session_hours_max less session_stop_margin_minutes, from process start; T-038) and stops cleanly,
+with meta "complete": false; --resume DIR (a previous session's OUT) keeps the ids already written and continues.
 """
 import argparse
+import shutil
 import json
 import time
 from pathlib import Path
 
 from training.encoder_train import load_set
+from training import schedule
 from xbrl_frontier import config, sft_format
 
 
@@ -25,7 +30,10 @@ def main() -> None:
     ap.add_argument("--set", choices=["finni", "dev", "fresh"], required=True)
     ap.add_argument("--corpus", type=Path)
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--resume", type=Path, help="previous session's OUT directory; its written predictions are kept")
+    ap.add_argument("--chunk", type=int, default=1024, help="prompts per llm.generate call; output is appended per chunk")
     args = ap.parse_args()
+    started = time.time()
 
     from serving.common import env_record, model_pin, pinned_snapshot, require_pins
     versions = require_pins("vllm")
@@ -64,29 +72,46 @@ def main() -> None:
     effective = llm.llm_engine.model_config.max_model_len
     fits = [n < effective for _, n in prompts]
     args.out.mkdir(parents=True, exist_ok=True)
-    run_prompts = [p for (p, n), ok in zip(prompts, fits) if ok]
-    params = [SamplingParams(temperature=g["temperature"], max_tokens=effective - n)
-              for (p, n), ok in zip(prompts, fits) if ok]
     meta = {"model": args.model, "revision": model_pin(args.model), "set": args.set, "versions": versions,
             "env": env_record("kaggle_t4"), "config_hash": config.config_hash(), "generation": g,
             "served_from": local, "configured_max_model_len": g["max_model_len"], "effective_max_model_len": effective,
             "max_model_len_refusals": refusals,
             "instances": len(items), "not_generated_over_max_model_len": fits.count(False), "targets": {}}
+    meta["complete"] = True
     for k, (name, path) in enumerate(targets):
         lora = LoRARequest(name, k + 1, path) if path else None
         t0 = time.time()
-        outs = iter(llm.generate(run_prompts, params, lora_request=lora))
         out_path = args.out / f"predictions_{name}_{args.set}.jsonl"
-        with open(out_path, "w") as f:
-            for x, (p, n), ok in zip(items, prompts, fits):
+        if args.resume and (args.resume / out_path.name).exists() and not out_path.exists():
+            shutil.copy(args.resume / out_path.name, out_path)
+        done = {json.loads(l)["id"] for l in open(out_path)} if out_path.exists() else set()
+        todo = [(x, p, n, ok) for x, (p, n), ok in zip(items, prompts, fits) if x["id"] not in done]
+        stopped = False
+        with open(out_path, "a") as f:
+            for x, p, n, ok in todo:
                 if not ok:
                     f.write(json.dumps({"id": x["id"], "text": None, "not_generated": True, "prompt_tokens": n}) + "\n")
-                    continue
-                o = next(outs).outputs[0]
-                f.write(json.dumps({"id": x["id"], "text": o.text, "finish_reason": o.finish_reason,
-                                    "prompt_tokens": n, "completion_tokens": len(o.token_ids),
-                                    "not_generated": False}) + "\n")
-        meta["targets"][name] = {"adapter": path, "file": out_path.name, "seconds": time.time() - t0}
+            gen = [(x, p, n) for x, p, n, ok in todo if ok]
+            for c in range(0, len(gen), args.chunk):
+                if schedule.session_time_up(time.time(), started):
+                    stopped = True
+                    break
+                part = gen[c:c + args.chunk]
+                outs = llm.generate([p for _, p, _ in part], [SamplingParams(temperature=g["temperature"], max_tokens=effective - n)
+                                                              for _, _, n in part], lora_request=lora)
+                for (x, _, n), o in zip(part, outs):
+                    o = o.outputs[0]
+                    f.write(json.dumps({"id": x["id"], "text": o.text, "finish_reason": o.finish_reason,
+                                        "prompt_tokens": n, "completion_tokens": len(o.token_ids),
+                                        "not_generated": False}) + "\n")
+                f.flush()
+        written = sum(1 for _ in open(out_path))
+        meta["targets"][name] = {"adapter": path, "file": out_path.name, "seconds_this_session": time.time() - t0,
+                                 "resumed_with": len(done), "written": written, "complete": written == len(items)}
+        meta["complete"] = meta["complete"] and written == len(items)
+        if stopped:
+            meta["stopped_for_session_limit"] = True
+            break
     (args.out / f"predictions_{args.set}.meta.json").write_text(json.dumps(meta, indent=1))
     print(json.dumps({k: v for k, v in meta.items() if k != "env"}, indent=1))
 

@@ -867,3 +867,7 @@ checkpoints would be lost with it. `training/kaggle_train.py` now saves a checkp
 every step has run. The next session resumes with `RESUME` pointing at this session's output (`--kernel-source`).
 Rejected: relying on the timer alone. A killed session discards its checkpoints, so up to a full session of GPU-hours would be lost.
 Cost: up to the margin of GPU time per session goes unused.
+Extension (2026-10-03): prediction runs follow the same rule. `serving/generate_predictions.py` generates in chunks, appends
+each chunk, checks the same deadline (from process start) before each chunk, and writes meta `complete: false` when it stops;
+`--resume` (notebook `RESUME`) keeps the written ids. The scorer already refuses a file with missing ids. Output length is not
+capped (max_tokens = effective max_model_len - prompt), so what gets scored is unchanged.
