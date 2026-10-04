@@ -18,9 +18,9 @@ class _Engine:
         self.pending, self.aborted, self.caps = [], [], {}
 
     def add_request(self, rid, prompt, params, lora_request=None):
-        self.pending.append(rid)
+        self.pending.append(rid)  # outputs report the external id ...
         self.caps[rid] = params["max_tokens"]
-        return rid
+        return rid + "-9f3a"  # ... while add_request returns an internal one (vLLM 0.30, O-035)
 
     def step(self):  # finishes one request per step
         return [_Out(self.pending.pop(0), "[]")] if self.pending else []
@@ -29,6 +29,7 @@ class _Engine:
         return bool(self.pending)
 
     def abort_request(self, ids):
+        ids = [i.rsplit("-", 1)[0] for i in ids]
         self.aborted += ids
         self.pending = [r for r in self.pending if r not in ids]
 
@@ -90,3 +91,12 @@ def test_deadline_stop_then_resume_completes(stubbed, monkeypatch):
     assert {r["id"]: r["session"] for r in rows} == {**{i: 1 for i in first}, **{f"i{k}": 2 for k in (2, 4, 5, 6)}}
     assert m["targets"]["base"]["resumed_with"] == 3
     assert all(r["max_tokens"] <= 100 - r["prompt_tokens"] for r in rows if not r["not_generated"])
+
+
+def test_match_handles_internal_ids_and_fails_fast():
+    flight = {"0": 1, "1": 1}
+    assert gp._match("0", flight, {}) == "0"
+    assert gp._match("1-ab12", flight, {}) == "1"
+    assert gp._match("zz", flight, {"zz": "0"}) == "0"
+    with pytest.raises(SystemExit, match="id mismatch"):
+        gp._match("7-ab12", flight, {})

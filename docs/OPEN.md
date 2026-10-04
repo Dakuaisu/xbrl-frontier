@@ -586,9 +586,10 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   in TRADEOFFS as an AUTONOMOUS DECISION with the table that forced it. Zero-shot is not in the PRD cut order, so this does not
   reorder the cuts (INT8 remains next).
 
-## O-032 Six E4 fresh-control calls made before the cap exceed it (OPEN)
+## O-032 Six E4 fresh-control calls made before the cap exceed it (RESOLVED)
 
-- Status: OPEN until the six are re-run under the cap (E4 day 3, 2026-10-04 from 07:00Z).
+- Status: RESOLVED 2026-10-04: all six re-run on E4 day 3 under the scaled cap (T-040 item 4), finish STOP on all, output
+  749-2,888 tokens against caps 1,373-4,721. The superseded rows stay in `superseded_uncapped.jsonl`.
 - Found (2026-10-03, T-039 check): of 1,005 uncapped `gemini-3.5-flash-lite` calls, 6 returned more output tokens than their
   T-039 cap in Gemini tokens (largest 3,767 vs cap 3,688; one also exceeds in Qwen tokens: 1,977 vs 1,936). Ids are in
   `superseded_uncapped.jsonl`. The other 999 are within the cap and stay as recorded.
@@ -611,26 +612,41 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   counted twice), recorded as `week_total_hours` in the quota_reset row. `kaggle_run.committed_estimate` uses this rule and
   reserves each running kernel's planned hours (12 h if unrecorded). No quota-kill risk for D1 0.6B: its full 12 h reaches about
   12.9 h this week.
-- GPU-hour table, PROVISIONAL (2026-10-03 16:30Z; replaced when the continuous-loop rate is measured). Generation rows use the
-  chunked capped zero-shot rate as an UPPER BOUND: 0.6B 1.71 h per 1,024 prompts measured (D1 0.6B session 1), so ~47 h per FinNI
-  pass (28,787); 1.7B scaled by the Phase 0 throughput ratio (18.9 / 15.3) to ~58 h. Fine-tuned students are trained to stop, so
-  their rows (D3, D4, D9, D11) are upper bounds only and likely far lower; unmeasured. Cap: `training.kaggle.gpu_hours_cap_total` 70.
+- GPU-hour table (2026-10-04 12:30Z; replaces the provisional table). Measured rates: training 26.6 s/step (D2 session 2,
+  563 tok/s; session 1 29.0 s/step); 0.6B capped zero-shot generation 1.59 h per 1,000 prompts (chunked, D1 0.6B session 1,
+  O-034) and 1.79 h per 1,000 (one 2,048-request continuous window drained in 3.66 h, O-035); both include the long-output tail.
+  The steady-state continuous rate is still unmeasured (O-035 lost that session). 1.7B generation is the 0.6B rate scaled by the
+  Phase 0 throughput ratio (18.9 / 15.3) to 1.97 h per 1,000. Fine-tuned students are trained to stop, so their generation rows
+  use the zero-shot rate as an upper bound ("<="). Order (approved): never-cut items, zero-shot under the O-031 rule, the other
+  deliverables (D4 and D9 before D10/D11/E5), then cuttable items in reverse PRD cut order.
 
-  | item | hours | basis | running total |
-  |---|---|---|---|
-  | committed so far | 46.5 | last week 21.64 (start-week rule) + AWQ 0.88 + D1 0.6B s1 12 (reserved) + D2 s2 12 (reserved) | 46.5 |
-  | run 1 remainder after s2 | 18.7 | 29.9 remaining at 517 tok/s less s2's ~11.25 | 65.2 |
-  | D1 0.6B remainder | ~37 | upper bound: ~47 per pass less ~6 of 28 chunks done in s1 | ~102 |
-  | D1 1.7B | ~58 | upper bound, scaled | ~160 |
-  | D3 dev scoring, 5 checkpoints x 1,933 | ~20 | upper bound at the 1.7B rate | ~180 |
-  | D4 FinNI + D9 fresh, final 1.7B | ~65 | upper bound | ~245 |
-  | D8 encoder (never cut) | ~6 | planning 3 h x measured slowdown | ~251 |
-  | D10 exports + D11 variant passes (merged, AWQ; INT8 is cut-order item 2) | ~2 + 2x58 | upper bound | ~369 |
-  | E5 load tests | ~6 | PRD section 9 | ~375 |
+  | # | item | hours | basis | running total |
+  |---|---|---|---|---|
+  | 0 | used | 49.60 | last week 21.64 + this week 27.96 (`kaggle quota`, start-week rule) | 49.60 |
+  | 1 | run 1 remainder (never cut: 40k curve point) | 15.4 | 1,813 steps x 26.6 s = 13.4 h + ~1 h setup/margin x 2 sessions | 65.0 |
+  | 2 | D3 dev scoring, 5 checkpoints x 1,933 (never cut: curve) | <= 19.0 | 9,665 prompts at <= 1.97 h/1,000 | <= 84.0 |
+  | **-** | **70 h line (`training.kaggle.gpu_hours_cap_total`) crossed inside row 2 at the upper bound** | | | |
+  | 3 | D8 encoder (never cut) | ~8.7 | PRD planning 3 h x measured slowdown 2.9 (517 / 1,500) | ~92.7 |
+  | 4 | zero-shot 1.7B (O-031) | 56.7 full / <= 9.2 sample | full set 28,787 at 1.97 h/1,000 does not fit, so the O-031 sample fallback applies; sample ~4,662 instances (O-027 at N = 23) | ~101.9 |
+  | 5 | D4 FinNI, final 1.7B | <= 56.7 full / <= 9.2 sample | decided when D3 measures the fine-tuned rate; if full set does not fit, same ids as zero-shot (O-031 logic) | ~111.1 |
+  | 6 | D9 fresh, final 1.7B | <= 6.8 | 3,434 prompts | ~117.9 |
+  | 7 | D10 export (merged, AWQ) | ~2 | PRD section 9 | ~119.9 |
+  | 8 | D11 fp16 + AWQ passes | <= 18.4 | 2 x sample at <= 1.97 h/1,000 | ~138.3 |
+  | 9 | E5 load tests | ~6 | PRD section 9 | ~144.3 |
+  | 10 | third frontier arm (cut 6) | 0 | not run (T-033), no Kaggle hours | ~144.3 |
+  | 11 | 0.6B student (cut 5): train + zero-shot + D4 + D9 | ~39 | 70.8M tokens at ~1,030 tok/s (planning 3,000 x 0.34) = 19.1 h + 7.4 + 7.4 + 5.5 | ~183.7 |
+  | 12 | curve validation run (cut 4) + dev passes | ~16.8 | 1,250 steps x 26.6 s = 9.2 h + 2 x 1,933 at 1.97 h/1,000 | ~200.5 |
+  | 13 | 3050 rows (cut 3) | 0 Kaggle | owner hardware, OWNER-BLOCKED (O-006/O-023) | ~200.5 |
+  | 14 | INT8 variant (cut 2): export + D11 pass | ~10.2 | ~1 + <= 9.2 | ~210.7 |
+  | 15 | second seed (cut 1, T-041) | 38.0 | already cut | ~248.7 |
 
-  At the upper bound, run 1's remainder plus D1 for both sizes (65.2 + 37 + 58 = ~160) does not fit under 70. No cut is made on
-  this table: cuts come in PRD section 9 order (next: INT8 variant) only when the measured continuous-loop rate confirms it.
-  Zero-shot is not in the cut order; if the measured rate still puts full-set zero-shot out of reach, that is an owner question.
+  Everything after the 70 h line is not run for budget unless measured rates come in far below these bounds. Cuts recorded now
+  (T-043, `data/budget/cuts.json`, PRD order): INT8 variant, curve validation run, 0.6B student; the 3050 rows stay owner-blocked
+  and the third arm was never run (T-033). These are below the line even if generation were several times faster, because rows 1
+  and 3 alone take the total to ~74 h. Never-cut and core items below the line (rows 2-9) are not cut: they are the shortfall.
+  Shortfall, owner to review: a complete run at these rates needs ~249 GPU-hours (~211 without seed 2) against 70; the never-cut
+  items and the 1.7B core (rows 1-9) need ~144. Every row will be re-measured as D3 lands (fine-tuned rate) and after the
+  2026-10-10 reset. The cap is not proposed to change.
   Cuts so far are recorded in `data/budget/cuts.json`, from which the README disclosure is generated.
 - Found (D2 session 1, 2026-10-02T21:41Z to 2026-10-03T08:52Z, stopped on the T-038 margin, 11.27 GPU-hours measured):
   `processed_tokens_per_sec` 517 against `training.planning_tokens_per_sec.t4_qlora_1p7b` 1,500. Step 1,388 of 4,716
@@ -667,3 +683,19 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   09:36:11Z timeout, a measured real margin of 43.6 min (log clock 11.27 h). Session 2 is expected to stop around 01:45-01:50Z with
   a similar margin (setup may be a few minutes longer because it mounts session 1's output). If it is killed instead, it is logged
   the same way as this entry and run 1 resumes from checkpoint-1388 on the fixed code after the 2026-10-10 reset.
+- Outcome (2026-10-04): D2 session 2 stopped on the margin at 01:43:55Z (expected 01:45-01:50Z), step 2,903 of 4,716, checkpoint-2903,
+  `complete: false`, 11.28 h measured; all five curve checkpoints exist (top point 37,721 instances at step 2,358). Not killed.
+
+## O-035 D1 0.6B continuous session lost: vLLM request-id mismatch, 3.8 GPU-hours (OPEN, finding)
+
+- Status: OPEN until a continuous session writes rows (first run after the 2026-10-10 reset).
+- Found (2026-10-04): `zeroshot-0p6b` v3 (source e4f32fe, continuous loop, 5 h planned) pushed 20:55Z; log clock 13,690 s (3.80 h
+  measured). The loop keyed in-flight requests by the id `LLMEngine.add_request` returned (e.g. `0-995051ef`, vLLM 0.30 adds a
+  suffix), while finished outputs reported another id, so no output matched, none was written, and no request beyond the first
+  window was added. The engine drained the 2,048-request window (21:01:25Z to 00:40:52Z), then the idle guard stopped the run with
+  "engine idle with 2048 unmatched request ids". Predictions file empty; output kept (an ERROR exit keeps /kaggle/working).
+- Measured from it: one 2,048-request window takes 3.66 h (1.79 h per 1,000 prompts, including the window's tail). The
+  steady-state continuous rate stays unmeasured.
+- Fix: requests are keyed by our id; a finished output is matched by its id, the alias add_request returned, or the id without
+  vLLM's suffix, and any unmatched finished output stops the run at once (not after the window drains). Regression test
+  reproduces the 0.30 behaviour (add_request returns a suffixed id, outputs report the plain one). A finding about this code.

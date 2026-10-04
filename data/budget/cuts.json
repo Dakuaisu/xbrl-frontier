@@ -1,8 +1,37 @@
 {
  "rule": "PRD section 9 cut order, one item at a time, only when a measured GPU-hour table (docs/OPEN.md O-033) says the next item does not fit",
  "cuts": [
-  {"item": "second training seed (D6, run 2: 1.7B seed 2)", "cut_order_position": 1, "decision": "T-041", "date": "2026-10-03",
+  {
+   "item": "second training seed (D6, run 2: 1.7B seed 2)",
+   "cut_order_position": 1,
+   "decision": "T-041",
+   "date": "2026-10-03",
    "reason": "measured training rate 517 tokens/s (planning 1,500): used 26.8 + run 1 remainder 29.9 + seed 2 38.0 = 94.7 GPU-hours > training.kaggle.gpu_hours_cap_total 70",
-   "readme": "One training seed (1.7B seed 1); intervals come from the company-level bootstrap of that seed. The second seed was cut first in the PRD cut order because the measured T4 training rate put it over the GPU-hour cap (T-041, O-033)."}
+   "readme": "One training seed (1.7B seed 1); intervals come from the company-level bootstrap of that seed. The second seed was cut first in the PRD cut order because the measured T4 training rate put it over the GPU-hour cap (T-041, O-033)."
+  },
+  {
+   "item": "INT8 W8A8 variant (export and D11 pass); fp16 and AWQ-INT4 kept",
+   "cut_order_position": 2,
+   "decision": "T-043",
+   "date": "2026-10-04",
+   "reason": "O-033 measured GPU-hour table 2026-10-04: never-cut run 1 remainder and encoder alone take the total to ~74 h of training.kaggle.gpu_hours_cap_total 70",
+   "readme": "The INT8 W8A8 serving variant passed the T4 smoke test but was not exported or scored: it was cut second in the PRD cut order because the measured GPU-hours did not fit the cap (T-043, O-033). fp16 and AWQ-INT4 are kept."
+  },
+  {
+   "item": "curve validation run (D5); the nested-checkpoint curve is kept and the missing check is flagged",
+   "cut_order_position": 4,
+   "decision": "T-043",
+   "date": "2026-10-04",
+   "reason": "O-033 measured GPU-hour table 2026-10-04: never-cut run 1 remainder and encoder alone take the total to ~74 h of training.kaggle.gpu_hours_cap_total 70",
+   "readme": "The independent curve-validation run was not trained (cut fourth in the PRD cut order for GPU-hours, T-043, O-033), so the nested-checkpoint learning curve is not checked against an independent run at 10,000 instances."
+  },
+  {
+   "item": "0.6B student (D7) and its zero-shot, FinNI and fresh passes",
+   "cut_order_position": 5,
+   "decision": "T-043",
+   "date": "2026-10-04",
+   "reason": "O-033 measured GPU-hour table 2026-10-04: never-cut run 1 remainder and encoder alone take the total to ~74 h of training.kaggle.gpu_hours_cap_total 70",
+   "readme": "Only the 1.7B student was trained; the 0.6B student was cut fifth in the PRD cut order because the measured GPU-hours did not fit the cap (T-043, O-033)."
+  }
  ]
 }

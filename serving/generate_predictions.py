@@ -22,6 +22,14 @@ from training import schedule
 from xbrl_frontier import config, output_cap, sft_format
 
 
+def _match(rid: str, flight: dict, alias: dict) -> str:
+    """Our id for a finished vLLM output: vLLM may return or report its internal id (external id + "-<suffix>", O-035)."""
+    for k in (rid, alias.get(rid), rid.rsplit("-", 1)[0]):
+        if k in flight:
+            return k
+    raise SystemExit(f"finished output {rid!r} matches no request in flight (e.g. {next(iter(flight), None)!r}); vLLM id mismatch")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True, choices=[s["id"] for s in config.get("pins.students")])
@@ -108,23 +116,26 @@ def main() -> None:
                                         "session": this["session"]}) + "\n")
             queue = [(x, p, n, output_cap.cap(x["text"], effective - n)) for x, p, n, ok in todo if ok]
             queue.reverse()
-            engine, flight = llm.llm_engine, {}
+            engine, flight, alias = llm.llm_engine, {}, {}
             while queue or flight:
                 if not stopped and schedule.session_time_up(time.time(), started, planned_hours):
                     stopped = True
                     queue.clear()
                     if flight:
-                        engine.abort_request(list(flight))
+                        engine.abort_request([r for r, e in alias.items() if e in flight])
                     break
                 while queue and len(flight) < args.window:
                     x, pr, n, c = queue.pop()
-                    rid = engine.add_request(str(x["id"]), pr, SamplingParams(temperature=g["temperature"], max_tokens=c),
+                    ext = str(x["id"])
+                    rid = engine.add_request(ext, pr, SamplingParams(temperature=g["temperature"], max_tokens=c),
                                              lora_request=lora)
-                    flight[rid] = (x, n, c)
+                    flight[ext] = (x, n, c)
+                    alias[rid] = ext
                 for o in engine.step():
-                    if not o.finished or o.request_id not in flight:
+                    if not o.finished:
                         continue
-                    x, n, c = flight.pop(o.request_id)
+                    key = _match(o.request_id, flight, alias)
+                    x, n, c = flight.pop(key)
                     o = o.outputs[0]
                     f.write(json.dumps({"id": x["id"], "text": o.text, "finish_reason": o.finish_reason,
                                         "prompt_tokens": n, "completion_tokens": len(o.token_ids), "max_tokens": c,

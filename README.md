@@ -37,6 +37,9 @@ Decisions follow `gates.decision_rule`: an interval that straddles the threshold
 - Instances mapped to a filing: 95.25% raw / 95.39% dedup with the benchmark's own serializer; Phase 0 token matcher 94.29% / 94.43% (O-011).
 - Training corpus: 38,788 (cap 40,000 not reached after decontamination, O-016); dev slice 1,933 (cap 2,000 not reached after decontamination, O-016). Curve points count distinct instances (T-016).
 - Cut (T-041): One training seed (1.7B seed 1); intervals come from the company-level bootstrap of that seed. The second seed was cut first in the PRD cut order because the measured T4 training rate put it over the GPU-hour cap (T-041, O-033).
+- Cut (T-043): The INT8 W8A8 serving variant passed the T4 smoke test but was not exported or scored: it was cut second in the PRD cut order because the measured GPU-hours did not fit the cap (T-043, O-033). fp16 and AWQ-INT4 are kept.
+- Cut (T-043): The independent curve-validation run was not trained (cut fourth in the PRD cut order for GPU-hours, T-043, O-033), so the nested-checkpoint learning curve is not checked against an independent run at 10,000 instances.
+- Cut (T-043): Only the 1.7B student was trained; the 0.6B student was cut fifth in the PRD cut order because the measured GPU-hours did not fit the cap (T-043, O-033).
 - Training instances: run 1 trains on 37,721 of 38,788 instances; 1,067 exceed `training.kaggle.max_seq_len_tokens` (4,096) and are skipped; learning-curve x-values are distinct instances actually trained on (T-016).
 - Contamination audit: 18,184 of 215,284 eligible training instances flagged and removed; 0 flagged in the final corpus of 40,721.
 

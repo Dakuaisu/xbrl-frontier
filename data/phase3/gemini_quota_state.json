@@ -18,6 +18,15 @@
    "retry_s": 58155.0,
    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
    "at": "2026-10-03T07:50:44.121924+00:00"
+  },
+  {
+   "per_day": true,
+   "per_minute": false,
+   "quota_value": 500,
+   "quota_id": "GenerateRequestsPerDayPerProjectPerModel-FreeTier generativelanguage.googleapis.com/generate_content_free_tier_requests",
+   "retry_s": 58158.0,
+   "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
+   "at": "2026-10-04T07:50:41.871365+00:00"
   }
  ]
 }

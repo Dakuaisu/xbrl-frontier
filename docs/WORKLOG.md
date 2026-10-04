@@ -602,3 +602,17 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   GPU-hours lost (measured push to kill). Finding about the chunked code and the process-start clock; fixed (continuous loop checks
   every step; `XF_SESSION_START` from the notebook's setup cell).
 - Verified before commit: full suite with `-rf`, 106 passed (new session-start test; 105 -> 106).
+
+## 2026-10-04 D2 session 2 done; D1 0.6B continuous session lost (O-035); E4 day 3; measured budget table; cuts (T-043)
+
+- D2 session 2 stopped on the margin 01:43:55Z: step 2,903 of 4,716, 563 tok/s, 11.28 h measured; all five curve checkpoints saved
+  (40k point realised at 37,721 instances). `data/phase2/kaggle/run-Qwen3-1.7B-s1/session2_run.json`. ~13.4 h of training remain.
+- D1 0.6B v3: request-id mismatch, 0 rows, 3.80 h measured, lost (O-035); fixed with a regression test.
+- `kaggle quota` 12:20Z: 27.96 h used this week (= 0.88 + 12.0 + 11.28 + 3.80, start-week rule), 2.04 h left until 2026-10-10;
+  cumulative 49.6 h of 70. No push before the reset.
+- O-033 table rebuilt from measured rates in the approved order with the 70 h line (crossed inside D3 dev scoring at the upper
+  bound). Cuts T-043 (INT8, curve validation run, 0.6B student) recorded in `data/budget/cuts.json`; README regenerated.
+- E4 day 3 (07:00:09-07:50:41Z): 501 calls, every one with `maxOutputTokens` (scaled cap), model `gemini-3.5-flash-lite`, 0 retries,
+  finish STOP on all; the six O-032 re-runs done under the cap (all STOP, output 749-2,888 tokens vs caps 1,373-4,721). Done 1,500 of
+  3,434, pending 1,934; billed $0.00, priced $0.215 for day 3, $0.568 cumulative. O-032 can close.
+- Verified before commit: full suite with `-rf`, 107 passed (new id-matching test; 106 -> 107).

@@ -947,3 +947,15 @@ lists every session (`session`, `git_head` from `SOURCE_COMMIT` in the source ar
 `written_this_session`), and every prediction row carries its `session`. Session 1 of D1 0.6B predates these records: its meta
 has none, so it is recorded as session 1, `code_path` chunked, `git_head` null (source 6d8aa54 per its push row in
 `data/kaggle/runs.jsonl`). Rejected: re-running session 1's rows on the new path (spends GPU-hours to remove a margin effect).
+
+## T-043 AUTONOMOUS DECISION - owner to review: cut INT8, the curve validation run and the 0.6B student (PRD section 9 cut order, items 2, 4, 5) (2026-10-04)
+
+Supervisor rule (O-033): cut in PRD order, one at a time, only when a measured table says the next item does not fit. The
+measured table of 2026-10-04 (O-033, reproduced in short): used 49.6 h; never-cut items first: run 1 remainder 15.4 h (measured
+26.6 s/step) -> 65.0; D3 dev scoring <= 19.0 -> <= 84.0, crossing `training.kaggle.gpu_hours_cap_total` 70; encoder ~8.7 -> ~92.7.
+Rows 1 and 3 alone reach ~74 h, so every cuttable item is below the line however fast generation turns out. Cut in order:
+INT8 variant (item 2; fp16 and AWQ-INT4 kept), the 3050 rows (item 3) stay owner-blocked and cost no Kaggle hours, curve validation
+run (item 4; nested curve kept, the missing check flagged), 0.6B student (item 5; with it the 0.6B zero-shot, FinNI and fresh passes,
+since the gain gate compares a student with its own base). The third arm (item 6) was never run (T-033). Each cut is in
+`data/budget/cuts.json`; the README disclosure is generated from it. The never-cut and core 1.7B items still exceed the cap; that
+shortfall is in O-033 for owner review. Rejected: proposing a larger cap (the owner's call, not proposed).
