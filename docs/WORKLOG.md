@@ -813,3 +813,9 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   retargets of the 20k notebook.
 - `score` repeats the 20k gates (one T4, hashes, exact unique dev IDs, complete run, oracle tests) with the T-048 config
   equivalence. New tests: `tests/test_d3_curve_dev.py` (5).
+
+## 2026-11-25 CI dependency pin corrected
+
+- `scorer-oracles` failed at install: `requirements.txt` pinned `huggingface_hub==2.1.1` (since bb94c5f), which conflicts with
+  `tokenizers==0.23.2` (`huggingface-hub<2.0`). `requirements.lock` and `.venv` have always used 1.33.0 (`pip check` clean), so
+  `requirements.txt` now matches the lock. No new dependency. `uv pip compile` for x86_64-manylinux_2_28 / Python 3.12 resolves.
