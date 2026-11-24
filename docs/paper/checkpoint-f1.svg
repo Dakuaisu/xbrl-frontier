@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="710" viewBox="0 0 1000 710" role="img" aria-labelledby="chart-title chart-desc">
+  <title id="chart-title">Checkpoint F1 versus distinct training instances</title>
+  <desc id="chart-desc">On a held-out deduplicated development set, exact-match micro F1 was 86.60 percent at 10,000 distinct training instances, 88.13 percent at 20,000, and 91.47 percent at 37,721. The first two points are first-epoch nested-prefix checkpoints; the final checkpoint follows two epochs. The vertical axis is truncated to 80 through 100 percent. Dashed lines connect measured checkpoints as a visual guide only. Independent curve validation was not performed.</desc>
+  <style>
+    .paper { fill: #ffffff; }
+    .ink { fill: #172b3a; }
+    .muted { fill: #435867; }
+    .accent { fill: #075e78; }
+    .grid { stroke: #d9e2e6; stroke-width: 1; }
+    .axis { stroke: #435867; stroke-width: 1.5; }
+    .series { fill: none; stroke: #075e78; stroke-width: 2.5; stroke-dasharray: 7 5; }
+    .point { fill: #075e78; stroke: #ffffff; stroke-width: 2.5; }
+    .sans { font-family: "Helvetica Neue", Helvetica, sans-serif; }
+    .eyebrow { font-size: 14px; font-weight: 700; letter-spacing: 1.2px; }
+    .heading { font-size: 30px; font-weight: 700; }
+    .subheading { font-size: 17px; }
+    .axis-title { font-size: 16px; font-weight: 700; }
+    .tick { font-size: 15px; }
+    .value { font-size: 20px; font-weight: 700; }
+    .detail { font-size: 15px; }
+    .note { font-size: 16px; }
+  </style>
+
+  <rect class="paper" width="1000" height="710"/>
+  <g class="sans">
+    <text class="muted eyebrow" x="72" y="46">LEARNING CURVE / DEVELOPMENT SET</text>
+    <text class="ink heading" x="72" y="86">Checkpoint F1 vs. training instances</text>
+    <text class="muted subheading" x="72" y="116">Qwen3-1.7B · held-out dev slice</text>
+
+    <text class="ink axis-title" x="120" y="156">Exact-match F1 (%)</text>
+    <g class="grid">
+      <line x1="120" y1="180" x2="904" y2="180"/>
+      <line x1="120" y1="247.5" x2="904" y2="247.5"/>
+      <line x1="120" y1="315" x2="904" y2="315"/>
+      <line x1="120" y1="382.5" x2="904" y2="382.5"/>
+      <line x1="120" y1="450" x2="904" y2="450"/>
+    </g>
+    <g class="muted tick" text-anchor="end">
+      <text x="104" y="185">100</text>
+      <text x="104" y="252.5">95</text>
+      <text x="104" y="320">90</text>
+      <text x="104" y="387.5">85</text>
+      <text x="104" y="455">80</text>
+    </g>
+    <line class="axis" x1="120" y1="180" x2="120" y2="450"/>
+    <line class="axis" x1="120" y1="450" x2="904" y2="450"/>
+    <g class="axis">
+      <line x1="120" y1="450" x2="120" y2="457"/>
+      <line x1="316" y1="450" x2="316" y2="457"/>
+      <line x1="512" y1="450" x2="512" y2="457"/>
+      <line x1="708" y1="450" x2="708" y2="457"/>
+      <line x1="904" y1="450" x2="904" y2="457"/>
+    </g>
+    <g class="muted tick" text-anchor="middle">
+      <text x="120" y="478">0</text>
+      <text x="316" y="478">10,000</text>
+      <text x="512" y="478">20,000</text>
+      <text x="708" y="478">30,000</text>
+      <text x="904" y="478">40,000</text>
+    </g>
+    <text class="ink axis-title" x="512" y="514" text-anchor="middle">Distinct training instances seen</text>
+
+    <path class="series" d="M 316 360.89 L 512 340.27 L 859.33 295.11"/>
+    <circle class="point" cx="316" cy="360.89" r="7"/>
+    <circle class="point" cx="512" cy="340.27" r="7"/>
+    <circle class="point" cx="859.33" cy="295.11" r="7"/>
+    <g class="accent value" text-anchor="middle">
+      <text x="316" y="337">86.60%</text>
+      <text x="512" y="316">88.13%</text>
+      <text x="859.33" y="257">91.47%</text>
+    </g>
+    <text class="muted detail" x="859.33" y="279" text-anchor="middle">final · 37,721 · 2 epochs</text>
+
+    <line class="grid" x1="72" y1="545" x2="928" y2="545"/>
+    <text class="muted eyebrow" x="72" y="573">METHOD</text>
+    <text class="ink note" x="72" y="599">First-epoch nested prefixes; final checkpoint after two epochs over 37,721 distinct instances.</text>
+    <text class="ink note" x="72" y="625">Global exact-match (value, type) F1 on held-out, deduplicated dev data (n = 1,920).</text>
+    <text class="ink note" x="72" y="651">Y-axis shown from 80–100%; dashed lines guide the eye. Independent curve validation not run.</text>
+    <text class="muted detail" x="72" y="685">Source: data/scores/d3-10k-20k-final-dev.json</text>
+  </g>
+</svg>
