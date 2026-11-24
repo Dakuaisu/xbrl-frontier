@@ -5,13 +5,23 @@ import sys
 
 import pytest
 
-from scripts.score_predictions import SCORES, gold_set
+from scripts.score_predictions import gold_set
 from serving.load_test import KIND
 from xbrl_frontier import bootstrap, config, eval_sets
 
 
-def _sh(*args):
-    return subprocess.run([sys.executable, "-m", *args], capture_output=True, text=True, cwd=config.REPO_ROOT)
+def _sh(tmp_path, module, *args):
+    runner = (
+        "import importlib, pathlib, sys; "
+        "module = importlib.import_module(sys.argv[1]); root = pathlib.Path(sys.argv[2]); "
+        "outputs = {'scripts.score_predictions': ('SCORES', root / 'scores'), "
+        "'scripts.cost_model': ('OUT', root / 'cost_model.json'), "
+        "'scripts.charts': ('OUT', root / 'charts')}; "
+        "name, path = outputs[sys.argv[1]]; setattr(module, name, path); "
+        "sys.argv = [sys.argv[1], *sys.argv[3:]]; module.main()"
+    )
+    return subprocess.run([sys.executable, "-c", runner, module, str(tmp_path), *args],
+                          capture_output=True, text=True, cwd=config.REPO_ROOT)
 
 
 def test_decision_rule_three_outcomes():
@@ -46,8 +56,8 @@ def sample(tmp_path_factory):
         p = d / f"{tag}.jsonl"
         p.write_text("".join(json.dumps({"id": it.id, "pairs": []} if empty else {"id": it.id, "text": it.answer}) + "\n"
                              for it in items if it.id in want))
-        assert _sh("scripts.score_predictions", "--pred", str(p), "--set", "finni", "--ids", str(d / "ids.txt"), "--tag", tag).returncode == 0
-        return SCORES / f"{tag}.json"
+        assert _sh(d, "scripts.score_predictions", "--pred", str(p), "--set", "finni", "--ids", str(d / "ids.txt"), "--tag", tag).returncode == 0
+        return d / "scores" / f"{tag}.json"
     files = {"student": score("_t4_student", False), "luna": score("_t4_luna", True), "gem": score("_t4_gem", False)}
     for arm in ("luna", "gem"):
         for kind in ("batch", "sync"):
@@ -57,42 +67,32 @@ def sample(tmp_path_factory):
            for c, rps, t, e in ((1, 1.0, 100, 900), (4, 3.0, 300, 1800), (16, 6.0, 900, 4000))]
     (d / "load.json").write_text(json.dumps({"kind": KIND, "card": "kaggle_t4", "variant": "fp16", "points": pts,
                                              "checkpoint_hashes": {}}))
-    yield d, files
-    for f in files.values():
-        f.unlink(missing_ok=True)
+    return d, files
 
 
-@pytest.fixture
-def clean_outputs():
-    yield
-    (config.REPO_ROOT / "data" / "phase4" / "cost_model.json").unlink(missing_ok=True)
-    for p in (config.REPO_ROOT / "data" / "charts").glob("pareto_*.vl.json"):
-        p.unlink()
-
-
-def test_cost_model_end_to_end_and_comparator(sample, clean_outputs):
+def test_cost_model_end_to_end_and_comparator(sample):
     d, files = sample
     args = ["scripts.cost_model", "--load", f"fp16={d / 'load.json'}", "--student-score", str(files["student"]),
             "--arm", f"gpt-6-luna={files['luna']},{d / 'luna_batch.jsonl'},{d / 'luna_sync.jsonl'}",
             "--arm", f"gemini-3.5-flash-lite={files['gem']},{d / 'gem_batch.jsonl'},{d / 'gem_sync.jsonl'}"]
-    out = _sh(*args)
+    out = _sh(d, *args)
     assert out.returncode == 0, out.stderr
-    cm = json.loads((config.REPO_ROOT / "data" / "phase4" / "cost_model.json").read_text())
+    cm = json.loads((d / "cost_model.json").read_text())
     assert cm["comparator"]["arm"] == "gemini-3.5-flash-lite" and cm["comparator"]["rule_applied"] == "primary"
     g = cm["gate"][f"fp16|{config.get('gates.cost_gate_regime')}"]
     assert g["gated"] and g["outcome"] in ("pass", "fail") and g["cost_ratio"] > 0
     assert cm["student"]["bootstrap_unit"] == "company (CIK)"
-    full = _sh("scripts.cost_model", "--load", f"fp16={d / 'load.json'}", "--student-score", str(files["luna"]).replace("_t4_luna", "_nope"),
+    full = _sh(d, "scripts.cost_model", "--load", f"fp16={d / 'load.json'}", "--student-score", str(files["luna"]).replace("_t4_luna", "_nope"),
                "--arm", "x=a,b,c")
     assert full.returncode != 0
     bad = d / "bad_load.json"
     bad.write_text(json.dumps({"card": "kaggle_t4", "points": [{}]}))
-    out = _sh("scripts.cost_model", "--load", f"fp16={bad}", "--student-score", str(files["student"]),
+    out = _sh(d, "scripts.cost_model", "--load", f"fp16={bad}", "--student-score", str(files["student"]),
               "--arm", f"gpt-6-luna={files['luna']},{d / 'luna_batch.jsonl'},{d / 'luna_sync.jsonl'}")
     assert out.returncode != 0 and "not a kaggle_t4 load-test output" in out.stdout + out.stderr
-    pareto = _sh("scripts.charts", "pareto", "--cost", str(config.REPO_ROOT / "data" / "phase4" / "cost_model.json"))
+    pareto = _sh(d, "scripts.charts", "pareto", "--cost", str(d / "cost_model.json"))
     assert pareto.returncode == 0, pareto.stderr
-    spec = json.loads((config.REPO_ROOT / "data" / "charts" / "pareto_offline.vl.json").read_text())
+    spec = json.loads((d / "charts" / "pareto_offline.vl.json").read_text())
     assert spec["usermeta"]["missing"] == ["fp16"] and {v["name"] for v in spec["data"]["values"]} == {"gpt-6-luna", "gemini-3.5-flash-lite"}
 
 
@@ -100,5 +100,5 @@ def test_charts_refuse_non_result_files(tmp_path):
     f = tmp_path / "x.json"
     f.write_text(json.dumps({"rows": []}))
     for args in (("pareto", "--cost", str(f)), ("curve", "--curve-file", str(f)), ("latency", "--load", str(f))):
-        out = _sh("scripts.charts", *args)
+        out = _sh(tmp_path, "scripts.charts", *args)
         assert out.returncode != 0 and "refusing" in out.stdout + out.stderr

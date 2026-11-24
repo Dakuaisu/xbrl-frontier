@@ -5,6 +5,7 @@ __pycache__/
 .DS_Store
 .codegraph
 .omo/
+/.playwright-mcp/
 
 data/*
 !data/eval_manifest.csv
