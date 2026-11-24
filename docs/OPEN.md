@@ -774,3 +774,14 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Final update: 10k and 20k collectors both completed and saved coverage-gated scores; the 20k collector observed version 1 COMPLETE,
   the 18.12 h quota and nine passing oracle tests (`data/kaggle/d3-20k-watch.log`). Remaining curve checkpoints and wider evaluation
   are tracked in O-033; no unattended dispatch is implied by this resolution.
+
+## O-037 CI oracle tests need Hugging Face access to the gated FinNI set (OWNER-BLOCKED)
+
+- Status: OWNER-BLOCKED. Found 2026-11-25 on the first `scorer-oracles` runs after the push: install now passes (pin fix), but
+  the oracle tests download `TheFinAI/FinNI-eval-v2` at the pinned revision and get `GatedRepoError` 401 without credentials
+  (4 failed, 8 errors, 15 passed). Locally they pass from the cached snapshot.
+- Ready: `.github/workflows/oracles.yml` passes `secrets.HF_TOKEN` to the test step as `HF_TOKEN`.
+- Owner action: create a read-only Hugging Face token on an account that has accepted the FinNI dataset terms, then run
+  `gh secret set HF_TOKEN --repo Dakuaisu/xbrl-frontier` and paste it, then re-run the workflow
+  (`gh run rerun --failed <run id>` or push).
+- Next action: once set, the builder confirms the run passes and resolves this entry.
