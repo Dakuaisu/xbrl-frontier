@@ -616,3 +616,186 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   finish STOP on all; the six O-032 re-runs done under the cap (all STOP, output 749-2,888 tokens vs caps 1,373-4,721). Done 1,500 of
   3,434, pending 1,934; billed $0.00, priced $0.215 for day 3, $0.568 cumulative. O-032 can close.
 - Verified before commit: full suite with `-rf`, 107 passed (new id-matching test; 106 -> 107).
+
+## 2026-11-21 D2 session 3 authorized resume
+
+- Verified the completed session 2 kernel output: checkpoint trainer state agrees with `run.json`, and the adapter, optimizer,
+  scheduler, RNG, scaler and training arguments are present. The remote corpus hashes and source training script and configuration
+  match the prior run and local records. The training notebook now checks the copied checkpoint and prior run before training.
+- Reconciled the quota ledger using the last closed week's recorded usage and today's zero reading, preserving cumulative usage.
+  The guarded push accepted session 3 with the previous session as kernel source and matching notebook and kernel timeout settings.
+  Kaggle reported `QUEUED`; a successful launch does not yet establish that training resumed.
+- Focused verification: `.venv/bin/python -m pytest tests/test_kaggle_resume_notebook.py tests/test_kaggle_run.py
+  tests/test_training_schedule.py -q` reported 9 passed. Next: inspect the kernel log and confirm it resumes from the expected step.
+
+## 2026-11-21 D2 session 3 authenticated retry
+
+- The original training attempt did not establish progress. Its push and watcher records are retained; the CLI returned no output files
+  for the version-specific fetch. After the owner's CPU secret-access check, the current slug reported `CANCEL_ACKNOWLEDGED` immediately
+  before the retry. The notebook now obtains its Hugging Face token from Kaggle Secrets only on Kaggle, passes it only in the child
+  process environment, propagates subprocess failures and requires positive resume progress.
+- The guard included the observed 0.04 GPU-hours from the earlier attempt: cumulative 49.64 before the retry and a 12-hour reservation,
+  within the configured caps. One retry was accepted as version 3 of `adnanrashid29/xbrl-frontier-run-1p7b-s1-sess3`, with the session 2
+  kernel as source. Kaggle reported `QUEUED`; there is no evidence yet of a step beyond checkpoint 2903. The five-minute watcher was
+  restarted in tmux session `xbrl-session3-watch`, appending to `data/kaggle/session3-watch.log`.
+- Focused tests: `.venv/bin/python -m pytest tests/test_kaggle_resume_notebook.py tests/test_kaggle_run.py
+  tests/test_training_schedule.py -q` reported 12 passed. Benchmark citation: FinTagging, arXiv:2505.20650v5,
+  https://arxiv.org/html/2505.20650v5. Next: inspect the retry output for actual resume progress before claiming success.
+
+## 2026-11-22 Owner UI resume preparation
+
+- Version 3 ended `ERROR` (owner identified the Kaggle Secrets failure); live weekly GPU quota rose from 0.04 to 0.09 hours.
+  The ledger records the rounded difference and retains prior evidence. The 12-hour reservation remains within both configured caps.
+- `notebooks/phase2_kaggle_train.ipynb` now has the ledger's session-2 resume parameters directly in its first code cell for UI import;
+  its copied-checkpoint, model/config/corpus, checked-process and positive-progress checks remain in place. No UI run has been submitted.
+- Read-only tmux watcher `xbrl-session3-ui-watch` polls every five minutes, retains the version-3 baseline and does not stop on its
+  stale error. Version, accelerator and latest status are observations, not proof of progress. Initial observation: waiting for a new
+  version, version 3, `ERROR`, progress unverified. Log: `data/kaggle/session3-ui-watch.log`.
+- Focused tests: 12 passed. Parsed the notebook and compared its parameter cell against the recorded push; all code outputs are empty.
+  Next: owner imports the notebook into the same approved Kaggle notebook, verifies its attached session-2 source and settings, and
+  saves and runs once; inspect the new run for actual progress afterward.
+
+## 2026-11-22 Session 3 UI version 4 submitted
+
+- Imported `notebooks/phase2_kaggle_train.ipynb` through the private session-3 editor's file chooser. Confirmed both corpus and source
+  datasets, the session-2 notebook input, Internet, the enabled masked secret and the T4 accelerator; the draft session was off.
+- The existing guard estimated the planned session within caps using the live quota reading. One UI Save & Run All was submitted;
+  version history identified version 4 and the CLI reported `RUNNING`. The save dialog did not expose a kernel timeout; the notebook
+  retains its planned session limit and stop margin. No progress beyond the source checkpoint has yet been verified.
+- Focused tests: 12 passed. The five-minute read-only watcher remains active; next inspect version 4's output and account for actual
+  GPU usage once the run is terminal.
+
+## 2026-11-22 Session 4 final training resume
+
+- Session-3 version 4 completed at checkpoint 4180 of 4716 after resuming checkpoint 2903. Preserved `run.json`, the complete
+  checkpoint and all five curve adapters under `data/kaggle/session3-v4/`. The trainer state, prior-run model and seed, configuration,
+  corpus report hashes and saved source script were checked against the local configuration and source.
+- Reconciled the rounded live weekly quota to 11.35 GPU-hours, or 60.95 cumulative. Created a private session-4 fork and enabled the
+  existing masked secret; its version 1 was a zero-second Quick Save, not a training run. The guarded launcher accepted one training
+  run as version 2, using session 3 as kernel source, the existing source and corpus datasets, checkpoint 4180 and a six-hour
+  provider timeout. The configured training stop margin is 45 minutes. Status initially `RUNNING`; actual resume progress is unverified.
+- `xbrl-session4-collect` in tmux polls for terminal status, collects `run.json` and final-adapter files and checks completion,
+  checkpoint provenance and a readable nonempty safetensors header before reporting its SHA-256. Logs are in
+  `data/kaggle/session4-watch.log`; the collector does not score. Shell syntax and focused tests passed (12 tests).
+
+## 2026-11-22 Session 4 secret-free continuation preparation
+
+- Version 2 stopped before training with HTTP 400 during Kaggle Secrets lookup; its copied `run.json` is not a new result. The rounded
+  quota difference is recorded once in the ledger. Current cumulative usage before retry is 60.98 GPU-hours.
+- Extracted only the context-free query template from the existing local pinned FinNI snapshot (no benchmark rows exported); SHA-256
+  `5ff41227d8f9e758f862f6ffeb41863386442739fbdd7f6667220b59f443029f`. Reconstructed queries matched the pinned source byte-for-byte
+  across all rows. The private notebook passes that template to the trainer in memory, checks its digest and avoids `finni.load()`;
+  public Qwen downloads run without requesting or passing a Hugging Face token.
+- Focused notebook, budget and schedule tests: 13 passed; notebook schema validated. The intended retry retains session-3 checkpoint
+  4180, the same corpus and model, the configured stop margin and a six-hour provider timeout.
+- The guarded launcher accepted the secret-free continuation as session-4 version 3, with session-3 output as its only kernel source;
+  initial status `RUNNING`. The pre-launch quota was 11.38 weekly / 60.98 cumulative and the six-hour reservation was within caps.
+  The rearmed tmux collector is `xbrl-session4-retry-collect`; `data/kaggle/session4-watch.log` records its observations and terminal
+  collection into the separate `data/kaggle/session4-retry-output/` directory, avoiding stale version-2 artifacts. Training progress
+  and final adapter are not yet verified.
+
+## 2026-11-23 D3 timing pilot blocked by session 4 failure
+
+- Read-only Kaggle status reported session 4 version 2 `ERROR`. The existing watcher had slept between polls, then collected its
+  output and failed its final-completion assertion; it has exited. The output is the prior incomplete run at step 4180, not a final
+  adapter. The notebook log indicates Kaggle secret-service HTTP 400 / connection failure before the training subprocess ran. No
+  training or D3 job was launched and no automatic pilot watcher was armed; see O-036 for the remaining safety requirements.
+- Offline `scripts/verify_output_cap.py` checked every gold answer for both pinned student tokenizers against the current cap:
+  `all_within_cap True`. `data/corpus/dev.jsonl` SHA-256 matches the corpus report. Focused generation, statistics, Kaggle budget
+  and scheduling tests: 11 passed. No pilot-specific dry-run or unknown-push guard exists yet, so those cannot be claimed verified.
+- The live weekly quota reading is recorded in O-036 only as an observation; active reservations and the final cumulative budget
+  must be reconciled afresh before any later pilot. No prediction timing or model quality was measured in this work.
+
+## 2026-11-23 D3 conditional dispatch dry-run components
+
+- Added isolated D3 admission and provider-independent state-machine modules. Tests cover waiting on the old failed version,
+  required completed training and artifact provenance, bounded planned hours and unknown reservations, exclusive durable attempt
+  markers, remote unknown state, polling sleep, and partial timing status. These are simulations, not an armed watcher or live run.
+- `scripts/d3_prompt.py` checked the context-free template against every query in the cached pinned FinNI snapshot and wrote the
+  verified artifact to `data/kaggle/d3-prompt.json`; its SHA-256 matches the independent training preparation above. No secrets or
+  benchmark rows are needed by that artifact.
+- Focused tests: 32 passed; full offline suite: 134 passed; Python compilation succeeded. Python LSP diagnostics were unavailable
+  because the configured language server is not installed. The installed Kaggle CLI does not document authoritative version-history
+  discovery, and no live provider, remote absence proof, complete reservation reconciliation, or pilot notebook/collector is wired
+  to this state machine. Therefore it is not armed; version 3 training is being handled independently by the training agent.
+
+## 2026-11-23 Supervised D3 timing pilot
+
+- Session 4 version 3 reached `complete: true` at the requested step; independently checked the final adapter and dev-file hashes
+  against the saved record and verified the remote generator, scheduling and prompt-format source match the local copies. The
+  output-cap audit artifact matches the current configuration and records no exceeding gold answers.
+- Manually checked the project kernels were terminal, observed the live weekly quota, and reconciled the prior closed-week ledger
+  plus the live quota against `training.kaggle` caps. The supervised pilot reservation fit with no active project-kernel reservations.
+  Two old non-project notebook records returned 404 for session status and were last run years earlier; no live session was shown.
+- Prepared `scripts/d3_supervised_notebook.py` with the pinned context-free prompt, hash checks, an explicit single-visible-T4
+  assertion, greedy generation, and the existing session-stop margin. The one authorized push returned version 1 successfully and
+  Kaggle reported `RUNNING`; its provider timeout is the owner-authorized maximum. No accuracy or timing result is claimed yet.
+- `scripts/collect_d3_pilot.sh` polls the exact pilot version in `xbrl-d3-pilot-collect`, with `caffeinate` while it runs; it downloads
+  terminal output, logs quota and writes `timing_summary.json` with partial/completion, rows and cutoff counts, never accuracy.
+  Focused tests: 25 passed; shell syntax and Python compilation passed. Python LSP was unavailable because it is not installed.
+- A subsequent full offline suite did not finish within the three-minute command timeout; no full-suite pass is claimed for this
+  change. The focused tests were rerun successfully. The collector was restarted after its quota-log addition and continued polling
+  the already-submitted version; the Kaggle job was not resubmitted.
+
+## 2026-11-23 D3 final adapter dev scoring
+
+- Ran `PYTHONPATH=. HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 .venv/bin/python -m pytest tests/test_oracles.py -q` before scoring;
+  all oracle tests passed. Independently verified unique prediction and dev IDs, exact set equality and the saved dev, prediction,
+  final-adapter, configuration and model-revision provenance. The pilot metadata and cap audit agree with the current configuration.
+- Ran `PYTHONPATH=. HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 uv run --no-project .venv/bin/python -m scripts.score_predictions --set dev
+  --pred data/kaggle/d3-pilot-output/d3-pilot/predictions_final_dev.jsonl --tag d3-final-dev-pilot`. The raw and deduplicated scores,
+  parse failures, cutoffs, ungenerated rates, per-instance errors and slices are in `data/scores/d3-final-dev-pilot.json`.
+  Hashes, coverage checks and commands are pinned in `data/scores/d3-final-dev-pilot.provenance.json`.
+- Focused scorer/unit tests passed with the offline cache. An initial attempt without offline flags timed out; it was rerun offline.
+  These are held-out dev-slice results, not FinNI benchmark results. No scoring rules were changed and no jobs were launched.
+
+## 2026-11-23 D3 10k dev evaluation
+
+- Verified the requested curve checkpoint against the saved run manifest and trainer step. The preserved session-3 adapter weights
+  match a fresh download from the session-4 kernel output byte-for-byte, and the safetensors reader opened the weights. Confirmed
+  unique, exact dev IDs against the completed final-adapter predictions, the same generation settings and the T-039 cap audit.
+- Reconciled the final-dev pilot's measured quota difference in `data/kaggle/runs.jsonl`, checked the live quota and terminal statuses
+  of the project kernels, and reserved the one owner-authorized bounded session within `training.kaggle` caps. The one-shot marker is
+  `data/kaggle/d3-10k-attempt.json`; Kaggle accepted `xbrl-frontier-d3-10k-dev` version 1 and reported `RUNNING`.
+- The notebook is a narrowly retargeted copy of the successful final-dev pilot; the checkpoint and dev hashes are checked again in
+  the kernel, and it asserts one visible T4. `scripts/collect_d3_10k.sh` polls the exact version in tmux session
+  `xbrl-d3-10k-collect`, with `caffeinate`. On terminal success, `scripts/d3_10k_score.py` requires matching provenance and exact
+  unique dev coverage, runs the scorer oracles, scores raw and deduplicated dev results and saves table/text comparisons to the
+  final adapter. Until those checks finish, no 10k score or comparison is claimed.
+- Focused notebook, coverage, generator and schedule tests: 15 passed; shell syntax and Python compilation passed. The configured
+  Python LSP was unavailable because it is not installed. No other checkpoint or training job was submitted.
+
+## 2026-11-23 D3 20k dev evaluation
+
+- The 10k collector finished and produced coverage-gated dev scoring and a comparison against the final adapter. Reconciled the 10k
+  run's rounded quota delta in `data/kaggle/runs.jsonl`. The current weekly quota plus prior-week ledger and the planned reservation
+  remain within `training.kaggle` limits; project kernel statuses and the unique new kernel name were checked before submission.
+- Verified `curve/prefix_20000` against the saved training manifest and step; the session-3 saved weights match a freshly downloaded
+  session-4 copy and open with the safetensors reader. The dev hash, exact unique IDs, prior prediction hashes, model, prompt,
+  generator, decoding configuration and T-039 audit were checked against both completed prior runs.
+- One owner-authorized `xbrl-frontier-d3-20k-dev` version 1 was accepted and reported `RUNNING`; the exclusive attempt marker is
+  `data/kaggle/d3-20k-attempt.json`. The notebook reuses the 10k path with only checkpoint/output identity retargeted; its preflight
+  requires the pinned hashes and one visible T4, and the provider timeout follows the owner-authorized bound.
+- `xbrl-d3-20k-collect` polls the exact version under `caffeinate`; on successful terminal output it checks provenance and exact
+  full-dev coverage, runs the oracle tests and saves the 20k score plus the raw/deduplicated table/text comparison against 10k and
+  final. No 20k result is claimed before those gates complete. Focused tests: 18 passed; shell syntax and Python compilation passed.
+  Python LSP diagnostics were unavailable because the configured server is not installed. No other job was submitted.
+
+## 2026-11-25 November measured-status reconciliation
+
+- Reviewed the saved version-specific collector logs, prediction metadata, preflights, final training manifest and dev score reports
+  offline. The 20k collector observed version 1 COMPLETE, downloaded its predictions, recorded 18.12 h weekly quota, passed nine
+  oracle tests and saved the three-way dev comparison (`data/kaggle/d3-20k-watch.log`). Added exactly one 20k fetch to
+  `data/kaggle/runs.jsonl`: 18.12 - 17.24 = 0.88 h, from rounded readings. Its timestamp is the terminal observation, not a
+  claim of the exact quota-read time. The final, 10k and 20k artifacts each record full dev generation on one visible T4.
+- The latest recorded cumulative use is 49.60 + 18.12 = 67.72 h, leaving 2.28 h under the configured total cap at that observation;
+  no current quota or reservation state was queried. Updated O-033 with measured generation versus quota session rates, remaining
+  work and a labeled sample-path budget scenario. The final adapter is not the full-corpus curve checkpoint, so three curve dev
+  passes remain. The scenario crosses the cap in D3 and does not establish external-dataset rates or authorize new jobs or cuts.
+- Resolved O-036 for the successful training retry and supervised pilot; preserved its earlier failure history and the caveat that
+  the generic dispatcher is not operational. Next: reconcile actual quota and reservations before any separately authorized work;
+  the never-cut curve and encoder remain budget-constrained. No provider calls or commits were made for this reconciliation.
+- Verification: offline `uv run --no-project --no-sync .venv/bin/python` check parsed all 48 ledger rows, found exactly one 20k
+  version-1 fetch, compared each of the three prediction ID sets to all 1,933 unique dev IDs, checked preflight device counts and
+  hashes, final versus curve steps, elapsed-time totals and budget arithmetic; all assertions passed. `git diff --check` passed.
+  LSP diagnostics are unavailable for Markdown and JSONL in this environment; no source code was changed.

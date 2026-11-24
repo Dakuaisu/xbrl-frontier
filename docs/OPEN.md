@@ -604,6 +604,37 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   Resumes are sized to the remaining weekly quota (`SESSION_HOURS` / `kaggle_run push --planned-hours`, counted in the
   committed-hours refusal); if the room is under about 3 h, the resume waits for the 2026-10-10 reset. Run 1's state is safe on Kaggle (checkpoint-1388, curve prefixes 2,500 /
   5,000 / 10,000 / 20,000; `data/phase2/kaggle/run-Qwen3-1.7B-s1/session1_run.json`, `complete: false`).
+- Current snapshot (2026-11-23; supersedes the October projection below, retained as history): final training and final/10k/20k
+  dev passes completed. The latest recorded quota is 18.12 h for the week; adding the 49.60 h closed-week carry gives 67.72 h
+  cumulative and 2.28 h remaining under `training.kaggle.gpu_hours_cap_total`. This is a historical observation, not a live
+  reservation check. The 11.38 to 15.45 h interval includes the completed session-4 retry but is not separately fetched in the
+  ledger; count it once through the quota reading, not again as a separate inferred run.
+- Measured on the same 1,933 dev prompts: final, 10k and 20k generation took 2,522.88, 2,583.32 and 2,658.37 seconds respectively
+  (`data/kaggle/d3-{pilot,10k,20k}-output/` prediction metadata). Pooled: 7,764.57 s / 5,799 prompts = 0.372 generation h per
+  1,000. Their rounded quota deltas are 0.85 + 0.94 + 0.88 = 2.67 h, or 0.460 quota h per 1,000 for these three separately
+  started sessions. Quota includes setup and other session overhead; generation time is not paid-session time. These are measured
+  dev rates, not measured FinNI, fresh-slice, zero-shot, encoder, export or quantized-serving rates.
+- Updated core-work budget, in the established O-033 priority order. Projected amounts are scenarios, not measured external-set
+  rates or guarantees; estimated session overhead, prompt shapes, and actual runtime can differ. Existing cuts are unchanged.
+
+  | item | additional GPU h | cumulative h | basis / status |
+  |---|---:|---:|---|
+  | Used through 20k | 0 | 67.72 | 49.60 carry + 18.12 observed weekly quota |
+  | D3 remaining 2.5k, 5k and full-corpus curve checkpoints (never cut) | ~2.67 | ~70.39 | projection: three separate sessions at 2.67 / 3 h each; final, 10k and 20k already counted; cap crossed in this row |
+  | D8 encoder (never cut) | ~8.70 | ~79.09 | historical planning estimate, not a measured encoder rate |
+  | Zero-shot 1.7B (O-031 sample fallback) | ~9.20 | ~88.29 | historical scaled zero-shot estimate for ~4,662 prompts; external rate unmeasured |
+  | D4 final 1.7B FinNI | ~2.15 sample / ~13.25 full | ~90.44 sample | scenario: 4,662 / 28,787 prompts at pooled dev quota rate; no external-set measurement |
+  | D9 fresh final 1.7B | ~1.58 | ~92.02 | scenario: 3,434 prompts at pooled dev quota rate; no fresh-set measurement |
+  | D10 export | ~2.00 | ~94.02 | historical planning estimate |
+  | D11 fp16 + AWQ sample passes | ~4.29 | ~98.31 | scenario: 2 x 4,662 prompts at pooled dev quota rate; AWQ rate unmeasured |
+  | E5 load tests | ~6.00 | ~104.31 | historical planning estimate |
+
+  The full-corpus curve adapter is `curve/prefix_37721` at step 2358, not the final adapter at step 4716
+  (`data/kaggle/session4-retry-output/run-Qwen3-1.7B-s1/run.json`). The sample-path core projection adds ~36.59 h to 67.72 h,
+  exceeding the cap by ~34.31 h; the full-D4 alternative adds ~11.10 h more. The never-cut D3/encoder projection alone exceeds
+  the cap. The exact crossing depends on actual runtimes and
+  scheduling, and neither a cap change nor further cuts are authorized by this calculation. Reconcile current quota and all active
+  or unknown reservations before any future dispatch.
 - Kaggle quota attribution (reconciled 2026-10-03 14:22Z): `kaggle quota` read 6.55 h used, which matches AWQ 0.88 h plus
   D1 0.6B's live wall-clock 5.67 h, and neither "clipped to the week" (~16.4 h + D1 0.6B) nor "whole session in the week it ends"
   (~21.2 h + D1 0.6B). Earlier readings agree: 0.00 h at 01:36Z with two pre-reset sessions running; 1.09 h at 08:54Z (AWQ +
@@ -699,3 +730,44 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
 - Fix: requests are keyed by our id; a finished output is matched by its id, the alias add_request returned, or the id without
   vLLM's suffix, and any unmatched finished output stops the run at once (not after the window drains). Regression test
   reproduces the 0.30 behaviour (add_request returns a suffixed id, outputs report the plain one). A finding about this code.
+
+## O-036 Session 4 failure and D3 timing pilot (RESOLVED)
+
+- Status: RESOLVED for the failed training continuation and supervised pilot, 2026-11-23. Version 3 completed at the required final
+  step with verified weights (`data/kaggle/session4-watch.log`); the final, 10k and 20k dev runs subsequently completed, with
+  predictions and scores in `data/kaggle/d3-*-output/` and `data/scores/d3-10k-20k-final-dev.json`. The notes below are historical
+  observations, not current status. This does not certify or arm the generic unattended dispatcher described below.
+
+- Found 2026-11-23: Kaggle reports `ERROR` for `xbrl-frontier-run-1p7b-s1-sess4` version 2. The existing collector observed
+  the terminal state and downloaded `run.json`, but its completion assertion failed. The downloaded record has `complete: false`,
+  `global_step: 4180`, and `final_adapter: null`; no final weights were verified. The kernel log reports an HTTP 400 and a
+  connection error communicating with the Kaggle secret service before the training subprocess started. A successful resume is
+  not established. Evidence: `data/kaggle/session4-watch.log` and `data/kaggle/session4-diagnostics/` (local untracked files).
+- D3 pilot status: BLOCKED, no prediction job submitted and no automatic dispatcher armed. Never substitute the earlier checkpoint
+  for the final adapter. The checked local dev file matches `data/corpus_report.json`; the output-cap verification was rerun offline
+  against the current configuration and all gold answers fit. These are input checks, not prediction or timing measurements.
+- The most recent quota observation was 11.38 GPU-hours used in the current week, versus 11.35 before the session-4 push; this is
+  only a rounded quota difference, not a reconciled final accounting or proof of available pilot budget. Before any future dispatch,
+  reconcile all active and unknown reservations and cumulative usage against both configured caps. The current launcher does not
+  provide an idempotent unknown-push-state guard; the prediction notebook also needs a verified one-GPU record, a provider timeout
+  at most two hours, reliable partial-output collection, and dry-run guard tests. Until those are implemented and verified, do not
+  treat it as an unattended dispatcher.
+- Next action: investigate the secret-service failure without exposing credentials or launching training; after an authorized and
+  successful final training run, require its collector to verify `complete: true`, step 4716, checkpoint provenance and valid final
+  weights, then independently reconcile reservations and implement/test an idempotent, fail-closed pilot dispatcher. Report partial
+  rows and elapsed timing explicitly as partial; do not claim full dev scores from incomplete predictions.
+- Update 2026-11-23: version 3 was submitted separately by the training agent (see WORKLOG); completion is not established here.
+  `scripts/d3_pilot_gate.py` and `scripts/d3_pilot_dispatch.py` provide offline-tested admission, exclusive attempt markers, polling
+  and partial timing status for a provider interface. They are not an operational Kaggle dispatcher: there is no implemented live
+  provider, authoritative newest-version/remote-absence check, reservation reconciliation, or verified pilot notebook/collector.
+  Do not arm them for a live run. The exact context-free prompt is prepared locally by `scripts/d3_prompt.py`, using the pinned
+  benchmark snapshot; its artifact is `data/kaggle/d3-prompt.json` and is not a benchmark-row export.
+- Update 2026-11-23: session 4 version 3 completed, and its collector and a fresh local SHA-256 check verified the final adapter at
+  the requested training step. One owner-authorized supervised D3 timing pilot was submitted, not the generic dispatcher. Its
+  version-specific collector is `xbrl-d3-pilot-collect`; status and eventual timing-only summary are under `data/kaggle/`.
+  Generation, single-device preflight and output collection remain unverified until that run produces its own evidence.
+- Subsequent update: the final-dev pilot completed and was scored; provenance and score paths are in WORKLOG. One authorized 10k
+  curve-checkpoint dev evaluation is running with its own collector and fail-closed scoring/comparison; its results remain pending.
+- Final update: 10k and 20k collectors both completed and saved coverage-gated scores; the 20k collector observed version 1 COMPLETE,
+  the 18.12 h quota and nine passing oracle tests (`data/kaggle/d3-20k-watch.log`). Remaining curve checkpoints and wider evaluation
+  are tracked in O-033; no unattended dispatch is implied by this resolution.

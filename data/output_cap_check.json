@@ -1,7 +1,8 @@
 {
  "output_cap": {
   "tokens_per_numeric": 24,
-  "base_tokens": 64
+  "base_tokens": 64,
+  "gemini_token_ratio": 1.28
  },
  "rule": "cap = tokens_per_numeric x numeric_count(context) + base_tokens",
  "results": {
@@ -55,5 +56,5 @@
   }
  },
  "all_within_cap": true,
- "config_hash": "e5348f9a842b9d6f9f1d36f7380d29cc49f38d28f34f58befe903f64bbc10153"
+ "config_hash": "4769638ad1d76f1d7af153fb56bddc3bda3ee682ce3ff08fa50b8e61e4ee5861"
 }

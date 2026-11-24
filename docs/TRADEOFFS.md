@@ -959,3 +959,68 @@ run (item 4; nested curve kept, the missing check flagged), 0.6B student (item 5
 since the gain gate compares a student with its own base). The third arm (item 6) was never run (T-033). Each cut is in
 `data/budget/cuts.json`; the README disclosure is generated from it. The never-cut and core 1.7B items still exceed the cap; that
 shortfall is in O-033 for owner review. Rejected: proposing a larger cap (the owner's call, not proposed).
+
+## T-044 AUTONOMOUS DECISION - owner to review: verify D2 resume progress and record how each run was submitted (2026-11-21 to 2026-11-22)
+
+**Decision:** Resume session 3 from the verified session-2 checkpoint at step 2903, not from scratch. Check the
+copied trainer state and checkpoint files, model, seed, config and corpus before training. Require the checked
+subprocess to succeed and the new run manifest to name the expected checkpoint and show a higher step. The
+authenticated CLI retry (version 3) was configured to read the Hugging Face token from Kaggle Secrets and pass it
+only in the checked trainer subprocess's environment. Queued status didn't prove the lookup succeeded. Version 3 ended
+in a Secrets error. The next attempt was one private UI **Save & Run All** (version 4), not a CLI submission.
+The guard checked quota against the 12-hour reservation. The notebook retained its planned session length and
+T-038 stop margin, but the save dialog didn't expose the provider timeout, so a 12-hour provider timeout isn't
+verified for this UI run. The collected output verified progress to step 4180 of 4716, not training completion.
+
+**Alternatives:** Another CLI retry would set an explicit provider timeout but would still depend on the failing
+Secrets lookup. Restarting would discard verified progress. Neither a launch acknowledgment nor a copied
+`run.json` counts as evidence of progress.
+
+**Evidence:** [Authenticated retry](WORKLOG.md#2026-11-21-d2-session-3-authenticated-retry),
+[UI submission](WORKLOG.md#2026-11-22-session-3-ui-version-4-submitted),
+[collected checkpoint](WORKLOG.md#2026-11-22-session-4-final-training-resume),
+[run ledger](../data/kaggle/runs.jsonl), [training notebook](../notebooks/phase2_kaggle_train.ipynb).
+
+## T-045 AUTONOMOUS DECISION - owner to review: finish D2 with a verified secret-free FinNI template (2026-11-22 to 2026-11-23)
+
+**Decision:** Session 4's version 1 was a UI Quick Save, not training. The guarded CLI submission of version 2
+resumed from checkpoint 4180 in its launch parameters but stopped at an HTTP 400 during Secrets lookup before
+the trainer ran. For the version 3 retry, use only the context-free template from the pinned FinNI snapshot.
+Reconstructing queries matched the pinned source byte-for-byte across all rows. The notebook sends the template
+in memory to the checked child process, verifies its digest there and bypasses `finni.load()`. It removes
+`HF_TOKEN` from the child environment and disables implicit Hugging Face authentication; the public Qwen
+downloads require no token. No benchmark rows were exported. Both CLI training submissions used a six-hour
+provider timeout, separate from the notebook's earlier stop under `training.kaggle` and T-038. Version 3 kept
+the same checkpoint, corpus and model and collected its output separately from version 2. The saved run reached
+completion and the final adapter was independently checked before D3.
+
+**Alternatives:** Retrying the same Secrets-dependent lookup would retain the failure point. Exporting the dataset
+was unnecessary: the verified template preserved prompt parity without moving benchmark rows. The version 2
+copy of `run.json` was not evidence of a new training result.
+
+**Evidence:** [Session 4 launch](WORKLOG.md#2026-11-22-session-4-final-training-resume),
+[template verification and retry](WORKLOG.md#2026-11-22-session-4-secret-free-continuation-preparation),
+[completion and adapter check](WORKLOG.md#2026-11-23-supervised-d3-timing-pilot),
+[run ledger](../data/kaggle/runs.jsonl), [training notebook](../notebooks/phase2_kaggle_train.ipynb).
+
+## T-046 AUTONOMOUS DECISION - owner to review: keep D3 dispatch supervised and gate dev scoring on coverage (2026-11-23)
+
+**Decision:** Don't start D3 from the failed session 4 version 2 or arm the dry-run dispatcher. After version 3
+completed, verify adapter and dev provenance and the T-039 output-cap audit, reconcile live quota and active
+reservations, then submit one bounded CLI timing pilot. The notebook checks pinned inputs and one visible T4.
+The collector polls the exact version and reports timing and partial status, not accuracy. Score offline only
+after the scorer oracles pass and prediction IDs match the dev set exactly, with no duplicates. Extend this same
+setup to the verified 10k and 20k nested checkpoints, one bounded submission at a time, with raw and deduplicated
+table/text comparisons. The worklog records authorization for these specific runs. Any scores that pass the gates
+are held-out dev results, not FinNI benchmark scores or the independent curve validation cut in T-043.
+
+**Alternatives:** Automatic dispatch would save supervision, but its dry-run tests didn't establish live version
+discovery, remote absence or complete quota reconciliation. Scoring partial output could give a misleading
+comparison. A new validation training run would be a different experiment from scoring saved checkpoints.
+
+**Evidence:** [Dry-run limits](WORKLOG.md#2026-11-23-d3-conditional-dispatch-dry-run-components),
+[supervised pilot](WORKLOG.md#2026-11-23-supervised-d3-timing-pilot),
+[offline scoring](WORKLOG.md#2026-11-23-d3-final-adapter-dev-scoring),
+[10k](WORKLOG.md#2026-11-23-d3-10k-dev-evaluation) and [20k](WORKLOG.md#2026-11-23-d3-20k-dev-evaluation) worklogs,
+[run ledger](../data/kaggle/runs.jsonl), [pilot](../data/kaggle/d3-supervised-pilot.ipynb),
+[10k](../data/kaggle/d3-10k-dev.ipynb) and [20k](../data/kaggle/d3-20k-dev.ipynb) notebooks.
