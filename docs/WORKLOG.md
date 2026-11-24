@@ -804,3 +804,12 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 
 - Owner decision T-047: `training.kaggle.gpu_hours_cap_total` raised by 30 h in `docs/config/thresholds.yaml`. Recorded in
   TRADEOFFS T-047 and O-033. No gate, threshold or cut changes. Next: re-read `kaggle quota`, then the never-cut curve points.
+
+## 2026-11-25 Remaining curve checkpoints: dev evaluation prepared (T-048)
+
+- Downloaded `curve/prefix_{2500,5000,37721}` adapters from the session-4 kernel output; each matches the preserved session-3
+  copy byte for byte. `scripts/d3_curve_dev.py notebook` checked each against `run.json` (steps 157 / 313 / 2,358; instances
+  2,512 / 5,008 / 37,721), the dev hash and the output-cap audit, and wrote `data/kaggle/d3-{2500,5000,37721}-dev.ipynb` as
+  retargets of the 20k notebook.
+- `score` repeats the 20k gates (one T4, hashes, exact unique dev IDs, complete run, oracle tests) with the T-048 config
+  equivalence. New tests: `tests/test_d3_curve_dev.py` (5).

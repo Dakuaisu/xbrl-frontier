@@ -1043,3 +1043,17 @@ favour of the raise.
 **Scope:** the cap is a budget, not a gate or a metric; no gate, threshold or scorer changes. The T-043 cuts (INT8, curve
 validation run, 0.6B student) and the T-041 seed-2 cut stand; reinstating any of them needs its own owner decision. The README
 discloses the cap as raised.
+
+## T-048 AUTONOMOUS DECISION - owner to review: score the remaining curve checkpoints on dev across the T-047 config hash (2026-11-25)
+
+**Decision:** Score the 2,500, 5,000 and full-corpus (37,721-instance) curve checkpoints on the dev slice with the same
+notebook, generator, prompt, decoding and output cap as the final, 10k and 20k runs. Each checkpoint gets its own bounded
+session with one visible T4 (`scripts/d3_curve_dev.py`, `scripts/collect_d3_curve.sh`). The Kaggle code still carries the
+pre-T-047 config, so generation metadata records that config hash. `d3_curve_dev.equivalent_config` accepts that hash only
+after rebuilding it from git (`7a37c2d^`) and checking that the parsed config differs from the current one in
+`training.kaggle.gpu_hours_cap_total` alone. Any other difference is refused.
+
+**Alternatives:** Uploading a new source dataset would change the runner and code hashes the 10k/20k comparison relies on.
+Re-scoring the earlier runs under the new hash would overwrite score reports whose hashes are pinned in provenance files.
+Scoring several checkpoints in one session saves setup time, but a session holding two or more passes exceeds the 2 h bound
+used for every D3 session once the stop margin is taken out.
