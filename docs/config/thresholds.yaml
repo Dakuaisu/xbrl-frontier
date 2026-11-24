@@ -149,7 +149,7 @@ training:
     quant_base:              "nf4"                            # QLoRA via bitsandbytes
     session_hours_max:       12
     weekly_gpu_hours_quota:  30
-    gpu_hours_cap_total:     70
+    gpu_hours_cap_total:     100                              # raised by owner decision T-047 (2026-11-25)
     checkpoint_every_minutes: 30                              # resume across sessions
     session_stop_margin_minutes: 45                           # stop, checkpoint and exit this long before session_hours_max (T-038)
     micro_batch:             1                                # per-step instances; grad accumulation = global_batch_instances / micro_batch (T-017)

@@ -799,3 +799,8 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   version-1 fetch, compared each of the three prediction ID sets to all 1,933 unique dev IDs, checked preflight device counts and
   hashes, final versus curve steps, elapsed-time totals and budget arithmetic; all assertions passed. `git diff --check` passed.
   LSP diagnostics are unavailable for Markdown and JSONL in this environment; no source code was changed.
+
+## 2026-11-25 GPU-hour cap raised (T-047)
+
+- Owner decision T-047: `training.kaggle.gpu_hours_cap_total` raised by 30 h in `docs/config/thresholds.yaml`. Recorded in
+  TRADEOFFS T-047 and O-033. No gate, threshold or cut changes. Next: re-read `kaggle quota`, then the never-cut curve points.

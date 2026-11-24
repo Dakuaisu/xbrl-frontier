@@ -604,6 +604,9 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   Resumes are sized to the remaining weekly quota (`SESSION_HOURS` / `kaggle_run push --planned-hours`, counted in the
   committed-hours refusal); if the room is under about 3 h, the resume waits for the 2026-10-10 reset. Run 1's state is safe on Kaggle (checkpoint-1388, curve prefixes 2,500 /
   5,000 / 10,000 / 20,000; `data/phase2/kaggle/run-Qwen3-1.7B-s1/session1_run.json`, `complete: false`).
+- Update 2026-11-25: owner decision T-047 raised `training.kaggle.gpu_hours_cap_total` by 30 h so the never-cut items and the
+  1.7B core can run. The T-043 cuts stand; reinstating any of them is a separate owner decision. The O-031 sample fallback is
+  re-evaluated against the new cap value when D4 is sized. Stays OPEN until the revised table is re-measured against the new cap.
 - Current snapshot (2026-11-23; supersedes the October projection below, retained as history): final training and final/10k/20k
   dev passes completed. The latest recorded quota is 18.12 h for the week; adding the 49.60 h closed-week carry gives 67.72 h
   cumulative and 2.28 h remaining under `training.kaggle.gpu_hours_cap_total`. This is a historical observation, not a live

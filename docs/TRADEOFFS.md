@@ -1024,3 +1024,22 @@ comparison. A new validation training run would be a different experiment from s
 [10k](WORKLOG.md#2026-11-23-d3-10k-dev-evaluation) and [20k](WORKLOG.md#2026-11-23-d3-20k-dev-evaluation) worklogs,
 [run ledger](../data/kaggle/runs.jsonl), [pilot](../data/kaggle/d3-supervised-pilot.ipynb),
 [10k](../data/kaggle/d3-10k-dev.ipynb) and [20k](../data/kaggle/d3-20k-dev.ipynb) notebooks.
+
+## T-047 OWNER DECISION (Adnan, stated directly, 2026-11-25): raise the total Kaggle GPU-hour cap by 30 h
+
+**Decision:** `training.kaggle.gpu_hours_cap_total` goes from 70 to 100 GPU-hours. The weekly quota
+(`training.kaggle.weekly_gpu_hours_quota`) and the per-push committed-hours refusal in `scripts/kaggle_run.py` are unchanged;
+the refusal reads the new cap at runtime.
+
+**Why:** at the 2026-11-23 reading, 67.72 h of the 70 h cap were used (O-033), leaving 2.28 h. That is short of the
+never-cut items (encoder baseline, remaining curve checkpoints) and the 1.7B core (D4 FinNI, D9 fresh, AWQ export and pass,
+E5 load tests). The measured fine-tuned generation rate (O-033: about 0.46 quota h per 1,000 prompts) puts that work at
+roughly 25-35 h.
+
+**Alternatives:** keep 70 h and score D4 on the pinned sample under the O-031 fallback (the full-set headline gate would be
+reported as not measured); move INT4 passes to the owner's RTX 3050 (still possible on top of this). Rejected by the owner in
+favour of the raise.
+
+**Scope:** the cap is a budget, not a gate or a metric; no gate, threshold or scorer changes. The T-043 cuts (INT8, curve
+validation run, 0.6B student) and the T-041 seed-2 cut stand; reinstating any of them needs its own owner decision. The README
+discloses the cap as raised.
