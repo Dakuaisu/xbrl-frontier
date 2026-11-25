@@ -1,9 +1,10 @@
 name: scorer-oracles
 on:
+  workflow_dispatch:
   push:
-    paths: ["xbrl_frontier/**", "scripts/score_predictions.py", "tests/**", "docs/config/thresholds.yaml", "requirements*.txt", "requirements.lock"]
+    paths: ["xbrl_frontier/**", "scripts/score_predictions.py", "tests/**", "docs/config/thresholds.yaml", "requirements*.txt", "requirements.lock", ".github/workflows/**"]
   pull_request:
-    paths: ["xbrl_frontier/**", "scripts/score_predictions.py", "tests/**", "docs/config/thresholds.yaml", "requirements*.txt", "requirements.lock"]
+    paths: ["xbrl_frontier/**", "scripts/score_predictions.py", "tests/**", "docs/config/thresholds.yaml", "requirements*.txt", "requirements.lock", ".github/workflows/**"]
 jobs:
   oracles:
     runs-on: ubuntu-latest

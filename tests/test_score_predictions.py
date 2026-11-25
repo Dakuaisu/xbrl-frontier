@@ -8,6 +8,8 @@ import pytest
 from scripts.score_predictions import SCORES, gold_set
 from xbrl_frontier import config
 
+needs_dev = pytest.mark.skipif(not (config.REPO_ROOT / "data/corpus/dev.jsonl").exists(),
+                               reason="data/corpus/dev.jsonl is a local, untracked corpus build")
 
 def _run(tmp_path, set_name, rows, tag):
     p = tmp_path / f"{tag}.jsonl"
@@ -17,7 +19,7 @@ def _run(tmp_path, set_name, rows, tag):
     return out, (SCORES / f"{tag}.json")
 
 
-@pytest.mark.parametrize("set_name", ["dev", "finni"])
+@pytest.mark.parametrize("set_name", [pytest.param("dev", marks=needs_dev), "finni"])
 def test_gold_copy_and_empty_oracles_through_files(tmp_path, set_name):
     tol = config.get("eval.oracles.tolerance")
     items, _ = gold_set(set_name, None)
@@ -35,6 +37,7 @@ def test_gold_copy_and_empty_oracles_through_files(tmp_path, set_name):
     (SCORES / f"_test_gold_{set_name}.json").unlink()
 
 
+@needs_dev
 def test_parse_failures_not_generated_and_missing(tmp_path):
     items, _ = gold_set("dev", None)
     rows = [{"id": it.id, "text": it.answer} for it in items]
