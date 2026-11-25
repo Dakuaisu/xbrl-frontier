@@ -1057,3 +1057,9 @@ after rebuilding it from git (`7a37c2d^`) and checking that the parsed config di
 Re-scoring the earlier runs under the new hash would overwrite score reports whose hashes are pinned in provenance files.
 Scoring several checkpoints in one session saves setup time, but a session holding two or more passes exceeds the 2 h bound
 used for every D3 session once the stop margin is taken out.
+
+## T-049 AUTONOMOUS DECISION - owner to review: report the table-minus-text gap at a named checkpoint (2026-11-25)
+
+**Decision:** Keep the README wording introduced in `e2f94c3` rather than repeat the prediction in [frozen PRD §11](PRD.md#L172) that tables lag text at every size. Report the signed gap (table F1 minus text F1, in percentage points) and the distinct training-instance count; at 37,721 also identify the pass. This changes the reporting language only, not the PRD, scorer, or evaluation gates.
+
+**Evidence:** On the [deduplicated internal dev slice](paper/learning-curve.md), table F1 trails text at 2,512 and 5,008 instances but leads at every measured checkpoint from 10,000 onward. At 20,000 instances, tables score 88.74% versus 84.59% for text (+4.15 points). The original wording would misstate the direction; these measurements are not public FinNI scores.
