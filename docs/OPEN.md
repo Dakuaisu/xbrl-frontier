@@ -775,9 +775,11 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   the 18.12 h quota and nine passing oracle tests (`data/kaggle/d3-20k-watch.log`). Remaining curve checkpoints and wider evaluation
   are tracked in O-033; no unattended dispatch is implied by this resolution.
 
-## O-037 CI oracle tests need Hugging Face access to the gated FinNI set (OWNER-BLOCKED)
+## O-037 CI oracle tests need Hugging Face access to the gated FinNI set (RESOLVED)
 
-- Status: OWNER-BLOCKED. Found 2026-11-25 on the first `scorer-oracles` runs after the push: install now passes (pin fix), but
+- Status: RESOLVED 2026-11-25: owner set `HF_TOKEN`; run 45573865473 passed (25 passed, 2 skipped: the dev-corpus
+  cases, which need the untracked local corpus and run locally).
+- History: OWNER-BLOCKED. Found 2026-11-25 on the first `scorer-oracles` runs after the push: install now passes (pin fix), but
   the oracle tests download `TheFinAI/FinNI-eval-v2` at the pinned revision and get `GatedRepoError` 401 without credentials
   (4 failed, 8 errors, 15 passed). Locally they pass from the cached snapshot.
 - Ready: `.github/workflows/oracles.yml` passes `secrets.HF_TOKEN` to the test step as `HF_TOKEN`.
