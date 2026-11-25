@@ -1,81 +1,65 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="710" viewBox="0 0 1000 710" role="img" aria-labelledby="chart-title chart-desc">
-  <title id="chart-title">Checkpoint F1 versus distinct training instances</title>
-  <desc id="chart-desc">On a held-out deduplicated development set, exact-match micro F1 was 86.60 percent at 10,000 distinct training instances, 88.13 percent at 20,000, and 91.47 percent at 37,721. The first two points are first-epoch nested-prefix checkpoints; the final checkpoint follows two epochs. The vertical axis is truncated to 80 through 100 percent. Dashed lines connect measured checkpoints as a visual guide only. Independent curve validation was not performed.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="810" viewBox="0 0 1000 810" role="img" aria-labelledby="title desc">
+  <title id="title">Development learning curve, overall and by context type</title>
+  <desc id="desc">Five first-pass checkpoints are connected by lines; the separately marked final adapter used the same 37,721 distinct training instances after two passes. Deduplicated exact-match F1 is shown for overall, table and text contexts. Each vertical axis is truncated to 0.70 through 0.95. The accompanying table provides raw and deduplicated values, failure counts and provenance. This is an internal development set, not the public FinNI benchmark; independent curve validation was not run.</desc>
   <style>
-    .paper { fill: #ffffff; }
-    .ink { fill: #172b3a; }
-    .muted { fill: #435867; }
-    .accent { fill: #075e78; }
-    .grid { stroke: #d9e2e6; stroke-width: 1; }
-    .axis { stroke: #435867; stroke-width: 1.5; }
-    .series { fill: none; stroke: #075e78; stroke-width: 2.5; stroke-dasharray: 7 5; }
-    .point { fill: #075e78; stroke: #ffffff; stroke-width: 2.5; }
-    .sans { font-family: "Helvetica Neue", Helvetica, sans-serif; }
-    .eyebrow { font-size: 14px; font-weight: 700; letter-spacing: 1.2px; }
-    .heading { font-size: 30px; font-weight: 700; }
-    .subheading { font-size: 17px; }
-    .axis-title { font-size: 16px; font-weight: 700; }
-    .tick { font-size: 15px; }
-    .value { font-size: 20px; font-weight: 700; }
-    .detail { font-size: 15px; }
-    .note { font-size: 16px; }
+    .bg{fill:#fff}.ink{fill:#172b3a}.muted{fill:#435867}.grid{stroke:#d9e2e6;stroke-width:1}
+    .axis{stroke:#435867;stroke-width:1.3}.line{fill:none;stroke:#075e78;stroke-width:2.5}
+    .point{fill:#075e78;stroke:#fff;stroke-width:1.4}.final{fill:#a04416;stroke:#fff;stroke-width:1.2}
+    .sans{font-family:Helvetica,Arial,sans-serif}.heading{font-size:27px;font-weight:700}
+    .sub{font-size:15px}.label{font-size:17px;font-weight:700}.tick{font-size:13px}.note{font-size:14px}
   </style>
-
-  <rect class="paper" width="1000" height="710"/>
+  <rect class="bg" width="1000" height="810"/>
   <g class="sans">
-    <text class="muted eyebrow" x="72" y="46">LEARNING CURVE / DEVELOPMENT SET</text>
-    <text class="ink heading" x="72" y="86">Checkpoint F1 vs. training instances</text>
-    <text class="muted subheading" x="72" y="116">Qwen3-1.7B · held-out dev slice</text>
+    <text class="ink heading" x="64" y="48">Development F1 vs. training instances</text>
+    <text class="muted sub" x="64" y="73">Qwen3-1.7B · deduplicated exact-match micro-F1 · one seed</text>
+    <line class="line" x1="164" y1="104" x2="200" y2="104"/><circle class="point" cx="182" cy="104" r="4"/>
+    <text class="ink sub" x="210" y="109">First-pass nested checkpoints</text>
+    <polygon class="final" points="532,98 538,104 532,110 526,104"/>
+    <text class="ink sub" x="546" y="109">Final adapter after two passes</text>
 
-    <text class="ink axis-title" x="120" y="156">Exact-match F1 (%)</text>
     <g class="grid">
-      <line x1="120" y1="180" x2="904" y2="180"/>
-      <line x1="120" y1="247.5" x2="904" y2="247.5"/>
-      <line x1="120" y1="315" x2="904" y2="315"/>
-      <line x1="120" y1="382.5" x2="904" y2="382.5"/>
-      <line x1="120" y1="450" x2="904" y2="450"/>
+      <path d="M160 140H850 M160 170H850 M160 230H850 M160 290H850"/>
+      <path d="M160 330H850 M160 360H850 M160 420H850 M160 480H850"/>
+      <path d="M160 520H850 M160 550H850 M160 610H850 M160 670H850"/>
     </g>
+    <g class="axis" fill="none"><path d="M160 140V290H850 M160 330V480H850 M160 520V670H850"/></g>
+    <g class="ink label"><text x="64" y="151">Overall</text><text x="64" y="341">Table</text><text x="64" y="531">Text</text></g>
     <g class="muted tick" text-anchor="end">
-      <text x="104" y="185">100</text>
-      <text x="104" y="252.5">95</text>
-      <text x="104" y="320">90</text>
-      <text x="104" y="387.5">85</text>
-      <text x="104" y="455">80</text>
+      <text x="150" y="145">0.95</text><text x="150" y="175">0.90</text><text x="150" y="235">0.80</text><text x="150" y="295">0.70</text>
+      <text x="150" y="335">0.95</text><text x="150" y="365">0.90</text><text x="150" y="425">0.80</text><text x="150" y="485">0.70</text>
+      <text x="150" y="525">0.95</text><text x="150" y="555">0.90</text><text x="150" y="615">0.80</text><text x="150" y="675">0.70</text>
     </g>
-    <line class="axis" x1="120" y1="180" x2="120" y2="450"/>
-    <line class="axis" x1="120" y1="450" x2="904" y2="450"/>
-    <g class="axis">
-      <line x1="120" y1="450" x2="120" y2="457"/>
-      <line x1="316" y1="450" x2="316" y2="457"/>
-      <line x1="512" y1="450" x2="512" y2="457"/>
-      <line x1="708" y1="450" x2="708" y2="457"/>
-      <line x1="904" y1="450" x2="904" y2="457"/>
-    </g>
-    <g class="muted tick" text-anchor="middle">
-      <text x="120" y="478">0</text>
-      <text x="316" y="478">10,000</text>
-      <text x="512" y="478">20,000</text>
-      <text x="708" y="478">30,000</text>
-      <text x="904" y="478">40,000</text>
-    </g>
-    <text class="ink axis-title" x="512" y="514" text-anchor="middle">Distinct training instances seen</text>
 
-    <path class="series" d="M 316 360.89 L 512 340.27 L 859.33 295.11"/>
-    <circle class="point" cx="316" cy="360.89" r="7"/>
-    <circle class="point" cx="512" cy="340.27" r="7"/>
-    <circle class="point" cx="859.33" cy="295.11" r="7"/>
-    <g class="accent value" text-anchor="middle">
-      <text x="316" y="337">86.60%</text>
-      <text x="512" y="316">88.13%</text>
-      <text x="859.33" y="257">91.47%</text>
-    </g>
-    <text class="muted detail" x="859.33" y="279" text-anchor="middle">final · 37,721 · 2 epochs</text>
+    <polyline class="line" data-line="overall" points="203.33,257.06 246.39,247.28 332.50,190.40 505.00,181.22 810.69,168.56"/>
+    <circle class="point" data-series="overall" data-stage="first-pass" data-instances="2512" data-f1="0.7549" data-cx="203.33" data-cy="257.06" cx="203.33" cy="257.06" r="4.2"/>
+    <circle class="point" data-series="overall" data-stage="first-pass" data-instances="5008" data-f1="0.7712" data-cx="246.39" data-cy="247.28" cx="246.39" cy="247.28" r="4.2"/>
+    <circle class="point" data-series="overall" data-stage="first-pass" data-instances="10000" data-f1="0.8660" data-cx="332.50" data-cy="190.40" cx="332.50" cy="190.40" r="4.2"/>
+    <circle class="point" data-series="overall" data-stage="first-pass" data-instances="20000" data-f1="0.8813" data-cx="505.00" data-cy="181.22" cx="505.00" cy="181.22" r="4.2"/>
+    <circle class="point" data-series="overall" data-stage="first-pass" data-instances="37721" data-f1="0.9024" data-cx="810.69" data-cy="168.56" cx="810.69" cy="168.56" r="4.2"/>
+    <polygon class="final" data-series="overall" data-stage="final" data-instances="37721" data-f1="0.9147" data-cx="810.69" data-cy="161.18" points="810.69,155.68 816.19,161.18 810.69,166.68 805.19,161.18"/>
+    <text class="ink tick" x="866" y="158">Final 0.9147</text><text class="muted tick" x="866" y="177">1 pass 0.9024</text>
 
-    <line class="grid" x1="72" y1="545" x2="928" y2="545"/>
-    <text class="muted eyebrow" x="72" y="573">METHOD</text>
-    <text class="ink note" x="72" y="599">First-epoch nested prefixes; final checkpoint after two epochs over 37,721 distinct instances.</text>
-    <text class="ink note" x="72" y="625">Global exact-match (value, type) F1 on held-out, deduplicated dev data (n = 1,920).</text>
-    <text class="ink note" x="72" y="651">Y-axis shown from 80–100%; dashed lines guide the eye. Independent curve validation not run.</text>
-    <text class="muted detail" x="72" y="685">Source: data/scores/d3-10k-20k-final-dev.json</text>
+    <polyline class="line" data-line="table" points="203.33,448.20 246.39,437.76 332.50,380.22 505.00,367.56 810.69,356.76"/>
+    <circle class="point" data-series="table" data-stage="first-pass" data-instances="2512" data-f1="0.7530" data-cx="203.33" data-cy="448.20" cx="203.33" cy="448.20" r="4.2"/>
+    <circle class="point" data-series="table" data-stage="first-pass" data-instances="5008" data-f1="0.7704" data-cx="246.39" data-cy="437.76" cx="246.39" cy="437.76" r="4.2"/>
+    <circle class="point" data-series="table" data-stage="first-pass" data-instances="10000" data-f1="0.8663" data-cx="332.50" data-cy="380.22" cx="332.50" cy="380.22" r="4.2"/>
+    <circle class="point" data-series="table" data-stage="first-pass" data-instances="20000" data-f1="0.8874" data-cx="505.00" data-cy="367.56" cx="505.00" cy="367.56" r="4.2"/>
+    <circle class="point" data-series="table" data-stage="first-pass" data-instances="37721" data-f1="0.9054" data-cx="810.69" data-cy="356.76" cx="810.69" cy="356.76" r="4.2"/>
+    <polygon class="final" data-series="table" data-stage="final" data-instances="37721" data-f1="0.9179" data-cx="810.69" data-cy="349.26" points="810.69,343.76 816.19,349.26 810.69,354.76 805.19,349.26"/>
+    <text class="ink tick" x="866" y="346">Final 0.9179</text><text class="muted tick" x="866" y="365">1 pass 0.9054</text>
+
+    <polyline class="line" data-line="text" points="203.33,630.10 246.39,624.94 332.50,571.30 505.00,582.46 810.69,559.18"/>
+    <circle class="point" data-series="text" data-stage="first-pass" data-instances="2512" data-f1="0.7665" data-cx="203.33" data-cy="630.10" cx="203.33" cy="630.10" r="4.2"/>
+    <circle class="point" data-series="text" data-stage="first-pass" data-instances="5008" data-f1="0.7751" data-cx="246.39" data-cy="624.94" cx="246.39" cy="624.94" r="4.2"/>
+    <circle class="point" data-series="text" data-stage="first-pass" data-instances="10000" data-f1="0.8645" data-cx="332.50" data-cy="571.30" cx="332.50" cy="571.30" r="4.2"/>
+    <circle class="point" data-series="text" data-stage="first-pass" data-instances="20000" data-f1="0.8459" data-cx="505.00" data-cy="582.46" cx="505.00" cy="582.46" r="4.2"/>
+    <circle class="point" data-series="text" data-stage="first-pass" data-instances="37721" data-f1="0.8847" data-cx="810.69" data-cy="559.18" cx="810.69" cy="559.18" r="4.2"/>
+    <polygon class="final" data-series="text" data-stage="final" data-instances="37721" data-f1="0.8956" data-cx="810.69" data-cy="552.64" points="810.69,547.14 816.19,552.64 810.69,558.14 805.19,552.64"/>
+    <text class="ink tick" x="866" y="549">Final 0.8956</text><text class="muted tick" x="866" y="568">1 pass 0.8847</text>
+
+    <g class="muted tick" text-anchor="middle"><text x="160" y="691">0</text><text x="332.5" y="691">10,000</text><text x="505" y="691">20,000</text><text x="677.5" y="691">30,000</text><text x="850" y="691">40,000</text></g>
+    <text class="ink label" text-anchor="middle" x="505" y="722">Distinct training instances seen</text>
+    <text class="muted note" x="64" y="758">Each y-axis is truncated to 0.70–0.95. Lines connect first-pass snapshots only.</text>
+    <text class="muted note" x="64" y="782">Final and first-pass endpoints share 37,721 instances. See learning-curve.md for raw scores and provenance.</text>
   </g>
 </svg>
