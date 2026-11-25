@@ -852,3 +852,14 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - Did not launch or modify a remote notebook, access or display a secret, export dataset rows, or implement the success branch.
   The parent run's full test suite passed (164 tests). Owner next steps are in O-038. This failed probe does not clear the access
   gate for D4 or its continuation.
+
+## 2026-11-25 D4 owner-reported access resolution
+
+- The owner reports the latest UI run of `adnanrashid29/xbrl-frontier-d4-access-probe` completed with
+  `{"status":"D4_ACCESS_OK","revision":"e3e0aba23b5c3df17a71c8c013030182d013a538","rows":28787,"shard_sha256":"d13a93783e256b75c743fe4743dde1de1e9a5e80c972a137afcb783c81d73dcb"}`.
+  No successful saved-version number or independent success receipt was supplied. O-038 is resolved on this owner report; the
+  independently retrieved version 2 failure remains distinct evidence, not a successful version.
+- The owner reports version 2 lacked the `HF_TOKEN` user secret on that specific notebook (kernel id `147365028`), and corrected
+  its attachment before the success. Each new notebook must separately tick `HF_TOKEN` in Add-ons → Secrets. Updated the local
+  CPU probe to emit only a truncated allowlisted missing-secret message and redact other secret-lookup errors, suppressing exception
+  chains. Synthetic execution tests cover truncation and secret/row redaction; no provider job was launched for this change.
