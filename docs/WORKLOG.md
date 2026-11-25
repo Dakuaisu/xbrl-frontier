@@ -825,3 +825,30 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - With `HF_TOKEN` set, CI still failed: the re-run replayed the old commit's workflow (no token), and two
   `tests/test_score_predictions.py` cases read `data/corpus/dev.jsonl`, a git-ignored local build. Those dev cases now skip when the
   file is absent; the FinNI oracle cases still run in CI. Workflow edits now trigger the job; `workflow_dispatch` added.
+
+## 2026-11-25 D4 preflight: gated runtime access blocked
+
+- Confirmed the owner-updated `training.kaggle.gpu_hours_cap_total`, live weekly quota, terminal D3 kernel and the D3 full-prefix
+  fetch/accounting row before considering a reservation. The existing budget estimator accepted the requested planned session at
+  that observation. Rechecked the final adapter weight SHA-256 against its saved completion record.
+- Re-ran the T-039 gold-answer check offline against the current config and both pinned student tokenizers; every FinNI, dev and
+  fresh gold fit. Aggregate verification and the cached FinNI shard hash are in `data/kaggle/d4-output-cap-check.json`; no raw
+  benchmark examples were exported. The earlier CI credential success does not prove Kaggle runtime access, and the prior Kaggle
+  Secrets lookup failed. O-038 records the specific owner-blocked access proof and safe next steps.
+- Added `scripts/d4_resume_guard.py` and focused tests for identity/hash mismatch, missing-only IDs, duplicate/extra rejection and
+  preserving cutoff predictions. Prepared `notebooks/d4_access_probe.ipynb` for a CPU-only private draft; its schema is valid and
+  O-038 gives the owner exact import/attachment steps. Together with the existing generator stop/resume and schedule/budget tests,
+  18 tests passed. The guard is not wired into a D4 notebook or collector, and no D4 or access-probe job was submitted. Python LSP
+  diagnostics were unavailable because the configured server is not installed. No second-session command is claimed before
+  session 1 exists.
+
+## 2026-11-25 D4 owner UI probe result
+
+- Read-only Kaggle version history identifies version 2 as the owner's later Save & Run All, distinct from the earlier version 1;
+  the version-qualified CLI reported `ERROR`. Downloaded the version-specific output into a private temporary directory and used
+  a whitelist extractor rather than displaying the log. The sole extracted result was `D4_ACCESS_FAILED` / `BackendError`, saved
+  in `data/kaggle/d4-access-probe-v2.result.json` with version evidence. The probe reports no failure stage and no success revision,
+  row count or shard hash, so the cause is not established and O-038 remains OWNER-BLOCKED.
+- Did not launch or modify a remote notebook, access or display a secret, export dataset rows, or implement the success branch.
+  The parent run's full test suite passed (164 tests). Owner next steps are in O-038. This failed probe does not clear the access
+  gate for D4 or its continuation.

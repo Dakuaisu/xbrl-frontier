@@ -787,3 +787,37 @@ Each entry: id, status (OPEN | OWNER-BLOCKED | RESOLVED), what was found, eviden
   `gh secret set HF_TOKEN --repo Dakuaisu/xbrl-frontier` and paste it, then re-run the workflow
   (`gh run rerun --failed <run id>` or push).
 - Next action: once set, the builder confirms the run passes and resolves this entry.
+
+## O-038 D4 gated FinNI access from Kaggle is unverified (OWNER-BLOCKED)
+
+- Status: OWNER-BLOCKED. The local pinned FinNI snapshot is readable offline, but the D4 runtime needs the actual gated evaluation
+  examples; the context-free prompt alone is insufficient. A previous private Kaggle run failed with HTTP 400 in its Secrets lookup.
+  The CI `HF_TOKEN` resolution in O-037 does not establish that a Kaggle notebook can retrieve that token or access the gated data.
+  The current process has no `HF_TOKEN` environment value; no secret value was read or disclosed. The Kaggle Secrets panel did not
+  show a usable secret entry in this inspection. The private datasets listed by Kaggle contain project source and corpus, not a
+  verified authorized FinNI attachment. No benchmark rows were exported or uploaded.
+- Ready: the final adapter hash and the D3 completion/fetch ledger row were checked. The current cap, weekly quota and stop-margin
+  rules permit the requested reservation at the observed reading. An offline T-039 check against all golds and both pinned
+  tokenizers is recorded at `data/kaggle/d4-output-cap-check.json`. `scripts/d4_resume_guard.py` and its tests demonstrate an
+  identity/hash and unique-ID missing-only guard, but are not yet integrated with a D4 notebook or collector.
+- Owner action: create a private Kaggle draft, import `notebooks/d4_access_probe.ipynb`, set Accelerator to **None / CPU** and
+  Internet on, and attach the completed session-4 notebook output (which contains `xbrl-frontier/docs/config/thresholds.yaml`).
+  In Add-ons → Secrets, add/attach `HF_TOKEN` for a read-only Hugging Face account that accepted the gated dataset terms; do not
+  put the value in chat or a notebook cell. Run the probe cell and return only its `D4_ACCESS_OK` or `D4_ACCESS_FAILED` JSON.
+  The probe checks the pinned revision, row count and cached local shard hash, downloads only into a temporary `/tmp` directory,
+  deletes that directory on exit, and does not print token values or dataset rows. Use the same secret attachment in the eventual
+  D4 notebook. A CI secret alone is not proof of Kaggle access.
+- Next action: after CPU-only runtime access is verified, finish and test a private D4 notebook and receipt/collector binding the
+  pinned shard, model, adapter, config, generator and prior-prediction hashes. Re-read quota and reservations, then submit only one
+  session with the requested provider timeout and `training.kaggle.session_stop_margin_minutes`. Session 2 must attach the verified
+  session-1 output and generate only IDs missing from its validated receipt; its exact command cannot be fixed until session 1 exists.
+  Score only after unique IDs exactly cover the pinned full set and oracle calibration passes.
+- Owner UI probe update: Kaggle's signed-in version history identifies version 2 as the later Save & Run All, distinct from the
+  earlier version 1. Version-qualified CLI status is `ERROR`; the privately downloaded output contains only the whitelisted result
+  `{"status":"D4_ACCESS_FAILED","error_type":"BackendError"}` at the probe-result boundary. Sanitized receipt:
+  `data/kaggle/d4-access-probe-v2.result.json`. The probe reports no stage, so this does not establish whether secret retrieval,
+  Hugging Face access, or another backend operation caused the failure. There is no success revision, row count or shard hash.
+- Owner next steps: in the existing private CPU probe, confirm the authorized Hugging Face secret is attached to that notebook and
+  internet is enabled; then investigate the backend issue without displaying or copying the secret or dataset rows. If rerunning,
+  use the private CPU-only probe and share only its sanitized status JSON. Do not start D4 until a version-specific `D4_ACCESS_OK`
+  confirms the pinned revision, row count and shard hash. Do not regard a CI secret or the earlier version's status as that proof.
