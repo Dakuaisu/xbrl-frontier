@@ -48,7 +48,8 @@ def build() -> str:
           "and an inconclusive headline gate ships without the claim.", "",
           "## Results", "",
           f"- Pareto, F1 vs $ per filing (offline and online regimes): {B} (`data/charts/pareto_*.vl.json` when measured)",
-          f"- Learning curve, F1 vs distinct training instances, overall and table vs text: {B} (`data/charts/learning_curve.vl.json`)",
+          "- Learning curve, F1 vs distinct training instances: [dev table](docs/paper/learning-curve.md) and "
+          "[dev chart](docs/paper/checkpoint-f1.svg) (dev only; frontier-sample checkpoint scores pending).",
           f"- Serving latency and throughput, T4 and RTX 3050: {B} (`data/charts/latency.vl.json`); the 3050 rows carry "
           f"\"{config.get('serving.hardware.rtx3050_wsl2.cost_label')}\"",
           f"- Encoder baseline (SEC-BERT): {B}; zero-shot base models: {B}; fresh-slice gap and control gap: {B}", "",
@@ -85,7 +86,7 @@ def build() -> str:
           f"on the FinTagging benchmark (paired bootstrap over {B} filings) and served it with vLLM at {B} ms p95 and {B} requests/s "
           f"on a single T4, {B}x cheaper per filing at market rate; total API spend ${B}.",
           f"- Published the F1-versus-training-size curve for regulatory table extraction: {B}% of final F1 at {B} instances, "
-          f"with tables lagging text by {B} points at every size.",
+          f"with a table–text gap of {B} points at {B} instances.",
           f"- Recovered FinTagging's unpublished evaluation manifest from EDGAR full-text search, mapped {B}% of evaluation instances "
           f"to their filings, and shipped the exclusion audit ({B} flagged, {B} remaining) plus a post-cutoff fresh slice with a {B}-point gap.",
           f"- Measured fp16 / INT8 / INT4 serving variants on Turing and Ampere consumer hardware with per-fact flip rates ({B}% at INT4) "

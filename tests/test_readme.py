@@ -1,4 +1,5 @@
 import json
+import re
 
 from scripts.readme import build
 from xbrl_frontier import config
@@ -17,3 +18,10 @@ def test_readme_skeleton_blanks_keys_and_recorded_disclosures():
     assert f"{ser['phase0_token_matcher']['assignment_rate_raw']:.2%}" in text
     assert "(cap 40,000 not reached after decontamination, O-016)" in text and "0 flagged in the final corpus" in text
     assert str(config.get("gates.finni_f1_fraction_of_best_frontier_min")) not in text.split("## Gates")[1].split("## Results")[0]
+
+
+def test_readme_links_the_tracked_dev_curve_artifacts():
+    links = set(re.findall(r"\]\(([^)]+)\)", build()))
+    expected = {"docs/paper/learning-curve.md", "docs/paper/checkpoint-f1.svg"}
+    assert expected <= links
+    assert all((config.REPO_ROOT / link).is_file() for link in expected)

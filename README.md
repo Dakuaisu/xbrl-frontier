@@ -25,7 +25,7 @@ Decisions follow `gates.decision_rule`: an interval that straddles the threshold
 ## Results
 
 - Pareto, F1 vs $ per filing (offline and online regimes): __ (`data/charts/pareto_*.vl.json` when measured)
-- Learning curve, F1 vs distinct training instances, overall and table vs text: __ (`data/charts/learning_curve.vl.json`)
+- Learning curve, F1 vs distinct training instances: [dev table](docs/paper/learning-curve.md) and [dev chart](docs/paper/checkpoint-f1.svg) (dev only; frontier-sample checkpoint scores pending).
 - Serving latency and throughput, T4 and RTX 3050: __ (`data/charts/latency.vl.json`); the 3050 rows carry "owned hardware; latency and throughput only; no $ per filing is reported"
 - Encoder baseline (SEC-BERT): __; zero-shot base models: __; fresh-slice gap and control gap: __
 
@@ -69,7 +69,7 @@ Decisions follow `gates.decision_rule`: an interval that straddles the threshold
 ## Resume bullets (blanks fill only from measured runs; PRD section 11)
 
 - Fine-tuned a __B-parameter open model on __ contamination-audited iXBRL instances that reached __% of __'s FinNI F1 on the FinTagging benchmark (paired bootstrap over __ filings) and served it with vLLM at __ ms p95 and __ requests/s on a single T4, __x cheaper per filing at market rate; total API spend $__.
-- Published the F1-versus-training-size curve for regulatory table extraction: __% of final F1 at __ instances, with tables lagging text by __ points at every size.
+- Published the F1-versus-training-size curve for regulatory table extraction: __% of final F1 at __ instances, with a table–text gap of __ points at __ instances.
 - Recovered FinTagging's unpublished evaluation manifest from EDGAR full-text search, mapped __% of evaluation instances to their filings, and shipped the exclusion audit (__ flagged, __ remaining) plus a post-cutoff fresh slice with a __-point gap.
 - Measured fp16 / INT8 / INT4 serving variants on Turing and Ampere consumer hardware with per-fact flip rates (__% at INT4) rather than aggregate F1 alone; every number reproducible from pinned revisions and a dated price sheet.
 
