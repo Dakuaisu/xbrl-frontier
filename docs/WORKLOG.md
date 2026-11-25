@@ -863,3 +863,13 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
   its attachment before the success. Each new notebook must separately tick `HF_TOKEN` in Add-ons → Secrets. Updated the local
   CPU probe to emit only a truncated allowlisted missing-secret message and redact other secret-lookup errors, suppressing exception
   chains. Synthetic execution tests cover truncation and secret/row redaction; no provider job was launched for this change.
+
+## 2026-11-25 D9 final adapter on the fresh slice
+
+- `xbrl-frontier-d9-fresh` v1 (`scripts/d9_fresh.py`, retarget of the verified final-adapter pilot; 3 h reservation) completed:
+  3,434 of 3,434 generated in 5,113 s on one T4. The collector checked one visible T4, the pinned fresh and adapter hashes, the
+  pilot's generation settings, completion and exact unique-id coverage, ran the oracle tests and scored:
+  `data/scores/d9-final-fresh.json`. Quota 21.23 -> 22.87 h (1.64 h; ledger row). Cumulative 72.47 of 100.
+- The fresh-slice gap (`gates.fresh_slice_f1_gap_max`) is not computed yet: it needs D4's FinNI score, and the control arm needs
+  the Gemini fresh-control run to finish (paused; `GEMINI_API_KEY` not in the builder's environment).
+- The Kaggle CLI access token expired 22:35Z and was renewed by the owner at 23:06Z; the run was unaffected.
