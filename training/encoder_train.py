@@ -72,7 +72,10 @@ def main() -> None:
     ap.add_argument("--resume", type=Path)
     ap.add_argument("--model-dir", type=Path, help="predict: trained model directory")
     ap.add_argument("--set", choices=["finni", "dev", "fresh"], default="finni")
+    ap.add_argument("--session-hours", type=float, help="train: planned session length (<= training.kaggle.session_hours_max)")
     args = ap.parse_args()
+    session_start = schedule.session_start()
+    planned_hours = schedule.session_hours(args.session_hours)
 
     from serving.common import env_record, pinned_snapshot, require_pins
     versions = require_pins("transformers", "accelerate")
@@ -143,6 +146,8 @@ def main() -> None:
         def _get_train_sampler(self, *a, **kw):
             return SequentialSampler(self.train_dataset)
 
+    stopped = {"for_session_limit": False}
+
     class Saver(TrainerCallback):
         last = time.time()
 
@@ -150,6 +155,10 @@ def main() -> None:
             if schedule.due_for_resume_checkpoint(time.time(), Saver.last):
                 control.should_save = True
                 Saver.last = time.time()
+            if schedule.session_time_up(time.time(), session_start, planned_hours):
+                control.should_save = True
+                control.should_training_stop = True
+                stopped["for_session_limit"] = True
 
     t0 = time.time()
     trainer = FixedOrderTrainer(
@@ -161,14 +170,19 @@ def main() -> None:
                                seed=config.get("pins.seeds")[0], report_to=[], dataloader_drop_last=False))
     ck = latest_checkpoint(ck_dir)
     trainer.train(resume_from_checkpoint=str(ck) if ck else None)
+    complete = trainer.state.global_step >= trainer.state.max_steps
     final = args.out / "final_model"
-    trainer.save_model(final)
-    tok.save_pretrained(final)
+    if complete:
+        trainer.save_model(final)
+        tok.save_pretrained(final)
     run = {"model": enc_pin["id"], "revision": enc_pin["hf_revision"], "versions": versions,
            "env": env_record("kaggle_t4"), "config_hash": config.config_hash(), "corpus_sha256": hashes,
            "skipped_over_max_seq_len": skipped, "train_chunks": len(feats), "words_cut_over_window": cut,
            "alignment": align, "label_space_size": len(space), "resumed_from": ck.name if ck else None,
-           "train_seconds_this_session": time.time() - t0, "final_model": str(final.relative_to(args.out))}
+           "train_seconds_this_session": time.time() - t0, "global_step": trainer.state.global_step,
+           "max_steps": trainer.state.max_steps, "stopped_for_session_limit": stopped["for_session_limit"],
+           "planned_session_hours": planned_hours, "complete": complete,
+           "final_model": str(final.relative_to(args.out)) if complete else None}
     (args.out / "run.json").write_text(json.dumps(run, indent=1))
     print(json.dumps({k: v for k, v in run.items() if k != "env"}, indent=1))
 
