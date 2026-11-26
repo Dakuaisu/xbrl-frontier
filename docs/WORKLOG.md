@@ -888,3 +888,18 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - Quota 22.87 -> 23.27 h (0.40 h for the three versions; ledger rows). Cumulative 72.87 of 100.
 - Outputs stay on Kaggle (kernel output, version 3); weights were not downloaded. Next: the quantized pass (D11) on the same ids as
   D4, then `scripts/flip_rate.py` for `gates.quantized_*`.
+
+## 2026-11-26 D8 encoder baseline: trained; dev and fresh scored
+
+- `xbrl-frontier-d8-encoder-train` v1 (0.10 h) crashed at step 111: `encode_chunks` skipped words whose tokenizer output is empty
+  (e.g. zero-width characters) in `input_ids` but still appended a label, so labels outran inputs by one (collator: "expected sequence
+  of length 372 ... got 384"). Fixed (92d04a8) with a regression test that fails on the old code (`tests/test_encoder_chunks.py`).
+  Encoder training also now stops on the session margin and saves `final_model` only when complete (3030096). Source dataset
+  re-versioned at 487845e; D4 notebook rebuilt for the new `encoder_train.py` hash (its builder pins that file).
+- v2 (0.83 h, 6 h reservation): complete, 28,689 of 28,689 steps, 38,252 training chunks, 1,067 instances skipped over
+  `training.kaggle.max_seq_len_tokens` (same set as the students), alignment 199,760 of 200,589 facts, 0 words cut.
+- `xbrl-frontier-d8-encoder-predict` v1 (0.06 h): dev 1,933 and fresh 3,434 rows. Oracle tests passed; exact unique-id coverage
+  checked; scored with `scripts/score_predictions.py`: `data/scores/d8-encoder-{dev,fresh}.json`. Dedup F1: dev 0.8518
+  (P 0.8782, R 0.8270), fresh 0.8088 (P 0.8945, R 0.7381). Same slices, the final 1.7B adapter: dev 0.9147, fresh 0.9100.
+- FinNI-set encoder predictions need the gated data (UI run with `HF_TOKEN`), so they wait with D4.
+- Quota 24.26 h this week; cumulative 73.86 of 100.
