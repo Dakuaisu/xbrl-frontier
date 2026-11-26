@@ -50,6 +50,9 @@ def encode_chunks(tok, ws: list[str], label_ids: list[int] | None, window: int) 
     for a, b in bio.chunks([len(p) for p in per_word], window):
         ids, labels, first = [tok.cls_token_id], [-100], []
         for w in range(a, b):
+            if not per_word[w]:
+                first.append(None)
+                continue
             first.append(len(ids))
             ids.extend(per_word[w])
             labels.append(label_ids[w] if label_ids is not None else 0)
@@ -57,7 +60,12 @@ def encode_chunks(tok, ws: list[str], label_ids: list[int] | None, window: int) 
         if len(ids) > window - 1:
             cut += 1
             ids, labels = ids[:window - 1], labels[:window - 1]
-            first = [f for f in first if f < window - 1]
+            kept = []
+            for f in first:
+                if f is not None and f >= window - 1:
+                    break
+                kept.append(f)
+            first = kept
         ids.append(tok.sep_token_id)
         labels.append(-100)
         out.append({"input_ids": ids, "labels": labels, "first_subtoken": first, "words": (a, a + len(first))})
@@ -110,7 +118,8 @@ def main() -> None:
                     logits = model(input_ids=torch.tensor([c["input_ids"]]).cuda()).logits[0]
                     pred = logits.argmax(-1).tolist()
                     for k, pos in enumerate(c["first_subtoken"]):
-                        labels[c["words"][0] + k] = id2label[pred[pos]]
+                        if pos is not None:
+                            labels[c["words"][0] + k] = id2label[pred[pos]]
                 pairs = bio.pairs_from_spans(bio.decode(ws, labels), tax)
                 f.write(json.dumps({"id": x["id"], "pairs": pairs, "chunks": len(chunks)}) + "\n")
         (args.out / f"encoder_predictions_{args.set}.meta.json").write_text(json.dumps(
