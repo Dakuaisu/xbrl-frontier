@@ -1063,3 +1063,17 @@ used for every D3 session once the stop margin is taken out.
 **Decision:** Keep the README wording introduced in `e2f94c3` rather than repeat the prediction in [frozen PRD §11](PRD.md#L172) that tables lag text at every size. Report the signed gap (table F1 minus text F1, in percentage points) and the distinct training-instance count; at 37,721 also identify the pass. This changes the reporting language only, not the PRD, scorer, or evaluation gates.
 
 **Evidence:** On the [deduplicated internal dev slice](paper/learning-curve.md), table F1 trails text at 2,512 and 5,008 instances but leads at every measured checkpoint from 10,000 onward. At 20,000 instances, tables score 88.74% versus 84.59% for text (+4.15 points). The original wording would misstate the direction; these measurements are not public FinNI scores.
+
+## T-050 AUTONOMOUS DECISION - owner to review: D10 export run environment (2026-11-26)
+
+**Decision:** Run the PRD export with three environment changes and no change to its method: (1) skip the INT8 stage, which T-043
+cut; (2) uninstall the Kaggle image's torchao 0.10.0 before the merge, because peft 0.21.2 refuses that version and the merge does
+not use torchao; (3) give AWQ calibration the verified context-free FinNI prompt template in memory (sha256 checked), as D2 and D3
+did, instead of loading the gated set to derive it. The calibration sample, seed, size and schemes are unchanged
+(`serving.export_quantization.awq_calibration`).
+
+**Alternatives:** Pinning a newer torchao would add a dependency to the pinned set for a library the merge doesn't use. Attaching
+`HF_TOKEN` would need a UI run (CLI pushes can't attach secrets) only to rebuild a template we already hold with a verified hash.
+
+**Evidence:** WORKLOG 2026-11-26; `data/kaggle/runs.jsonl` d10-export rows; `data/kaggle/d10-export-output-v{1..3}/` logs and
+`export.json` (local, untracked).

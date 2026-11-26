@@ -873,3 +873,18 @@ During the pilot, successive reads of `data/phase2/mac_pilot_0.6B.log` seemed to
 - The fresh-slice gap (`gates.fresh_slice_f1_gap_max`) is not computed yet: it needs D4's FinNI score, and the control arm needs
   the Gemini fresh-control run to finish (paused; `GEMINI_API_KEY` not in the builder's environment).
 - The Kaggle CLI access token expired 22:35Z and was renewed by the owner at 23:06Z; the run was unaffected.
+
+## 2026-11-26 D10 export: merged fp16 and AWQ-INT4 of the final 1.7B adapter (T-050)
+
+- `xbrl-frontier-d10-export` (notebook `data/kaggle/d10-export.ipynb`, sha256 `fd0bcc33...`, built from
+  `notebooks/phase2_kaggle_export.ipynb`): final adapter checked against `e6726442...`, one visible T4 asserted, INT8 stage omitted
+  (cut, T-043). Three versions, each a 3 h reservation:
+  - v1 (0.10 h): merge failed. peft 0.21.2 rejects the image's torchao 0.10.0 ("only versions above 0.16.0 are supported").
+  - v2 (0.09 h): torchao uninstalled before the merge; merge succeeded. AWQ failed: calibration renders prompts through
+    `sft_format.query_template()`, which loads the gated FinNI set (401 without a token).
+  - v3 (0.21 h): the verified context-free template (`data/kaggle/d3-prompt.json`, sha256 `5ff41227...`) is passed in memory, as in
+    the D2/D3 runs. Both stages recorded in `export.json`: merge, then awq (autoawq 0.2.9, 28 layers, seed 20261006, 128
+    calibration samples from train.jsonl sha256 `59025e0e...`, which matches `data/corpus_report.json`).
+- Quota 22.87 -> 23.27 h (0.40 h for the three versions; ledger rows). Cumulative 72.87 of 100.
+- Outputs stay on Kaggle (kernel output, version 3); weights were not downloaded. Next: the quantized pass (D11) on the same ids as
+  D4, then `scripts/flip_rate.py` for `gates.quantized_*`.
